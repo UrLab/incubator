@@ -20,4 +20,4 @@ class Event(models.Model):
     stop = models.DateTimeField()
     title = models.CharField(max_length=300)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
-    organizer = models.OneToOneField(settings.AUTH_USER_MODEL)
+    organizer = models.ForeignKey(settings.AUTH_USER_MODEL)
