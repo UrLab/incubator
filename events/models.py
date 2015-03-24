@@ -23,3 +23,11 @@ class Event(models.Model):
     organizer = models.ForeignKey(settings.AUTH_USER_MODEL)
     description = models.TextField()
 
+#    A un OJ et un PV (composés de points)
+#    On pourrait créer un pad et le remplir automatiquement puis récupérer le contenu automatiquement après la réu (optionnel)
+#    En faire une extension de events : rajouter un pad qui est sychronisé avec la page (inclure un outil d'edit collaborative dans la page direct alors (codé en rust erlang elixir!)?)? Permettrais de créer des notes collaboratives sur nos events.
+class Meeting(Event):
+    OJ = models.TextField()
+    PV = models.TextField()
+    membersPresent = models.ManyToManyField(settings.AUTH_USER_MODEL)
+
