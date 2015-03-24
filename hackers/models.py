@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -12,4 +13,8 @@ from django.contrib.auth.models import User
 class Hacker(models.Model):
     user = models.OneToOneField(User)
     balance = models.IntegerField(default=0)
+
+class MacAdress(models.Model):
+    adress = models.CharField(max_length=17, unique=True)
+    holder = models.ForeignKey(settings.AUTH_USER_MODEL)
 
