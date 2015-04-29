@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'events',
     'hackers',
     'projects',
+    'materials',
 )
 
 MIDDLEWARE_CLASSES = (
