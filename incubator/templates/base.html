@@ -32,7 +32,11 @@
       <ul class="right">
         <li><a href="#">Projets</a></li>
         <li><a href="{% url "events_home" %}">Evénements</a></li>
-        <li><a href="#">Login</a></li>
+        {% if user.is_authenticated %}
+          <li><a href="{% url "logout" %}">Logout</a></li>
+        {% else %}
+          <li><a href="{% url "login" %}">Login</a></li>
+        {% endif %}
       </ul>
     </section>
   </nav>
