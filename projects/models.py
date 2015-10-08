@@ -7,18 +7,21 @@ from django.core.validators import MaxValueValidator
 #    Un projet peut dépendre d'autres projets (optionnel)
 #    Technical requirement (estimation de cout, tout ça) lié à l'inventaire.
 #    Vrai système de "gens intéressés" pour vraiment incuber ces putains de projet +1
+
 STATUS_CHOICES = (
-    ("p", "poposition"),
+    ("p", "proposition"),
     ("i", "in progress"),
     ("f", "finished")
 )
 
-class Projet(models.Model):
-    maintainer = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+class Project(models.Model):
+    title = models.CharField(max_length=300)
+    maintainer = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="maintained_projects")
+    participants = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
     description = models.TextField()
     progress = models.PositiveIntegerField(validators=[MaxValueValidator(100)])
-    dependencies = models.ManyToManyField('self')
-    requirement = models.TextField()
+    dependencies = models.ManyToManyField('self', blank=True)
+    requirements = models.TextField()
     content = models.TextField()
-
