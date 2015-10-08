@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+
 from .models import Event
 from .forms import EventForm
 
@@ -18,7 +21,11 @@ def add_event(request):
     if request.method == 'POST':
         form = EventForm(request.POST)
         if form.is_valid():
-            return HttpResponseRedirect('/thanks/')
+            event = form.save(commit=False)
+            event.organizer = request.user
+            event.save()
+
+            return HttpResponseRedirect(reverse('view_event', args=[event.id]))
 
     else:
         form = EventForm()
