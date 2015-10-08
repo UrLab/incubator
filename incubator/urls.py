@@ -7,4 +7,5 @@ urlpatterns = patterns(
     url(r'^events/', include('events.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
+    url('^', include('django.contrib.auth.urls'))
 )
