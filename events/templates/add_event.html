@@ -1,0 +1,9 @@
+{% extends "skeleton.html" %}
+
+{% block "content" %}
+<form action="{% url "add_event" %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+</form>
+{% endblock %}

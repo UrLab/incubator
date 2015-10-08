@@ -1,0 +1,16 @@
+{% extends "skeleton.html" %}
+
+{% block "content" %}
+<a href="{% url "add_event" %}">Proposer un événement</a>
+
+<h1>Evénements futurs</h1>
+{% for event in future %}
+    <h2>{{ event.title }}</h2>
+    {{event.description}}
+{% endfor %}
+<h1>Evénements passés</h1>
+{% for event in past %}
+    <h2>{{ event.title }}</h2>
+    {{event.description}}
+{% endfor %}
+{% endblock %}
