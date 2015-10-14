@@ -2,7 +2,7 @@
 {% load activelink %}
 {% load bootstrap3 %}
 {% bootstrap_css %}
-{% bootstrap_javascript %}
+{% bootstrap_javascript jquery=1 %}
 
 <!DOCTYPE html>
 <!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
@@ -18,15 +18,14 @@
         <nav class="navbar navbar-default navbar-static-top navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menuNavbar">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span> 
                     </button>
                     <a class="navbar-brand" href="/">UrLab</a>
                 </div>
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <div class="collapse navbar-collapse" id="menuNavbar">
                     <ul class="nav navbar-nav">
                         <li class="{% ifactive projets %}active{% endifactive %}"><a href="#">Projets</a></li>
                         <li class="{% ifcontains "/events/" %}active{% endifcontains %}"><a href="{% url "events_home" %}">Evénements</a></li>
