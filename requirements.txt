@@ -3,3 +3,5 @@ pytest-django
 django-extensions
 ipython
 django-debug-toolbar
+django-bootstrap3
+django-activelink

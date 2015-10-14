@@ -37,6 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'bootstrap3',
+    'activelink',
     'incubator',
     'events',
     'hackers',
@@ -90,4 +92,15 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
+)
+
+#context_processors += 'django.core.context_processors.request'
+TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
+                                "django.template.context_processors.debug",
+                                "django.template.context_processors.i18n",
+                                "django.template.context_processors.media",
+                                "django.template.context_processors.static",
+                                "django.template.context_processors.tz",
+                                'django.core.context_processors.request',
+                                "django.contrib.messages.context_processors.messages"
 )
