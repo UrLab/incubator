@@ -6,3 +6,4 @@ django-debug-toolbar
 django-bootstrap3
 django-activelink
 djangorestframework
+django-datetime-widget

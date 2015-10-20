@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from django.views.generic.detail import DetailView
 
 from .serializers import EventSerializer
-
+from datetimewidget.widgets import DateTimeWidget
 
 from .models import Event
 from .forms import EventForm
@@ -34,6 +34,11 @@ def add_event(request):
 
     else:
         form = EventForm()
+
+    form.fields['start'].widget = DateTimeWidget(attrs=form.fields['start'].widget.attrs,
+                                                            usel10n=True, bootstrap_version=3)
+    form.fields['stop'].widget = DateTimeWidget(attrs=form.fields['stop'].widget.attrs,
+                                                            usel10n=True, bootstrap_version=3)
 
     return render(request, 'add_event.html', {'form': form})
 
