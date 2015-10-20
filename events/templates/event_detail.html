@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load formatting %}
 
 {% block content %}
 
@@ -14,6 +15,6 @@
     Etat : {{event.get_status_display}}<br>
     Organisateur : {{event.organizer.username}}
 </p>
-<p>{{event.description}}</p>
+<p>{{event.description|markdown}}</p>
 
 {% endblock %}
