@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'bootstrap3',
     'activelink',
+    'rest_framework',
     'incubator',
     'events',
     'hackers',
@@ -94,13 +95,18 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
-#context_processors += 'django.core.context_processors.request'
-TEMPLATE_CONTEXT_PROCESSORS = ("django.contrib.auth.context_processors.auth",
-                                "django.template.context_processors.debug",
-                                "django.template.context_processors.i18n",
-                                "django.template.context_processors.media",
-                                "django.template.context_processors.static",
-                                "django.template.context_processors.tz",
-                                'django.core.context_processors.request',
-                                "django.contrib.messages.context_processors.messages"
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.template.context_processors.debug",
+    "django.template.context_processors.i18n",
+    "django.template.context_processors.media",
+    "django.template.context_processors.static",
+    "django.template.context_processors.tz",
+    'django.core.context_processors.request',
+    "django.contrib.messages.context_processors.messages"
 )
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'PAGE_SIZE': 10
+}

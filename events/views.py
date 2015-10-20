@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from rest_framework import viewsets
+
+from .serializers import EventSerializer
+
 
 from .models import Event
 from .forms import EventForm
@@ -31,3 +35,8 @@ def add_event(request):
         form = EventForm()
 
     return render(request, 'add_event.html', {'form': form})
+
+
+class EventViewSet(viewsets.ModelViewSet):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
