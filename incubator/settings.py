@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'debug_toolbar',
     'bootstrap3',
+    'datetimewidget',
     'activelink',
     'rest_framework',
     'incubator',
