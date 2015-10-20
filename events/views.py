@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from rest_framework import viewsets
+from django.views.generic.detail import DetailView
 
 from .serializers import EventSerializer
 
@@ -35,6 +36,13 @@ def add_event(request):
         form = EventForm()
 
     return render(request, 'add_event.html', {'form': form})
+
+
+class EventDetailView(DetailView):
+
+    model = Event
+    template_name = 'event_detail.html'
+    context_object_name = 'event'
 
 
 class EventViewSet(viewsets.ModelViewSet):
