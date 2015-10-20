@@ -1,54 +1,43 @@
 {% load staticfiles %}
+{% load activelink %}
+{% load bootstrap3 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery=1 %}
 
 <!DOCTYPE html>
 <!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
 <html class="no-js" lang="en" >
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}UrLab{% endblock %}</title>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block "title" %}UrLab{% endblock %}</title>
+    </head>
+    <body>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/normalize.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/css/foundation.min.css">
+        <nav class="navbar navbar-default navbar-static-top navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menuNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span> 
+                    </button>
+                    <a class="navbar-brand" href="/">UrLab</a>
+                </div>
+                <div class="collapse navbar-collapse" id="menuNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class="{% ifactive projets %}active{% endifactive %}"><a href="#">Projets</a></li>
+                        <li class="{% ifcontains "/events/" %}active{% endifcontains %}"><a href="{% url "events_home" %}">Evénements</a></li>
+                        <li class="{% ifactive login %}active{% endifactive %}"><a href="#">Login</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-  <!-- If you are using the gem version, you need this only -->
-  <link rel="stylesheet" href="{% static "css/style.css"%}">
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/js/vendor/modernizr.js"></script>
-
-</head>
-<body>
-
-  <nav class="top-bar" data-topbar role="navigation">
-    <ul class="title-area">
-      <li class="name">
-        <h1><a href="/">UrLab</a></h1>
-      </li>
-      <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-    </ul>
-
-    <section class="top-bar-section">
-      <ul class="right">
-        <li><a href="#">Projets</a></li>
-        <li><a href="{% url "events_home" %}">Evénements</a></li>
-        {% if user.is_authenticated %}
-          <li><a href="{% url "logout" %}">Logout</a></li>
-        {% else %}
-          <li><a href="{% url "login" %}">Login</a></li>
-          <li><a href="{% url "register" %}">Register</a></li>
-        {% endif %}
-      </ul>
-    </section>
-  </nav>
-
-  {% block content %}
-  {% endblock %}
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/js/vendor/jquery.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.3/js/foundation.min.js"></script>
-  <script>
-    $(document).foundation();
-  </script>
-</body>
+        <div class="container">
+        {% block "content" %}
+        {% endblock %}
+        </div>
+    </body>
 </html>
