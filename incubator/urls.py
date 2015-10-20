@@ -7,12 +7,12 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 import events.views
-import hackers.views
+import users.views
 
 
 router = routers.DefaultRouter()
 router.register(r'events', events.views.EventViewSet)
-router.register(r'users', hackers.views.UserViewSet)
+router.register(r'users', users.views.UserViewSet)
 
 
 urlpatterns = patterns(

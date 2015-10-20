@@ -1,13 +1,13 @@
 from django.contrib import admin
 
-from .models import Hacker, MacAdress
+from .models import User, MacAdress
 
 
-@admin.register(Hacker)
-class HackerAdmin(admin.ModelAdmin):
-    list_display = ('user', 'balance')
-    # list_filter = ('balance',)
-    search_fields = ('user',)
+@admin.register(User)
+class UserAdmin(admin.ModelAdmin):
+    #list_display = ('balance',)
+    list_filter = ('balance',)
+    #search_fields = ('user',)
 
 
 @admin.register(MacAdress)

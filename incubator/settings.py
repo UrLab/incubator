@@ -42,7 +42,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'incubator',
     'events',
-    'hackers',
+    'users',
     'projects',
     'materials',
 )
@@ -84,6 +84,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+AUTH_USER_MODEL = "users.User"
 
 
 # Static files (CSS, JavaScript, Images)
