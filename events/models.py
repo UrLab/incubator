@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from datetime import timedelta
 
 # Create your models here.
 # Events :
@@ -23,6 +24,12 @@ class Event(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name='Etat')
     organizer = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Organisateur')
     description = models.TextField(blank=True)
+
+    def is_only_a_day(self):
+        return self.start.date() == self.stop.date()
+
+    def has_no_duration(self):
+        return (self.stop - self.start) < timedelta(minutes=5)
 
 #    A un OJ et un PV (composés de points)
 #    On pourrait créer un pad et le remplir automatiquement puis récupérer le contenu automatiquement après la réu (optionnel)

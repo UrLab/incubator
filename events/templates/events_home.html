@@ -4,13 +4,17 @@
 <a href="{% url "add_event" %}">Proposer un événement</a>
 
 <h1>Evénements futurs</h1>
-{% for event in future %}
-    <h2>{{ event.title }}</h2>
-    {{event.description}}
-{% endfor %}
+{% if future %}
+    {% for event in future %}
+        <h2><a href="{% url "view_event" event.id %}">{{ event.title }}</a></h2>
+        {{event.description}}
+    {% endfor %}
+{% else %}
+Mamamia ! Il n'y a rien de prévu dans le futur ! Vite, <a href="{% url "add_event" %}">crée un événement</a> !
+{% endif %}
 <h1>Evénements passés</h1>
 {% for event in past %}
-    <h2>{{ event.title }}</h2>
+    <h2><a href="{% url "view_event" event.id %}">{{ event.title }}</a></h2>
     {{event.description}}
 {% endfor %}
 {% endblock %}
