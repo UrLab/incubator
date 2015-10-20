@@ -28,7 +28,7 @@
                 </div>
                 <div class="collapse navbar-collapse" id="menuNavbar">
                     <ul class="nav navbar-nav">
-                        <li class="{% ifactive projets %}active{% endifactive %}"><a href="#">Projets</a></li>
+                        <li class="{% ifcontains "/projects/" %}active{% endifcontains %}"><a href="{% url "projects_home" %}">Projets</a></li>
                         <li class="{% ifcontains "/events/" %}active{% endifcontains %}"><a href="{% url "events_home" %}">Evénements</a></li>
                         <li class="{% ifactive login %}active{% endifactive %}"><a href="#">Login</a></li>
                     </ul>
