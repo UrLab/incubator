@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load formatting %}
+
+{% block content %}
+
+<h1>{{project.title}}</h1>
+<p>
+    Etat : {{project.get_status_display}}<br>
+    Mainteneur : {{project.maintainer.username}}
+</p>
+<p>Description : {{project.short_description}}</p>
+<hr>
+<p>{{project.content|markdown}}</p>
+
+{% endblock %}

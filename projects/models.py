@@ -17,11 +17,16 @@ STATUS_CHOICES = (
 
 class Project(models.Model):
     title = models.CharField(max_length=300)
+
     maintainer = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="maintained_projects")
     participants = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
+
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
     status = models.CharField(max_length=1, choices=STATUS_CHOICES)
-    description = models.TextField()
     progress = models.PositiveIntegerField(validators=[MaxValueValidator(100)])
     dependencies = models.ManyToManyField('self', blank=True)
-    requirements = models.TextField()
+
+    short_description = models.TextField(max_length=1000)
     content = models.TextField()

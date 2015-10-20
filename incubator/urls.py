@@ -8,17 +8,20 @@ from django.contrib.auth.forms import UserCreationForm
 
 import events.views
 import users.views
+import projects.views
 
 
 router = routers.DefaultRouter()
 router.register(r'events', events.views.EventViewSet)
 router.register(r'users', users.views.UserViewSet)
+router.register(r'projects', projects.views.ProjectViewSet)
 
 
 urlpatterns = patterns(
     '',
     url(r'^$', 'incubator.views.home', name='home'),
     url(r'^events/', include('events.urls')),
+    url(r'^projects/', include('projects.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('django.contrib.auth.urls')),
