@@ -10,13 +10,13 @@ from datetimewidget.widgets import DateTimeWidget
 from .models import Event
 from .forms import EventForm
 
-from datetime import datetime
+from django.utils import timezone
 
 
 def events_home(request):
     context = {
-        'future': Event.objects.filter(stop__gt=datetime.now()).order_by('start')[:10],
-        'past': Event.objects.exclude(stop__gt=datetime.now()).order_by('-start')[:10],
+        'future': Event.objects.filter(stop__gt=timezone.now()).order_by('start')[:10],
+        'past': Event.objects.exclude(stop__gt=timezone.now()).order_by('-start')[:10],
     }
 
     return render(request, "events_home.html", context)
@@ -35,10 +35,16 @@ def add_event(request):
     else:
         form = EventForm()
 
-    form.fields['start'].widget = DateTimeWidget(attrs=form.fields['start'].widget.attrs,
-                                                            usel10n=True, bootstrap_version=3)
-    form.fields['stop'].widget = DateTimeWidget(attrs=form.fields['stop'].widget.attrs,
-                                                            usel10n=True, bootstrap_version=3)
+    form.fields['start'].widget = DateTimeWidget(
+        attrs=form.fields['start'].widget.attrs,
+        usel10n=True,
+        bootstrap_version=3
+    )
+    form.fields['stop'].widget = DateTimeWidget(
+        attrs=form.fields['stop'].widget.attrs,
+        usel10n=True,
+        bootstrap_version=3
+    )
 
     return render(request, 'add_event.html', {'form': form})
 
