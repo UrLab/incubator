@@ -5,13 +5,7 @@
 
 <h1>{{event.title}}</h1>
 <p>
-    {% if event.has_no_duration %}
-        Le {{event.start|date:"l d F Y"}}, à {{event.start|date:"H:m"}} à {{event.place}}<br>
-    {% elif event.is_only_a_day %}
-        Le {{event.start|date:"l d F Y"}}, de {{event.start|date:"H:m"}} à {{event.stop|date:"H:m"}} à {{event.place}}<br>
-    {% else %}
-        Du {{event.start}} au {{event.stop}} à {{event.place}}<br>
-    {% endif %}
+    {% include "event_time.html" %}
     Etat : {{event.get_status_display}}<br>
     Organisateur : {{event.organizer.username}}
 </p>
