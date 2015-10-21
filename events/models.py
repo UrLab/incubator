@@ -36,7 +36,8 @@ class Event(models.Model):
 #    En faire une extension de events : rajouter un pad qui est sychronisé avec la page (inclure un outil d'edit collaborative dans la page direct alors (codé en rust erlang elixir!)?)? Permettrais de créer des notes collaboratives sur nos events.
 
 
-class Meeting(Event):
+class Meeting(models.Model):
+    event = models.OneToOneField(Event)
     OJ = models.TextField()
     PV = models.TextField()
     membersPresent = models.ManyToManyField(settings.AUTH_USER_MODEL)

@@ -12,6 +12,5 @@ class EventAdmin(admin.ModelAdmin):
 
 @admin.register(Meeting)
 class MeetingAdmin(admin.ModelAdmin):
-    list_display = ('title', 'start', 'organizer')
-    list_filter = ('start',)
-    search_fields = ('OJ', 'PV', 'title')
+    list_display = ('event',)
+    search_fields = ('OJ', 'PV')

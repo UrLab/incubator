@@ -11,4 +11,19 @@
 </p>
 <p>{{event.description|markdown}}</p>
 
+{% if event.meeting %}
+    <h2>Membres présents</h2>
+    {{event.meeting.membersPresent.all|join:","|default:"Aucun membre présent"}}
+    <a href=""><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+
+    <h2>Ordre du jour</h2>
+    {{event.meeting.OJ|markdown}}
+
+    <h2>PV</h2>
+    {{event.meeting.PV|markdown}}
+{% else %}
+    <a href="">Ajouter un ordre du jour</a>
+{% endif %}
+
+
 {% endblock %}

@@ -15,28 +15,24 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Event',
             fields=[
-                ('id', models.AutoField(primary_key=True, auto_created=True, verbose_name='ID', serialize=False)),
+                ('id', models.AutoField(auto_created=True, serialize=False, verbose_name='ID', primary_key=True)),
                 ('place', models.CharField(max_length=300, verbose_name='Localisation', blank=True)),
                 ('start', models.DateTimeField(null=True, verbose_name='Début', blank=True)),
                 ('stop', models.DateTimeField(null=True, verbose_name='Fin', blank=True)),
                 ('title', models.CharField(max_length=300, verbose_name='Nom')),
-                ('status', models.CharField(max_length=1, choices=[('i', 'En préparation'), ('r', 'Prêt'), ('p', 'Planifié'), ('j', 'Idée')], verbose_name='Etat')),
+                ('status', models.CharField(choices=[('i', 'En préparation'), ('r', 'Prêt'), ('p', 'Planifié'), ('j', 'Idée')], max_length=1, verbose_name='Etat')),
                 ('description', models.TextField(blank=True)),
+                ('organizer', models.ForeignKey(verbose_name='Organisateur', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
             name='Meeting',
             fields=[
-                ('event_ptr', models.OneToOneField(to='events.Event', serialize=False, parent_link=True, primary_key=True, auto_created=True)),
+                ('id', models.AutoField(auto_created=True, serialize=False, verbose_name='ID', primary_key=True)),
                 ('OJ', models.TextField()),
                 ('PV', models.TextField()),
+                ('event', models.ForeignKey(to='events.Event')),
                 ('membersPresent', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
             ],
-            bases=('events.event',),
-        ),
-        migrations.AddField(
-            model_name='event',
-            name='organizer',
-            field=models.ForeignKey(verbose_name='Organisateur', to=settings.AUTH_USER_MODEL),
         ),
     ]
