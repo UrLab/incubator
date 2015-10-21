@@ -1,23 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
+<a href="">Proposer un projet</a>
+
 <h1>Projets</h1>
 
 <h2>En cours</h2>
 {% for project in progress %}
-    {{ project.title }} - {{ project.short_description }}<br>
+    {% include "project_list_item.html" %}
 {% endfor %}
 {% if progress|length_is:max_projects %}Voir plus{% endif %}
 
 <h2>Finis</h2>
 {% for project in finished %}
-    {{ project.title }} - {{ project.short_description }}<br>
+    {% include "project_list_item.html" %}
 {% endfor %}
 {% if progress|length_is:max_projects %}Voir plus{% endif %}
 
 <h2>Propositions</h2>
 {% for project in proposition %}
-    {{ project.title }} - {{ project.short_description }}<br>
+    {% include "project_list_item.html" %}
 {% endfor %}
 {% if progress|length_is:max_projects %}Voir plus{% endif %}
 
