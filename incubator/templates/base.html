@@ -1,8 +1,6 @@
 {% load staticfiles %}
 {% load activelink %}
 {% load bootstrap3 %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery=1 %}
 
 <!DOCTYPE html>
 <!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
@@ -11,6 +9,9 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% bootstrap_css %}
+        {% bootstrap_javascript jquery=1 %}
+        <link href="{% static "css/style.css" %}" rel="stylesheet">
         <title>{% block "title" %}UrLab{% endblock %}</title>
         {% block "head" %}{% endblock %}
     </head>
