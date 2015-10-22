@@ -24,7 +24,7 @@ urlpatterns = patterns(
     url(r'^projects/', include('projects.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^', include('django.contrib.auth.urls')),
+    url(r'^auth/', include('django.contrib.auth.urls')),
     url(r'^register/', CreateView.as_view(
         template_name='registration/register.html',
         form_class=UserCreationForm,

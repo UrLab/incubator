@@ -29,9 +29,24 @@
                 </div>
                 <div class="collapse navbar-collapse" id="menuNavbar">
                     <ul class="nav navbar-nav">
-                        <li class="{% ifcontains "/projects/" %}active{% endifcontains %}"><a href="{% url "projects_home" %}">Projets</a></li>
-                        <li class="{% ifcontains "/events/" %}active{% endifcontains %}"><a href="{% url "events_home" %}">Evénements</a></li>
-                        <li class="{% ifactive login %}active{% endifactive %}"><a href="#">Login</a></li>
+                        <li class="{% ifcontains "/projects/" %}active{% endifcontains %}">
+                            <a href="{% url "projects_home" %}">Projets</a>
+                        </li>
+                        <li class="{% ifcontains "/events/" %}active{% endifcontains %}">
+                            <a href="{% url "events_home" %}">Evénements</a>
+                        </li>
+
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if user.is_authenticated %}
+                            <li class="{% ifcontains "/auth/logout" %}active{% endifcontains %}">
+                                <a href="{% url "logout" %}">{{user.username}} - Logout</a>
+                            </li>
+                        {% else %}
+                            <li class="{% ifcontains "/auth/login" %}active{% endifcontains %}">
+                                <a href="{% url "login" %}">Login</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
