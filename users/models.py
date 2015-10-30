@@ -3,6 +3,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, UserManager
 
+from incubator.models import ASBLYear
+
 # Create your models here.
 #    User :
 #    Des users ont des skills/badges
@@ -65,6 +67,11 @@ class User(AbstractBaseUser):
 
     def get_full_name(self):
         return self.username
+
+    @property
+    def is_member(self):
+        year = ASBLYear.objects.filter(start__gte=timezone.now(), stop__lt=timezone.now())
+        return self.membership_set.filter(asbl_year=year).count() > 0
 
 
 class MacAdress(models.Model):
