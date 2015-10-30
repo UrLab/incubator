@@ -4,7 +4,7 @@ from rest_framework import routers
 
 from django.views.generic.edit import CreateView
 from django.contrib.auth.forms import UserCreationForm
-
+from django.contrib.flatpages import views
 
 import events.views
 import users.views
