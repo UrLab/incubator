@@ -49,6 +49,26 @@ def add_event(request):
     return render(request, 'add_event.html', {'form': form})
 
 
+def short_url_maker(*keywords):
+    def filter_func(request):
+        events = Event.objects.exclude(stop__lt=timezone.now()).order_by('start')
+        for kw in keywords:
+            events = events.filter(title__icontains=kw)
+
+        if len(events) == 0:
+            return HttpResponseRedirect(reverse('events_home'))
+        else:
+            return HttpResponseRedirect(reverse('view_event', args=[events[0].id]))
+
+    return filter_func
+
+
+sm = short_url_maker("smartmonday")
+linux = short_url_maker("install", "party")
+git = short_url_maker("workshop", "git")
+ag = short_url_maker("AG", "mandat")
+
+
 class EventDetailView(DetailView):
 
     model = Event
