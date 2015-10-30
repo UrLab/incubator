@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from django.views.generic.detail import DetailView
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 from .serializers import ProjectSerializer
 
 from .models import Project
-
+from .forms import ProjectForm
 
 def projects_home(request):
     MAX_PROJECTS = 10
@@ -19,6 +21,19 @@ def projects_home(request):
 
     return render(request, "projects_home.html", context)
 
+def add_project(request):
+    if request.method == 'POST':
+        form = ProjectForm(request.POST)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.organizer = request.user
+            event.save()
+
+            return HttpResponseRedirect(reverse('view_project', args=[event.id]))
+
+    else:
+        form = ProjectForm()
+    return render(request, 'add_project.html', {'form': form})
 
 class ProjectDetailView(DetailView):
     model = Project

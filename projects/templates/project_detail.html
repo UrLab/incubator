@@ -9,7 +9,11 @@
     Mainteneur : {{project.maintainer.username}}
 </p>
 <p>Description : {{project.short_description}}</p>
-<hr>
+<div class="progress">
+    <div class="progress-bar" role="progressbar" aria-valuenow="{{project.progress}}" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width:{{project.progress}}%">
+      {{project.progress}}%
+  </div>
+</div>
 <p>{{project.content|markdown}}</p>
 
 {% endblock %}
