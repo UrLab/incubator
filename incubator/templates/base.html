@@ -40,7 +40,7 @@
                     <ul class="nav navbar-nav navbar-right">
                         {% if user.is_authenticated %}
                             <li class="{% ifcontains "/auth/logout" %}active{% endifcontains %}">
-                                <a href="{% url "logout" %}">{{user.username}} - Logout</a>
+                                <a href="{% url "logout" %}?next=/">{{user.username}} - Logout</a>
                             </li>
                         {% else %}
                             <li class="{% ifcontains "/auth/login" %}active{% endifcontains %}">
