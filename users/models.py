@@ -11,6 +11,7 @@ from django.contrib.auth.models import AbstractBaseUser, UserManager
 #    Des users appartiennent à un groupe (anon, registered, membres cotisants, "bureau")
 #    Système d'emprunt (optionnel)
 
+
 class CustomUserManager(UserManager):
     def _create_user(self, username, email, password, **extra_fields):
         """
@@ -30,8 +31,6 @@ class CustomUserManager(UserManager):
         return self._create_user(username, email, password, is_staff=True, **extra_fields)
 
 
-
-
 class User(AbstractBaseUser):
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ['email']
@@ -46,6 +45,7 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
 
     balance = models.IntegerField(default=0)
+    has_key = models.BooleanField(default=False)
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?
@@ -62,10 +62,16 @@ class User(AbstractBaseUser):
 
     def get_short_name(self):
         return self.username
+
     def get_full_name(self):
         return self.username
+
 
 class MacAdress(models.Model):
     adress = models.CharField(max_length=17, unique=True)
     holder = models.ForeignKey(settings.AUTH_USER_MODEL)
 
+
+class Membership(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    asbl_year = models.ForeignKey('incubator.ASBLYear')
