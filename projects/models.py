@@ -28,5 +28,5 @@ class Project(models.Model):
     progress = models.PositiveIntegerField(validators=[MaxValueValidator(100)])
     dependencies = models.ManyToManyField('self', blank=True)
 
-    short_description = models.TextField(max_length=1000)
+    short_description = models.CharField(max_length=1000)
     content = models.TextField()
