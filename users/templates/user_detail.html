@@ -13,7 +13,13 @@
     {% elif user.balance > 50 %}
     <div class="alert alert-success" role="alert"><strong>Wow !</strong> Ca en fait une somme ça !</div>
     {% endif %}
-    {{user.balance}}€<a href="{% url 'change_balance' %}">Changer</a>
+    {{user.balance}}€<a href="{% url 'change_balance' %}">Changer</a><br>
+
+    {% if user.has_key %}
+    You have a key :) Plase contact mainteneur@urlab.be if it is not the case
+    {% else %}
+    You don't have a key. You could ask for one during a meeting.
+    {% endif %}
 </p>
 
 {% endblock %}
