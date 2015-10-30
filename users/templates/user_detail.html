@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load formatting %}
+
+{% block content %}
+
+<h1>{{user.username}}</h1>
+<p>
+    {{user.email}}<br>
+    {% if user.balance < 0 %}
+    <div class="alert alert-danger" role="alert"><strong>Solde négatif !</strong> Ne dépensez plus et rechargez vite !</div>
+    {% elif user.balance < 5 %}
+    <div class="alert alert-warning" role="alert"><strong>Hum, ne n'est pas beaucoup :</strong> pensez à recharger :)</div>
+    {% elif user.balance > 50 %}
+    <div class="alert alert-success" role="alert"><strong>Wow !</strong> Ca en fait une somme ça !</div>
+    {% endif %}
+    {{user.balance}}€<a href="{% url 'change_balance' %}">Changer</a>
+</p>
+
+{% endblock %}

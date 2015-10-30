@@ -22,6 +22,7 @@ urlpatterns = patterns(
     url(r'^$', 'incubator.views.home', name='home'),
     url(r'^events/', include('events.urls')),
     url(r'^projects/', include('projects.urls')),
+    url(r'^accounts/', include('users.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^auth/', include('django.contrib.auth.urls')),
