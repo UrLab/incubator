@@ -5,9 +5,9 @@ from .models import User, MacAdress
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    #list_display = ('balance',)
-    list_filter = ('balance',)
-    #search_fields = ('user',)
+    list_display = ('username', 'balance', 'email', 'has_key', 'is_staff')
+    list_filter = ('balance', 'has_key', 'is_staff')
+    search_fields = ('username',)
 
 
 @admin.register(MacAdress)
