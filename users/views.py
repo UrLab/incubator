@@ -4,6 +4,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic.detail import DetailView
 
+from incubator.settings import BANK_ACCOUNT
+
 from .serializers import UserSerializer
 from .models import User
 from .forms import BalanceForm
@@ -20,7 +22,7 @@ def change_balance(request):
     else:
         form = BalanceForm(instance=request.user)
 
-    return render(request, 'balance.html', {'form': form})
+    return render(request, 'balance.html', {'form': form, 'account': BANK_ACCOUNT})
 
 
 class UserDetailView(DetailView):

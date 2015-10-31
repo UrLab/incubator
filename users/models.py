@@ -73,6 +73,10 @@ class User(AbstractBaseUser):
         year = ASBLYear.objects.filter(start__gte=timezone.now(), stop__lt=timezone.now())
         return self.membership_set.filter(asbl_year=year).count() > 0
 
+    @property
+    def absolute_balance(self):
+        return abs(self.balance)
+
 
 class MacAdress(models.Model):
     adress = models.CharField(max_length=17, unique=True)

@@ -11,9 +11,15 @@
   <h1>Votre ardoise <small>UBS© (UrLab banking system)</small></h1>
 </div>
 
-<div class="alert alert-info" role="alert">
-    Vous avez actuellement <strong>{{request.user.balance }}€</strong> sur votre ardoise
+{% if request.user.balance < 0 %}
+<div class="alert alert-danger" role="alert">
+    Vous êtes actuellement en <strong>négatif</strong> de <strong>{{request.user.absolute_balance }}€</strong>. Pensez à recherger rapidement.
 </div>
+{% else %}
+<div class="alert alert-info" role="alert">
+    Vous avez actuellement <strong>{{request.user.balance }}€</strong> sur votre ardoise.
+</div>
+{% endif %}
 <div class="row">
   <div class="col-md-6">
     <h2>Liste de prix</h2>
@@ -47,6 +53,11 @@
   </div>
   <div class="col-md-6">
     <h2>Dépenser</h2>
+    {% if request.user.balance < -5 %}
+        <div class="alert alert-warning" role="alert">
+            Vous ne devriez pas dépenser alors que vous êtes en négatif.
+        </div>
+    {% endif %}
     <form class="form-inline">
       <div class="form-group">
         <div class="input-group">
@@ -60,7 +71,7 @@
     </form>
     <h2>Verser</h2>
     <p class="text-muted">Vous pouvez déponser directement l'argent dans la caisse.<br>
-    Pour des gros montants, faites un virement au BE99 99 99 99 99</p>
+    Pour des gros montants, faites un virement au <strong>{{account}}</strong></p>
     <form class="form-inline">
       <div class="form-group">
         <div class="input-group">
@@ -74,5 +85,29 @@
     </form>
   </div>
 </div>
+
+<pre class="text-muted">
+000100 IDENTIFICATION DIVISION.
+000200 PROGRAM-ID.     URLABBANKINGSYSTEM.
+000300
+000400*
+000500 ENVIRONMENT DIVISION.
+000600 CONFIGURATION SECTION.
+000700 SOURCE-COMPUTER. RM-COBOL.
+000800 OBJECT-COMPUTER. RM-COBOL.
+000900
+001000 DATA DIVISION.
+001100 FILE SECTION.
+001200
+100000 PROCEDURE DIVISION.
+100100
+100200 MAIN-LOGIC SECTION.
+100300 BEGIN.
+100400     DISPLAY " " LINE 1 POSITION 1 ERASE EOS.
+100500     DISPLAY "Hello UrLab!" LINE 15 POSITION 10.
+100600     STOP RUN.
+100700 MAIN-LOGIC-EXIT.
+100800     EXIT.
+</pre>
 
 {% endblock %}

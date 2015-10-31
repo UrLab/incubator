@@ -119,3 +119,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
     'PAGE_SIZE': 10
 }
+
+
+BANK_ACCOUNT = "BE66 0017 6764 5043"
