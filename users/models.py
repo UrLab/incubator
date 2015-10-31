@@ -44,10 +44,10 @@ class User(AbstractBaseUser):
     edited = models.DateTimeField(auto_now=True)
     first_name = models.CharField(max_length=127)
     last_name = models.CharField(max_length=127)
-    is_staff = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False, verbose_name="Est administrateur")
 
-    balance = models.IntegerField(default=0)
-    has_key = models.BooleanField(default=False)
+    balance = models.IntegerField(default=0, verbose_name="Ardoise")
+    has_key = models.BooleanField(default=False, verbose_name="Possède une clé")
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?

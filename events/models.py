@@ -31,13 +31,19 @@ class Event(models.Model):
     def has_no_duration(self):
         return (self.stop - self.start) < timedelta(minutes=5)
 
+    class Meta:
+        verbose_name = "Événement"
+
 #    A un OJ et un PV (composés de points)
 #    On pourrait créer un pad et le remplir automatiquement puis récupérer le contenu automatiquement après la réu (optionnel)
 #    En faire une extension de events : rajouter un pad qui est sychronisé avec la page (inclure un outil d'edit collaborative dans la page direct alors (codé en rust erlang elixir!)?)? Permettrais de créer des notes collaboratives sur nos events.
 
 
 class Meeting(models.Model):
-    event = models.OneToOneField(Event)
-    OJ = models.TextField()
+    event = models.OneToOneField(Event, verbose_name="Événement")
+    OJ = models.TextField(verbose_name='Ordre du jour')
     PV = models.TextField()
-    membersPresent = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    membersPresent = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Membres présents')
+
+    class Meta:
+        verbose_name = "Réunion"
