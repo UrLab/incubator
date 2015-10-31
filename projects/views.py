@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets
 from django.views.generic.detail import DetailView
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 from .serializers import ProjectSerializer
 
@@ -25,15 +26,22 @@ def add_project(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST)
         if form.is_valid():
-            event = form.save(commit=False)
-            event.organizer = request.user
-            event.save()
+            project = form.save(commit=False)
+            project.save()
 
-            return HttpResponseRedirect(reverse('view_project', args=[event.id]))
+            return HttpResponseRedirect(reverse('view_project', args=[project.id]))
 
     else:
         form = ProjectForm()
     return render(request, 'add_project.html', {'form': form})
+
+@login_required
+def add_participation(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    if request.user not in project.participants.all():
+        project.participants.add(request.user)
+    return HttpResponseRedirect(reverse('view_project', args=[pk]))
+
 
 class ProjectDetailView(DetailView):
     model = Project
