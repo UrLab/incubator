@@ -14,7 +14,26 @@
     {% elif user.balance > 50 %}
     <div class="alert alert-success" role="alert"><strong>Wow !</strong> Ca en fait une somme ça !</div>
     {% endif %}
+</p>
 
+<p>
+    <h3>Vous maintenez les projets suivants:</h3>
+    {% for project in user.maintained_projects.all %}
+    <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
+    {% endfor %}
+</p>
+
+<p>
+    <h3>Vous participez aux projets suivants:</h3>
+    {% for project in user.project_set.all %}
+    <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
+    {% empty %}
+    Vous ne participez a aucun projet :'(</br>
+    <a href="{% url 'projects_home' %}">Venez vous inscrire a l'un ou l'autre.</a>
+    {% endfor %}
+</p>
+
+<p>
     {% if user.has_key %}
     You have a key :) Plase contact mainteneur@urlab.be if it is not the case
     {% else %}
