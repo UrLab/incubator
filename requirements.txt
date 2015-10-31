@@ -8,3 +8,4 @@ django-activelink
 djangorestframework
 django-datetime-widget
 Markdown
+redis
