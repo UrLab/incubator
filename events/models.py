@@ -17,10 +17,10 @@ class Event(models.Model):
         ("p", "Planifié"),
         ("j", "Idée"),
     )
-    place = models.CharField(max_length=300, verbose_name='Localisation', blank=True)
-    start = models.DateTimeField(verbose_name='Début', blank=True, null=True)
-    stop = models.DateTimeField(verbose_name='Fin', blank=True, null=True)
     title = models.CharField(max_length=300, verbose_name='Nom')
+    place = models.CharField(max_length=300, verbose_name='Lieu', blank=True)
+    start = models.DateTimeField(verbose_name='Date et heure de début', blank=True, null=True)
+    stop = models.DateTimeField(verbose_name='Date et heure de fin', blank=True, null=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name='Etat')
     organizer = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Organisateur')
     description = models.TextField(blank=True)
