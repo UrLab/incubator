@@ -26,14 +26,14 @@
 {% endif %}
 
 <p>
-    <h3>Vous maintenez les projets suivants:</h3>
+    <h3>{%if request.user == user %}Vous maintenez{% else %}{{user.username}} maintient{% endif %} les projets suivants:</h3>
     {% for project in user.maintained_projects.all %}
     <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
     {% endfor %}
 </p>
 
 <p>
-    <h3>Vous participez aux projets suivants:</h3>
+    <h3>{%if request.user == user %}Vous participez{% else %}{{user.username}} participe{% endif %} aux projets suivants:</h3>
     {% for project in user.project_set.all %}
     <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
     {% empty %}
