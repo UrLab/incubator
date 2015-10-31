@@ -33,3 +33,6 @@ class Project(models.Model):
 
     class Meta:
         verbose_name = "Projet"
+
+    def __str__(self):
+        return self.title

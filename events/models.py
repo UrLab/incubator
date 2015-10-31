@@ -31,6 +31,9 @@ class Event(models.Model):
     def has_no_duration(self):
         return (self.stop - self.start) < timedelta(minutes=5)
 
+    def __str__(self):
+        return self.title
+
     class Meta:
         verbose_name = "Événement"
 
