@@ -6,13 +6,73 @@
 {% endblock %}
 
 {% block content %}
-<form action="{% url "change_balance" %}" method="post" class="form">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% buttons %}
-    <button type="submit" class="btn btn-primary">
-        Submit
-    </button>
-    {% endbuttons %}
-</form>
+
+<div class="page-header">
+  <h1>Votre ardoise <small>UBS© (UrLab banking system)</small></h1>
+</div>
+
+<div class="alert alert-info" role="alert">
+    Vous avez actuellement <strong>{{request.user.balance }}€</strong> sur votre ardoise
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <h2>Liste de prix</h2>
+    <div class="panel panel-default">
+      <div class="panel-heading">Nourriture</div>
+      <table class="table">
+        <thead>
+            <tr><th>Nom</th><th>Prix</th><th>Achat</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Pain</td><td>20€</td><td><a href="">Acheter {% bootstrap_icon "shopping-cart" %}</a></td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">Boissons</div>
+      <table class="table">
+        <thead>
+            <tr><th>Nom</th><th>Prix</th><th>Achat</th></tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Bière</td><td>0.20€</td><td><a href="">Acheter {% bootstrap_icon "shopping-cart" %}</a></td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <div class="col-md-6">
+    <h2>Dépenser</h2>
+    <form class="form-inline">
+      <div class="form-group">
+        <div class="input-group">
+            <input type="text" class="form-control" id="exampleInputName2" placeholder="Montant">
+            <div class="input-group-addon">€</div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-warning">
+        Dépenser
+      </button>
+    </form>
+    <h2>Verser</h2>
+    <p class="text-muted">Vous pouvez déponser directement l'argent dans la caisse.<br>
+    Pour des gros montants, faites un virement au BE99 99 99 99 99</p>
+    <form class="form-inline">
+      <div class="form-group">
+        <div class="input-group">
+            <input type="text" class="form-control" id="exampleInputName2" placeholder="Montant">
+            <div class="input-group-addon">€</div>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-success">
+        Verser
+      </button>
+    </form>
+  </div>
+</div>
+
 {% endblock %}
