@@ -7,7 +7,7 @@
 <p>
     {% include "event_time.html" %}
     Etat : {{event.get_status_display}}<br>
-    Organisateur : {{event.organizer.username}}
+    Organisateur : <a href="{% url 'user_profile' event.organizer.username %}">{{event.organizer.username}}</a>
 </p>
 <p>{{event.description|markdown}}</p>
 

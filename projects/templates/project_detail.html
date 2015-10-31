@@ -6,10 +6,10 @@
 <h1>{{project.title}}</h1>
 <p>
     Etat : {{project.get_status_display}}<br>
-    Mainteneur : <a href="">{{project.maintainer.username}}</a><br>
+    Mainteneur : <a href="{% url 'user_profile' project.maintainer.username %}">{{project.maintainer.username}}</a><br>
     Prticipant{{project.participants.all|pluralize}}:
     {% for participant in project.participants.all %}
-    <a href="">{{participant.username}}</a>
+    <a href="{% url 'user_profile' participant.username %}">{{participant.username}}</a>
     {% empty %}
     Oh, il n'y a aucun participant :'(
     {% endfor %}</br>
