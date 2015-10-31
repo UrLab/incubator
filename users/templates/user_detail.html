@@ -3,7 +3,14 @@
 
 {% block content %}
 
-<h1>{{user.username}}</h1>
+<h1>
+{{user.username}}
+{% if request.user.is_authenticated %}
+    {% if user.first_name or user.last_name %}
+        <small>({{user.first_name}} {{user.last_name}})</small>
+    {% endif %}
+{% endif %}
+</h1>
 {% if request.user.is_autenticated %}
 <p>
     {{user.email}}<br>
