@@ -4,6 +4,7 @@
 {% block content %}
 
 <h1>{{user.username}}</h1>
+{% if request.user.is_autenticated %}
 <p>
     {{user.email}}<br>
     Balance: {{user.balance}}€ <a href="{% url 'change_balance' %}">Changer</a><br>
@@ -15,6 +16,7 @@
     <div class="alert alert-success" role="alert"><strong>Wow !</strong> Ca en fait une somme ça !</div>
     {% endif %}
 </p>
+{% endif %}
 
 <p>
     <h3>Vous maintenez les projets suivants:</h3>
