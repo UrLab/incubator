@@ -78,11 +78,6 @@ class User(AbstractBaseUser):
         return abs(self.balance)
 
 
-class MacAdress(models.Model):
-    adress = models.CharField(max_length=17, unique=True)
-    holder = models.ForeignKey(settings.AUTH_USER_MODEL)
-
-
 class Membership(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     asbl_year = models.ForeignKey('incubator.ASBLYear')

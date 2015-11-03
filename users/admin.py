@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import User, MacAdress
+from .models import User# , MacAdress
 
 
 @admin.register(User)
@@ -10,8 +10,8 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ('username',)
 
 
-@admin.register(MacAdress)
-class MacAdressAdmin(admin.ModelAdmin):
-    list_display = ('adress', 'holder')
-    # list_filter = ('adress',)
-    search_fields = ('adress', 'holder')
+# @admin.register(MacAdress)
+# class MacAdressAdmin(admin.ModelAdmin):
+#     list_display = ('adress', 'holder')
+#     # list_filter = ('adress',)
+#     search_fields = ('adress', 'holder')
