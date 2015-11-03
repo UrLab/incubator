@@ -12,7 +12,7 @@
         <ul>
         {% for user in users %}
             <li>
-                {{user}}
+                <a href="{% url 'user_profile' user %}">{{user}}</a>
                 {% if user.has_key %}
                     <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
                 {% endif %}
