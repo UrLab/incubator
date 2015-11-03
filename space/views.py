@@ -9,8 +9,7 @@ def pamela_list(request):
 
     known_mac = MacAdress.objects.filter(adress__in=maclist)
     unknown_mac = filter(lambda x: x not in [obj.adress for obj in known_mac], maclist)
-
-    users = {mac.holder for mac in known_mac}
+    users = {mac.holder for mac in known_mac if mac.holder is not None}
 
     return render(request, "pamela.html", {
         "unknown_mac": unknown_mac,
