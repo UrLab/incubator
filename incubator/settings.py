@@ -48,6 +48,7 @@ INSTALLED_APPS = (
     'events',
     'users',
     'projects',
+    'space',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -122,3 +123,6 @@ REST_FRAMEWORK = {
 
 
 BANK_ACCOUNT = "BE66 0017 6764 5043"
+
+REDIS_HOST = "rainbowdash.lan"
+REDIS_PORT = 6379

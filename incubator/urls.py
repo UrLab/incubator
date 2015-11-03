@@ -23,6 +23,7 @@ urlpatterns = patterns(
     url(r'^events/', include('events.urls')),
     url(r'^projects/', include('projects.urls')),
     url(r'^accounts/', include('users.urls')),
+    url(r'^space/', include('space.urls')),
 
     url(r'^sm', 'events.views.sm'),
     url(r'^linux', 'events.views.linux'),

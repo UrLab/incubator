@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+Updated {{updated}}s ago<br>
+{% for mac in maclist %}
+    {{mac}}<br>
+{% endfor %}
+
+{% endblock %}
