@@ -9,15 +9,19 @@
 <div class="row">
     <div class="col-md-4">
         <h3>Membres à UrLab</h3>
+        <ul>
         {% for user in users %}
-            {{user}}<br>
+            <li>{{user}}</li>
         {% endfor %}
+        </ul>
     </div>
     <div class="col-md-4">
         <h3>Machines inconnues</h3>
+        <ul>
         {% for mac in unknown_mac %}
-            {{mac}}<br>
+            <li>{{mac}}</li>
         {% endfor %}
+        </ul>
     </div>
     <div class="col-md-4">
         <h3>Ajoutez votre machine</h3>
