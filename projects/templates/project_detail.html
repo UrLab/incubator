@@ -49,7 +49,9 @@
     <a href="{% url 'project_add_participation' project.id%}">Je participe</a>
     {% endif %}
     <br>
-    <img src="{{project.picture.url}}"  class="img-thumbnail">
+    {% if project.picture %}
+      <img src="{{project.picture.url}}"  class="img-thumbnail">
+    {% endif %}
   </div>
   <div class="col-md-8 col-md-pull-4">
     {{project.content|markdown}}
