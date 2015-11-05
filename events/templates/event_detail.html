@@ -3,27 +3,55 @@
 
 {% block content %}
 
-<h1>{{event.title}}</h1>
+<div class="page-header">
+  <h1>{{event.title}}</h1>
+</div>
+
 <p>
-    {% include "event_time.html" %}
-    Etat : {{event.get_status_display}}<br>
-    Organisateur : <a href="{% url 'user_profile' event.organizer.username %}">{{event.organizer.username}}</a>
+    <div class="row">
+        <div class="col-md-8">
+            {% include "event_time.html" %}
+            Etat : {{event.get_status_display}}<br>
+            Organisateur : <a href="{% url 'user_profile' event.organizer.username %}">{{event.organizer.username}}</a>
+        </div>
+        <div class="col-md-4">
+            <p>
+                12 personnes sont intéressés
+                <button type="submit" class="btn btn-primary btn-xs">
+                        Moi aussi
+                </button><br>
+            </p>
+        </div>
+    </div>
+
 </p>
-<p>{{event.description|markdown}}</p>
+<hr>
+<div class="row">
+  <div class="col-md-6">
+    <h2>Description</h2>
+    {{event.description|markdown}}
+  </div>
+  <div class="col-md-6">
+    {% if event.meeting %}
+        <h2>Membres présents</h2>
+        {{event.meeting.membersPresent.all|join:","|default:"Aucun membre présent"}}
+        <a href=""><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
 
-{% if event.meeting %}
-    <h2>Membres présents</h2>
-    {{event.meeting.membersPresent.all|join:","|default:"Aucun membre présent"}}
-    <a href=""><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+        <h2>Ordre du jour</h2>
+        {{event.meeting.OJ|markdown}}
 
-    <h2>Ordre du jour</h2>
-    {{event.meeting.OJ|markdown}}
+        <h2>PV</h2>
+        {{event.meeting.PV|markdown}}
+    {% else %}
+        <h2>Ordre du jour</h2>
+        <p><a href="">Ajouter un ordre du jour</a></p>
+    {% endif %}
+  </div>
 
-    <h2>PV</h2>
-    {{event.meeting.PV|markdown}}
-{% else %}
-    <a href="">Ajouter un ordre du jour</a>
-{% endif %}
+</div>
+
+
+
 
 
 {% endblock %}
