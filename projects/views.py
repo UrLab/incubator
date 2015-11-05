@@ -18,7 +18,8 @@ def projects_home(request):
         when status="p" then 3
     end)'''
 
-    projects = Project.objects.extra(select={'order': CASE_SQL}, order_by=['order'])
+    # projects = Project.objects.extra(select={'order': CASE_SQL}, order_by=['order'])
+    projects = Project.objects.order_by('-modified')
     return render(request, "projects_home.html", {'projects': projects})
 
 

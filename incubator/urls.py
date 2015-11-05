@@ -9,6 +9,7 @@ from django.contrib.flatpages import views
 import events.views
 import users.views
 import projects.views
+from incubator import settings
 
 
 router = routers.DefaultRouter()
@@ -42,3 +43,7 @@ urlpatterns = patterns(
 
     url(r'^api/', include(router.urls)),
 )
+
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
