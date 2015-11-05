@@ -21,46 +21,55 @@
   </h1>
 </div>
 
-{% if request.user.is_authenticated %}
-<p>
-    {{user.email}}<br>
-    Balance: {{user.balance}}€
-    {% if request.user == user %}
-        <a href="{% url 'change_balance' %}">Changer</a><br>
-        {% if user.balance < 0 %}
-        <div class="alert alert-danger" role="alert"><strong>Solde négatif !</strong> Ne dépensez plus et rechargez vite !</div>
-        {% elif user.balance < 5 %}
-        <div class="alert alert-warning" role="alert"><strong>Hum, ne n'est pas beaucoup :</strong> pensez à recharger :)</div>
-        {% elif user.balance > 50 %}
-        <div class="alert alert-success" role="alert"><strong>Wow !</strong> Ca en fait une somme ça !</div>
+<div class="row">
+  <div class="col-md-8">
+    <p>
+        <h3>{%if request.user == user %}Vous maintenez{% else %}{{user.username}} maintient{% endif %} les projets suivants:</h3>
+        {% for project in user.maintained_projects.all %}
+        <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
+        {% endfor %}
+    </p>
+    <p>
+        <h3>{%if request.user == user %}Vous participez{% else %}{{user.username}} participe{% endif %} aux projets suivants:</h3>
+        {% for project in user.project_set.all %}
+        <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
+        {% empty %}
+        Vous ne participez a aucun projet :'(</br>
+        <a href="{% url 'projects_home' %}">Venez vous inscrire a l'un ou l'autre.</a>
+        {% endfor %}
+    </p>
+  </div>
+  <div class="col-md-4">
+    {% if request.user.is_authenticated %}
+    <p>
+        {% if request.user == user %}
+            {% if user.balance < 0 %}
+            <div class="alert alert-danger" role="alert"><strong>Votre solde est négatif !</strong> Ne dépensez plus et rechargez vite !</div>
+            {% elif user.balance < 5 %}
+            <div class="alert alert-warning" role="alert"><strong>Vous n'avez plus grand chose en stock :</strong> pensez à recharger :)</div>
+            {% elif user.balance > 50 %}
+            <div class="alert alert-success" role="alert"><strong>Wow !</strong> Ca en fait une somme ça !</div>
+            {% endif %}
         {% endif %}
+        <strong>Email :</strong> {{user.email}}<br>
+        <strong>Ardoise :</strong> {{user.balance}}€
+        {% if request.user == user %}
+            <a href="{% url 'change_balance' %}" class="btn btn-info btn-xs">Mettre à jour</a><br>
+        {% endif %}
+    </p>
     {% endif %}
-</p>
-{% endif %}
-
-<p>
-    <h3>{%if request.user == user %}Vous maintenez{% else %}{{user.username}} maintient{% endif %} les projets suivants:</h3>
-    {% for project in user.maintained_projects.all %}
-    <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
-    {% endfor %}
-</p>
-
-<p>
-    <h3>{%if request.user == user %}Vous participez{% else %}{{user.username}} participe{% endif %} aux projets suivants:</h3>
-    {% for project in user.project_set.all %}
-    <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
-    {% empty %}
-    Vous ne participez a aucun projet :'(</br>
-    <a href="{% url 'projects_home' %}">Venez vous inscrire a l'un ou l'autre.</a>
-    {% endfor %}
-</p>
-
-<p>
-    {% if user.has_key %}
-    You have a key :) Plase contact mainteneur@urlab.be if it is not the case
-    {% else %}
-    You don't have a key. You could ask for one during a meeting.
-    {% endif %}
-</p>
+    <p>
+        {% if request.user == user %}
+            {% if user.has_key %}
+                Vous avez une clé.
+            {% else %}
+                Vous n'avez pas de clé. Vous pouvez en demander une lors d'une réunion.
+            {% endif %}
+        {% elif user.has_key %}
+            {{user}} a une clé.
+        {% endif %}
+    </p>
+  </div>
+</div>
 
 {% endblock %}
