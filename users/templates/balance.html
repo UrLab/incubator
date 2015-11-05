@@ -7,6 +7,13 @@
 
 {% block content %}
 
+<ol class="breadcrumb">
+  <li><a href="/">UrLab</a></li>
+  <li>Membres</li>
+  <li><a href="{% url "profile" %}">{{user.username}}</a></li>
+  <li class="active">Ardoise</li>
+</ol>
+
 <div class="page-header">
   <h1>Votre ardoise <small>UBS© (UrLab banking system)</small></h1>
 </div>

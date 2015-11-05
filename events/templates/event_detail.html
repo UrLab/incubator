@@ -3,6 +3,12 @@
 
 {% block content %}
 
+<ol class="breadcrumb">
+  <li><a href="/">UrLab</a></li>
+  <li><a href="{% url "events_home" %}">Événements</a></li>
+  <li class="active">{{event.title}}</li>
+</ol>
+
 <div class="page-header">
   <h1>{{event.title}}</h1>
 </div>
