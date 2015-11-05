@@ -10,17 +10,17 @@ from .serializers import ProjectSerializer
 from .models import Project
 from .forms import ProjectForm
 
+
 def projects_home(request):
-    MAX_PROJECTS = 10
-    context = {
-        'max_projects': MAX_PROJECTS,
-    }
+    CASE_SQL = '''(case
+        when status="i" then 1
+        when status="f" then 2
+        when status="p" then 3
+    end)'''
 
-    context['proposition'] = Project.objects.filter(status='p').order_by('-modified')[:MAX_PROJECTS]
-    context['progress'] = Project.objects.filter(status='i').order_by('-modified')[:MAX_PROJECTS]
-    context['finished'] = Project.objects.filter(status='f').order_by('-modified')[:MAX_PROJECTS]
+    projects = Project.objects.extra(select={'order': CASE_SQL}, order_by=['order'])
+    return render(request, "projects_home.html", {'projects': projects})
 
-    return render(request, "projects_home.html", context)
 
 def add_project(request):
     if request.method == 'POST':
@@ -34,6 +34,7 @@ def add_project(request):
     else:
         form = ProjectForm()
     return render(request, 'add_project.html', {'form': form})
+
 
 @login_required
 def add_participation(request, pk):

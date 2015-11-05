@@ -1,6 +1,0 @@
-<b>
-    <a href="{% url 'view_project' project.id %}">{{ project.title }}</a>
-</b> - {{ project.short_description }}
-({{ project.participants.all|length|add:1}}
-participant{{ project.participants.all|length|add:1|pluralize}})
-<br>

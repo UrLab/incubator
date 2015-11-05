@@ -5,22 +5,35 @@
 
 <h1>Projets</h1>
 
-<h2>En cours</h2>
-{% for project in progress %}
-    {% include "project_list_item.html" %}
-{% endfor %}
-{% if progress|length_is:max_projects %}Voir plus{% endif %}
-
-<h2>Finis</h2>
-{% for project in finished %}
-    {% include "project_list_item.html" %}
-{% endfor %}
-{% if progress|length_is:max_projects %}Voir plus{% endif %}
-
-<h2>Propositions</h2>
-{% for project in proposition %}
-    {% include "project_list_item.html" %}
-{% endfor %}
-{% if progress|length_is:max_projects %}Voir plus{% endif %}
+<div class="row">
+    {% for project in projects %}
+      <div class="col-sm-6 col-md-3">
+        <div class="thumbnail">
+          <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMjQyIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDI0MiAyMDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MjAwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTUwZDZkYWMwMDYgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMnB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNTBkNmRhYzAwNiI+PHJlY3Qgd2lkdGg9IjI0MiIgaGVpZ2h0PSIyMDAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI4OS41IiB5PSIxMDQuNSI+MjQyeDIwMDwvdGV4dD48L2c+PC9nPjwvc3ZnPg==" alt="...">
+          <div class="caption">
+            <h3>
+                {{ project.title }}<br>
+                <small>
+                    {{ project.participants.all|length|add:1}} participant{{ project.participants.all|length|add:1|pluralize}}
+                    {% if project.status == 'i' %}
+                    - {{project.progress}}%
+                    {% elif project.status == 'f' %}
+                        - <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        Fini
+                    {% else %}
+                        - Proposition
+                    {% endif %}
+                </small>
+            </h3>
+            <p>{{ project.short_description }}</p>
+            <p class="text-center">
+                <a href="#" class="btn btn-primary" role="button">Voir plus</a>
+                <a href="#" class="btn btn-default" role="button">Participer</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+</div>
 
 {% endblock %}
