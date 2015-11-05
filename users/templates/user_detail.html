@@ -3,24 +3,37 @@
 
 {% block content %}
 
-<h1>
-{{user.username}}
-{% if request.user.is_authenticated %}
-    {% if user.first_name or user.last_name %}
-        <small>({{user.first_name}} {{user.last_name}})</small>
+<ol class="breadcrumb">
+  <li><a href="/">UrLab</a></li>
+  <li>Membres</li>
+  <li class="active">{{user.username}}</li>
+</ol>
+
+
+<div class="page-header">
+  <h1>
+    {{user.username}}
+    {% if request.user.is_authenticated %}
+        {% if user.first_name or user.last_name %}
+            <small>({{user.first_name}} {{user.last_name}})</small>
+        {% endif %}
     {% endif %}
-{% endif %}
-</h1>
-{% if request.user.is_autenticated %}
+  </h1>
+</div>
+
+{% if request.user.is_authenticated %}
 <p>
     {{user.email}}<br>
-    Balance: {{user.balance}}€ <a href="{% url 'change_balance' %}">Changer</a><br>
-    {% if user.balance < 0 %}
-    <div class="alert alert-danger" role="alert"><strong>Solde négatif !</strong> Ne dépensez plus et rechargez vite !</div>
-    {% elif user.balance < 5 %}
-    <div class="alert alert-warning" role="alert"><strong>Hum, ne n'est pas beaucoup :</strong> pensez à recharger :)</div>
-    {% elif user.balance > 50 %}
-    <div class="alert alert-success" role="alert"><strong>Wow !</strong> Ca en fait une somme ça !</div>
+    Balance: {{user.balance}}€
+    {% if request.user == user %}
+        <a href="{% url 'change_balance' %}">Changer</a><br>
+        {% if user.balance < 0 %}
+        <div class="alert alert-danger" role="alert"><strong>Solde négatif !</strong> Ne dépensez plus et rechargez vite !</div>
+        {% elif user.balance < 5 %}
+        <div class="alert alert-warning" role="alert"><strong>Hum, ne n'est pas beaucoup :</strong> pensez à recharger :)</div>
+        {% elif user.balance > 50 %}
+        <div class="alert alert-success" role="alert"><strong>Wow !</strong> Ca en fait une somme ça !</div>
+        {% endif %}
     {% endif %}
 </p>
 {% endif %}
