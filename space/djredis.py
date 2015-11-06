@@ -37,7 +37,7 @@ def set_space_open(client, is_open):
 
     client.set('incubator_status', is_open)
 
-    SpaceStatus.create(is_open=bool(is_open))
+    SpaceStatus.objects.create(is_open=bool(is_open))
 
 
 def space_is_open(client):
