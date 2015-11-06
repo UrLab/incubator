@@ -1,5 +1,8 @@
 from django.shortcuts import render
 from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+
 from .djredis import get_redis, get_mac
 from .models import MacAdress
 from .forms import MacAdressForm
@@ -30,7 +33,8 @@ def pamela_list(request):
             mac.holder = request.user
             mac.save()
             messages.success(request, 'Votre MAC a été ajoutée !')
-            form = MacAdressForm()
+
+            return HttpResponseRedirect(reverse('pamela_list'))
     else:
         form = MacAdressForm()
 
