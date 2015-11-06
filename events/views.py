@@ -16,10 +16,6 @@ class EventAddView(CreateView):
     form_class = EventForm
     template_name = 'add_event.html'
 
-    def form_valid(self, form):
-        form.instance.organizer = self.request.user
-        return super(EventAddView, self).form_valid(form)
-
 
 class EventEditView(UpdateView):
     form_class = EventForm
