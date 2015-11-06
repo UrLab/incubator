@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets
 from django.views.generic.detail import DetailView
+from django.views.generic import CreateView, UpdateView
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
@@ -11,30 +12,26 @@ from .models import Project
 from .forms import ProjectForm
 
 
-def projects_home(request):
-    CASE_SQL = '''(case
-        when status="i" then 1
-        when status="f" then 2
-        when status="p" then 3
-    end)'''
+class ProjectAddView(CreateView):
+    form_class = ProjectForm
+    template_name = 'add_project.html'
 
-    # projects = Project.objects.extra(select={'order': CASE_SQL}, order_by=['order'])
+
+class ProjectEditView(UpdateView):
+    form_class = ProjectForm
+    model = Project
+    template_name = 'add_project.html'
+
+
+class ProjectDetailView(DetailView):
+    model = Project
+    template_name = 'project_detail.html'
+    context_object_name = 'project'
+
+
+def projects_home(request):
     projects = Project.objects.order_by('-modified')
     return render(request, "projects_home.html", {'projects': projects})
-
-
-def add_project(request):
-    if request.method == 'POST':
-        form = ProjectForm(request.POST)
-        if form.is_valid():
-            project = form.save(commit=False)
-            project.save()
-
-            return HttpResponseRedirect(reverse('view_project', args=[project.id]))
-
-    else:
-        form = ProjectForm()
-    return render(request, 'add_project.html', {'form': form})
 
 
 @login_required
@@ -43,12 +40,6 @@ def add_participation(request, pk):
     if request.user not in project.participants.all():
         project.participants.add(request.user)
     return HttpResponseRedirect(reverse('view_project', args=[pk]))
-
-
-class ProjectDetailView(DetailView):
-    model = Project
-    template_name = 'project_detail.html'
-    context_object_name = 'project'
 
 
 class ProjectViewSet(viewsets.ModelViewSet):

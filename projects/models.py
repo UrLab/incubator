@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
 from django.core.validators import MaxValueValidator
+from django.core.urlresolvers import reverse
+
 
 # Create your models here.
 #    Un projet appartient à des users
@@ -38,3 +40,6 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('view_project', args=[self.id])
