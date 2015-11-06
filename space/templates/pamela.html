@@ -1,10 +1,18 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
+
 
 {% block content %}
 
 <div class="page-header">
   <h1>Pamela <small>Mis à jour il y a {{updated}} secondes</small></h1>
 </div>
+
+{% for message in messages %}
+    <div class="alert alert-success" role="alert">
+        {{ message }}
+    </div>
+{% endfor %}
 
 <div class="row">
     <div class="col-md-4">
@@ -32,18 +40,18 @@
         <h3>Ajoutez votre machine</h3>
         <p>Tapez ceci dans un terminal pour avoir une liste de vos MAC adress : </p>
         <pre>ip addr show</pre>
-        <p>Et ajoutez votre machine à Pamela : </p>
-        <form>
-          <div class="form-group">
-            <label for="mac">MAC address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="MAC address">
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Nom de la machine</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Nom de la machine">
-          </div>
-          <button type="submit" class="btn btn-info">Ajouter à Pamela</button>
-        </form>
+        {% if request.user.is_authenticated %}
+            <p>Et ajoutez votre machine à Pamela : </p>
+            <form action="{% url "pamela_list" %}" method="post" class="form">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                <button type="submit" class="btn btn-info">Ajouter à Pamela</button>
+                {% endbuttons %}
+            </form>
+        {% else %}
+            Connectez-vous pour pouvoir ajouter votre adresse à Pamela
+        {% endif %}
     </div>
 </div>
 {% endblock %}

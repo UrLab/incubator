@@ -1,6 +1,13 @@
 from django.shortcuts import render
-from .djredis import get_redis, get_mac
+from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden, HttpResponse
+
+from .djredis import get_redis, get_mac, set_space_open
 from .models import MacAdress
+from .forms import MacAdressForm
+
+from incubator.settings import STATUS_SECRETS
 
 
 def make_pamela():
@@ -16,11 +23,42 @@ def make_pamela():
         'raw_maclist': maclist,
         'updated': updated,
         'unknown_mac': unknown_mac,
-        'users': users
+        'users': users,
     }
 
 
 def pamela_list(request):
+    if request.method == 'POST':
+        form = MacAdressForm(request.POST)
+        if form.is_valid():
+            mac = form.save(commit=False)
+            mac.holder = request.user
+            mac.save()
+            messages.success(request, 'Votre MAC a été ajoutée !')
+
+            return HttpResponseRedirect(reverse('pamela_list'))
+    else:
+        form = MacAdressForm()
+
     context = make_pamela()
+    context['form'] = form
 
     return render(request, "pamela.html", context)
+
+
+def status_change(request):
+    if request.method != 'POST':
+        return HttpResponseBadRequest("Only POST is allowed")
+
+    if 'secret' not in request.POST.keys():
+        return HttpResponseBadRequest("You must query this endpoint with a secret.")
+
+    if request.POST['secret'] not in STATUS_SECRETS:
+        message = 'Bad secret {} is not in the allowed list'.format(request.POST['secret'])
+        return HttpResponseForbidden(message)
+
+    redis = get_redis()
+    state = bool(request.POST['open'])
+    set_space_open(redis, state)
+
+    return HttpResponse("Hackerspace is now open={}".format(state))

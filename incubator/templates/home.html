@@ -6,10 +6,17 @@
   <div class="col-md-8">
         <h1>
             UrLab ?
+            {% if space_open %}
             <a href="" class="btn btn-success">
                 {% bootstrap_icon "ok" %}
                 C'est ouvert !
             </a>
+            {% else %}
+            <a href="" class="btn btn-danger">
+                {% bootstrap_icon "remove" %}
+                On est fermés
+            </a>
+            {% endif %}
         </h1>
 
         <p>UrLab est le hackerspace de l’ULB. Il s’agit d'un laboratoire ouvert par et pour les étudiants, où l’on met à disposition une infrastructure pour qu’ils puissent y exprimer leur créativité de manière collaborative.</p>
