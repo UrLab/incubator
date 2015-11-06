@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from .djredis import get_redis, get_mac, set_space_open
 from .models import MacAdress
@@ -46,6 +47,7 @@ def pamela_list(request):
     return render(request, "pamela.html", context)
 
 
+@csrf_exempt
 def status_change(request):
     if request.method != 'POST':
         return HttpResponseBadRequest("Only POST is allowed")
@@ -57,8 +59,11 @@ def status_change(request):
         message = 'Bad secret {} is not in the allowed list'.format(request.POST['secret'])
         return HttpResponseForbidden(message)
 
+    if 'open' not in request.POST.keys():
+        return HttpResponseBadRequest('You must query this endpoint an "open" key.')
+
     redis = get_redis()
-    state = bool(request.POST['open'])
+    state = int(request.POST['open'])
     set_space_open(redis, state)
 
     return HttpResponse("Hackerspace is now open={}".format(state))
