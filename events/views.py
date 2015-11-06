@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.views.generic.detail import DetailView
+from django.views.generic import CreateView, UpdateView
 from django.utils import timezone
 from rest_framework import viewsets
 
@@ -9,6 +10,27 @@ from rest_framework import viewsets
 from .serializers import EventSerializer
 from .models import Event
 from .forms import EventForm
+
+
+class EventAddView(CreateView):
+    form_class = EventForm
+    template_name = 'add_event.html'
+
+    def form_valid(self, form):
+        form.instance.organizer = self.request.user
+        return super(EventAddView, self).form_valid(form)
+
+
+class EventEditView(UpdateView):
+    form_class = EventForm
+    model = Event
+    template_name = 'add_event.html'
+
+
+class EventDetailView(DetailView):
+    model = Event
+    template_name = 'event_detail.html'
+    context_object_name = 'event'
 
 
 def events_home(request):
@@ -20,22 +42,6 @@ def events_home(request):
     return render(request, "events_home.html", context)
 
 
-def add_event(request):
-    if request.method == 'POST':
-        form = EventForm(request.POST)
-        if form.is_valid():
-            event = form.save(commit=False)
-            event.organizer = request.user
-            event.save()
-
-            return HttpResponseRedirect(reverse('view_event', args=[event.id]))
-
-    else:
-        form = EventForm()
-
-    return render(request, 'add_event.html', {'form': form})
-
-
 def short_url_maker(*keywords):
     def filter_func(request):
         events = Event.objects.exclude(stop__lt=timezone.now()).order_by('start')
@@ -45,7 +51,7 @@ def short_url_maker(*keywords):
         if len(events) == 0:
             return HttpResponseRedirect(reverse('events_home'))
         else:
-            return HttpResponseRedirect(reverse('view_event', args=[events[0].id]))
+            return HttpResponseRedirect(events[0].get_absolute_url())
 
     return filter_func
 
@@ -54,13 +60,6 @@ sm = short_url_maker("smartmonday")
 linux = short_url_maker("install", "party")
 git = short_url_maker("workshop", "git")
 ag = short_url_maker("AG", "mandat")
-
-
-class EventDetailView(DetailView):
-
-    model = Event
-    template_name = 'event_detail.html'
-    context_object_name = 'event'
 
 
 class EventViewSet(viewsets.ModelViewSet):

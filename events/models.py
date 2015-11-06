@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 from datetime import timedelta
+from django.core.urlresolvers import reverse
+
 
 # Create your models here.
 # Events :
@@ -33,6 +35,9 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('view_event', args=[self.id])
 
     class Meta:
         verbose_name = "Événement"
