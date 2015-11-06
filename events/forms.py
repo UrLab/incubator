@@ -1,4 +1,6 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, Textarea
+from datetimewidget.widgets import DateTimeWidget
+
 from django import forms
 
 from .models import Event
@@ -8,6 +10,20 @@ class EventForm(ModelForm):
     class Meta:
         model = Event
         exclude = ['organizer']
+
+        widgets = {
+            'start': DateTimeWidget(
+                attrs={'id': "start"},
+                usel10n=True,
+                bootstrap_version=3
+            ),
+            'stop': DateTimeWidget(
+                attrs={'id': "stop"},
+                usel10n=True,
+                bootstrap_version=3
+            ),
+            'description': Textarea(attrs={'rows': 15}),
+        }
 
     def clean(self):
         cleaned_data = super(EventForm, self).clean()
