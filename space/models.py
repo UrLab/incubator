@@ -16,6 +16,10 @@ class MacAdress(models.Model):
     machine_name = models.CharField(blank=True, max_length=100, verbose_name='Nom de la machine')
     holder = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
 
+    def save(self, *args, **kwargs):
+        self.adress = self.adress.lower()
+        super(MacAdress, self).save(*args, **kwargs)
+
 
 class SpaceStats(models.Model):
     adress_count = models.IntegerField()
