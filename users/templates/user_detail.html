@@ -19,7 +19,10 @@
         {% endif %}
     {% endif %}
     {% if request.user == user %}
-        <a href="{% url 'user_edit' %}" class="btn btn-default">Editer</a>
+        <a href="{% url 'user_edit' %}" class="btn btn-default">
+            <span class="fa fa-edit" aria-hidden="true"></span>
+            Editer
+        </a>
     {% endif %}
   </h1>
 </div>
