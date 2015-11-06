@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'users',
     'projects',
     'space',
+    'stock',
 )
 
 MIDDLEWARE_CLASSES = (

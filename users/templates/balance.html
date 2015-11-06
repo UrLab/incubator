@@ -30,33 +30,30 @@
 <div class="row">
   <div class="col-md-6">
     <h2>Liste de prix</h2>
-    <div class="panel panel-default">
-      <div class="panel-heading">Nourriture</div>
-      <table class="table">
-        <thead>
-            <tr><th>Nom</th><th>Prix</th><th>Achat</th></tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Pain</td><td>20€</td><td><a href="">Acheter {% bootstrap_icon "shopping-cart" %}</a></td>
-            </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="panel panel-default">
-      <div class="panel-heading">Boissons</div>
-      <table class="table">
-        <thead>
-            <tr><th>Nom</th><th>Prix</th><th>Achat</th></tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Bière</td><td>0.20€</td><td><a href="">Acheter {% bootstrap_icon "shopping-cart" %}</a></td>
-            </tr>
-        </tbody>
-      </table>
-    </div>
-
+    {% regroup products by category as category_list %}
+    {% for category in category_list %}
+      <div class="panel panel-default">
+        <div class="panel-heading">{{category.grouper}}</div>
+        <table class="table">
+          <thead>
+              <tr>
+                <th class="col-md-3">Nom</th>
+                <th class="col-md-3">Prix</th>
+                <th class="col-md-3">Achat</th>
+              </tr>
+          </thead>
+          <tbody>
+            {% for product in category.list %}
+              <tr>
+                  <td class="col-md-3">{{product.name}}</td>
+                  <td class="col-md-3">{{product.price}}€</td>
+                  <td class="col-md-3"><a href="">Acheter {% bootstrap_icon "shopping-cart" %}</a></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% endfor %}
   </div>
   <div class="col-md-6">
     <h2>Dépenser</h2>
