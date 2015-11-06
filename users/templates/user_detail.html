@@ -61,12 +61,12 @@
     <p>
         {% if request.user == user %}
             {% if user.has_key %}
-                Vous avez une clé.
+            <span class="fa fa-key" aria-hidden="true"></span> Vous avez une clé.
             {% else %}
-                Vous n'avez pas de clé. Vous pouvez en demander une lors d'une réunion.
+            <span class="fa fa-key" aria-hidden="true"></span> Vous n'avez pas de clé. Vous pouvez en demander une lors d'une réunion.
             {% endif %}
         {% elif user.has_key %}
-            {{user}} a une clé.
+        <span class="fa fa-key" aria-hidden="true"></span> {{user}} a une clé.
         {% endif %}
     </p>
   </div>
