@@ -7,12 +7,12 @@
         <h1>
             UrLab ?
             {% if space_open %}
-            <a href="" class="btn btn-success">
+            <a href="{% url "pamela_list" %}" class="btn btn-success">
                 {% bootstrap_icon "ok" %}
                 C'est ouvert !
             </a>
             {% else %}
-            <a href="" class="btn btn-danger">
+            <a href="{% url "pamela_list" %}" class="btn btn-danger">
                 {% bootstrap_icon "remove" %}
                 On est fermés
             </a>
