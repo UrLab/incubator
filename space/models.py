@@ -26,3 +26,8 @@ class SpaceStats(models.Model):
     user_count = models.IntegerField()
     unknown_mac_count = models.IntegerField()
     time = models.DateTimeField(auto_now_add=True)
+
+
+class SpaceStatus(models.Model):
+    time = models.DateTimeField(auto_now_add=True)
+    is_open = models.BooleanField()

@@ -135,3 +135,9 @@ REDIS_PORT = 6379
 FAKE_REDIS = True
 
 STATUS_SECRETS = []
+
+
+try:
+    from incubator.local_settings import *
+except ImportError:
+    pass

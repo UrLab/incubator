@@ -1,5 +1,6 @@
 from redis import StrictRedis
 from incubator.settings import REDIS_HOST, REDIS_PORT, FAKE_REDIS
+from space.models import SpaceStatus
 
 
 def get_redis():
@@ -29,11 +30,18 @@ def get_mac(client):
 
 
 def set_space_open(client, is_open):
-    client.set('incubator_status', int(is_open))
+    if isinstance(is_open, bool):
+        is_open = 1 if is_open else 0
+    if is_open > 1:
+        is_open = 1
+
+    client.set('incubator_status', is_open)
+
+    SpaceStatus.objects.create(is_open=bool(is_open))
 
 
 def space_is_open(client):
-    return bool(client.get('incubator_status'))
+    return int(client.get('incubator_status')) == 1
 
 
 if FAKE_REDIS:

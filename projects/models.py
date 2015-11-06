@@ -28,10 +28,10 @@ class Project(models.Model):
     progress = models.PositiveIntegerField(validators=[MaxValueValidator(100)], verbose_name="Progression")
     dependencies = models.ManyToManyField('self', blank=True, verbose_name="Dépendences")
 
+    picture = models.ImageField(upload_to='project_pictures', null=True, blank=True)
+
     short_description = models.CharField(max_length=1000, verbose_name="Description courte")
     content = models.TextField(verbose_name="Contenu")
-
-    picture = models.ImageField(upload_to='project_pictures', null=True, blank=True)
 
     class Meta:
         verbose_name = "Projet"
