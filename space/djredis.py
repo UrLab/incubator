@@ -1,5 +1,5 @@
 from redis import StrictRedis
-from incubator.settings import REDIS_HOST, REDIS_PORT
+from incubator.settings import REDIS_HOST, REDIS_PORT, FAKE_REDIS
 
 
 def get_redis():
@@ -26,3 +26,15 @@ def get_mac(client):
     mac = mac.decode()
     updated = int(expiration) - ttl
     return updated, mac.split(',')
+
+
+def set_space_open(client, is_open):
+    client.set('incubator_status', int(is_open))
+
+
+def space_is_open(client):
+    return bool(client.get('incubator_status'))
+
+
+if FAKE_REDIS:
+    from .fakeredis import *
