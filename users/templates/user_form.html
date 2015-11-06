@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block head %}
+    {{ form.media  }}
+    <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static "js/bootstrap-multiselect.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+<form action="{% url "user_edit" %}" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">
+        Submit
+    </button>
+    {% endbuttons %}
+</form>
+
+
+{% endblock %}
