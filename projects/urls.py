@@ -1,12 +1,12 @@
 from django.conf.urls import patterns, url
-
-from .views import ProjectDetailView, ProjectAddView, ProjectEditView
+from django.contrib.auth.decorators import login_required
+from .views import ProjectDetailView, ProjectAddView, ProjectEditView, add_participation, projects_home
 
 urlpatterns = patterns(
     '',
-    url(r'^$', 'projects.views.projects_home', name='projects_home'),
-    url(r'^add$', ProjectAddView.as_view(), name='add_project'),
-    url(r'^edit/(?P<pk>[0-9]+)$', ProjectEditView.as_view(), name='edit_project'),
+    url(r'^$', projects_home, name='projects_home'),
+    url(r'^add$', login_required(ProjectAddView.as_view()), name='add_project'),
+    url(r'^edit/(?P<pk>[0-9]+)$', login_required(ProjectEditView.as_view()), name='edit_project'),
     url(r'^(?P<pk>[0-9]+)', ProjectDetailView.as_view(), name='view_project'),
-    url(r'^partcipe/(?P<pk>[0-9]+)', 'projects.views.add_participation', name='project_add_participation'),
+    url(r'^partcipe/(?P<pk>[0-9]+)', login_required(add_participation), name='project_add_participation'),
 )

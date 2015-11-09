@@ -38,16 +38,16 @@ class User(AbstractBaseUser):
     REQUIRED_FIELDS = ['email']
     objects = CustomUserManager()
 
-    username = models.CharField(max_length=30, unique=True)
+    username = models.CharField(max_length=30, unique=True, verbose_name="nom d'utilisateur")
     email = models.CharField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     first_name = models.CharField(max_length=127)
     last_name = models.CharField(max_length=127)
-    is_staff = models.BooleanField(default=False, verbose_name="Est administrateur")
+    is_staff = models.BooleanField(default=False, verbose_name="est administrateur")
 
-    balance = models.DecimalField(max_digits=6, decimal_places=2, default=0, verbose_name="Ardoise")
-    has_key = models.BooleanField(default=False, verbose_name="Possède une clé")
+    balance = models.DecimalField(max_digits=6, decimal_places=2, default=0, verbose_name="ardoise")
+    has_key = models.BooleanField(default=False, verbose_name="possède une clé")
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?

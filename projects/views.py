@@ -4,7 +4,6 @@ from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.contrib.auth.decorators import login_required
 
 from .serializers import ProjectSerializer
 
@@ -34,7 +33,6 @@ def projects_home(request):
     return render(request, "projects_home.html", {'projects': projects})
 
 
-@login_required
 def add_participation(request, pk):
     project = get_object_or_404(Project, pk=pk)
     if request.user not in project.participants.all():
