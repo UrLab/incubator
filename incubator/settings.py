@@ -146,6 +146,7 @@ FAKE_REDIS = True
 
 STATUS_SECRETS = []
 
+LOGIN_URL = '/auth/login/'
 
 try:
     from incubator.local_settings import *

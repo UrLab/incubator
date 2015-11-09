@@ -2,30 +2,31 @@
 {% load bootstrap3 %}
 
 {% block content %}
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
 
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
+<div class="row">
+  <div class="col-md-6">
+    {% if next %}
+        <div class="alert alert-warning" role="alert">
+            Vous devez d'abord vous connecter avant de pouvoir accéder à cette page.
+        </div>
     {% endif %}
-{% endif %}
 
-<form method="post" action="{% url 'django.contrib.auth.views.login' %}">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% buttons %}
-    <button type="submit" class="btn btn-primary">
-        Submit
-    </button>
-    {% endbuttons %}
-</form>
+    <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary">
+            Se connecter
+        </button>
+        {% endbuttons %}
+    </form>
+  </div>
+  <div class="col-md-6">
+    <p><a href="{% url 'password_reset' %}">Mot de passe perdu ?</a></p>
 
-{# Assumes you setup the password_reset view in your URLconf #}
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+  </div>
+</div>
+
+
 
 {% endblock %}
