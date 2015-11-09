@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load sekizai_tags i18n wiki_tags %}
+
+{%block head %}
+ <link href="{{ STATIC_URL  }}wiki/bootstrap/css/wiki-bootstrap.min.css" rel="stylesheet">
+{%endblock%}
+
+{%block content %}
+      {% block wiki_breadcrumbs %}{% endblock %}
+      {% block wiki_contents %}{% endblock %}
+{% endblock %}

@@ -77,6 +77,10 @@ class User(AbstractBaseUser):
     def absolute_balance(self):
         return abs(self.balance)
 
+    @property
+    def is_superuser(self):
+        return self.is_staff
+
 
 class Membership(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
