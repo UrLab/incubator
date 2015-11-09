@@ -1,11 +1,20 @@
 from events.forms import EventForm
 from datetime import datetime
+import pytest
+from users.models import User
 
+pytestmark = pytest.mark.django_db
+
+@pytest.fixture(scope='function')
+def user():
+    user = User.objects.create(username="test", email="test@test.be", first_name="Test", last_name="Test")
+    return user.id
 
 def test_only_title_and_state_required():
     form_data = {
         'title': 'wtf',
-        'status': 'j'
+        'status': 'j',
+        'organizer': user,
     }
     form = EventForm(data=form_data)
 
@@ -16,7 +25,8 @@ def test_no_stop_but_start():
     form_data = {
         'title': 'wtf',
         'status': 'j',
-        'start': datetime(2000, 1, 1)
+        'start': datetime(2000, 1, 1),
+        'organizer': user,
     }
     form = EventForm(data=form_data)
 
