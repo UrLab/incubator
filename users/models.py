@@ -46,7 +46,7 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length=127)
     is_staff = models.BooleanField(default=False, verbose_name="Est administrateur")
 
-    balance = models.IntegerField(default=0, verbose_name="Ardoise")
+    balance = models.DecimalField(max_digits=6, decimal_places=2, default=0, verbose_name="Ardoise")
     has_key = models.BooleanField(default=False, verbose_name="Possède une clé")
 
     def has_module_perms(self, *args, **kwargs):
