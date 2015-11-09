@@ -29,7 +29,7 @@ class ProjectDetailView(DetailView):
 
 
 def projects_home(request):
-    projects = Project.objects.order_by('-modified')
+    projects = Project.objects.prefetch_related("participants").select_related("maintainer").order_by('-modified')
     return render(request, "projects_home.html", {'projects': projects})
 
 
