@@ -2,6 +2,8 @@
 {% load activelink %}
 {% load bootstrap3 %}
 
+{% load sekizai_tags i18n wiki_tags %}
+
 <!DOCTYPE html>
 <!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
 <html class="no-js" lang="en" >
@@ -13,6 +15,7 @@
         {% bootstrap_javascript jquery=1 %}
         <link href="{% static "css/style.css" %}" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        {% render_block "css" %}
         <title>{% block title %}UrLab{% endblock %}</title>
         {% block head %}{% endblock %}
     </head>
@@ -37,7 +40,7 @@
                             <a href="{% url "events_home" %}">Evénements</a>
                         </li>
                         <li class="{% ifcontains "/wiki/" %}active{% endifcontains %}">
-                            <a href="">Wiki</a>
+                            <a href="{% url "wiki:root" %}">Wiki</a>
                         </li>
                         <li class="{% ifcontains "/space/pamela" %}active{% endifcontains %}">
                             <a href="{% url "pamela_list" %}">Pamela</a>
@@ -79,5 +82,6 @@
         {% block content %}
         {% endblock %}
         </div>
+        {% render_block "js" %}
     </body>
 </html>

@@ -10,6 +10,9 @@ import events.views
 import users.views
 import projects.views
 from incubator import settings
+from wiki.urls import get_pattern as get_wiki_pattern
+from django_nyt.urls import get_pattern as get_nyt_pattern
+
 
 
 router = routers.DefaultRouter()
@@ -42,6 +45,8 @@ urlpatterns = patterns(
     ), name="register"),
 
     url(r'^api/', include(router.urls)),
+    (r'^notifications/', get_nyt_pattern()),
+    url(r'^wiki/', get_wiki_pattern()),
 )
 
 if settings.DEBUG:
