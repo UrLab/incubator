@@ -30,17 +30,22 @@
             </div>
           </div>
       {% endif %}
-      <p>{{ project.short_description }}</p>
+      <p class="project-card-description">{{ project.short_description }}</p>
       <p class="text-center">
           <a href="{% url "view_project" project.id %}" class="btn btn-primary" role="button">
               <i class="fa fa-eye" aria-hidden="true"></i>
               Voir plus
           </a>
           {% if request.user != project.maintainer and request.user not in project.participants.all %}
-          <a href="{% url "project_add_participation" project.id %}" class="btn btn-default" role="button">
-              <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-              Participer
-          </a>
+            <a href="{% url "project_add_participation" project.id %}" class="btn btn-default" role="button">
+                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                Participer
+            </a>
+          {% else %}
+            <a href="{% url "edit_project" project.id %}" class="btn btn-default" role="button">
+                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                Editer
+            </a>
           {% endif %}
       </p>
 
