@@ -39,7 +39,7 @@ class User(AbstractBaseUser):
     objects = CustomUserManager()
 
     username = models.CharField(max_length=30, unique=True, verbose_name="nom d'utilisateur")
-    email = models.CharField(max_length=255, unique=True)
+    email = models.EmailField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     first_name = models.CharField(max_length=127, blank=True)
