@@ -2,6 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.core.validators import MaxValueValidator
 from django.core.urlresolvers import reverse
+from django.utils import timezone
+from datetime import timedelta
 
 
 # Create your models here.
@@ -43,3 +45,11 @@ class Project(models.Model):
 
     def get_absolute_url(self):
         return reverse('view_project', args=[self.id])
+
+    def is_stalled(self):
+        if self.status == "f":
+            return False
+
+        stall_time = timezone.now() - self.modified
+        month = timedelta(days=30)
+        return stall_time > month * 6
