@@ -5,6 +5,7 @@
 
 <div class="row">
   <div class="col-md-6">
+    <h1>Connexion</h1>
     {% if next %}
         <div class="alert alert-warning" role="alert">
             Vous devez d'abord vous connecter avant de pouvoir accéder à cette page.
@@ -20,9 +21,32 @@
         </button>
         {% endbuttons %}
     </form>
+    <h3>Mot de passe Perdu ?</h3>
+    <p>
+      Mauvaise mémoire ? Backup perdu ? Vous pouvez en
+      <a href="{% url 'password_reset' %}">choisir un nouveau</a>.
+    </p>
   </div>
   <div class="col-md-6">
-    <p><a href="{% url 'password_reset' %}">Mot de passe perdu ?</a></p>
+    <h1>Créer un compte</h1>
+    <p>
+      N'importe qui peut créer un compe, vous n'avez pas besoin d'être membre de UrLab ni d'être inscrits à l'ULB. On est ouverts à tout le monde on vous dit !
+    </p>
+    <p>
+      Avoir un compte vous permet de créer et d'éditer des projets ainsi que des événements. Vous pouvez aussi avoir votre nom dans pamela et gérer votre compte interne au hackerspace.
+    </p>
+    <form method="get" action="{% url 'django.contrib.auth.views.login' %}">
+        <div class="form-group">
+          <label class="control-label" for="id_username">Nom d'utilisateur</label>
+          <input class="form-control" id="id_username" maxlength="254" name="username" placeholder="Nom d'utilisateur" required="required" title="" type="text" />
+        </div>
+        <div class="form-group">
+        {% buttons %}
+        <button type="submit" class="btn btn-success">
+            Créer un compte
+        </button>
+        {% endbuttons %}
+    </form>
 
   </div>
 </div>
