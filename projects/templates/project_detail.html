@@ -53,7 +53,7 @@
       <a href="{% url 'user_profile' participant.username %}">{{participant.username}}</a>{% if not forloop.last %}, {% endif %}
     {% empty %}
         {% if user != project.maintainer %}
-            Il n'y a encore aucun participant, ajoutez vous !
+            Il n'y a encore aucun autre participant, ajoutez vous !
         {% endif %}
     {% endfor %}
     </br>
