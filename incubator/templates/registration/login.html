@@ -35,7 +35,7 @@
     <p>
       Avoir un compte vous permet de créer et d'éditer des projets ainsi que des événements. Vous pouvez aussi avoir votre nom dans pamela et gérer votre compte interne au hackerspace.
     </p>
-    <form method="get" action="{% url 'django.contrib.auth.views.login' %}">
+    <form method="get" action="{% url 'register' %}">
         <div class="form-group">
           <label class="control-label" for="id_username">Nom d'utilisateur</label>
           <input class="form-control" id="id_username" maxlength="254" name="username" placeholder="Nom d'utilisateur" required="required" title="" type="text" />
