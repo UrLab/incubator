@@ -42,8 +42,8 @@ class User(AbstractBaseUser):
     email = models.CharField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
-    first_name = models.CharField(max_length=127)
-    last_name = models.CharField(max_length=127)
+    first_name = models.CharField(max_length=127, blank=True)
+    last_name = models.CharField(max_length=127, blank=True)
     is_staff = models.BooleanField(default=False, verbose_name="est administrateur")
 
     balance = models.DecimalField(max_digits=6, decimal_places=2, default=0, verbose_name="ardoise")
