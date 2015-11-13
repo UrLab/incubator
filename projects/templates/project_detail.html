@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load formatting %}
+{% load humanize %}
 
 {% block content %}
 
@@ -42,9 +43,11 @@
           </div>
         </div>
     {% endif %}
-    Mainteneur : <a href="{% url 'user_profile' project.maintainer.username %}">{{project.maintainer.username}}</a><br>
+    <strong>Dernière modification :</strong> {{project.modified|naturaltime}}<br>
+    <strong>Mainteneur :</strong>
+    <a href="{% url 'user_profile' project.maintainer.username %}">{{project.maintainer.username}}</a><br>
     {% if project.participants.all %}
-        Participant{{project.participants.all|pluralize}}:
+        <strong>Participant{{project.participants.all|pluralize}} :</strong>
     {% endif %}
     {% for participant in project.participants.all %}
     <a href="{% url 'user_profile' participant.username %}">{{participant.username}}</a>
