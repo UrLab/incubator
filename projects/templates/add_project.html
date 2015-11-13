@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-<form action="{% url "add_project" %}" method="post" class="form">
+<form action="" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form form %}
     {% buttons %}
