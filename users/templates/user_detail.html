@@ -71,6 +71,34 @@
             {% else %}
             <span class="fa fa-key" aria-hidden="true"></span> Vous n'avez pas de clé. Vous pouvez en demander une lors d'une réunion.
             {% endif %}
+            <br>
+            <h4>Vos adresses MAC</h4>
+            <ul>
+            {% for mac in user.macadress_set.all %}
+                <li>
+                    <form method="POST" action="{% url "delete_mac" mac.id %}">
+                        {% if mac.machine_name %}
+                            {{mac.machine_name}} : {{mac.adress}}
+                        {% else %}
+                            {{mac.adress}}
+                        {% endif %}
+
+                       {% csrf_token %}
+                       <button type="submit" class="btn btn-danger btn-xs">
+                        <i class="fa fa-times"></i>
+                       </button>
+                    </form>
+                </li>
+            {% empty %}
+                <li>Vous n'avez aucune MAC Adress enregistrée</li>
+            {% endfor %}
+                <li>
+                    Ajouter
+                    <a href="{% url "pamela_list" %}" class="btn btn-success btn-xs">
+                        <i class="fa fa-plus"></i>
+                    </a>
+                </li>
+            </ul>
         {% elif user.has_key %}
         <span class="fa fa-key" aria-hidden="true"></span> {{user}} a une clé.
         {% endif %}

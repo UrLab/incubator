@@ -3,6 +3,9 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.edit import DeleteView
+from django.core.urlresolvers import reverse_lazy
+from django.core.exceptions import PermissionDenied
 
 from .djredis import get_redis, get_mac, set_space_open
 from .models import MacAdress
@@ -67,3 +70,14 @@ def status_change(request):
     set_space_open(redis, state)
 
     return HttpResponse("Hackerspace is now open={}".format(state))
+
+
+class DeleteMACView(DeleteView):
+    model = MacAdress
+    success_url = reverse_lazy('profile')
+
+    def get_object(self, queryset=None):
+        obj = super(DeleteMACView, self).get_object()
+        if not obj.holder == self.request.user:
+            raise PermissionDenied
+        return obj
