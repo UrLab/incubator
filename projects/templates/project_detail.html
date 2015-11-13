@@ -62,13 +62,15 @@
     {% endif %}
   </div>
   <div class="col-md-8 col-md-pull-4">
-    <div class="alert alert-warning" role="alert">
-      Ce projet est maintenu par
-      <a href="{% url 'user_profile' project.maintainer.username %}">
-        {{project.maintainer.username}}
-      </a> mais il semblerait qu'il n'ait plus été mis à jour depuis longtemps !<br>
-      Si il vous intérese, n'hésitez pas à contacter son mainteneur et à prendre la main sur le projet.
-    </div>
+    {% if project.stalled %}
+      <div class="alert alert-warning" role="alert">
+        Ce projet est maintenu par
+        <a href="{% url 'user_profile' project.maintainer.username %}">
+          {{project.maintainer.username}}
+        </a> mais il semblerait qu'il n'ait plus été mis à jour depuis longtemps !<br>
+        Si il vous intérese, n'hésitez pas à contacter son mainteneur et à prendre la main sur le projet.
+      </div>
+    {% endif %}
     {{project.content|markdown}}
   </div>
 </div>
