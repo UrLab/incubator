@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, UserManager
+from django.contrib.auth.models import Group
 
 from incubator.models import ASBLYear
 
@@ -48,6 +49,8 @@ class User(AbstractBaseUser):
 
     balance = models.DecimalField(max_digits=6, decimal_places=2, default=0, verbose_name="ardoise")
     has_key = models.BooleanField(default=False, verbose_name="possède une clé")
+
+    groups = models.ManyToManyField(Group)
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?

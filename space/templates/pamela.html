@@ -15,27 +15,41 @@
 {% endfor %}
 
 <div class="row">
-    <div class="col-md-4">
-        <h3>Membres à UrLab</h3>
-        <ul>
-        {% for user in users %}
-            <li>
-                <a href="{% url 'user_profile' user %}">{{user}}</a>
-                {% if user.has_key %}
-                    <span class="fa fa-key" aria-hidden="true"></span>
-                {% endif %}
-            </li>
-        {% endfor %}
-        </ul>
-    </div>
-    <div class="col-md-4">
-        <h3>Machines inconnues</h3>
-        <ul>
-        {% for mac in unknown_mac %}
-            <li>{{mac}}</li>
-        {% endfor %}
-        </ul>
-    </div>
+    {% if unknown_mac or users%}
+        <div class="col-md-4">
+            <h3>Membres à UrLab</h3>
+            <ul>
+            {% for user in users %}
+                <li>
+                    <a href="{% url 'user_profile' user %}">{{user}}</a>
+                    {% if user.has_key %}
+                        <span class="fa fa-key" aria-hidden="true"></span>
+                    {% endif %}
+                </li>
+            {% empty %}
+                <li class="text-muted">Il n'y a aucun membre connu au hackerspace pour l'instant.</li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <h3>Machines inconnues</h3>
+            <ul>
+            {% for mac in unknown_mac %}
+                <li>{{mac}}</li>
+            {% empty %}
+                <li class="text-muted">Il n'y a pas de machine non reconnue pour l'instant.</li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <div class="col-md-8">
+            <h3>Il n'y a personne pour l'instant !</h3>
+            <p>
+                D'après P.A.M.E.L.A., il semblerait qu'il n'y aie personne au hackerspace pour l'instant.<br>
+                Quel dommage ! Re-essayez bientôt, il y aura surement du passage.
+            </p>
+        </div>
+    {% endif %}
     <div class="col-md-4">
         <h3>Ajoutez votre machine</h3>
         <p>Tapez ceci dans un terminal pour avoir une liste de vos MAC adress : </p>
