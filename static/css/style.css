@@ -8,7 +8,6 @@
 	max-height: 200px;
 	margin-top: 5px;
 	vertical-align: bottom;
-
 	/*height: 200px*/
 }
 
@@ -30,13 +29,11 @@ body {
 	margin: 0;
 	width: 100%;
 	height: 250px;
-	background-color: #BBBBBB;
-	background-image: url('/static/img/terminal.jpg');
-	background-size: contain 100%;
 	position: absolute;
 	bottom: -255px;
 	left: 0px;
 	overflow: hidden;
+	background-color: #BBBBBB;
 }
 
 #home-logo {
@@ -92,13 +89,20 @@ div.col-sm-3.base-map {
 
 .base-footer p {
 	font-family: "Courier New", Courier, monospace;
+	color: black;
+}
+
+.green {
 	color: #23FF23;
 }
 
 .base-footer-info {
 	padding-top: 25px;
-	height: 100%
+	height: 100%;
 	color: #23FF23;
+	background-color: #BBBBBB;
+	background-image: url('/static/img/terminal.jpg');
+	background-size: 100% 100%;
 }
 
 .base-footer ul {
