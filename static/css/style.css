@@ -12,12 +12,18 @@
 	/*height: 200px*/
 }
 
-.
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+}
 
 .base-body {
-	min-height: 100%;
-	z-index: 999;
 	background-color: rgba(255,255,255,1);
+	margin-bottom: 250px;
+	position:relative;
 }
 
 .base-footer {
@@ -27,6 +33,10 @@
 	background-color: #BBBBBB;
 	background-image: url('/static/img/terminal.jpg');
 	background-size: contain 100%;
+	position: absolute;
+	bottom: -255px;
+	left: 0px;
+	overflow: hidden;
 }
 
 #home-logo {
@@ -49,16 +59,31 @@
 	z-index: 1;*/
 }
 
+.base-footer-row {
+	height: 250px;
+	margin: 0px;
+	padding: 0px;
+}
+
 .base-map {
 	border: 0px;
+	height: 250px;
 	display: inline;
 	padding: 0;
+	margin: 0px;
+	padding: 0px !important;
+	overflow: hidden;
 }
 
 .base-map iframe {
 	border: 0px;
-	margin: 0;
+	margin: 0px;
+
 	/*float: right;*/
+}
+
+div.col-sm-3.base-map {
+	overflow: hidden;
 }
 
 .base-footer-opening {
