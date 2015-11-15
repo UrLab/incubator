@@ -35,13 +35,8 @@ def projects_home(request):
 
 def add_participation(request, pk):
     project = get_object_or_404(Project, pk=pk)
-    project.participants.add(request.user)
-    return HttpResponseRedirect(reverse('view_project', args=[pk]))
-
-
-def remove_participation(request, pk):
-    project = get_object_or_404(Project, pk=pk)
-    project.participants.remove(request.user)
+    if request.user not in project.participants.all():
+        project.participants.add(request.user)
     return HttpResponseRedirect(reverse('view_project', args=[pk]))
 
 

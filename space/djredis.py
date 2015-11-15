@@ -26,10 +26,6 @@ def get_mac(client):
 
     mac = mac.decode()
     updated = int(expiration) - ttl
-
-    if mac == "":
-        return updated, []
-
     return updated, mac.split(',')
 
 

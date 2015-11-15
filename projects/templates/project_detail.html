@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load formatting %}
-{% load humanize %}
 
 {% block content %}
 
@@ -43,31 +42,19 @@
           </div>
         </div>
     {% endif %}
-    <strong>Dernière modification :</strong> {{project.modified|naturaltime}}<br>
-    <strong>Mainteneur :</strong>
-    <a href="{% url 'user_profile' project.maintainer.username %}">{{project.maintainer.username}}</a><br>
+    Mainteneur : <a href="{% url 'user_profile' project.maintainer.username %}">{{project.maintainer.username}}</a><br>
     {% if project.participants.all %}
-        <strong>Participant{{project.participants.all|pluralize}} :</strong>
+        Participant{{project.participants.all|pluralize}}:
     {% endif %}
     {% for participant in project.participants.all %}
-      <a href="{% url 'user_profile' participant.username %}">{{participant.username}}</a>{% if not forloop.last %}, {% endif %}
+    <a href="{% url 'user_profile' participant.username %}">{{participant.username}}</a>
     {% empty %}
         {% if user != project.maintainer %}
-            Il n'y a encore aucun autre participant, ajoutez vous !
+            Il n'y a encore aucun participant, ajoutez vous !</br>
         {% endif %}
     {% endfor %}
-    </br>
     {% if user != project.maintainer and user not in project.participants.all %}
-      <a href="{% url 'project_add_participation' project.id%}" class="btn btn-info btn-xs">
-        <i class="fa fa-child"></i>
-        Je veux participer ! </br>
-      </a></br>
-    {% endif %}
-    {% if user in project.participants.all %}
-      <a href="{% url 'project_remove_participation' project.id%}" class="btn btn-default btn-xs">
-        <i class="fa fa-times"></i>
-        Ne plus participer</br>
-      </a></br>
+    <a href="{% url 'project_add_participation' project.id%}">Je participe</a>
     {% endif %}
     <br>
     {% if project.picture %}
@@ -75,15 +62,6 @@
     {% endif %}
   </div>
   <div class="col-md-8 col-md-pull-4">
-    {% if project.stalled %}
-      <div class="alert alert-warning" role="alert">
-        Ce projet est maintenu par
-        <a href="{% url 'user_profile' project.maintainer.username %}">
-          {{project.maintainer.username}}
-        </a> mais il semblerait qu'il n'ait plus été mis à jour depuis longtemps !<br>
-        Si il vous intérese, n'hésitez pas à contacter son mainteneur et à prendre la main sur le projet.
-      </div>
-    {% endif %}
     {{project.content|markdown}}
   </div>
 </div>
