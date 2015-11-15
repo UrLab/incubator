@@ -115,3 +115,15 @@ div.col-sm-3.base-map {
     font-family: "Courier New", Courier, monospace;
     color: #23FF23;
 }
+
+.slimg {
+  width: auto;
+  height: 270px;
+  max-height: 270px;
+  vertical-align: middle;
+}
+
+.slimg img {
+	/*height: 225px;*/
+	/*width: auto;*/
+}
