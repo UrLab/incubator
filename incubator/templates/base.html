@@ -23,7 +23,7 @@
         <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders.png"/></a></div>
     </header>
     <body class="base-body">
-        <nav class="navbar navbar-default navbar-static-top navbar-inverse navbar-shadow" style="background-color: #2F2F38;">
+        <nav class="navbar navbar-default navbar-static-top navbar-inverse" style="background-color: #2F2F38;">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menuNavbar">
@@ -50,8 +50,10 @@
 
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li style="background-color: red">
-                                <p class="navbar-text" style="color: black;">This is ALPHA software ! Data may be lost at any moment</p>
+                        <li style="background-color: #337AB7">
+                                <p class="navbar-text" style="color: white;">
+                                    This is a Beta, do not play with money yet ;)
+                                </p>
                         </li>
                         {% if request.user.is_authenticated %}
                             <li class="dropdown">
@@ -86,23 +88,7 @@
         </div>
         {% render_block "js" %}
     </body>
-    <footer class="container base-footer"> <!-- base-footer -->
-        <div class="row"> <!-- base-footer-row -->
-            <div class="col-sm-4 base-footer-opening"> <!-- base-footer-opening -->
-                <img src="/static/img/opening/week-2w.png" width="100%" height="auto"/>
-            </div>
-            <div class="col-sm-4 base-footer-info"> <!-- base-footer-info -->
-                <ul>
-                    <li>Contacts</li>
-                    <li>Club-mate</li>
-                    <li>Photos</li>
-                    <li>PDS</li>
-                    <li>Etc...</li>
-                </ul>
-            </div>
-            <div class="col-sm-4 base-map"> <!-- base-map -->
-                <iframe src="https://www.google.com/maps/d/u/0/embed?mid=zPnchbKdsavc.kWC7JrWya-pE&z=14" width="100%" height="250px"></iframe>
-            </div>
-        </div>
+    <footer class="base-footer">
+        
     </footer>
 </html>
