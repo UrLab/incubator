@@ -24,7 +24,6 @@ def make_pamela():
     users = {mac.holder for mac in known_mac if mac.holder is not None}
 
     unknown_mac = list(filter(lambda x: x not in [obj.adress for obj in known_mac], maclist))
-    print(maclist)
 
     return {
         'raw_maclist': maclist,
