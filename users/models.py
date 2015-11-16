@@ -33,6 +33,10 @@ class CustomUserManager(UserManager):
     def create_superuser(self, username, email, password, **extra_fields):
         return self._create_user(username, email, password, is_staff=True, **extra_fields)
 
+    def get_by_natural_key(self, username):
+        # makes user matching case insensitive
+        return self.get(username__iexact=username)
+
 
 class User(AbstractBaseUser):
     USERNAME_FIELD = "username"
