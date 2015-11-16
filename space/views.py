@@ -103,7 +103,8 @@ def spaceapi(request):
     client = get_redis()
     pam = make_pamela()
 
-    names = pam['unknown_mac'] + list(pam['users'])
+    users = [u.username for u in pam['users']]
+    names = pam['unknown_mac'] + users
 
     if len(names) == 0:
         people_now_present = {
@@ -167,13 +168,12 @@ def spaceapi(request):
             "name": "door_stairs"
         }]
         response["sensors"]["light"] = [{
-            "value": 100*sensors['light_%s' % loc],
+            "value": 100 * sensors['light_%s' % loc],
             "unit": '%',
             "location": loc,
             "name": 'light_%s' % loc
         } for loc in ('inside', 'outside')]
     except:
         pass
-
 
     return JsonResponse(response)
