@@ -20,6 +20,7 @@ router.register(r'projects', projects.views.ProjectViewSet)
 urlpatterns = patterns(
     '',
     url(r'^$', 'incubator.views.home', name='home'),
+    url(r'^spaceapi.json$', 'space.views.spaceapi', name="sapceapi"),
     url(r'^events/', include('events.urls')),
     url(r'^projects/', include('projects.urls')),
     url(r'^accounts/', include('users.urls')),

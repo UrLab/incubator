@@ -6,9 +6,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.core.exceptions import PermissionDenied
+from django.http import JsonResponse
 
-from .djredis import get_redis, get_mac, set_space_open
-from .models import MacAdress
+
+from .djredis import get_redis, get_mac, set_space_open, space_is_open
+from .models import MacAdress, SpaceStatus
 from .forms import MacAdressForm
 
 from incubator.settings import STATUS_SECRETS
@@ -82,3 +84,66 @@ class DeleteMACView(DeleteView):
         if not obj.holder == self.request.user:
             raise PermissionDenied
         return obj
+
+
+def spaceapi(request):
+    client = get_redis()
+    pam = make_pamela()
+
+    names = pam['unknown_mac'] + list(pam['users'])
+
+    if len(names) == 0:
+        people_now_present = {
+            "value": 0,
+        }
+    else:
+        people_now_present = {
+            "value": len(names),
+            "names": names,
+        }
+
+    response = {
+        "api": "0.13",
+        "space": "UrLab",
+        "logo": "https://urlab.be/urlab.png",
+        "url": "https://urlab.be",
+        "location": {
+            "lat": "50.812915",
+            "lon": "4.384396",
+            "address": "131, avenue Buyl, 1050, Bruxelles, Belgium",
+        },
+        "state": {
+            "open": space_is_open(client),
+            "lastchange": SpaceStatus.objects.last().time.timestamp(),
+        },
+        # "events": {},
+        "contact": {
+            "issue_mail": "contact@urlab.be",
+            "ml": "hackulb@cerkinfo.be",
+            "twitter": "@UrLabBxl",
+            "facebook": "https://www.facebook.com/urlabbxl",
+            "irc": "irc://chat.freenode.net#urlab",
+            "email": "contact@urlab.be",
+            # "phone": "",
+            # "keymasters": "";
+        },
+        "issue_report_channels": [
+            "issue_mail",
+            "twitter"
+        ],
+        "sensors": {
+            "people_now_present": [people_now_present],
+            # "total_member_count": 42,
+            # "beverage_supply": [42],
+            # "temperature": [],
+        },
+        # "feeds": {
+        #     "calendar": "",
+        # },
+        "projects": [
+            "https://github.com/UrLab",
+            "https://urlab.be/projects/",
+        ],
+    }
+
+    return JsonResponse(response)

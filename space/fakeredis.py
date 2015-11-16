@@ -22,4 +22,4 @@ def space_is_open(client):
         with open('/tmp/spacestatus', 'r') as f:
             return f.read() == "True"
     except:
-        pass
+        return True
