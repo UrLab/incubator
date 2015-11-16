@@ -19,10 +19,10 @@
         {% render_block "css" %}
         {% block head %}{% endblock %}
     </head>
+    <body class="base-body">
     <header class="base-header">
         <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders.png"/></a></div>
     </header>
-    <body class="base-body">
         <nav class="navbar navbar-default navbar-static-top navbar-inverse navbar-shadow" style="background-color: #2F2F38;">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -87,8 +87,7 @@
         {% endblock %}
         </div>
         {% render_block "js" %}
-    </body>
-    <footer class="container base-footer"> <!-- base-footer -->
+        <footer class="container base-footer"> <!-- base-footer -->
         <div class="row"> <!-- base-footer-row -->
             <div class="col-sm-4 base-footer-opening"> <!-- base-footer-opening -->
                 <img src="/static/img/opening/week-2w.png" width="100%" height="auto"/>
@@ -107,4 +106,5 @@
             </div>
         </div>
     </footer>
+    </body> 
 </html>
