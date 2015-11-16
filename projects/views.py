@@ -4,6 +4,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from math import ceil
 
 from .serializers import ProjectSerializer
 
@@ -28,9 +29,17 @@ class ProjectDetailView(DetailView):
     context_object_name = 'project'
 
 
+def clusters_of(seq, size):
+    for i in range(int(ceil(len(seq)/size))):
+        lower, upper = i*size, (i+1)*size
+        yield seq[lower:upper]
+
+
 def projects_home(request):
     projects = Project.objects.prefetch_related("participants").select_related("maintainer").order_by('-modified')
-    return render(request, "projects_home.html", {'projects': projects})
+    return render(request, "projects_home.html", {
+        'projects': clusters_of(projects, 4)
+    })
 
 
 def add_participation(request, pk):
