@@ -91,7 +91,8 @@ class DeleteMACView(DeleteView):
 def get_sensors(*sensors):
     query_template = "SELECT value FROM %s ORDER BY time DESC LIMIT 1"
     queries = ';'.join(query_template % s for s in sensors)
-    client = InfluxDBClient(INFLUX_HOST, INFLUX_PORT, INFLUX_USER, INFLUX_PASS)
+    influx_credentials = (INFLUX_HOST, INFLUX_PORT, INFLUX_USER, INFLUX_PASS)
+    client = InfluxDBClient(*influx_credentials)
     r = client.query(queries, database="hal")
     return {k: next(v.get_points())['value'] for k, v in zip(sensors, r)}
 
@@ -112,7 +113,6 @@ def spaceapi(request):
             "names": names,
         }
 
-    sensors = get_sensors('light_inside', 'light_outside', 'door_stairs')
     response = {
         "api": "0.13",
         "space": "UrLab",
@@ -144,17 +144,6 @@ def spaceapi(request):
         ],
         "sensors": {
             "people_now_present": [people_now_present],
-            "door_locked": [{
-                "value": sensors['door_stairs'] == 0,
-                "location": "stairs",
-                "name": "door_stairs"
-            }],
-            "light": [{
-                "value": 100*sensors['light_%s' % loc],
-                "unit": '%',
-                "location": loc,
-                "name": 'light_%s' % loc
-            } for loc in ('inside', 'outside')]
             # "total_member_count": 42,
             # "beverage_supply": [42],
             # "temperature": [],
@@ -167,5 +156,22 @@ def spaceapi(request):
             "https://urlab.be/projects/",
         ],
     }
+
+    try:
+        sensors = get_sensors('light_inside', 'light_outside', 'door_stairs')
+        response["sensors"]["door_locked"] = [{
+            "value": sensors['door_stairs'] == 0,
+            "location": "stairs",
+            "name": "door_stairs"
+        }]
+        response["sensors"]["light"] = [{
+            "value": 100*sensors['light_%s' % loc],
+            "unit": '%',
+            "location": loc,
+            "name": 'light_%s' % loc
+        } for loc in ('inside', 'outside')]
+    except:
+        pass
+
 
     return JsonResponse(response)
