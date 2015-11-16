@@ -6,12 +6,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.core.exceptions import PermissionDenied
+from django.http import JsonResponse
+from influxdb import InfluxDBClient
 
-from .djredis import get_redis, get_mac, set_space_open
-from .models import MacAdress
+from .djredis import get_redis, get_mac, set_space_open, space_is_open
+from .models import MacAdress, SpaceStatus
 from .forms import MacAdressForm
 
-from incubator.settings import STATUS_SECRETS
+from incubator.settings import (STATUS_SECRETS,
+                                INFLUX_HOST, INFLUX_PORT, INFLUX_USER,
+                                INFLUX_PASS)
 
 
 def make_pamela():
@@ -22,12 +26,11 @@ def make_pamela():
     users = {mac.holder for mac in known_mac if mac.holder is not None}
 
     unknown_mac = list(filter(lambda x: x not in [obj.adress for obj in known_mac], maclist))
-    print(maclist)
 
     return {
         'raw_maclist': maclist,
         'updated': updated,
-        'unknown_mac': unknown_mac,
+        'unknown_mac': ['xx:xx:xx:' + mac[-5:] for mac in unknown_mac],
         'users': users,
     }
 
@@ -82,3 +85,95 @@ class DeleteMACView(DeleteView):
         if not obj.holder == self.request.user:
             raise PermissionDenied
         return obj
+
+
+def get_sensors(*sensors):
+    query_template = "SELECT value FROM %s ORDER BY time DESC LIMIT 1"
+    queries = ';'.join(query_template % s for s in sensors)
+    influx_credentials = (INFLUX_HOST, INFLUX_PORT, INFLUX_USER, INFLUX_PASS)
+    client = InfluxDBClient(*influx_credentials)
+    r = client.query(queries, database="hal")
+    if len(sensors) == 1:
+        return {sensors[0]: next(r.get_points())['value']}
+    else:
+        return {k: next(v.get_points())['value'] for k, v in zip(sensors, r)}
+
+
+def spaceapi(request):
+    client = get_redis()
+    pam = make_pamela()
+
+    users = [u.username for u in pam['users']]
+    names = pam['unknown_mac'] + users
+
+    if len(names) == 0:
+        people_now_present = {
+            "value": 0,
+        }
+    else:
+        people_now_present = {
+            "value": len(names),
+            "names": names,
+        }
+
+    response = {
+        "api": "0.13",
+        "space": "UrLab",
+        "logo": "https://urlab.be/urlab.png",
+        "url": "https://urlab.be",
+        "location": {
+            "lat": "50.812915",
+            "lon": "4.384396",
+            "address": "131, avenue Buyl, 1050, Bruxelles, Belgium",
+        },
+        "state": {
+            "open": space_is_open(client),
+            "lastchange": SpaceStatus.objects.last().time.timestamp(),
+        },
+        # "events": {},
+        "contact": {
+            "issue_mail": "contact@urlab.be",
+            "ml": "hackulb@cerkinfo.be",
+            "twitter": "@UrLabBxl",
+            "facebook": "https://www.facebook.com/urlabbxl",
+            "irc": "irc://chat.freenode.net#urlab",
+            "email": "contact@urlab.be",
+            # "phone": "",
+            # "keymasters": "";
+        },
+        "issue_report_channels": [
+            "issue_mail",
+            "twitter"
+        ],
+        "sensors": {
+            "people_now_present": [people_now_present],
+            # "total_member_count": 42,
+            # "beverage_supply": [42],
+            # "temperature": [],
+        },
+        # "feeds": {
+        #     "calendar": "",
+        # },
+        "projects": [
+            "https://github.com/UrLab",
+            "https://urlab.be/projects/",
+        ],
+    }
+
+    try:
+        sensors = get_sensors('light_inside', 'light_outside', 'door_stairs')
+        response["sensors"]["door_locked"] = [{
+            "value": sensors['door_stairs'] == 0,
+            "location": "stairs",
+            "name": "door_stairs"
+        }]
+        response["sensors"]["light"] = [{
+            "value": 100 * sensors['light_%s' % loc],
+            "unit": '%',
+            "location": loc,
+            "name": 'light_%s' % loc
+        } for loc in ('inside', 'outside')]
+    except:
+        pass
+
+    return JsonResponse(response)

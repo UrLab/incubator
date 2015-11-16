@@ -33,6 +33,10 @@ class CustomUserManager(UserManager):
     def create_superuser(self, username, email, password, **extra_fields):
         return self._create_user(username, email, password, is_staff=True, **extra_fields)
 
+    def get_by_natural_key(self, username):
+        # makes user matching case insensitive
+        return self.get(username__iexact=username)
+
 
 class User(AbstractBaseUser):
     USERNAME_FIELD = "username"
@@ -50,7 +54,7 @@ class User(AbstractBaseUser):
     balance = models.DecimalField(max_digits=6, decimal_places=2, default=0, verbose_name="ardoise")
     has_key = models.BooleanField(default=False, verbose_name="possède une clé")
 
-    groups = models.ManyToManyField(Group)
+    groups = models.ManyToManyField(Group, blank=True)
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?

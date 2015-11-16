@@ -13,6 +13,7 @@ def home(request):
     })
 
 
+
 class RegisterView(CreateView):
     template_name = 'registration/register.html'
     form_class = UserCreationForm
