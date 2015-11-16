@@ -93,7 +93,10 @@ def get_sensors(*sensors):
     influx_credentials = (INFLUX_HOST, INFLUX_PORT, INFLUX_USER, INFLUX_PASS)
     client = InfluxDBClient(*influx_credentials)
     r = client.query(queries, database="hal")
-    return {k: next(v.get_points())['value'] for k, v in zip(sensors, r)}
+    if len(sensors) == 1:
+        return {sensors[0]: next(r.get_points())['value']}
+    else:
+        return {k: next(v.get_points())['value'] for k, v in zip(sensors, r)}
 
 
 def spaceapi(request):
