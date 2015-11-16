@@ -7,13 +7,15 @@ from django.views.generic.edit import DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
-
+from influxdb import InfluxDBClient
 
 from .djredis import get_redis, get_mac, set_space_open, space_is_open
 from .models import MacAdress, SpaceStatus
 from .forms import MacAdressForm
 
-from incubator.settings import STATUS_SECRETS
+from incubator.settings import (STATUS_SECRETS,
+                                INFLUX_HOST, INFLUX_PORT, INFLUX_USER,
+                                INFLUX_PASS)
 
 
 def make_pamela():
@@ -86,6 +88,14 @@ class DeleteMACView(DeleteView):
         return obj
 
 
+def get_sensors(*sensors):
+    query_template = "SELECT value FROM %s ORDER BY time DESC LIMIT 1"
+    queries = ';'.join(query_template % s for s in sensors)
+    client = InfluxDBClient(INFLUX_HOST, INFLUX_PORT, INFLUX_USER, INFLUX_PASS)
+    r = client.query(queries, database="hal")
+    return {k: next(v.get_points())['value'] for k, v in zip(sensors, r)}
+
+
 def spaceapi(request):
     client = get_redis()
     pam = make_pamela()
@@ -102,6 +112,7 @@ def spaceapi(request):
             "names": names,
         }
 
+    sensors = get_sensors('light_inside', 'light_outside', 'door_stairs')
     response = {
         "api": "0.13",
         "space": "UrLab",
@@ -133,6 +144,17 @@ def spaceapi(request):
         ],
         "sensors": {
             "people_now_present": [people_now_present],
+            "door_locked": [{
+                "value": sensors['door_stairs'] == 0,
+                "location": "stairs",
+                "name": "door_stairs"
+            }],
+            "light": [{
+                "value": 100*sensors['light_%s' % loc],
+                "unit": '%',
+                "location": loc,
+                "name": 'light_%s' % loc
+            } for loc in ('inside', 'outside')]
             # "total_member_count": 42,
             # "beverage_supply": [42],
             # "temperature": [],

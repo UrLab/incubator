@@ -11,3 +11,4 @@ Markdown
 redis
 Pillow
 git+git://github.com/benjaoming/django-wiki.git
+influxdb

@@ -153,8 +153,12 @@ BANK_ACCOUNT = "BE66 0017 6764 5043"
 
 REDIS_HOST = "rainbowdash.lan"
 REDIS_PORT = 6379
-
 FAKE_REDIS = True
+
+INFLUX_HOST = "localhost"
+INFLUX_PORT = 8086
+INFLUX_USER = "derp"
+INFLUX_PASS = "derp"
 
 STATUS_SECRETS = []
 
