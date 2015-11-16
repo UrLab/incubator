@@ -21,10 +21,12 @@
     </a>, n'ayez pas peur, on est ouverts à tout !
 </p>
 
-<div class="row">
-    {% for project in projects %}
-        {% include "project_card.html" %}
-    {% endfor %}
-</div>
+{% for row in projects %}
+    <div class="row">
+        {% for project in row %}
+          {% include "project_card.html" %}
+        {% endfor %}
+    </div>
+{% endfor %}
 
 {% endblock %}
