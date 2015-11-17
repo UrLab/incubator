@@ -73,32 +73,32 @@
             {% endif %}
             <br>
             <h4>Vos adresses MAC</h4>
-            <ul>
+            <table class="table table-condensed">
             {% for mac in user.macadress_set.all %}
-                <li>
-                    <form method="POST" action="{% url "delete_mac" mac.id %}">
-                        {% if mac.machine_name %}
-                            {{mac.machine_name}} : {{mac.adress}}
-                        {% else %}
-                            {{mac.adress}}
-                        {% endif %}
-
-                       {% csrf_token %}
-                       <button type="submit" class="btn btn-danger btn-xs">
-                        <i class="fa fa-times"></i>
-                       </button>
-                    </form>
-                </li>
+                <tr>
+                    <td>{{mac.machine_name}}</td>
+                    <td>{{mac.adress}}</td>
+                    <td>
+                        <form method="POST" action="{% url "delete_mac" mac.id %}">
+                           {% csrf_token %}
+                           <button type="submit" class="btn btn-danger btn-xs">
+                            <i class="fa fa-times"></i>
+                           </button>
+                        </form>
+                    </td>
+                </tr>
             {% empty %}
-                <li>Vous n'avez aucune MAC Adress enregistrée</li>
+                <tr><td colspan="3">Vous n'avez aucune MAC Adress enregistrée</td></tr>
             {% endfor %}
-                <li>
-                    Ajouter
-                    <a href="{% url "pamela_list" %}" class="btn btn-success btn-xs">
-                        <i class="fa fa-plus"></i>
-                    </a>
-                </li>
-            </ul>
+                <tr>
+                    <td colspan="2">Ajouter une nouvelle MAC</td>
+                    <td>
+                        <a href="{% url "pamela_list" %}" class="btn btn-success btn-xs">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </td>
+                </tr>
+            </table>
         {% elif user.has_key %}
         <span class="fa fa-key" aria-hidden="true"></span> {{user}} a une clé.
         {% endif %}
