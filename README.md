@@ -1,3 +1,4 @@
+![SHAME](https://travis-ci.org/UrLab/incubator.svg?branch=master)
 # incubator
 Let's bootstrap an new incubator for UrLab ! (in python and with an API this time)
 
