@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.shortcuts import render
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -7,11 +9,15 @@ from django.views.generic.edit import DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
+from django.utils import timezone
 from influxdb import InfluxDBClient
+from rest_framework import viewsets
+from rest_framework.response import Response
 
 from .djredis import get_redis, get_mac, set_space_open, space_is_open
 from .models import MacAdress, SpaceStatus
 from .forms import MacAdressForm
+from .serializers import PamelaSerializer
 
 from incubator.settings import (STATUS_SECRETS,
                                 INFLUX_HOST, INFLUX_PORT, INFLUX_USER,
@@ -177,3 +183,20 @@ def spaceapi(request):
         pass
 
     return JsonResponse(response)
+
+
+class PamelaObject(object):
+    def __init__(self, pamela_dict):
+        last_updated = timezone.now() - timedelta(seconds=pamela_dict['updated'])
+
+        self.total_mac_count = len(pamela_dict['raw_maclist'])
+        self.last_updated = last_updated
+        self.unknown_mac = pamela_dict['unknown_mac']
+        self.users = pamela_dict['users']
+
+
+class PamelaViewSet(viewsets.ViewSet):
+    def list(self, request):
+        pam = PamelaObject(make_pamela())
+        serializer = PamelaSerializer(pam)
+        return Response(serializer.data)
