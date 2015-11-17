@@ -18,7 +18,7 @@
 
 .base-footer {
 	margin-top: 75px;
-	width: 100%;
+	/*width: 100%;*/
 	background-color: #BBBBBB;
 	-webkit-box-shadow: 0px -9px 43px -4px rgba(61,61,61,0.5);
 	-moz-box-shadow: 0px -9px 43px -4px rgba(61,61,61,0.5);
@@ -34,27 +34,27 @@
 #home-logo {
 	width: 100%;
 	text-align: center;
-	background-image:linear-gradient(white, #97F);
+	background-image:linear-gradient(white, #BBBBBB);
 }
 
 #home-logo-image {
 	width: 50%;
 	margin: auto;
 	height: auto;
-	max-height: 160px;
-	max-width: 324px;
+	max-height: 120px;
+	max-width: 243px;
 	overflow: hidden;
 }
 
 .base-footer-row {
-	height: 250px;
+	height: 200px;
 	margin: 0px;
 	padding: 0px;
 }
 
 .base-map {
 	border: 0px;
-	height: 250px;
+	height: 200px;
 	display: inline;
 	padding: 0;
 	margin: 0px;
@@ -72,11 +72,11 @@ div.col-sm-3.base-map {
 }
 
 .base-footer-opening {
-	height: 250px;
+	height: 200px;
 	margin-left: 0;
 	margin-right: 0;
-	padding-left: 0;
-	padding-right: 0;
+	padding-left: 0 !important;
+	padding-right: 0 !important;
 	overflow: scroll;
 	overflow-x: hidden;
 }
@@ -92,14 +92,14 @@ div.col-sm-3.base-map {
 
 .base-footer-info {
 	padding: 0;
-	height: 250px;
+	height: 200px;
 	color: #23FF23;
 	background-image: url('/static/img/terminal.jpg');
 	background-size: 100% 100%;
 }
 
 .shadow {
-	height: 250px;
+	height: 200px;
 	width: 100%;
 	z-index: 100;
 	position: absolute;
@@ -108,26 +108,30 @@ div.col-sm-3.base-map {
 	box-shadow: inset 0px -20px 80px -10px rgba(0,0,0,1);
 }
 
-.base-footer ul {
+.base-footer-info ul {
     list-style: none;
     margin-left: 0;
     padding-left: 0;
     padding: 25px;
 }
 
-.base-footer ul li {
+.base-footer-info ul li {
     padding-left: 2em;
     text-indent: -2em;
     color: #55FF55;
     text-shadow: 0px 0px 4px #23FF23;
 }
 
-.base-footer ul li:before {
+.base-footer-info ul li:before {
     content: "$>";
     padding-right: 5px;
     font-family: "Courier New", Courier, monospace;
     color: #55FF55;
     text-shadow: 0px 0px 4px #23FF23;
+}
+
+.base-footer-info ul li a {
+	color: #55FF55;
 }
 
 .slimg {
