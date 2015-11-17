@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
-
+{% load staticfiles %}
 
 {% block content %}
-
 <div class="page-header">
-  <h1>Pamela <small>Mis à jour il y a {{updated}} secondes</small></h1>
+    <h1>Pamela 
+        <small>
+            a Payload for Anti-Matter Exploration and Light-nuclei Astrophysics
+        </small>
+    </h1>
 </div>
 
 {% for message in messages %}
@@ -15,42 +18,8 @@
 {% endfor %}
 
 <div class="row">
-    {% if unknown_mac or users%}
-        <div class="col-md-4">
-            <h3>Membres à UrLab</h3>
-            <ul>
-            {% for user in users %}
-                <li>
-                    <a href="{% url 'user_profile' user %}">{{user}}</a>
-                    {% if user.has_key %}
-                        <span class="fa fa-key" aria-hidden="true" data-toggle="tooltip" title="{{user}} a une clé" data-placement="right">
-                        </span>
-                    {% endif %}
-                </li>
-            {% empty %}
-                <li class="text-muted">Il n'y a aucun membre connu au hackerspace pour l'instant.</li>
-            {% endfor %}
-            </ul>
-        </div>
-        <div class="col-md-4">
-            <h3>Machines inconnues</h3>
-            <ul>
-            {% for mac in unknown_mac %}
-                <li>{{mac}}</li>
-            {% empty %}
-                <li class="text-muted">Il n'y a pas de machine non reconnue pour l'instant.</li>
-            {% endfor %}
-            </ul>
-        </div>
-    {% else %}
-        <div class="col-md-8">
-            <h3>Il n'y a personne pour l'instant !</h3>
-            <p>
-                D'après P.A.M.E.L.A., il semblerait qu'il n'y aie personne au hackerspace pour l'instant.<br>
-                Quel dommage ! Re-essayez bientôt, il y aura surement du passage.
-            </p>
-        </div>
-    {% endif %}
+    <div class="col-md-8" id="pamela">
+    </div>
     <div class="col-md-4">
         <h3>Ajoutez votre machine</h3>
         <p>Tapez ceci dans un terminal pour avoir une liste de vos MAC adress : </p>
@@ -70,9 +39,83 @@
     </div>
 </div>
 
-<script>
+<style>
+#pamela {font-size: 150%;}
+#pamela .user-avatar {
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: .75em;
+}
+#pamela .user-entry {padding-top: .5em;}
+#pamela .user-list {list-style: none;}
+</style>
+<script src="{% static "js/react.min.js" %}"></script>
+<script src="{% static "js/react-dom.min.js" %}"></script>
+<script src="{% static "js/babel.min.js" %}"></script>
+<script type="text/babel">
+var PamelaUsersBox = React.createClass({
+    render: function(){
+        var userlist = this.props.users.map(function(user){
+            return <li className="user-entry">
+                <img className="user-avatar" src={user.gravatar}/>
+                &nbsp;
+                <abbr title={(user.has_key) ? 'Possède une clef' : 'Manant'}>
+                   <i className={"fa fa-" + ((user.has_key) ? 'key' : 'user')}></i>
+                </abbr>
+                &nbsp;
+                <a href={"/accounts/"+user.username}>{user.username}</a>
+            </li>
+        })
+        return <ul className="user-list">{userlist}</ul>
+    }
+});
+
+var PamelaNoobsBox = React.createClass({
+    render: function(){
+        var userlist = this.props.macs.map(function(mac){
+            return <li className="user-entry">
+                <i className="fa fa-user"></i>&nbsp;{mac}
+            </li>
+        })
+        return <ul className="user-list">{userlist}</ul>
+    }
+});
+
+var Pamela = React.createClass({
+    render: function(){
+        return <div className="row-fluid">
+            <h2 className="col-sm-12">
+                <small>Mis à jour il y a {this.state.age} secondes</small>
+            </h2>
+            <div className="col-md-6 col-sm-12">
+                <h3>Membres de UrLab</h3>
+                <PamelaUsersBox users={this.state.users}/>
+            </div>
+            <div className="col-md-6 col-sm-12">
+                <h3>Inconnus</h3>
+                <PamelaNoobsBox macs={this.state.unknown_mac}/>
+            </div>
+        </div>
+    },
+    getInitialState: function(){
+        return {age: "XXX", unknown_mac: [], users: []};
+    },
+    getPamelaData: function(){
+        $.getJSON(this.props.url, function(data){
+            this.setState(data);
+        }.bind(this));
+    },
+    componentDidMount: function(){
+        this.getPamelaData();
+        setInterval(this.getPamelaData, this.props.pollInterval);
+    }
+});
+
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
+    ReactDOM.render(
+        <Pamela url="/api/space/pamela" pollInterval={7500}/>,
+        document.getElementById('pamela'));
 });
 </script>
 {% endblock %}
