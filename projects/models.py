@@ -4,6 +4,7 @@ from django.core.validators import MaxValueValidator
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from datetime import timedelta
+from django_resized import ResizedImageField
 
 
 # Create your models here.
@@ -32,7 +33,7 @@ class Project(models.Model):
     progress = models.PositiveIntegerField(validators=[MaxValueValidator(100)], verbose_name="Progression")
     dependencies = models.ManyToManyField('self', blank=True, verbose_name="Dépendences")
 
-    picture = models.ImageField(upload_to='project_pictures', null=True, blank=True)
+    picture = ResizedImageField(size=[500, 500], upload_to='project_pictures', null=True, blank=True)
 
     short_description = models.CharField(max_length=1000, verbose_name="Description courte")
     content = models.TextField(verbose_name="Contenu", blank=True)
