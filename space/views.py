@@ -30,7 +30,7 @@ def make_pamela():
     return {
         'raw_maclist': maclist,
         'updated': updated,
-        'unknown_mac': ['xx:xx:xx:' + mac[-5:] for mac in unknown_mac],
+        'unknown_mac': ['xx:xx:xx:xx:' + mac[-5:] for mac in unknown_mac],
         'users': users,
     }
 
