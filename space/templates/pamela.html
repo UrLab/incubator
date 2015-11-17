@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
-
+{% load staticfiles %}
 
 {% block content %}
-
 <div class="page-header">
-  <h1>Pamela <small>a Payload for Anti-Matter Exploration and Light-nuclei Astrophysics</small></h1>
+    <h1>Pamela 
+        <small>
+            a Payload for Anti-Matter Exploration and Light-nuclei Astrophysics
+        </small>
+    </h1>
 </div>
 
 {% for message in messages %}
@@ -36,28 +39,19 @@
     </div>
 </div>
 
-<script src="https://fb.me/react-0.14.2.js"></script>
-<script src="https://fb.me/react-dom-0.14.2.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
 <style>
-.user-avatar {
+#pamela {font-size: 150%;}
+#pamela .user-avatar {
     width: 1.5em;
     height: 1.5em;
     border-radius: .75em;
 }
-
-.user-entry {
-    padding-top: .5em;
-}
-
-.user-list {
-    list-style: none;
-}
-
-#pamela {
-    font-size: 150%;
-}
+#pamela .user-entry {padding-top: .5em;}
+#pamela .user-list {list-style: none;}
 </style>
+<script src="{% static "js/react.min.js" %}"></script>
+<script src="{% static "js/react-dom.min.js" %}"></script>
+<script src="{% static "js/babel.min.js" %}"></script>
 <script type="text/babel">
 var PamelaUsersBox = React.createClass({
     render: function(){
@@ -104,11 +98,7 @@ var Pamela = React.createClass({
         </div>
     },
     getInitialState: function(){
-        return {
-            age: "XXX",
-            unknown_mac: [], 
-            users: []
-        };
+        return {age: "XXX", unknown_mac: [], users: []};
     },
     getPamelaData: function(){
         $.getJSON(this.props.url, function(data){
@@ -124,7 +114,7 @@ var Pamela = React.createClass({
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
     ReactDOM.render(
-        <Pamela url="/api/space/pamela" pollInterval={1000}/>,
+        <Pamela url="/api/space/pamela" pollInterval={7500}/>,
         document.getElementById('pamela'));
 });
 </script>
