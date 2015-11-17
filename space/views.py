@@ -17,7 +17,7 @@ from rest_framework.response import Response
 from .djredis import get_redis, get_mac, set_space_open, space_is_open
 from .models import MacAdress, SpaceStatus
 from .forms import MacAdressForm
-from .serializers import PamelaSerializer
+from .serializers import PamelaSerializer, SpaceStatusSerializer
 
 from incubator.settings import (STATUS_SECRETS,
                                 INFLUX_HOST, INFLUX_PORT, INFLUX_USER,
@@ -200,3 +200,8 @@ class PamelaViewSet(viewsets.ViewSet):
         pam = PamelaObject(make_pamela())
         serializer = PamelaSerializer(pam)
         return Response(serializer.data)
+
+
+class OpeningsViewSet(viewsets.ModelViewSet):
+    queryset = SpaceStatus.objects.all()
+    serializer_class = SpaceStatusSerializer

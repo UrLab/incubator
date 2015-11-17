@@ -19,6 +19,7 @@ router.register(r'users', users.views.UserViewSet)
 router.register(r'projects', projects.views.ProjectViewSet)
 router.register(r'stock/categories', stock.views.CategoryViewSet)
 router.register(r'stock/products', stock.views.ProductViewSet)
+router.register(r'space/openings', space.views.OpeningsViewSet)
 router.register(r'space/pamela', space.views.PamelaViewSet, base_name="pamela")
 
 

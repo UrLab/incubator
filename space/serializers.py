@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from users.serializers import UserSerializer
+from .models import SpaceStatus
 
 
 class PamelaSerializer(serializers.Serializer):
@@ -7,3 +8,9 @@ class PamelaSerializer(serializers.Serializer):
     last_updated = serializers.DateTimeField()
     unknown_mac = serializers.ListField(serializers.CharField())
     users = UserSerializer(many=True)
+
+
+class SpaceStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SpaceStatus
+        fields = ('time', 'is_open',)
