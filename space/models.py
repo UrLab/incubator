@@ -21,13 +21,6 @@ class MacAdress(models.Model):
         super(MacAdress, self).save(*args, **kwargs)
 
 
-class SpaceStats(models.Model):
-    adress_count = models.IntegerField()
-    user_count = models.IntegerField()
-    unknown_mac_count = models.IntegerField()
-    time = models.DateTimeField(auto_now_add=True)
-
-
 class SpaceStatus(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     is_open = models.BooleanField()
