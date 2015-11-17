@@ -10,6 +10,6 @@ django-datetime-widget
 Markdown
 redis
 Pillow
-git+git://github.com/benjaoming/django-wiki.git
+git+git://github.com/benjaoming/django-wiki.git@93d7cb12cdb6cae3ae088564b7cd9f7cf5b79831
 influxdb
 django-resized
