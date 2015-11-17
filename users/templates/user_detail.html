@@ -40,8 +40,10 @@
         {% for project in user.project_set.all %}
         <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
         {% empty %}
+        {%if request.user == user %}
         Vous ne participez a aucun projet :'(</br>
         <a href="{% url 'projects_home' %}">Venez vous inscrire a l'un ou l'autre.</a>
+        {% endif %}
         {% endfor %}
     </p>
   </div>
