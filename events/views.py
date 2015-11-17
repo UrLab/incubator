@@ -5,6 +5,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.utils import timezone
 from rest_framework import viewsets
+from django.db.models import Q
 
 
 from .serializers import EventSerializer
@@ -15,6 +16,11 @@ from .forms import EventForm
 class EventAddView(CreateView):
     form_class = EventForm
     template_name = 'add_event.html'
+
+    def get_initial(self):
+        return {
+            'organizer': self.request.user,
+        }
 
 
 class EventEditView(UpdateView):
@@ -30,9 +36,13 @@ class EventDetailView(DetailView):
 
 
 def events_home(request):
+    futureQ = Q(stop__gt=timezone.now())
+    readyQ = Q(status__exact="r")
+
     context = {
-        'future': Event.objects.filter(stop__gt=timezone.now()).order_by('start')[:10],
-        'past': Event.objects.exclude(stop__gt=timezone.now()).order_by('-start')[:10],
+        'future': Event.objects.filter(futureQ & readyQ).order_by('start'),
+        'past': Event.objects.filter(~futureQ & readyQ).order_by('-start')[:10],
+        'incubation': Event.objects.filter(~readyQ),
     }
 
     return render(request, "events_home.html", context)

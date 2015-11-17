@@ -12,6 +12,10 @@
 <form action="{% url "user_edit" %}" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form form %}
+    <div class="form-group">
+        <label class="control-label" for="id_email">Nom d'utilisateur</label> (pour changer votre nom d'utilisateur, envoyez un mail à contact@urlab.be)
+        <input class="form-control" value="{{request.user.username}}" disabled/>
+    </div>
     {% buttons %}
     <button type="submit" class="btn btn-primary">
         Submit

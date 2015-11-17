@@ -40,7 +40,7 @@ class EventForm(ModelForm):
         if (not stop) and start:
             cleaned_data['stop'] = start
 
-        if status in ("r", "p") and not start:
+        if status == "r" and not start:
             raise forms.ValidationError(
-                "Un événement prêt ou planifié doit avoir une date de début"
+                "Un événement prêt doit avoir une date de début"
             )

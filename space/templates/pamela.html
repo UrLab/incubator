@@ -23,7 +23,8 @@
                 <li>
                     <a href="{% url 'user_profile' user %}">{{user}}</a>
                     {% if user.has_key %}
-                        <span class="fa fa-key" aria-hidden="true"></span>
+                        <span class="fa fa-key" aria-hidden="true" data-toggle="tooltip" title="{{user}} a une clé" data-placement="right">
+                        </span>
                     {% endif %}
                 </li>
             {% empty %}
@@ -68,4 +69,10 @@
         {% endif %}
     </div>
 </div>
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+</script>
 {% endblock %}

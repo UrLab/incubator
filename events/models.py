@@ -14,10 +14,8 @@ from django.core.urlresolvers import reverse
 
 class Event(models.Model):
     STATUS_CHOICES = (
-        ("i", "En préparation"),
         ("r", "Prêt"),
-        ("p", "Planifié"),
-        ("j", "Idée"),
+        ("i", "En incubation"),
     )
     title = models.CharField(max_length=300, verbose_name='Nom')
     place = models.CharField(max_length=300, verbose_name='Lieu', blank=True)
@@ -31,6 +29,8 @@ class Event(models.Model):
         return self.start.date() == self.stop.date()
 
     def has_no_duration(self):
+        if self.start is None:
+            return True
         return (self.stop - self.start) < timedelta(minutes=5)
 
     def __str__(self):
