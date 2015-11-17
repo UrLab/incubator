@@ -191,6 +191,7 @@ class PamelaObject(object):
 
         self.total_mac_count = len(pamela_dict['raw_maclist'])
         self.last_updated = last_updated
+        self.age = pamela_dict['updated']
         self.unknown_mac = pamela_dict['unknown_mac']
         self.users = pamela_dict['users']
 
