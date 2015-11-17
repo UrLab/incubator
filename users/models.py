@@ -1,3 +1,6 @@
+import urllib
+import hashlib
+
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
@@ -87,6 +90,15 @@ class User(AbstractBaseUser):
     @property
     def is_superuser(self):
         return self.is_staff
+
+    @property
+    def gravatar(self):
+        default = "http://www.example.com/default.jpg"
+        mail = self.email.lower().encode('utf8')
+        size = 40
+        gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(mail).hexdigest()
+
+        return gravatar_url
 
 
 class Membership(models.Model):
