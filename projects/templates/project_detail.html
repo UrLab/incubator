@@ -3,6 +3,12 @@
 {% load humanize %}
 
 {% block content %}
+<style type="text/css">
+.project-detail-content img {
+  max-width: 750px;
+  max-height: 750px;
+}
+</style>
 
 <ol class="breadcrumb">
   <li><a href="/">UrLab</a></li>
@@ -74,7 +80,7 @@
       <img src="{{project.picture.url}}"  class="img-thumbnail">
     {% endif %}
   </div>
-  <div class="col-md-8 col-md-pull-4">
+  <div class="col-md-8 col-md-pull-4 project-detail-content">
     {% if project.stalled %}
       <div class="alert alert-warning" role="alert">
         Ce projet est maintenu par
