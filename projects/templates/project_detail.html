@@ -79,6 +79,8 @@
     {% if project.picture %}
       <img src="{{project.picture.url}}"  class="img-thumbnail">
     {% endif %}
+    <br>
+    {% include "project_tasks_list.html" %}
   </div>
   <div class="col-md-8 col-md-pull-4 project-detail-content">
     {% if project.stalled %}
