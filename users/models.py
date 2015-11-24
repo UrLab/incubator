@@ -94,7 +94,7 @@ class User(AbstractBaseUser):
     @property
     def gravatar(self):
         mail = self.email.lower().encode('utf8')
-        gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(mail).hexdigest()
+        gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(mail).hexdigest() + "?d=wavatar"
 
         return gravatar_url
 

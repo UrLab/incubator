@@ -5,15 +5,17 @@ from users.models import User
 
 pytestmark = pytest.mark.django_db
 
+
 @pytest.fixture(scope='function')
 def user():
     user = User.objects.create(username="test", email="test@test.be", first_name="Test", last_name="Test")
     return user.id
 
+
 def test_only_title_and_state_required():
     form_data = {
         'title': 'wtf',
-        'status': 'j',
+        'status': 'i',
         'organizer': user,
     }
     form = EventForm(data=form_data)
@@ -24,7 +26,7 @@ def test_only_title_and_state_required():
 def test_no_stop_but_start():
     form_data = {
         'title': 'wtf',
-        'status': 'j',
+        'status': 'i',
         'start': datetime(2000, 1, 1),
         'organizer': user,
     }
@@ -43,13 +45,13 @@ def test_ready_must_have_date():
     form = EventForm(data=form_data)
 
     assert not form.is_valid(), form.errors
-    assert 'Un événement prêt ou planifié doit avoir une date de début' in form.errors['__all__']
+    assert 'Un événement prêt doit avoir une date de début' in form.errors['__all__']
 
 
 def test_stop_must_be_after_start():
     form_data = {
         'title': 'wtf',
-        'status': 'j',
+        'status': 'i',
         'start': datetime(2100, 1, 1),
         'stop': datetime(2000, 1, 1)
     }

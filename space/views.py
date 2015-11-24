@@ -128,8 +128,8 @@ def spaceapi(request):
         "logo": "https://urlab.be/urlab.png",
         "url": "https://urlab.be",
         "location": {
-            "lat": "50.812915",
-            "lon": "4.384396",
+            "lat": 50.812915,
+            "lon": 4.384396,
             "address": "131, avenue Buyl, 1050, Bruxelles, Belgium",
         },
         "state": {
