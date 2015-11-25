@@ -10,7 +10,7 @@ from django.db.models import Q
 
 from .serializers import EventSerializer, MeetingSerializer, HackerAgendaEventSerializer
 from .models import Event, Meeting
-from .forms import EventForm
+from .forms import EventForm, MeetingForm
 
 
 class EventAddView(CreateView):
@@ -33,6 +33,28 @@ class EventDetailView(DetailView):
     model = Event
     template_name = 'event_detail.html'
     context_object_name = 'event'
+
+
+class MeetingAddView(CreateView):
+    form_class = MeetingForm
+    template_name = 'meeting_form.html'
+
+    def form_valid(self, form):
+        event = get_object_or_404(Event, pk=self.kwargs['pk'])
+        form.instance.event = event
+        return super(MeetingAddView, self).form_valid(form)
+
+    def get_success_url(self):
+        return self.object.event.get_absolute_url()
+
+
+class MeetingEditView(UpdateView):
+    form_class = MeetingForm
+    template_name = 'meeting_form.html'
+    model = Meeting
+
+    def get_success_url(self):
+        return self.object.event.get_absolute_url()
 
 
 def events_home(request):

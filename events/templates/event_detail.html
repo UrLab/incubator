@@ -33,7 +33,7 @@
                 </button>
             </p>
             {% if request.user.is_authenticated and not event.meeting %}
-              <p>Cet événement n'a pas d'ordre du jour. <a href="" class="btn btn-default btn-xs">Ajouter un OJ</a></p>
+              <p>Cet événement n'a pas d'ordre du jour. <a href="{% url "add_meeting" event.id %}" class="btn btn-default btn-xs">Ajouter un OJ</a></p>
             {% endif %}
         </div>
     </div>
@@ -57,14 +57,26 @@
       {{event.description|markdown}}
     </div>
     <div class="col-md-7">
-      <h3>Ordre du jour</h3>
+      <h3>
+        Ordre du jour
+        <a class="btn btn-default btn-xs"  href="{% url "edit_meeting" event.meeting.id %}">
+            <span class="fa fa-edit" aria-hidden="true"></span>
+            Editer
+        </a>
+      </h3>
       {% if not event.meeting.OJ %}
         <p><i>L'ordre du jour est vide pour l'instant.</i></p>
       {% else %}
         {{event.meeting.OJ|markdown}}
       {% endif %}
 
-      <h3>Compte rendu</h3>
+      <h3>
+        Compte rendu
+        <a class="btn btn-default btn-xs"  href="{% url "edit_meeting" event.meeting.id %}">
+            <span class="fa fa-edit" aria-hidden="true"></span>
+            Editer
+        </a>
+      </h3>
 
       {% if event.meeting.PV %}
         {{event.meeting.PV|markdown}}
