@@ -75,7 +75,7 @@
         <p>Le pad pour prendre note en live se trouve là bas: <a href="{{event.meeting.pad}}">{{event.meeting.pad}}</a><br>
         <i>Veuillez y prendre note en Markdown.</i></p>
         {% if event.is_finished %}
-          <a href="{% url "import_pad" event.id %}" class="btn btn-success">Impotez le contenu du pad ici.</a>
+          <a href="{% url "import_pad" event.id %}" class="btn btn-success">Importez le contenu du pad ici</a>
         {% endif %}
       {% endif %}
       {% if event.is_today_or_before %}
