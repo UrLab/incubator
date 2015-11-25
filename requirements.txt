@@ -14,3 +14,5 @@ git+git://github.com/benjaoming/django-wiki.git@93d7cb12cdb6cae3ae088564b7cd9f7c
 influxdb
 django-resized
 requests
+django-crispy-forms
+django-filter

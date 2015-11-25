@@ -5,12 +5,11 @@ from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from rest_framework import viewsets
 from django.db.models import Q
 
 
-from .serializers import EventSerializer
-from .models import Event
+from .serializers import EventSerializer, MeetingSerializer
+from .models import Event, Meeting
 from .forms import EventForm
 
 
@@ -83,6 +82,18 @@ git = short_url_maker("workshop", "git")
 ag = short_url_maker("AG", "mandat")
 
 
+from rest_framework import filters
+from rest_framework import viewsets
+
+
 class EventViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.all()
     serializer_class = EventSerializer
+    queryset = Event.objects.all()
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter,)
+    ordering_fields = ('start', 'stop')
+    filter_fields = ('place', 'start', 'stop', 'status', 'organizer', 'meeting')
+
+
+class MeetingViewSet(viewsets.ModelViewSet):
+    serializer_class = MeetingSerializer
+    queryset = Meeting.objects.all()

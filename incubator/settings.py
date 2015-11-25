@@ -44,6 +44,8 @@ INSTALLED_APPS = (
     'datetimewidget',
     'activelink',
     'rest_framework',
+    'django_filters',
+    'crispy_forms',
     'incubator',
     'events',
     'users',
@@ -145,7 +147,7 @@ PASSWORD_HASHERS = (
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('incubator.drf_permissions.ReadOnlyPermission',),
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 20,
 }
 
 
