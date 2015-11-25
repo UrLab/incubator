@@ -13,6 +13,8 @@ from django_resized import ResizedImageField
 #    Technical requirement (estimation de cout, tout ça) lié à l'inventaire.
 #    Vrai système de "gens intéressés" pour vraiment incuber ces putains de projet +1
 
+User = settings.AUTH_USER_MODEL
+
 STATUS_CHOICES = (
     ("p", "proposition"),
     ("i", "in progress"),
@@ -23,8 +25,8 @@ STATUS_CHOICES = (
 class Project(models.Model):
     title = models.CharField(max_length=300, verbose_name='Nom')
 
-    maintainer = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="maintained_projects", verbose_name='Mainteneur')
-    participants = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True)
+    maintainer = models.ForeignKey(User, related_name="maintained_projects", verbose_name='Mainteneur')
+    participants = models.ManyToManyField(User, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
@@ -54,3 +56,18 @@ class Project(models.Model):
         stall_time = timezone.now() - self.modified
         month = timedelta(days=30)
         return stall_time > month * 6
+
+
+class Task(models.Model):
+    project = models.ForeignKey(Project, related_name='tasks', verbose_name='Projet')
+    name = models.CharField(max_length=300, verbose_name='Nom')
+
+    proposed_by = models.ForeignKey(User, related_name='proposed_tasks', verbose_name='Proposé par')
+    proposed_on = models.DateTimeField(verbose_name='Date de création', auto_now_add=True)
+
+    completed_by = models.ForeignKey(User, related_name='completed_tasks', verbose_name='Réalisé par', null=True, blank=True)
+    completed_on = models.DateTimeField(verbose_name='Date de réalisation', null=True, blank=True)
+
+    @property
+    def completed(self):
+        return self.completed_by is not None
