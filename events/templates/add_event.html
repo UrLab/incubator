@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<form action="" method="post" class="form">
+<form action="" method="post" class="form" enctype="multipart/form-data">
     {% csrf_token %}
     {% bootstrap_form form %}
     {% buttons %}

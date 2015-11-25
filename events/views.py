@@ -39,10 +39,12 @@ def events_home(request):
     futureQ = Q(stop__gt=timezone.now())
     readyQ = Q(status__exact="r")
 
+    base = Event.objects.select_related('meeting')
+
     context = {
-        'future': Event.objects.filter(futureQ & readyQ).order_by('start'),
-        'past': Event.objects.filter(~futureQ & readyQ).order_by('-start')[:10],
-        'incubation': Event.objects.filter(~readyQ),
+        'future': base.filter(futureQ & readyQ).order_by('start'),
+        'past': base.filter(~futureQ & readyQ).order_by('-start')[:10],
+        'incubation': base.filter(~readyQ),
     }
 
     return render(request, "events_home.html", context)

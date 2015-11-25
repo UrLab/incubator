@@ -23,7 +23,6 @@
     <div class="row">
         <div class="col-md-8">
             {% include "event_time.html" %}
-            Etat : {{event.get_status_display}}<br>
             Organisateur : <a href="{% url 'user_profile' event.organizer.username %}">{{event.organizer.username}}</a>
         </div>
         <div class="col-md-4">
@@ -42,6 +41,11 @@
 </p>
 <hr>
 <div class="row">
+  {% if event.status == 'i' %}
+    <div class="alert alert-warning" role="alert">
+      Cet événement est en incubation. N'hésitez pas à le compléter, à choisir une date pour l'organiser ou tout simplement en vous signalant comme "intéressé".
+    </div>
+  {% endif %}
   {% if not event.meeting %}
     <div class="col-md-12">
       <h2>Description</h2>

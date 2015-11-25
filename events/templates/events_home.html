@@ -25,8 +25,7 @@
     </h1>
     {% if future %}
         {% for event in future %}
-            <h2><a href="{% url "view_event" event.id %}">{{ event.title }}</a></h2>
-            {% include "event_time.html" %}
+          {% include "event_card.html" %}
         {% endfor %}
     {% else %}
     Mamamia ! Il n'y a rien de prévu dans le futur ! Vite, <a href="{% url "add_event" %}">crée un événement</a> !
@@ -39,8 +38,7 @@
       Incubateur à événement
     </h1>
     {% for event in incubation %}
-        <h2><a href="{% url "view_event" event.id %}">{{ event.title }}</a></h2>
-        {% include "event_time.html" %}
+      {% include "event_card.html" %}
     {% empty %}
       <p>Il n'y a aucun événement en incubation pour l'instant</p>
     {% endfor %}
@@ -50,8 +48,7 @@
         Evénements passés
     </h1>
     {% for event in past %}
-        <h2><a href="{% url "view_event" event.id %}">{{ event.title }}</a></h2>
-        {% include "event_time.html" %}
+      {% include "event_card.html" %}
     {% empty %}
       <p>Il n'y a aucun événement passé, future is NOW !</p>
     {% endfor %}
