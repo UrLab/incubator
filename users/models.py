@@ -56,7 +56,9 @@ class User(AbstractBaseUser):
     balance = models.DecimalField(max_digits=6, decimal_places=2, default=0, verbose_name="ardoise")
     has_key = models.BooleanField(default=False, verbose_name="possède une clé")
 
+    # Needed for compatibility with the Django build-in User model
     groups = models.ManyToManyField(Group, blank=True)
+    is_active = models.BooleanField(default=True)
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?
