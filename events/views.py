@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.db.models import Q
 
 
-from .serializers import EventSerializer, MeetingSerializer
+from .serializers import EventSerializer, MeetingSerializer, HackerAgendaEventSerializer
 from .models import Event, Meeting
 from .forms import EventForm
 
@@ -84,6 +84,8 @@ ag = short_url_maker("AG", "mandat")
 
 from rest_framework import filters
 from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -97,3 +99,15 @@ class EventViewSet(viewsets.ModelViewSet):
 class MeetingViewSet(viewsets.ModelViewSet):
     serializer_class = MeetingSerializer
     queryset = Meeting.objects.all()
+
+
+class HackerAgendaAPI(APIView):
+    def get(self, request, format=None):
+        qs = Event.objects.filter(status="r").filter(start__isnull=False)
+        events = HackerAgendaEventSerializer(qs, many=True)
+
+        return Response({
+            "org": "UrLab",
+            "api": 0.1,
+            "events": events.data
+        })

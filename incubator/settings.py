@@ -150,6 +150,9 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20,
 }
 
+# no tailing slash
+ROOT_URL = "http://urlab.be"
+
 
 BANK_ACCOUNT = "BE66 0017 6764 5043"
 

@@ -27,7 +27,7 @@ urlpatterns = patterns(
     url(r'^auth/', include('django.contrib.auth.urls')),
     url(r'^register/', incubator.views.RegisterView.as_view(), name="register"),
 
-    url(r'^api/', include(incubator.apiurls.api.urls)),
+    url(r'^api/', include('incubator.apiurls')),
     (r'^notifications/', get_nyt_pattern()),
     url(r'^wiki/', get_wiki_pattern()),
 )

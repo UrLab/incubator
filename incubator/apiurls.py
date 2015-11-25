@@ -1,3 +1,4 @@
+from django.conf.urls import patterns, include, url
 from rest_framework import routers
 
 import events.views
@@ -16,3 +17,10 @@ api.register(r'stock/categories', stock.views.CategoryViewSet)
 api.register(r'stock/products', stock.views.ProductViewSet)
 api.register(r'space/openings', space.views.OpeningsViewSet)
 api.register(r'space/pamela', space.views.PamelaViewSet, base_name="pamela")
+
+
+urlpatterns = patterns(
+    '',
+    url(r'^hackeragenda', events.views.HackerAgendaAPI.as_view()),
+    url(r'^', include(api.urls)),
+)

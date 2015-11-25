@@ -35,6 +35,9 @@ class Event(models.Model):
     def get_absolute_url(self):
         return reverse('view_event', args=[self.id])
 
+    def get_absolute_full_url(self):
+        return settings.ROOT_URL + self.get_absolute_url()
+
     def is_meeting(self):
         return bool(self.meeting)
 
@@ -51,6 +54,9 @@ class Event(models.Model):
         if instant is None:
             return False
         return instant < timezone.now()
+
+    def all_day(self):
+        return False
 
     class Meta:
         verbose_name = "Événement"
