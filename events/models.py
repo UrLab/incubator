@@ -58,6 +58,12 @@ class Meeting(models.Model):
     OJ = models.TextField(verbose_name='Ordre du jour')
     PV = models.TextField()
     members = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Membres présents')
+    pad = models.URLField(blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.pad:
+            self.pad = "https://pad.lqdn.fr/p/urlab-meeting-{}".format(self.id)
+        super(Meeting, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Réunion"
