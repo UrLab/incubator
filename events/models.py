@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from datetime import timedelta
 from django.core.urlresolvers import reverse
+from django.utils import timezone
 from django_resized import ResizedImageField
 
 
@@ -35,6 +36,12 @@ class Event(models.Model):
 
     def is_meeting(self):
         return bool(self.meeting)
+
+    def start_day(self):
+        return self.start.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    def is_today_or_before(self):
+        return self.start_day() < timezone.now()
 
     class Meta:
         verbose_name = "Événement"
