@@ -31,34 +31,39 @@
                 12 personnes sont intéressés
                 <button type="submit" class="btn btn-primary btn-xs">
                         Moi aussi
-                </button><br>
+                </button>
             </p>
+            {% if request.user.is_authenticated and not event.meeting %}
+              <p>Cet événement n'a pas d'ordre du jour. <a href="" class="btn btn-default btn-xs">Ajouter un OJ</a></p>
+            {% endif %}
         </div>
     </div>
 
 </p>
 <hr>
 <div class="row">
-  <div class="col-md-6">
-    <h2>Description</h2>
-    {{event.description|markdown}}
-  </div>
-  <div class="col-md-6">
-    {% if event.meeting %}
-        <h2>Membres présents</h2>
-        {{event.meeting.membersPresent.all|join:","|default:"Aucun membre présent"}}
-        <a href=""><i class="fa fa-plus" aria-hidden="true"></i></a>
+  {% if not event.meeting %}
+    <div class="col-md-12">
+      <h2>Description</h2>
+      {{event.description|markdown}}
+    </div>
+  {% else %}
+    <div class="col-md-6">
+      <h2>Description</h2>
+      {{event.description|markdown}}
+    </div>
+    <div class="col-md-6">
+      <h2>Membres présents</h2>
+      {{event.meeting.membersPresent.all|join:","|default:"Aucun membre présent"}}
+      <a href=""><i class="fa fa-plus" aria-hidden="true"></i></a>
 
-        <h2>Ordre du jour</h2>
-        {{event.meeting.OJ|markdown}}
+      <h2>Ordre du jour</h2>
+      {{event.meeting.OJ|markdown}}
 
-        <h2>PV</h2>
-        {{event.meeting.PV|markdown}}
-    {% else %}
-        <h2>Ordre du jour</h2>
-        <p><a href="">Ajouter un ordre du jour</a></p>
-    {% endif %}
-  </div>
+      <h2>PV</h2>
+      {{event.meeting.PV|markdown}}
+    </div>
+  {% endif%}
 
 </div>
 
