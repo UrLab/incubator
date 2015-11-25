@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import viewsets
 from django.db.models import Q
@@ -62,6 +63,18 @@ def short_url_maker(*keywords):
             return HttpResponseRedirect(events[0].get_absolute_url())
 
     return filter_func
+
+
+def import_pad(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    meeting = event.meeting
+    if meeting.PV:
+        return HttpResponseForbidden("This meeting already has a PV")
+
+    meeting.PV = meeting.get_pad_contents()
+    meeting.save()
+
+    return HttpResponseRedirect(event.get_absolute_url())
 
 
 sm = short_url_maker("smartmonday")

@@ -43,7 +43,7 @@
 <div class="row">
   {% if event.status == 'i' %}
     <div class="alert alert-warning" role="alert">
-      Cet événement est en incubation. N'hésitez pas à le compléter, à choisir une date pour l'organiser ou tout simplement en vous signalant comme "intéressé".
+      <b>Événement en incubation :</b> N'hésitez pas à le compléter, à choisir une date pour l'organiser ou tout simplement en vous signalant comme "intéressé".
     </div>
   {% endif %}
   {% if not event.meeting %}
@@ -52,22 +52,37 @@
       {{event.description|markdown}}
     </div>
   {% else %}
-    <div class="col-md-6">
+    <div class="col-md-5">
       <h2>Description</h2>
       {{event.description|markdown}}
     </div>
-    <div class="col-md-6">
+    <div class="col-md-7">
+      <h3>Ordre du jour</h3>
+      {% if not event.meeting.OJ %}
+        <p><i>L'ordre du jour est vide pour l'instant.</i></p>
+      {% else %}
+        {{event.meeting.OJ|markdown}}
+      {% endif %}
+
+      <h3>Compte rendu</h3>
+
+      {% if event.meeting.PV %}
+        {{event.meeting.PV|markdown}}
+        <hr>
+        <h4>Pad de la réunion</h4>
+        <p><a href="{{event.meeting.pad}}">{{event.meeting.pad}}</a></p>
+      {% else %}
+        <p>Le pad pour prendre note en live se trouve là bas: <a href="{{event.meeting.pad}}">{{event.meeting.pad}}</a><br>
+        <i>Veuillez y prendre note en Markdown.</i></p>
+        {% if event.is_finished %}
+          <a href="{% url "import_pad" event.id %}" class="btn btn-success">Impotez le contenu du pad ici.</a>
+        {% endif %}
+      {% endif %}
       {% if event.is_today_or_before %}
-        <h2>Membres présents</h2>
-        {{event.meeting.membersPresent.all|join:","|default:"Aucun membre présent"}}
+        <h4>Membres présents</h4>
+        {{event.meeting.members.all|join:", "|default:"Aucun membre présent"}}
         <a href=""><i class="fa fa-plus" aria-hidden="true"></i></a>
       {% endif %}
-      <h2>Ordre du jour</h2>
-      {{event.meeting.OJ|markdown}}
-
-      <h2>Compte rendu</h2>
-      <p>Le pad pour prendre note en live se trouve là bas: <a href="{{event.meeting.pad}}">{{event.meeting.pad}}</a></p>
-      {{event.meeting.PV|markdown}}
     </div>
   {% endif%}
 

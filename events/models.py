@@ -4,6 +4,7 @@ from datetime import timedelta
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django_resized import ResizedImageField
+import requests
 
 
 class Event(models.Model):
@@ -41,7 +42,15 @@ class Event(models.Model):
         return self.start.replace(hour=0, minute=0, second=0, microsecond=0)
 
     def is_today_or_before(self):
+        if self.start is None:
+            return False
         return self.start_day() < timezone.now()
+
+    def is_finished(self):
+        instant = self.stop if self.stop else self.start
+        if instant is None:
+            return False
+        return instant < timezone.now()
 
     class Meta:
         verbose_name = "Événement"
@@ -55,12 +64,18 @@ class Event(models.Model):
 
 class Meeting(models.Model):
     event = models.OneToOneField(Event, verbose_name="Événement")
-    OJ = models.TextField(verbose_name='Ordre du jour')
-    PV = models.TextField()
-    members = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Membres présents')
+    OJ = models.TextField(verbose_name='Ordre du jour', blank=True)
+    PV = models.TextField(blank=True)
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Membres présents', blank=True)
     pad = models.URLField(blank=True)
 
+    def get_pad_contents(self):
+        r = requests.get(self.pad + "/export/txt")
+        if r.ok:
+            return r.text
+
     def save(self, *args, **kwargs):
+        super(Meeting, self).save(*args, **kwargs)
         if not self.pad:
             self.pad = "https://pad.lqdn.fr/p/urlab-meeting-{}".format(self.id)
         super(Meeting, self).save(*args, **kwargs)
