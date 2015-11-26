@@ -16,3 +16,4 @@ django-resized
 requests
 django-crispy-forms
 django-filter
+ics

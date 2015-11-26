@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponseForbidden
+from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.db.models import Q
+from ics import Calendar
+from ics import Event as VEvent
 
 
 from .serializers import EventSerializer, MeetingSerializer, HackerAgendaEventSerializer
@@ -96,6 +98,22 @@ def import_pad(request, pk):
     meeting.save()
 
     return HttpResponseRedirect(event.get_absolute_url())
+
+
+def ical(request):
+    events = Event.objects.filter(status__exact="r")
+    cal = Calendar()
+    for event in events:
+        vevent = VEvent(
+            name=event.title,
+            begin=event.start,
+            end=event.stop,
+            description=event.description,
+            location=event.place
+        )
+        cal.events.append(vevent)
+
+    return HttpResponse(str(cal), content_type="text/calendar")
 
 
 sm = short_url_maker("smartmonday")
