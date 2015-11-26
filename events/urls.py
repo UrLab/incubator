@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .views import (
     EventDetailView, EventAddView, EventEditView, MeetingAddView, MeetingEditView,
     events_home, import_pad,
-    ical
+    ical, not_interested, interested
 )
 
 urlpatterns = patterns(
@@ -16,4 +16,6 @@ urlpatterns = patterns(
     url(r'^(?P<pk>[0-9]+)', EventDetailView.as_view(), name='view_event'),
     url(r'^add_meeting/(?P<pk>[0-9]+)', MeetingAddView.as_view(), name='add_meeting'),
     url(r'^edit_meeting/(?P<pk>[0-9]+)', MeetingEditView.as_view(), name='edit_meeting'),
+    url(r'^not_interested/(?P<pk>[0-9]+)$', login_required(not_interested), name='not_interested_event'),
+    url(r'^interested/(?P<pk>[0-9]+)$', login_required(interested), name='interested_event'),
 )

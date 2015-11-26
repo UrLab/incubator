@@ -116,6 +116,18 @@ def ical(request):
     return HttpResponse(str(cal), content_type="text/calendar")
 
 
+def interested(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    event.interested.add(request.user)
+    return HttpResponseRedirect(event.get_absolute_url())
+
+
+def not_interested(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    event.interested.remove(request.user)
+    return HttpResponseRedirect(event.get_absolute_url())
+
+
 sm = short_url_maker("smartmonday")
 linux = short_url_maker("install", "party")
 git = short_url_maker("workshop", "git")

@@ -27,10 +27,28 @@
         </div>
         <div class="col-md-4">
             <p>
-                12 personnes sont intéressés
-                <button type="submit" class="btn btn-primary btn-xs">
+                {% with interested=event.interested.all %}
+                  {% if interested.count == 0 %}
+                    Personne n'est intéressé pour l'instant
+                  {% elif interested.count == 1 %}
+                    Une personne est intéressée
+                  {% else %}
+                    {{interested.count}} personnes sont intéressés
+                  {% endif %}
+                  {% if request.user in interested %}
+                    <a class="btn btn-primary btn-xs" href="{% url "not_interested_event" event.id %}">
+                      Plus moi
+                    </a>
+                  {% else %}
+                    <a class="btn btn-primary btn-xs" href="{% url "interested_event" event.id %}">
+                      {% if interested.count == 0%}
+                        Je le suis !
+                      {% else %}
                         Moi aussi
-                </button>
+                      {% endif %}
+                    </a>
+                  {% endif %}
+                {% endwith %}
             </p>
             {% if request.user.is_authenticated and not event.meeting %}
               <p>Cet événement n'a pas d'ordre du jour. <a href="{% url "add_meeting" event.id %}" class="btn btn-default btn-xs">Ajouter un OJ</a></p>
