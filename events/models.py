@@ -19,7 +19,7 @@ class Event(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name='Etat')
     organizer = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Organisateur')
     description = models.TextField(blank=True)
-    picture = ResizedImageField(size=[500, 500], upload_to='project_pictures', null=True, blank=True)
+    picture = ResizedImageField(size=[500, 500], upload_to='event_pictures', null=True, blank=True)
 
     def is_only_a_day(self):
         return self.start.date() == self.stop.date()

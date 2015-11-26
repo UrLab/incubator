@@ -47,10 +47,15 @@
     </div>
   {% endif %}
   {% if not event.meeting %}
-    <div class="col-md-12">
-      <h2>Description</h2>
-      {{event.description|markdown}}
-    </div>
+      <div class="col-md-8">
+        <h2>Description</h2>
+        {{event.description|markdown}}
+      </div>
+      {% if event.picture %}
+        <div class="col-md-4">
+          <img src="{{event.picture.url}}" class="img-thumbnail">
+        </div>
+      {% endif %}
   {% else %}
     <div class="col-md-5">
       <h2>Description</h2>
