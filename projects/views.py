@@ -17,6 +17,12 @@ class ProjectAddView(CreateView):
     form_class = ProjectForm
     template_name = 'add_project.html'
 
+    def get_initial(self):
+        return {
+            'maintainer': self.request.user,
+            'progress': 0,
+        }
+
 
 class ProjectEditView(UpdateView):
     form_class = ProjectForm
@@ -31,8 +37,8 @@ class ProjectDetailView(DetailView):
 
 
 def clusters_of(seq, size):
-    for i in range(int(ceil(len(seq)/size))):
-        lower, upper = i*size, (i+1)*size
+    for i in range(int(ceil(len(seq) / size))):
+        lower, upper = i * size, (i + 1) * size
         yield seq[lower:upper]
 
 
