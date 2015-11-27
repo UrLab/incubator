@@ -2,6 +2,10 @@
 {% load bootstrap3 %}
 {% load static %}
 
+{% block title %}
+Formulaire d'événement
+{% endblock %}
+
 {% block head %}
     {{ form.media  }}
     <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet">

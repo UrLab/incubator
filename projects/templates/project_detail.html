@@ -2,6 +2,10 @@
 {% load formatting %}
 {% load humanize %}
 
+{% block title %}
+{{project.title}}
+{% endblock %}
+
 {% block content %}
 <style type="text/css">
 .project-detail-content img {

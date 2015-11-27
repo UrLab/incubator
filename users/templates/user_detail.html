@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load formatting %}
 
+{% block title %}
+Profil de {{user.username}}
+{% endblock %}
+
 {% block content %}
 
 <ol class="breadcrumb">
