@@ -98,19 +98,33 @@ var PamelaNoobsBox = React.createClass({
 });
 
 var Pamela = React.createClass({
+    pamela_content: function(){
+        if (this.state.unknown_mac.length + this.state.users.length == 0){
+            return <div className="col-md-12 col-sm-12">
+                <h2>Il n'y a personne pour l'instant</h2>
+            </div>;
+        } else {
+            return <div className="row-fluid"> 
+                <div className="col-md-6 col-sm-12">
+                    <h3>Membres de UrLab</h3>
+                    <PamelaUsersBox users={this.state.users}/>
+                </div>
+                <div className="col-md-6 col-sm-12">
+                    <h3>Inconnus</h3>
+                    <PamelaNoobsBox macs={this.state.unknown_mac}/>
+                </div>
+            </div>;
+
+        }
+    },
     render: function(){
-        return <div className="row-fluid">
-            <h2 className="col-sm-12">
-                <small>Mis à jour il y a {this.state.age} secondes</small>
-            </h2>
-            <div className="col-md-6 col-sm-12">
-                <h3>Membres de UrLab</h3>
-                <PamelaUsersBox users={this.state.users}/>
+        return <div className="container-fluid">
+            <div className="row-fluid">
+                <h2 className="col-sm-12">
+                    <small>Mis à jour il y a {this.state.age} secondes</small>
+                </h2>
             </div>
-            <div className="col-md-6 col-sm-12">
-                <h3>Inconnus</h3>
-                <PamelaNoobsBox macs={this.state.unknown_mac}/>
-            </div>
+            {this.pamela_content()}
         </div>
     },
     getInitialState: function(){
