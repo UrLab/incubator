@@ -1,26 +1,11 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
-from rest_framework import routers
 
-import events.views
-import users.views
-import projects.views
 import incubator.views
-import stock.views
-import space.views
+import incubator.apiurls
 from incubator import settings
 from wiki.urls import get_pattern as get_wiki_pattern
 from django_nyt.urls import get_pattern as get_nyt_pattern
-
-
-router = routers.DefaultRouter()
-router.register(r'events', events.views.EventViewSet)
-router.register(r'users', users.views.UserViewSet)
-router.register(r'projects', projects.views.ProjectViewSet)
-router.register(r'stock/categories', stock.views.CategoryViewSet)
-router.register(r'stock/products', stock.views.ProductViewSet)
-router.register(r'space/openings', space.views.OpeningsViewSet)
-router.register(r'space/pamela', space.views.PamelaViewSet, base_name="pamela")
 
 
 urlpatterns = patterns(
@@ -42,7 +27,7 @@ urlpatterns = patterns(
     url(r'^auth/', include('django.contrib.auth.urls')),
     url(r'^register/', incubator.views.RegisterView.as_view(), name="register"),
 
-    url(r'^api/', include(router.urls)),
+    url(r'^api/', include('incubator.apiurls')),
     (r'^notifications/', get_nyt_pattern()),
     url(r'^wiki/', get_wiki_pattern()),
 )

@@ -44,6 +44,8 @@ INSTALLED_APPS = (
     'datetimewidget',
     'activelink',
     'rest_framework',
+    'django_filters',
+    'crispy_forms',
     'incubator',
     'events',
     'users',
@@ -145,8 +147,11 @@ PASSWORD_HASHERS = (
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('incubator.drf_permissions.ReadOnlyPermission',),
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 20,
 }
+
+# no tailing slash
+ROOT_URL = "http://urlab.be"
 
 
 BANK_ACCOUNT = "BE66 0017 6764 5043"

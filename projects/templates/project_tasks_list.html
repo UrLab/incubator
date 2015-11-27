@@ -1,0 +1,60 @@
+{% load humanize %}
+
+<h3>Tâches</h3>
+<ul class="list-group">
+  {% for task in project.tasks.all %}
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col-xs-1">
+          {% if task.completed %}
+            {% if request.user.is_authenticated %}
+              <a title="Recommencer" href="{% url "uncomplete_task" task.id %}">
+            {% endif %}
+              <i class="fa fa-2x fa-check-square"></i>
+            {% if request.user.is_authenticated %}</a>{% endif %}
+          {% else %}
+            {% if request.user.is_authenticated %}
+              <a title="Terminer" href="{% url "complete_task" task.id %}">
+            {% endif %}
+              <i class="fa fa-2x fa-square-o"></i>
+            {% if request.user.is_authenticated %}</a>{% endif %}
+          {% endif %}
+        </div>
+        <div class="col-xs-10 pull-right">
+          {{task.name}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          {% if task.completed %}
+            <span  class="badge alert-info pull-right">
+              Fait {{task.completed_on|naturaltime}}
+              <em>({{ task.completed_by.username }})</em>
+            </span>
+          {% else %}
+            <span class="badge alert-warning pull-right">
+              Proposé {{task.proposed_on|naturaltime}}
+              <em>({{ task.proposed_by.username }})</em>
+            </span>
+          {% endif %}
+        </div>
+      </div>
+    </li>
+  {% endfor %}
+  {% if request.user.is_authenticated %}
+    <li class="list-group-item">
+      <div class="row">
+        <form action="{% url "add_task" project.id %}" method="post" class="form">
+          {% csrf_token %}
+          <div class="col-xs-1">
+            <i class="fa fa-2x fa-plus-square"></i>
+          </div>
+          <div class="col-xs-10 pull-right">
+            <input type="text" name="task_name" placeholder="Nouvelle tâche"/>
+            <button type="submit" class="btn btn-primary pull-right">Ajouter</button>
+          </div>
+        </form>
+      </div>
+    </li>
+  {% endif %}
+</ul>

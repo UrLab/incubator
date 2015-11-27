@@ -2,10 +2,12 @@
 {% load bootstrap3 %}
 {% load static %}
 
+{% block title %}
+Changez votre profil
+{% endblock %}
+
 {% block head %}
     {{ form.media  }}
-    <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet">
-    <script type="text/javascript" src="{% static "js/bootstrap-multiselect.js" %}"></script>
 {% endblock %}
 
 {% block content %}

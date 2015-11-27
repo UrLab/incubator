@@ -1,12 +1,19 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
+{% load static %}
+
+{% block title %}
+Formulaire d'événement
+{% endblock %}
 
 {% block head %}
     {{ form.media  }}
+    <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static "js/bootstrap-multiselect.js" %}"></script>
 {% endblock %}
 
 {% block content %}
-<form action="" method="post" class="form">
+<form action="" method="post" class="form" enctype="multipart/form-data">
     {% csrf_token %}
     {% bootstrap_form form %}
     {% buttons %}
@@ -15,4 +22,17 @@
     </button>
     {% endbuttons %}
 </form>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#id_interested').multiselect({
+            enableFiltering: true,
+            filterBehavior: 'text',
+            buttonWidth: '100%',
+            enableCaseInsensitiveFiltering: true,
+
+        });
+    });
+</script>
+
 {% endblock %}

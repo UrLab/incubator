@@ -1,3 +1,28 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  /* Margin bottom by footer height */
+  /*margin-bottom: 4em;*/
+}
+
+.footer {
+  /*position: absolute;
+  bottom: 0;
+  width: 100%;*/
+   /*Set the fixed height of the footer here */
+  /*height: 4em;
+  padding-top: 1em;
+  border-top: 1px solid #f5f5f5;*/
+}
+
+.footer a {
+  /*color: #5b94c5;*/
+}
+
 .project-card-description {
     height: 3em;
     overflow: hidden;

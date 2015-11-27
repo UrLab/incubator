@@ -52,11 +52,14 @@ class User(AbstractBaseUser):
     first_name = models.CharField(max_length=127, blank=True)
     last_name = models.CharField(max_length=127, blank=True)
     is_staff = models.BooleanField(default=False, verbose_name="est administrateur")
+    is_active = models.BooleanField(default=True)
 
     balance = models.DecimalField(max_digits=6, decimal_places=2, default=0, verbose_name="ardoise")
     has_key = models.BooleanField(default=False, verbose_name="possède une clé")
 
+    # Needed for compatibility with the Django build-in User model
     groups = models.ManyToManyField(Group, blank=True)
+    is_active = models.BooleanField(default=True)
 
     def has_module_perms(self, *args, **kwargs):
         return True # TODO : is this a good idea ?
@@ -93,7 +96,7 @@ class User(AbstractBaseUser):
     @property
     def gravatar(self):
         mail = self.email.lower().encode('utf8')
-        gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(mail).hexdigest()
+        gravatar_url = "http://www.gravatar.com/avatar/" + hashlib.md5(mail).hexdigest() + "?d=wavatar"
 
         return gravatar_url
 

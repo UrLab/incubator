@@ -2,14 +2,9 @@ from django.db import models
 from django.conf import settings
 from datetime import timedelta
 from django.core.urlresolvers import reverse
-
-
-# Create your models here.
-# Events :
-#    Des users peuvent participer à un event
-#    Les gens peuvnet être "intéressés"
-#    Utiliser https://github.com/thoas/django-sequere ?
-#    API hackeragenda
+from django.utils import timezone
+from django_resized import ResizedImageField
+import requests
 
 
 class Event(models.Model):
@@ -24,6 +19,8 @@ class Event(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name='Etat')
     organizer = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Organisateur')
     description = models.TextField(blank=True)
+    picture = ResizedImageField(size=[500, 500], upload_to='event_pictures', null=True, blank=True)
+    interested = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="interesting_events")
 
     def is_only_a_day(self):
         return self.start.date() == self.stop.date()
@@ -39,19 +36,56 @@ class Event(models.Model):
     def get_absolute_url(self):
         return reverse('view_event', args=[self.id])
 
+    def get_absolute_full_url(self):
+        return settings.ROOT_URL + self.get_absolute_url()
+
+    def is_meeting(self):
+        return bool(self.meeting)
+
+    def start_day(self):
+        return self.start.replace(hour=0, minute=0, second=0, microsecond=0)
+
+    def is_today_or_before(self):
+        if self.start is None:
+            return False
+        return self.start_day() < timezone.now()
+
+    def is_finished(self):
+        instant = self.stop if self.stop else self.start
+        if instant is None:
+            return False
+        return instant < timezone.now()
+
+    def all_day(self):
+        return False
+
     class Meta:
         verbose_name = "Événement"
 
-#    A un OJ et un PV (composés de points)
-#    On pourrait créer un pad et le remplir automatiquement puis récupérer le contenu automatiquement après la réu (optionnel)
-#    En faire une extension de events : rajouter un pad qui est sychronisé avec la page (inclure un outil d'edit collaborative dans la page direct alors (codé en rust erlang elixir!)?)? Permettrais de créer des notes collaboratives sur nos events.
+# A un OJ et un PV (composés de points)
+# On pourrait créer un pad et le remplir automatiquement puis récupérer le contenu automatiquement après la réu (optionnel)
+# En faire une extension de events : rajouter un pad qui est sychronisé avec la page
+# (inclure un outil d'edit collaborative dans la page direct alors (codé en rust erlang elixir!)?)?
+# Permettrais de créer des notes collaboratives sur nos events.
 
 
 class Meeting(models.Model):
     event = models.OneToOneField(Event, verbose_name="Événement")
-    OJ = models.TextField(verbose_name='Ordre du jour')
-    PV = models.TextField()
-    membersPresent = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Membres présents')
+    OJ = models.TextField(verbose_name='Ordre du jour', blank=True)
+    PV = models.TextField(blank=True)
+    members = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Membres présents', blank=True)
+    pad = models.URLField(blank=True)
+
+    def get_pad_contents(self):
+        r = requests.get(self.pad + "/export/txt")
+        if r.ok:
+            return r.text
+
+    def save(self, *args, **kwargs):
+        super(Meeting, self).save(*args, **kwargs)
+        if not self.pad:
+            self.pad = "https://pad.lqdn.fr/p/urlab-meeting-{}".format(self.id)
+        super(Meeting, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Réunion"

@@ -15,9 +15,9 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 from .djredis import get_redis, get_mac, set_space_open, space_is_open
-from .models import MacAdress, SpaceStatus
+from .models import MacAdress, SpaceStatus, MusicOfTheDay
 from .forms import MacAdressForm
-from .serializers import PamelaSerializer, SpaceStatusSerializer
+from .serializers import PamelaSerializer, SpaceStatusSerializer, MotdSerializer
 
 from incubator.settings import (STATUS_SECRETS,
                                 INFLUX_HOST, INFLUX_PORT, INFLUX_USER,
@@ -56,6 +56,8 @@ def pamela_list(request):
 
     context = make_pamela()
     context['form'] = form
+    context['space_open'] = space_is_open(get_redis())
+    context['status_change'] = SpaceStatus.objects.last()
 
     return render(request, "pamela.html", context)
 
@@ -128,8 +130,8 @@ def spaceapi(request):
         "logo": "https://urlab.be/urlab.png",
         "url": "https://urlab.be",
         "location": {
-            "lat": "50.812915",
-            "lon": "4.384396",
+            "lat": 50.812915,
+            "lon": 4.384396,
             "address": "131, avenue Buyl, 1050, Bruxelles, Belgium",
         },
         "state": {
@@ -191,6 +193,7 @@ class PamelaObject(object):
 
         self.total_mac_count = len(pamela_dict['raw_maclist'])
         self.last_updated = last_updated
+        self.age = pamela_dict['updated']
         self.unknown_mac = pamela_dict['unknown_mac']
         self.users = pamela_dict['users']
 
@@ -205,3 +208,8 @@ class PamelaViewSet(viewsets.ViewSet):
 class OpeningsViewSet(viewsets.ModelViewSet):
     queryset = SpaceStatus.objects.all()
     serializer_class = SpaceStatusSerializer
+
+
+class MotdViewSet(viewsets.ModelViewSet):
+    queryset = MusicOfTheDay.objects.all()
+    serializer_class = MotdSerializer

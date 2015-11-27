@@ -3,7 +3,7 @@ from datetimewidget.widgets import DateTimeWidget
 
 from django import forms
 
-from .models import Event
+from .models import Event, Meeting
 
 
 class EventForm(ModelForm):
@@ -44,3 +44,9 @@ class EventForm(ModelForm):
             raise forms.ValidationError(
                 "Un événement prêt doit avoir une date de début"
             )
+
+
+class MeetingForm(ModelForm):
+    class Meta:
+        model = Meeting
+        fields = ('OJ', 'PV')

@@ -13,6 +13,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {% bootstrap_css %}
         {% bootstrap_javascript jquery=1 %}
+
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
         <link href="{% static "css/style.css" %}" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <title>{% block title %}UrLab{% endblock %}</title>
@@ -23,7 +25,7 @@
     <header class="base-header">
         <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders.png"/></a></div>
     </header>
-        <nav class="navbar navbar-default navbar-static-top navbar-inverse navbar-shadow" style="background-color: #2F2F38;">
+        <nav class="navbar navbar-default navbar-static-top navbar-shadow">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menuNavbar">
@@ -31,7 +33,9 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="/">UrLab</a>
+                    <a class="navbar-brand" href="/">
+                        <img src="/static/img/space_invader.png" height=20 width=20 />
+                    </a>
                 </div>
                 <div class="collapse navbar-collapse" id="menuNavbar">
                     <ul class="nav navbar-nav">
@@ -50,11 +54,6 @@
 
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li style="background-color: #337AB7">
-                                <p class="navbar-text" style="color: white;">
-                                    This is a Beta, do not play with money yet ;)
-                                </p>
-                        </li>
                         {% if request.user.is_authenticated %}
                             <li class="dropdown">
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -86,25 +85,40 @@
         {% block content %}
         {% endblock %}
         </div>
-        {% render_block "js" %}
+        <!-- <footer class="footer">
+          <div class="container">
+            <p class="text-muted">
+                Made with love at
+                <a href="http://urlab.be">
+                <img src="/static/img/small-urlab.png" style="height: 1em;">
+                UrLab</a> - Code on <a href="http://github.com/UrLab/incubator">GitHub</a>
+                - <a href="http://cerkinfo.be">
+                <img style="height: 1.0em;" src="/static/img/small-ci.png">
+                </a> -
+                <a href="/api">We haz an API</a> -
+                Scientia vincere tenebras
+            </p>
+          </div>
+        </footer> -->
         <footer class="container base-footer"> <!-- base-footer -->
-        <div class="row"> <!-- base-footer-row -->
-            <div class="col-sm-4 base-footer-opening"> <!-- base-footer-opening -->
-                <img src="/static/img/opening/week-2w.png" width="100%" height="auto"/>
+            <div class="row"> <!-- base-footer-row -->
+                <div class="col-sm-4 base-footer-opening"> <!-- base-footer-opening -->
+                    <img src="/static/img/opening/week-2w.png" width="100%" height="auto"/>
+                </div>
+                <div class="col-sm-4 base-footer-info"> <!-- base-footer-info -->
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/space/pamela">Pamela</a></li>
+                        <li><a href="/wiki/">Wiki</a></li>
+                        <li></li>
+                        <li>...</li>
+                    </ul>
+                </div>
+                <div class="col-sm-4 base-map"> <!-- base-map -->
+                    <iframe src="https://www.google.com/maps/d/u/0/embed?mid=zPnchbKdsavc.kWC7JrWya-pE&z=14" width="100%" height="250px"></iframe>
+                </div>
             </div>
-            <div class="col-sm-4 base-footer-info"> <!-- base-footer-info -->
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/space/pamela">Pamela</a></li>
-                    <li><a href="/wiki/">Wiki</a></li>
-                    <li></li>
-                    <li>...</li>
-                </ul>
-            </div>
-            <div class="col-sm-4 base-map"> <!-- base-map -->
-                <iframe src="https://www.google.com/maps/d/u/0/embed?mid=zPnchbKdsavc.kWC7JrWya-pE&z=14" width="100%" height="250px"></iframe>
-            </div>
-        </div>
-    </footer>
+        </footer>
+        {% render_block "js" %}
     </body> 
 </html>

@@ -2,6 +2,10 @@
 {% load bootstrap3 %}
 {% load static %}
 
+{% block title %}
+Formulaire de projet
+{% endblock %}
+
 {% block head %}
     {{ form.media  }}
     <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet">
@@ -25,14 +29,14 @@
             enableFiltering: true,
             filterBehavior: 'text',
             buttonWidth: '100%',
+            enableCaseInsensitiveFiltering: true,
         });
-    });
-    $(document).ready(function() {
         $('#id_dependencies').multiselect({
             enableFiltering: true,
             filterBehavior: 'text',
             disableIfEmpty: true,
             buttonWidth: '100%',
+            enableCaseInsensitiveFiltering: true,
         });
     });
 </script>

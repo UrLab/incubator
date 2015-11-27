@@ -1,16 +1,18 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
-from rest_framework import viewsets
 from django.db.models import Q
+from ics import Calendar
+from ics import Event as VEvent
 
 
-from .serializers import EventSerializer
-from .models import Event
-from .forms import EventForm
+from .serializers import EventSerializer, MeetingSerializer, HackerAgendaEventSerializer
+from .models import Event, Meeting
+from .forms import EventForm, MeetingForm
 
 
 class EventAddView(CreateView):
@@ -35,14 +37,38 @@ class EventDetailView(DetailView):
     context_object_name = 'event'
 
 
+class MeetingAddView(CreateView):
+    form_class = MeetingForm
+    template_name = 'meeting_form.html'
+
+    def form_valid(self, form):
+        event = get_object_or_404(Event, pk=self.kwargs['pk'])
+        form.instance.event = event
+        return super(MeetingAddView, self).form_valid(form)
+
+    def get_success_url(self):
+        return self.object.event.get_absolute_url()
+
+
+class MeetingEditView(UpdateView):
+    form_class = MeetingForm
+    template_name = 'meeting_form.html'
+    model = Meeting
+
+    def get_success_url(self):
+        return self.object.event.get_absolute_url()
+
+
 def events_home(request):
     futureQ = Q(stop__gt=timezone.now())
     readyQ = Q(status__exact="r")
 
+    base = Event.objects.select_related('meeting')
+
     context = {
-        'future': Event.objects.filter(futureQ & readyQ).order_by('start'),
-        'past': Event.objects.filter(~futureQ & readyQ).order_by('-start')[:10],
-        'incubation': Event.objects.filter(~readyQ),
+        'future': base.filter(futureQ & readyQ).order_by('start'),
+        'past': base.filter(~futureQ & readyQ).order_by('-start')[:10],
+        'incubation': base.filter(~readyQ),
     }
 
     return render(request, "events_home.html", context)
@@ -62,12 +88,78 @@ def short_url_maker(*keywords):
     return filter_func
 
 
+def import_pad(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    meeting = event.meeting
+    if meeting.PV:
+        return HttpResponseForbidden("This meeting already has a PV")
+
+    meeting.PV = meeting.get_pad_contents()
+    meeting.save()
+
+    return HttpResponseRedirect(event.get_absolute_url())
+
+
+def ical(request):
+    events = Event.objects.filter(status__exact="r")
+    cal = Calendar()
+    for event in events:
+        vevent = VEvent(
+            name=event.title,
+            begin=event.start,
+            end=event.stop,
+            description=event.description,
+            location=event.place
+        )
+        cal.events.append(vevent)
+
+    return HttpResponse(str(cal), content_type="text/calendar")
+
+
+def interested(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    event.interested.add(request.user)
+    return HttpResponseRedirect(event.get_absolute_url())
+
+
+def not_interested(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    event.interested.remove(request.user)
+    return HttpResponseRedirect(event.get_absolute_url())
+
+
 sm = short_url_maker("smartmonday")
 linux = short_url_maker("install", "party")
 git = short_url_maker("workshop", "git")
 ag = short_url_maker("AG", "mandat")
 
 
+from rest_framework import filters
+from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+
 class EventViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.all()
     serializer_class = EventSerializer
+    queryset = Event.objects.all()
+    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter,)
+    ordering_fields = ('start', 'stop')
+    filter_fields = ('place', 'start', 'stop', 'status', 'organizer', 'meeting')
+
+
+class MeetingViewSet(viewsets.ModelViewSet):
+    serializer_class = MeetingSerializer
+    queryset = Meeting.objects.all()
+
+
+class HackerAgendaAPI(APIView):
+    def get(self, request, format=None):
+        qs = Event.objects.filter(status="r").filter(start__isnull=False)
+        events = HackerAgendaEventSerializer(qs, many=True)
+
+        return Response({
+            "org": "UrLab",
+            "api": 0.1,
+            "events": events.data
+        })
