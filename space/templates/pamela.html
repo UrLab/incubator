@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
 {% load staticfiles %}
+{% load humanize %}
 
 {% block content %}
 <div class="page-header">
-    <h1>Pamela 
+    <h1>Pamela
         <small>
             a Payload for Anti-Matter Exploration and Light-nuclei Astrophysics
         </small>
@@ -18,9 +19,21 @@
 {% endfor %}
 
 <div class="row">
+    <div class="col-md-12">
+        {% if space_open %}
+            <div class="alert alert-success" role="alert">
+                Le Hackerspace est ouvert (depuis {{status_change.time|timesince}}). Venez nous dire bonjour !
+            </div>
+        {% else %}
+            <div class="alert alert-danger" role="alert">
+                Le Hackerspace est fermé depuis {{status_change.time|timesince}}.
+            </div>
+        {% endif %}
+    </div>
     <div class="col-md-8" id="pamela">
     </div>
     <div class="col-md-4">
+        <p>P.A.M.E.L.A. est l'interface permettant de voir qui est actuellement connecté sur le réseau du Hackerspace.</p>
         <h3>Ajoutez votre machine</h3>
         <p>Tapez ceci dans un terminal pour avoir une liste de vos MAC adress : </p>
         <pre>ip addr show</pre>
@@ -33,6 +46,9 @@
                 <button type="submit" class="btn btn-info">Ajouter à Pamela</button>
                 {% endbuttons %}
             </form>
+            <p class="text-muted"><small>
+                * En donnant votre adresse MAC©, vous acceptez l'enregistrement de l'association entre votre pseudonyme et l'adresse matérielle de votre ordinateur sur le serveur de UrLab©. Cette information ne sera utilisée que pour afficher votre nom sur cette page. Si vous ne souhaitez pas communiquer cette information, seuls les deux derniers bytes de cette adresse sont affichés sur cette page<sup>Patent pending</sup>.
+            </small></p>
         {% else %}
             Connectez-vous pour pouvoir ajouter votre adresse à Pamela
         {% endif %}

@@ -56,6 +56,8 @@ def pamela_list(request):
 
     context = make_pamela()
     context['form'] = form
+    context['space_open'] = space_is_open(get_redis())
+    context['status_change'] = SpaceStatus.objects.last()
 
     return render(request, "pamela.html", context)
 
