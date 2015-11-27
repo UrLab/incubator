@@ -17,6 +17,7 @@ api.register(r'stock/categories', stock.views.CategoryViewSet)
 api.register(r'stock/products', stock.views.ProductViewSet)
 api.register(r'space/openings', space.views.OpeningsViewSet)
 api.register(r'space/pamela', space.views.PamelaViewSet, base_name="pamela")
+api.register(r'space/motd', space.views.MotdViewSet)
 
 
 urlpatterns = patterns(

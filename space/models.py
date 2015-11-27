@@ -24,3 +24,15 @@ class MacAdress(models.Model):
 class SpaceStatus(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     is_open = models.BooleanField()
+
+
+class MusicOfTheDay(models.Model):
+    url = models.URLField()
+    irc_nick = models.CharField(max_length=200)
+    day = models.DateField(auto_now_add=True)
+
+    KNOWN_PROVIDERS = {
+        'youtube.com': 'youtube',
+        'youtu.be': 'youtube',
+        'soundcloud.com': 'soundcloud',
+    }
