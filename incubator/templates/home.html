@@ -44,16 +44,20 @@
 
         <p>UrLab est un lieu de rencontre pour les étudiants intéressés par la technologie. C’est un lieu où l’on développe ses projets et l’on partage ses connaissances par l’intermédiaire d’ateliers et de conférences.</p>
 
-        <h2>Évènements à venir</h2>
+        <h2>
+            <span class="fa fa-calendar-o" aria-hidden="true"></span>
+            Évènements à venir
+        </h2>
         {% if events %}
             <dl>
                 {% for ev in events %}
-                <dt><a href="{% url "view_event" ev.id %}">{{ ev.title }}</a></dt>
-                <dd>{{ ev.start | naturaltime }} / {{ ev.place }}</dd>
+                <dt><h4><a href="{% url "view_event" ev.id %}">{{ ev.title }}</a></h4></dt>
+                <dd>{{ ev.start | naturaltime | capfirst }}
+                <span class="fa fa-map-marker" aria-hidden="true"></span> {{ ev.place }}</dd>
                 {% endfor %}
             </dl>
         {% else %}
-            Pas d'évènements à venir
+            <p class="text-muted">Il n'y a actuellement pas d'évènements à venir</p>
         {% endif %}
     </div>
     <div class="col-md-4 well">
