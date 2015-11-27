@@ -169,6 +169,15 @@ STATUS_SECRETS = []
 
 LOGIN_URL = '/auth/login/'
 
+WIKI_ATTACHMENTS_EXTENSIONS = (
+    'jpg',
+    'jpeg',
+    'png',
+    'tex',
+    'ppt',
+    'pptx',
+)
+
 try:
     from incubator.local_settings import *
 except ImportError:
