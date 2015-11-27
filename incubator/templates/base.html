@@ -87,6 +87,7 @@
         {% for message in messages %}
             <div class="alert alert-{{ message.tags }}">{{ message }}</div>
         {% endfor %}
+        <br>
         {% block content %}
         {% endblock %}
         </div>
@@ -106,5 +107,5 @@
           </div>
         </footer>
         {% render_block "js" %}
-    </body> 
+    </body>
 </html>
