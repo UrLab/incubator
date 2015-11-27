@@ -1,4 +1,6 @@
 from rest_framework import permissions
+from rest_framework.pagination import PageNumberPagination
+import sys
 
 
 class ReadOnlyPermission(permissions.BasePermission):
@@ -13,3 +15,11 @@ class ReadOnlyPermission(permissions.BasePermission):
             return True
 
         return False
+
+
+class AnachistPageNumberPagination(PageNumberPagination):
+    page_size = 100
+    page_query_param = 'page'
+    page_size_query_param = 'page_size'
+    max_page_size = sys.maxsize
+
