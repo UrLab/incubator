@@ -22,7 +22,7 @@
     <div class="col-md-12">
         {% if space_open %}
             <div class="alert alert-success" role="alert">
-                Le Hackerspace est ouvert (depuis {{status_change.time|timesince}}). Venez nous dire bonjour !
+                Le Hackerspace est ouvert depuis {{status_change.time|timesince}}. Venez nous dire bonjour !
             </div>
         {% else %}
             <div class="alert alert-danger" role="alert">
@@ -104,7 +104,7 @@ var Pamela = React.createClass({
                 <h2>Il n'y a personne pour l'instant</h2>
             </div>;
         } else {
-            return <div className="row-fluid"> 
+            return <div className="row-fluid">
                 <div className="col-md-6 col-sm-12">
                     <h3>Membres de UrLab</h3>
                     <PamelaUsersBox users={this.state.users}/>
