@@ -2,10 +2,13 @@ html {
   position: relative;
   min-height: 100%;
 }
+
 body {
+  font-family: 'Open Sans', sans-serif;
   /* Margin bottom by footer height */
   margin-bottom: 4em;
 }
+
 .footer {
   position: absolute;
   bottom: 0;
