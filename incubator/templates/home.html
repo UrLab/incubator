@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
 {% load formatting %}
+{% load humanize %}
 
 {% block content %}
 <div class="row">
@@ -42,6 +43,18 @@
         </p>
 
         <p>UrLab est un lieu de rencontre pour les étudiants intéressés par la technologie. C’est un lieu où l’on développe ses projets et l’on partage ses connaissances par l’intermédiaire d’ateliers et de conférences.</p>
+
+        <h2>Évènements à venir</h2>
+        {% if events %}
+            <dl>
+                {% for ev in events %}
+                <dt><a href="{% url "view_event" ev.id %}">{{ ev.title }}</a></dt>
+                <dd>{{ ev.start | naturaltime }} / {{ ev.place }}</dd>
+                {% endfor %}
+            </dl>
+        {% else %}
+            Pas d'évènements à venir
+        {% endif %}
     </div>
     <div class="col-md-4 well">
         <p>UrLab se trouve sur le campus du Solbosh, à l'ULB et est ouvert à tout le monde.</p>
