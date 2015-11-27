@@ -64,6 +64,7 @@
                                 <li><a href="/admin">Administration</a></li>
                                 {% endif %}
                                 <li role="separator" class="divider"></li>
+                                <li><a href="{% url "password_change" %}">Changer de mot de passe</a></li>
                                 <li><a href="{% url "logout" %}?next=/">{% bootstrap_icon "disconnect" %}Déconnexion</a></li>
                               </ul>
                             </li>
