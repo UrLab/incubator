@@ -15,97 +15,102 @@
         {% bootstrap_javascript jquery=1 %}
 
         <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-        <link href="{% static "css/style.css" %}" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+        <link href="{% static "css/style.css" %}" rel="stylesheet">
         <title>{% block title %}UrLab{% endblock %}</title>
         {% render_block "css" %}
         {% block head %}{% endblock %}
     </head>
     <body class="base-body">
-    <header class="base-header">
-        <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders.png"/></a></div>
-    </header>
-        <nav class="navbar navbar-default navbar-static-top navbar-shadow">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menuNavbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="/">
-                        <img src="/static/img/space_invader.png" height=20 width=20 />
-                    </a>
-                </div>
-                <div class="collapse navbar-collapse" id="menuNavbar">
-                    <ul class="nav navbar-nav">
-                        <li class="{% ifcontains "/projects/" %}active{% endifcontains %}">
-                            <a href="{% url "projects_home" %}">Projets</a>
-                        </li>
-                        <li class="{% ifcontains "/events/" %}active{% endifcontains %}">
-                            <a href="{% url "events_home" %}">Evénements</a>
-                        </li>
-                        <li class="{% ifcontains "/wiki/" %}active{% endifcontains %}">
-                            <a href="{% url "wiki:root" %}">Wiki</a>
-                        </li>
-                        <li class="{% ifcontains "/space/pamela" %}active{% endifcontains %}">
-                            <a href="{% url "pamela_list" %}">Pamela</a>
-                        </li>
+        <header class="base-header masthead">
+            <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders.png"/></a></div>
+        </header>
+        <div class="nav-wrapper">
+            <div id="nav">
+                <nav class="navbar navbar-default navbar-static-top navbar-shadow" >
+                    <div class="container-fluid">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menuNavbar">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                            <a class="navbar-brand" href="/">
+                                <img src="/static/img/space_invader.png" height=20 width=20 />
+                            </a>
+                        </div>
+                        <div class="collapse navbar-collapse" id="menuNavbar">
+                            <ul class="nav navbar-nav">
+                                <li class="{% ifcontains "/projects/" %}active{% endifcontains %}">
+                                    <a href="{% url "projects_home" %}">Projets</a>
+                                </li>
+                                <li class="{% ifcontains "/events/" %}active{% endifcontains %}">
+                                    <a href="{% url "events_home" %}">Evénements</a>
+                                </li>
+                                <li class="{% ifcontains "/wiki/" %}active{% endifcontains %}">
+                                    <a href="{% url "wiki:root" %}">Wiki</a>
+                                </li>
+                                <li class="{% ifcontains "/space/pamela" %}active{% endifcontains %}">
+                                    <a href="{% url "pamela_list" %}">Pamela</a>
+                                </li>
 
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/about/">About</a></li>
-                        {% if request.user.is_authenticated %}
-                            <li class="dropdown">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                {% bootstrap_icon "user" %}
-                                {{request.user.username}} <span class="caret"></span>
-                              </a>
-                              <ul class="dropdown-menu">
-                                <li><a href="{% url "profile" %}">{% bootstrap_icon "user" %} Profil</a></li>
-                                <li><a href="{% url "change_balance" %}">{% bootstrap_icon "euro" %} Ardoise</a></li>
-                                {% if request.user.is_staff %}
-                                <li role="separator" class="divider"></li>
-                                <li><a href="/admin">Administration</a></li>
+                            </ul>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="/about/">About</a></li>
+                                {% if request.user.is_authenticated %}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        {% bootstrap_icon "user" %}
+                                        {{request.user.username}} <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{% url "profile" %}">{% bootstrap_icon "user" %} Profil</a></li>
+                                        <li><a href="{% url "change_balance" %}">{% bootstrap_icon "euro" %} Ardoise</a></li>
+                                        {% if request.user.is_staff %}
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="/admin">Administration</a></li>
+                                        {% endif %}
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="{% url "password_change" %}">Changer de mot de passe</a></li>
+                                        <li><a href="{% url "logout" %}?next=/">{% bootstrap_icon "disconnect" %}Déconnexion</a></li>
+                                    </ul>
+                                </li>
+                                {% else %}
+                                <li class="{% ifcontains "/auth/login" %}active{% endifcontains %}">
+                                    <a href="{% url "login" %}">Login / Register</a>
+                                </li>
                                 {% endif %}
-                                <li role="separator" class="divider"></li>
-                                <li><a href="{% url "password_change" %}">Changer de mot de passe</a></li>
-                                <li><a href="{% url "logout" %}?next=/">{% bootstrap_icon "disconnect" %}Déconnexion</a></li>
-                              </ul>
-                            </li>
-                        {% else %}
-                            <li class="{% ifcontains "/auth/login" %}active{% endifcontains %}">
-                                <a href="{% url "login" %}">Login / Register</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
             </div>
-        </nav>
+        </div>
 
         <div class="container">
-        {% for message in messages %}
+            {% for message in messages %}
             <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-        <br>
-        {% block content %}
-        {% endblock %}
+            {% endfor %}
+            <br>
+            {% block content %}
+            {% endblock %}
         </div>
         <footer class="footer">
-          <div class="container">
-            <p class="text-muted">
+            <div class="container">
+                <p class="text-muted">
                 Made with love at
                 <a href="http://urlab.be">
-                <img src="/static/img/small-urlab.png" style="height: 1em;">
-                UrLab</a> - Code on <a href="http://github.com/UrLab/incubator">GitHub</a>
+                    <img src="/static/img/small-urlab.png" style="height: 1em;">
+                    UrLab</a> - Code on <a href="http://github.com/UrLab/incubator">GitHub</a>
                 - <a href="http://cerkinfo.be">
-                <img style="height: 1.0em;" src="/static/img/small-ci.png">
+                    <img style="height: 1.0em;" src="/static/img/small-ci.png">
                 </a> -
                 <a href="/api">We haz an API</a> -
                 Scientia vincere tenebras
-            </p>
-          </div>
+                </p>
+            </div>
         </footer>
         {% render_block "js" %}
+        <script src="{% static "js/navbar.js" %}"></script>
     </body>
 </html>
