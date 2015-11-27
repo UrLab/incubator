@@ -17,13 +17,15 @@
         <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
         <link href="{% static "css/style.css" %}" rel="stylesheet">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-        {% render_block "css" %}
         <title>{% block title %}UrLab{% endblock %}</title>
+        {% render_block "css" %}
         {% block head %}{% endblock %}
     </head>
-    <body>
-
-        <nav class="navbar navbar-default navbar-static-top">
+    <body class="base-body">
+    <header class="base-header">
+        <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders.png"/></a></div>
+    </header>
+        <nav class="navbar navbar-default navbar-static-top navbar-shadow">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menuNavbar">
@@ -104,5 +106,5 @@
           </div>
         </footer>
         {% render_block "js" %}
-    </body>
+    </body> 
 </html>
