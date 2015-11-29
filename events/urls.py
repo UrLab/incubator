@@ -18,6 +18,6 @@ urlpatterns = patterns(
     url(r'^edit_meeting/(?P<pk>[0-9]+)', MeetingEditView.as_view(), name='edit_meeting'),
     url(r'^not_interested/(?P<pk>[0-9]+)$', login_required(not_interested), name='not_interested_event'),
     url(r'^interested/(?P<pk>[0-9]+)$', login_required(interested), name='interested_event'),
-    url(r'^start_event/(?P<pk>[0-9+])$', login_required(start_event), name='start_event'),
-    url(r'^stop_event/(?P<pk>[0-9+])$', login_required(stop_event), name='stop_event')
+    url(r'^start_event/(?P<pk>[0-9]+)$', login_required(start_event), name='start_event'),
+    url(r'^stop_event/(?P<pk>[0-9]+)$', login_required(stop_event), name='stop_event')
 )
