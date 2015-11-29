@@ -81,10 +81,15 @@ class Meeting(models.Model):
         if r.ok:
             return r.text
 
+    def set_pad_contents(self):
+        return requests.post(self.pad + "/import", files={'file': ('osef.txt', self.OJ)}).ok
+
     def save(self, *args, **kwargs):
         super(Meeting, self).save(*args, **kwargs)
         if not self.pad:
             self.pad = "https://pad.lqdn.fr/p/urlab-meeting-{}".format(self.id)
+        if not self.PV:
+            self.set_pad_contents()
         super(Meeting, self).save(*args, **kwargs)
 
     class Meta:
