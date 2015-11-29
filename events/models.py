@@ -11,6 +11,8 @@ class Event(models.Model):
     STATUS_CHOICES = (
         ("r", "Prêt"),
         ("i", "En incubation"),
+        ("o", "En cours"),
+        ("f", "Fini"),
     )
     title = models.CharField(max_length=300, verbose_name='Nom')
     place = models.CharField(max_length=300, verbose_name='Lieu', blank=True)
@@ -70,7 +72,7 @@ class Event(models.Model):
 
 
 class Meeting(models.Model):
-    event = models.OneToOneField(Event, verbose_name="Événement")
+    event = models.OneToOneField(Event, verbose_name="Événement", related_name='meeting')
     OJ = models.TextField(verbose_name='Ordre du jour', blank=True)
     PV = models.TextField(blank=True)
     members = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Membres présents', blank=True)
@@ -81,15 +83,13 @@ class Meeting(models.Model):
         if r.ok:
             return r.text
 
-    def set_pad_contents(self):
-        return requests.post(self.pad + "/import", files={'file': ('osef.txt', self.OJ)}).ok
+    def set_pad_contents(self, content):
+        requests.post(self.pad + "/import", files={'file': ('osef.txt', content)}).ok
 
     def save(self, *args, **kwargs):
         super(Meeting, self).save(*args, **kwargs)
         if not self.pad:
             self.pad = "https://pad.lqdn.fr/p/urlab-meeting-{}".format(self.id)
-        if not self.PV:
-            self.set_pad_contents()
         super(Meeting, self).save(*args, **kwargs)
 
     class Meta:

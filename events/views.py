@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
@@ -127,6 +128,31 @@ def not_interested(request, pk):
     event.interested.remove(request.user)
     return HttpResponseRedirect(event.get_absolute_url())
 
+def start_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    if (event.status != 'r'):
+        return HttpResponseForbidden("This event should be ready before being started")
+    event.status = 'o'
+    event.save()
+    try:
+        event.meeting.set_pad_contents(event.meeting.OJ)
+    except ObjectDoesNotExist:
+        print('ObjectDoesNotExist')
+        pass
+    return HttpResponseRedirect(event.get_absolute_url())
+
+def stop_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    if (event.status != 'o'):
+        return HttpResponseForbidden("This event should be started before being stopped")
+    event.status = 'f'
+    event.save()
+    try:
+        event.meeting.PV = event.meeting.get_pad_contents()
+        event.meeting.save()
+    except ObjectDoesNotExist:
+        pass
+    return HttpResponseRedirect(event.get_absolute_url())
 
 sm = short_url_maker("smartmonday")
 linux = short_url_maker("install", "party")
