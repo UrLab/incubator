@@ -84,7 +84,7 @@ class Meeting(models.Model):
             return r.text
 
     def set_pad_contents(self, content):
-        requests.post(self.pad + "/import", files={'file': ('osef.txt', content)}).ok
+        return requests.post(self.pad + "/import", files={'file': ('osef.txt', content)}).ok
 
     def save(self, *args, **kwargs):
         super(Meeting, self).save(*args, **kwargs)

@@ -136,6 +136,7 @@ def start_event(request, pk):
     event.save()
     try:
         event.meeting.set_pad_contents(event.meeting.OJ)
+        event.meeting.save()
     except ObjectDoesNotExist:
         print('ObjectDoesNotExist')
         pass
