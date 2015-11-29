@@ -29,7 +29,7 @@ class SpaceStatus(models.Model):
 class MusicOfTheDay(models.Model):
     url = models.URLField()
     irc_nick = models.CharField(max_length=200)
-    day = models.DateField(auto_now_add=True)
+    day = models.DateField(auto_now_add=True, unique=True)
 
     KNOWN_PROVIDERS = {
         'youtube.com': 'youtube',
