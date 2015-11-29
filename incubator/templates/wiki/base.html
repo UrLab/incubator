@@ -5,9 +5,9 @@
 {% block wiki_pagetitle %}{% endblock %} - Wiki
 {% endblock %}
 
-{%block head %}
+{% addtoblock "css" %}
  <link href="{{ STATIC_URL  }}wiki/bootstrap/css/wiki-bootstrap.min.css" rel="stylesheet">
-{%endblock%}
+{% endaddtoblock %}
 
 {%block content %}
       {% block wiki_breadcrumbs %}{% endblock %}
