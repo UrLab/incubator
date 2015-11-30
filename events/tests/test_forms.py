@@ -3,8 +3,6 @@ from datetime import datetime
 import pytest
 from users.models import User
 
-pytestmark = pytest.mark.django_db
-
 
 @pytest.fixture(scope='function')
 def user():
@@ -12,7 +10,8 @@ def user():
     return user.id
 
 
-def test_only_title_and_state_required():
+@pytest.mark.django_db
+def test_only_title_and_state_required(user):
     form_data = {
         'title': 'wtf',
         'status': 'i',
@@ -23,7 +22,8 @@ def test_only_title_and_state_required():
     assert form.is_valid(), form.errors
 
 
-def test_no_stop_but_start():
+@pytest.mark.django_db
+def test_no_stop_but_start(user):
     form_data = {
         'title': 'wtf',
         'status': 'i',
