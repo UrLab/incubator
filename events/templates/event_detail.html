@@ -67,6 +67,10 @@
     <div class="alert alert-warning" role="alert">
       <b>Événement en incubation :</b> N'hésitez pas à le compléter, à choisir une date pour l'organiser ou tout simplement en vous signalant comme "intéressé".
     </div>
+  {% elif event.status == 'r' and event.is_today_or_before %}
+    <p><a href="{% url "start_event" event.id %}" class="btn btn-success btn-default">Démarrer l'événement</a></p>
+  {% elif event.status == 'o' %}
+    <p><a href="{% url "stop_event" event.id %}" class="btn btn-success btn-default">Finir l'événement</a></p>
   {% endif %}
   {% if not event.meeting %}
       <div class="col-md-8">
