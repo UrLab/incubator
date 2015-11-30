@@ -32,7 +32,7 @@ def private_api(**required_params):
                     request.POST['secret'])
                 return HttpResponseForbidden(message)
 
-            params = {}
+            params = kwargs
             for name, typecast in required_params.items():
                 if name not in request.POST.keys():
                     return HttpResponseBadRequest(
@@ -42,6 +42,6 @@ def private_api(**required_params):
                 except ValueError:
                     return HttpResponseBadRequest(
                         "Did not understood %s=%s" % (name, request.POST[name]))
-            return some_view(request, **params)
+            return some_view(request, *args, **params)
         return inner
     return outer
