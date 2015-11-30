@@ -36,7 +36,7 @@ def test_simple(rf, settings):
 
     request = rf.post('', {'secret': 'good_secret1'})
     response = inner_fn(request)
-    assert isinstance(response, HttpResponse)
+    assert type(response) == HttpResponse
     assert response == X
 
 
@@ -51,7 +51,7 @@ def test_cast(rf, settings):
 
     request = rf.post('', {'secret': 'good_secret1', 'var': '1.1'})
     response = inner_fn(request)
-    assert isinstance(response, HttpResponse)
+    assert type(response) == HttpResponse
     assert response == X
 
 
@@ -68,5 +68,20 @@ def test_does_not_strip_args(rf, settings):
 
     request = rf.post('', {'secret': 'good_secret1', 'var': '1.1'})
     response = inner_fn(request, '42', fixed_named='ololol')
-    assert isinstance(response, HttpResponse)
+    assert type(response) == HttpResponse
     assert response == X
+
+
+def test_missing_post_arg(rf, settings):
+    settings.STATUS_SECRETS = ['good_secret1', 'good_secret2']
+
+    @private_api(var=float)
+    def inner_fn(request, var):
+        assert isinstance(var, float)
+        assert var == 1.1
+        return X
+
+    request = rf.post('', {'secret': 'good_secret1'})
+    response = inner_fn(request)
+    assert isinstance(response, HttpResponseBadRequest)
+    assert response.content == b'Parameter var is required'
