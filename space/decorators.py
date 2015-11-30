@@ -1,6 +1,6 @@
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
-from incubator.settings import STATUS_SECRETS
+from django.conf import settings
 
 
 def one_or_zero(arg):
@@ -27,7 +27,7 @@ def private_api(**required_params):
                 return HttpResponseBadRequest(
                     "You must query this endpoint with a secret.")
 
-            if request.POST['secret'] not in STATUS_SECRETS:
+            if request.POST['secret'] not in settings.STATUS_SECRETS:
                 message = 'Bad secret {} is not in the allowed list'.format(
                     request.POST['secret'])
                 return HttpResponseForbidden(message)
