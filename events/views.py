@@ -6,9 +6,11 @@ from django.views.generic import CreateView, UpdateView
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.db.models import Q
+from datetime import datetime
 from ics import Calendar
 from ics import Event as VEvent
 
+from space.decorators import private_api
 
 from .serializers import EventSerializer, MeetingSerializer, HackerAgendaEventSerializer
 from .models import Event, Meeting
@@ -151,6 +153,20 @@ class EventViewSet(viewsets.ModelViewSet):
 class MeetingViewSet(viewsets.ModelViewSet):
     serializer_class = MeetingSerializer
     queryset = Meeting.objects.all()
+
+
+def get_next_tw():
+    return Meeting.objects\
+                  .filter(event__start__gte=datetime.now())\
+                  .order_by('event__start')[0]
+
+
+@private_api(point=str)
+def add_point_to_next_tw(request, point):
+    tw = get_next_tw()
+    tw.OJ += '\n* ' + point
+    tw.save()
+    return HttpResponse("Point added to OJ")
 
 
 class HackerAgendaAPI(APIView):
