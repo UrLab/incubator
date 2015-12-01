@@ -155,18 +155,21 @@ class MeetingViewSet(viewsets.ModelViewSet):
     queryset = Meeting.objects.all()
 
 
-def get_next_tw():
+def get_next_meeting():
     return Meeting.objects\
                   .filter(event__start__gte=datetime.now())\
                   .order_by('event__start')[0]
 
 
 @private_api(point=str)
-def add_point_to_next_tw(request, point):
-    tw = get_next_tw()
-    tw.OJ += '\n* ' + point
-    tw.save()
+def add_point_to_next_meeting(request, point):
+    meeting = get_next_meeting()
+    meeting.OJ += '\n* ' + point
+    meeting.save()
     return HttpResponse("Point added to OJ")
+
+
+
 
 
 class HackerAgendaAPI(APIView):
