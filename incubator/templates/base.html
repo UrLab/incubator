@@ -23,7 +23,11 @@
     </head>
     <body class="base-body">
     <header class="base-header">
+    {% if space_open %}
+        <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders-open.png"/></a></div>
+    {% else %}
         <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders.png"/></a></div>
+    {% endif %}
     </header>
         <nav class="navbar navbar-default navbar-static-top navbar-shadow">
             <div class="container-fluid">
