@@ -12,7 +12,7 @@ from ics import Event as VEvent
 
 from space.decorators import private_api
 
-from .serializers import EventSerializer, MeetingSerializer, HackerAgendaEventSerializer
+from .serializers import EventSerializer, MeetingSerializer, HackerAgendaEventSerializer, FullMeetingSerializer
 from .models import Event, Meeting
 from .forms import EventForm, MeetingForm
 
@@ -169,7 +169,10 @@ def add_point_to_next_meeting(request, point):
     return HttpResponse("Point added to OJ")
 
 
-
+class NextMeetingAPI(APIView):
+    def get(self, request, format=None):
+        data = FullMeetingSerializer(get_next_meeting(), context={'request': request}).data
+        return Response(data)
 
 
 class HackerAgendaAPI(APIView):
