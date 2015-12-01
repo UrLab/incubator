@@ -55,6 +55,7 @@ def add_task(request, pk):
     project = get_object_or_404(Project, pk=pk)
     Task.objects.create(project=project, name=request.POST['task_name'],
                         proposed_by=request.user)
+    project.save()
     return HttpResponseRedirect(reverse('view_project', args=[pk]))
 
 
@@ -63,6 +64,7 @@ def complete_task(request, pk):
     task.completed_by = request.user
     task.completed_on = datetime.now()
     task.save()
+    task.project.save()
     return HttpResponseRedirect(reverse('view_project', args=[task.project.id]))
 
 
@@ -71,6 +73,7 @@ def uncomplete_task(request, pk):
     task.completed_by = None
     task.completed_on = None
     task.save()
+    task.project.save()
     return HttpResponseRedirect(reverse('view_project', args=[task.project.id]))
 
 
