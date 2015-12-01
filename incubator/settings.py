@@ -154,8 +154,8 @@ MESSAGE_TAGS = {
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('incubator.drf_permissions.ReadOnlyPermission',),
-    'PAGE_SIZE': 20,
+    'DEFAULT_PERMISSION_CLASSES': ('incubator.drf.ReadOnlyPermission',),
+    'DEFAULT_PAGINATION_CLASS': 'incubator.drf.AnachistPageNumberPagination',
 }
 
 # no tailing slash
