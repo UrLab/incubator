@@ -1,6 +1,7 @@
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
+
+from .models import PrivateAPIKey
 
 
 def one_or_zero(arg):
@@ -27,7 +28,11 @@ def private_api(**required_params):
                 return HttpResponseBadRequest(
                     "You must query this endpoint with a secret.")
 
-            if request.POST['secret'] not in settings.STATUS_SECRETS:
+            try:
+                api_key = PrivateAPIKey.objects.get(pk=request.POST['secret'])
+            except:
+                api_key = None
+            if not api_key or not api_key.active:
                 message = 'Bad secret {} is not in the allowed list'.format(
                     request.POST['secret'])
                 return HttpResponseForbidden(message)
