@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MacAdress, SpaceStatus, MusicOfTheDay
+from .models import MacAdress, SpaceStatus, MusicOfTheDay, PrivateAPIKey
 
 
 @admin.register(MacAdress)
@@ -18,3 +18,9 @@ class SpaceStatusAdmin(admin.ModelAdmin):
 class MusicOfTheDayAdmin(admin.ModelAdmin):
     list_display = ('url', 'irc_nick', 'day')
     list_filter = ('day', 'irc_nick')
+
+
+@admin.register(PrivateAPIKey)
+class PrivateAPIKeyAdmin(admin.ModelAdmin):
+    list_display = ('user', 'name', 'active', 'key')
+    list_filter = ('user', 'active')
