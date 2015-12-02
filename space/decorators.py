@@ -1,3 +1,5 @@
+import uuid
+
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
 
@@ -27,6 +29,13 @@ def private_api(**required_params):
             if 'secret' not in request.POST.keys():
                 return HttpResponseBadRequest(
                     "You must query this endpoint with a secret.")
+
+            try:
+                uuid.UUID(request.POST['secret'])
+            except ValueError:
+                message = 'Bad secret {} is not an uuid'.format(
+                    request.POST['secret'])
+                return HttpResponseBadRequest(message)
 
             api_key = PrivateAPIKey.objects.filter(key=request.POST['secret'], active=True).first()
             if api_key is None:
