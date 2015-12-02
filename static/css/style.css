@@ -28,6 +28,18 @@ body {
 	vertical-align: bottom;
 }
 
+#nav.affix {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index:10;
+}
+
+.nav-wrapper
+{
+    min-height:70px;
+}
+
 #home-logo {
 	width: 100%;
 	text-align: center;

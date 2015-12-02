@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
 {% load formatting %}
+{% load humanize %}
 
 {% block content %}
 <div class="row">
@@ -42,13 +43,94 @@
         </p>
 
         <p>UrLab est un lieu de rencontre pour les étudiants intéressés par la technologie. C’est un lieu où l’on développe ses projets et l’on partage ses connaissances par l’intermédiaire d’ateliers et de conférences.</p>
+
+        <h2>
+            <span class="fa fa-calendar-o" aria-hidden="true"></span>
+            Évènements à venir
+        </h2>
+        {% if events %}
+            <dl>
+                {% for ev in events %}
+                <dt><h4><a href="{% url "view_event" ev.id %}">{{ ev.title }}</a></h4></dt>
+                <dd>{{ ev.start | naturaltime | capfirst }}
+                <span class="fa fa-map-marker" aria-hidden="true"></span> {{ ev.place }}</dd>
+                {% endfor %}
+            </dl>
+        {% else %}
+            <p class="text-muted">Il n'y a actuellement pas d'évènements à venir</p>
+        {% endif %}
     </div>
     <div class="col-md-4 well">
         <p>UrLab se trouve sur le campus du Solbosh, à l'ULB et est ouvert à tout le monde.</p>
         <iframe width='100%' height='300px' frameBorder='0' src='https://a.tiles.mapbox.com/v4/c4ptaincrunch.o1n42mc8/attribution,zoompan,zoomwheel,geocoder.html?access_token=pk.eyJ1IjoiYzRwdGFpbmNydW5jaCIsImEiOiJUdWVRSENNIn0.qssi5TBLeBinBsXkZKiI6Q#14/50.812919/4.38443799999999'></iframe>
         <p>
         Pour savoir si nous sommes ouverts et qui s'y trouve actuellement, allez demander à <a href="{% url "pamela_list" %}">Pamela</a></p>
+        <hr/>
+        <div class="text-right">
+            <h3>Social</h3>
+            <a href="https://twitter.com/UrLabBxl" title="Twitter" target="_blank">
+                <span class="wow fa-stack fa-lg">
+                    <i class="fa fa-square-o fa-stack-2x"></i>
+                    <i class="fa fa-twitter fa-stack-1x"></i>
+                </span>
+            </a>
+            <a href="https://www.facebook.com/urlabbxl" title="Facebook" target="_blank">
+                <span class="wow fa-stack fa-lg">
+                    <i class="fa fa-square-o fa-stack-2x"></i>
+                    <i class="fa fa-facebook fa-stack-1x"></i>
+                </span>
+            </a>
+            <a href="https://github.com/UrLab" title="GitHub" target="_blank">
+                <span class="wow fa-stack fa-lg">
+                    <i class="fa fa-square-o fa-stack-2x"></i>
+                    <i class="fa fa-github fa-stack-1x"></i>
+                </span>
+            </a>
+            <a href="http://urlab.be/events/urlab.ics" title="iCal" target="_blank">
+                <span class="wow fa-stack fa-lg">
+                    <i class="fa fa-square-o fa-stack-2x"></i>
+                    <i class="fa fa-calendar fa-stack-1x"></i>
+                </span>
+            </a>
+            <a href="http://urlab.space" title="SpaceAPI" target="_blank">
+                <span class="wow fa-stack fa-lg">
+                    <i class="fa fa-square-o fa-stack-2x"></i>
+                    <i class="fa fa-space-shuttle fa-stack-1x"></i>
+                </span>
+            </a>
+            <a href="http://webchat.freenode.net/?channels=urlab" title="IRC" target="_blank">
+                <span class="wow fa-stack fa-lg">
+                    <i class="fa fa-square-o fa-stack-2x"></i>
+                    <i class="fa fa-slack fa-stack-1x"></i>
+                </span>
+            </a>
+
+            <h3>Contact</h3>
+            <h4>Mail
+                <small>
+                    <a href="mailto:contact@urlab.be">contact@urlab.be</a>
+                </small>
+            </h4>
+            <h4>Chat
+                <small>
+                    <a target="_blank" href="http://webchat.freenode.net/?channels=urlab">
+                        chat.freenode.org#urlab
+                    </a>
+                </small>
+            </h4>
+            <h4>Adresse <small>131 av. Buyl, 1050 Bruxelles</small></h4>
+            <h4>Téléphone <small>02/650.49.67</small></h4>
+        </div>
     </div>
+
 </div>
+
+<script type="text/javascript">
+    $('.wow').hover(function(evt){
+        var wow = evt.target.closest('.wow');
+        $(wow).find('.fa-stack-2x').toggleClass('fa-square-o fa-square');
+        $(wow).find('.fa-stack-1x').toggleClass('fa-inverse');
+    });
+</script>
 
 {% endblock %}

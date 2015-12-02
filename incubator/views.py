@@ -1,17 +1,21 @@
+from datetime import datetime
+
 from django.views.generic.edit import CreateView
 from users.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.flatpages.models import FlatPage
-
 from django.shortcuts import render
+
 from space.djredis import get_redis, space_is_open
+from events.models import Event
 
 
 def home(request):
     client = get_redis()
     return render(request, "home.html", {
         "space_open": space_is_open(client),
-        "message": FlatPage.objects.filter(url="/message/").first()
+        "message": FlatPage.objects.filter(url="/message/").first(),
+        "events": Event.objects.filter(stop__gt=datetime.now(), status__exact="r"),
     })
 
 

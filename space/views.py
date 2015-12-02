@@ -18,9 +18,8 @@ from .djredis import get_redis, get_mac, set_space_open, space_is_open
 from .models import MacAdress, SpaceStatus, MusicOfTheDay
 from .forms import MacAdressForm
 from .serializers import PamelaSerializer, SpaceStatusSerializer, MotdSerializer
-
-from incubator.settings import (STATUS_SECRETS,
-                                INFLUX_HOST, INFLUX_PORT, INFLUX_USER,
+from .decorators import private_api, one_or_zero
+from incubator.settings import (INFLUX_HOST, INFLUX_PORT, INFLUX_USER,
                                 INFLUX_PASS)
 
 
@@ -62,26 +61,16 @@ def pamela_list(request):
     return render(request, "pamela.html", context)
 
 
-@csrf_exempt
-def status_change(request):
-    if request.method != 'POST':
-        return HttpResponseBadRequest("Only POST is allowed")
+@private_api(open=one_or_zero)
+def status_change(request, open):
+    set_space_open(get_redis(), open)
+    return HttpResponse("Hackerspace is now open={}".format(open))
 
-    if 'secret' not in request.POST.keys():
-        return HttpResponseBadRequest("You must query this endpoint with a secret.")
 
-    if request.POST['secret'] not in STATUS_SECRETS:
-        message = 'Bad secret {} is not in the allowed list'.format(request.POST['secret'])
-        return HttpResponseForbidden(message)
-
-    if 'open' not in request.POST.keys():
-        return HttpResponseBadRequest('You must query this endpoint an "open" key.')
-
-    redis = get_redis()
-    state = int(request.POST['open'])
-    set_space_open(redis, state)
-
-    return HttpResponse("Hackerspace is now open={}".format(state))
+@private_api(url=str, nick=str)
+def motd_change(request, url, nick):
+    MusicOfTheDay.objects.create(url=url, irc_nick=nick)
+    return HttpResponse("Music has been changed to {} by {}".format(url, nick))
 
 
 class DeleteMACView(DeleteView):
