@@ -28,11 +28,8 @@ def private_api(**required_params):
                 return HttpResponseBadRequest(
                     "You must query this endpoint with a secret.")
 
-            try:
-                api_key = PrivateAPIKey.objects.get(pk=request.POST['secret'])
-            except:
-                api_key = None
-            if not api_key or not api_key.active:
+            api_key = PrivateAPIKey.objects.filter(key=request.POST['secret'], active=True).first()
+            if api_key is None:
                 message = 'Bad secret {} is not in the allowed list'.format(
                     request.POST['secret'])
                 return HttpResponseForbidden(message)
