@@ -23,7 +23,6 @@ from incubator.settings import (STATUS_SECRETS,
                                 INFLUX_HOST, INFLUX_PORT, INFLUX_USER,
                                 INFLUX_PASS)
 
-
 def make_pamela():
     redis = get_redis()
     updated, maclist = get_mac(redis)
@@ -124,10 +123,15 @@ def spaceapi(request):
             "names": names,
         }
 
+    if space_is_open(client):
+        logo_img = "https://urlab.be/static/img/space-invaders-open.png"
+    else:
+        logo_img = "https://urlab.be/static/img/space-invaders.png"
+
     response = {
         "api": "0.13",
         "space": "UrLab",
-        "logo": "https://urlab.be/urlab.png",
+        "logo": logo_img,
         "url": "https://urlab.be",
         "location": {
             "lat": 50.812915,
