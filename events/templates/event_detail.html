@@ -90,6 +90,12 @@
             <span class="fa fa-edit" aria-hidden="true"></span>
             Editer
         </a>
+        {% if not event.meeting.ongoing and not event.meeting.PV %}
+          <a href="{% url "export_pad" event.id %}" class="btn btn-default btn-xs">
+            <span class="fa fa-upload" aria-hidden="true"></span>
+            Exporter l'ordre du jour sur le pad
+          </a>
+        {% endif %}
       </h3>
       {% if not event.meeting.OJ %}
         <p><i>L'ordre du jour est vide pour l'instant.</i></p>
@@ -103,6 +109,10 @@
             <span class="fa fa-edit" aria-hidden="true"></span>
             Editer
         </a>
+        <a href="{% url "import_pad" event.id %}" class="btn btn-default btn-xs">
+          <span class="fa fa-download" aria-hidden="true"></span>
+          Importer le PV depuis le pad
+        </a>
       </h3>
 
       {% if event.meeting.PV %}
@@ -113,9 +123,6 @@
       {% else %}
         <p>Le pad pour prendre note en live se trouve là bas: <a href="{{event.meeting.pad}}">{{event.meeting.pad}}</a><br>
         <i>Veuillez y prendre note en Markdown.</i></p>
-        {% if event.is_finished %}
-          <a href="{% url "import_pad" event.id %}" class="btn btn-success">Importez le contenu du pad ici</a>
-        {% endif %}
       {% endif %}
       {% if event.is_today_or_before %}
         <h4>Membres présents</h4>

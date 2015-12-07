@@ -75,11 +75,15 @@ class Meeting(models.Model):
     PV = models.TextField(blank=True)
     members = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Membres présents', blank=True)
     pad = models.URLField(blank=True)
+    ongoing = models.BooleanField(default=False)
 
     def get_pad_contents(self):
         r = requests.get(self.pad + "/export/txt")
         if r.ok:
             return r.text
+
+    def set_pad_contents(self, content):
+        return requests.post(self.pad + "/import", files={'file': ('osef.txt', content)}).ok
 
     def save(self, *args, **kwargs):
         super(Meeting, self).save(*args, **kwargs)

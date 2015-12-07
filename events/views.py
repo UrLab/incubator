@@ -89,19 +89,6 @@ def short_url_maker(*keywords):
 
     return filter_func
 
-
-def import_pad(request, pk):
-    event = get_object_or_404(Event, pk=pk)
-    meeting = event.meeting
-    if meeting.PV:
-        return HttpResponseForbidden("This meeting already has a PV")
-
-    meeting.PV = meeting.get_pad_contents()
-    meeting.save()
-
-    return HttpResponseRedirect(event.get_absolute_url())
-
-
 def ical(request):
     events = Event.objects.filter(status__exact="r")
     cal = Calendar()
@@ -129,6 +116,32 @@ def not_interested(request, pk):
     event.interested.remove(request.user)
     return HttpResponseRedirect(event.get_absolute_url())
 
+def export_pad(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    meeting = event.meeting
+    if not meeting:
+        return HttpResponseForbidden("This is not a meeting")
+    if not meeting.OJ:
+        return HttpResponseForbidden("This meeting has no OJ")
+    if meeting.PV:
+        return HttpResponseForbidden("This meeting is already finished")
+    if meeting.ongoing:
+        return HttpResponseForbidden("This meeting is already ongoing")
+
+    meeting.set_pad_contents(meeting.OJ)
+    meeting.ongoing = True
+    meeting.save()
+    return HttpResponseRedirect(event.get_absolute_url())
+
+def import_pad(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    meeting = event.meeting
+    if not meeting:
+        return HttpResponseForbidden("This is not a meeting")        
+
+    meeting.PV = meeting.get_pad_contents()
+    meeting.save()
+    return HttpResponseRedirect(event.get_absolute_url())
 
 sm = short_url_maker("smartmonday")
 linux = short_url_maker("install", "party")
