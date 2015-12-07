@@ -22,13 +22,6 @@ Ardoise
   <h1>Votre ardoise <small>UBS© (UrLab banking system)</small></h1>
 </div>
 
-{% for message in messages %}
-    <div class="alert alert-success" role="alert">
-        {{ message }}
-    </div>
-{% endfor %}
-
-
 {% if request.user.balance < 0 %}
 <div class="alert alert-danger" role="alert">
     Vous êtes actuellement en <strong>négatif</strong> de <strong>{{request.user.absolute_balance }}€</strong>. Pensez à recherger rapidement.

@@ -71,3 +71,7 @@ class Task(models.Model):
     @property
     def completed(self):
         return self.completed_by is not None
+
+    def save(self, *args, **kwargs):
+        self.project.save()
+        super(Task, self).save(*args, **kwargs)

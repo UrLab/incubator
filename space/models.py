@@ -2,6 +2,7 @@ from django.db import models
 from incubator import settings
 from django.core.exceptions import ValidationError
 import re
+import uuid
 
 MAC_REGEX = re.compile(r'([a-f0-9]{2}:){5}[a-f0-9]{2}')
 
@@ -29,10 +30,32 @@ class SpaceStatus(models.Model):
 class MusicOfTheDay(models.Model):
     url = models.URLField()
     irc_nick = models.CharField(max_length=200)
-    day = models.DateField(auto_now_add=True)
+    day = models.DateField(auto_now_add=True, unique=True)
 
     KNOWN_PROVIDERS = {
         'youtube.com': 'youtube',
         'youtu.be': 'youtube',
         'soundcloud.com': 'soundcloud',
     }
+
+
+class PrivateAPIKey(models.Model):
+    class Meta:
+        verbose_name = "Clef d'accès à l'API privée"
+        verbose_name_plural = "Clefs d'accès à l'API privée"
+
+    key = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name='Clef')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur')
+    name = models.CharField(max_length=250, verbose_name='Utilisée pour')
+    active = models.BooleanField(default=False)
+
+    def __str__(self):
+        f = {
+            'active': "active" if self.active else "inactive",
+            'name': self.name,
+            'user': self.user.username
+        }
+        return '<Private API Key for {user}: "{name}" ({active})>'.format(**f)
+
+    __repr__ = __str__
+    __unicode__ = __str__

@@ -8,6 +8,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
+from django.contrib.messages import constants as messages
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -130,6 +133,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.template.context_processors.tz",
     'django.core.context_processors.request',
     "django.contrib.messages.context_processors.messages",
+    "space.context_processors.state",
     "sekizai.context_processors.sekizai",
 )
 
@@ -145,9 +149,14 @@ PASSWORD_HASHERS = (
 )
 
 
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger'
+}
+
+
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('incubator.drf_permissions.ReadOnlyPermission',),
-    'PAGE_SIZE': 20,
+    'DEFAULT_PERMISSION_CLASSES': ('incubator.drf.ReadOnlyPermission',),
+    'DEFAULT_PAGINATION_CLASS': 'incubator.drf.AnachistPageNumberPagination',
 }
 
 # no tailing slash
@@ -165,9 +174,16 @@ INFLUX_PORT = 8086
 INFLUX_USER = "derp"
 INFLUX_PASS = "derp"
 
-STATUS_SECRETS = []
-
 LOGIN_URL = '/auth/login/'
+
+WIKI_ATTACHMENTS_EXTENSIONS = (
+    'jpg',
+    'jpeg',
+    'png',
+    'tex',
+    'ppt',
+    'pptx',
+)
 
 try:
     from incubator.local_settings import *
