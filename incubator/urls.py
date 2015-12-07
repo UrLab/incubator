@@ -11,7 +11,7 @@ from django_nyt.urls import get_pattern as get_nyt_pattern
 urlpatterns = patterns(
     '',
     url(r'^$', 'incubator.views.home', name='home'),
-    url(r'^spaceapi.json$', 'space.views.spaceapi', name="sapceapi"),
+    url(r'^spaceapi.json$', 'space.views.spaceapi', name="spaceapi"),
     url(r'^events/', include('events.urls')),
     url(r'^projects/', include('projects.urls')),
     url(r'^accounts/', include('users.urls')),
