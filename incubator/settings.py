@@ -133,6 +133,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.template.context_processors.tz",
     'django.core.context_processors.request',
     "django.contrib.messages.context_processors.messages",
+    "space.context_processors.state",
     "sekizai.context_processors.sekizai",
 )
 
@@ -172,8 +173,6 @@ INFLUX_HOST = "localhost"
 INFLUX_PORT = 8086
 INFLUX_USER = "derp"
 INFLUX_PASS = "derp"
-
-STATUS_SECRETS = []
 
 LOGIN_URL = '/auth/login/'
 
