@@ -112,15 +112,10 @@ def spaceapi(request):
             "names": names,
         }
 
-    if space_is_open(client):
-        logo_img = "https://urlab.be/static/img/space-invaders-open.png"
-    else:
-        logo_img = "https://urlab.be/static/img/space-invaders.png"
-
     response = {
         "api": "0.13",
         "space": "UrLab",
-        "logo": logo_img,
+        "logo": "https://urlab.be/static/img/space-invaders.png",
         "url": "https://urlab.be",
         "location": {
             "lat": 50.812915,
@@ -130,6 +125,10 @@ def spaceapi(request):
         "state": {
             "open": space_is_open(client),
             "lastchange": SpaceStatus.objects.last().time.timestamp(),
+            "icon": {
+                "open": "https://urlab.be/static/img/space-invaders-open.png",
+                "closed": "https://urlab.be/static/img/space-invaders.png"
+            }
         },
         # "events": {},
         "contact": {
