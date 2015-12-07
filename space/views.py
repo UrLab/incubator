@@ -3,8 +3,7 @@ from datetime import timedelta
 from django.shortcuts import render
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden, HttpResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic.edit import DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.core.exceptions import PermissionDenied
@@ -13,6 +12,10 @@ from django.utils import timezone
 from influxdb import InfluxDBClient
 from rest_framework import viewsets
 from rest_framework.response import Response
+
+from django_pandas.io import read_frame
+import pandas as pd
+import matplotlib.pyplot as plt
 
 from .djredis import get_redis, get_mac, set_space_open, space_is_open
 from .models import MacAdress, SpaceStatus, MusicOfTheDay
@@ -174,6 +177,26 @@ def spaceapi(request):
         pass
 
     return JsonResponse(response)
+
+
+def openings(request):
+    # Grab openings in a pandas dataframe
+    db_df = read_frame(SpaceStatus.objects.all())
+
+    # Drop duplicate time index
+    db_df = db_df[db_df.time.diff().dt.total_seconds() > 0]
+    db_df.index = db_df.time
+
+    # Reindex on a monotonic hourly time index
+    index = pd.date_range(start=db_df.time.min(), end=pd.datetime.now(), freq='H')
+    df = db_df.reindex(index, method='pad')
+
+    # Group by hour and plot everything
+    df.groupby(df.index.time).is_open.mean().plot(kind='bar', figsize=(15, 7))
+
+    response = HttpResponse(content_type="image/png")
+    plt.savefig(response, format='png')
+    return response
 
 
 class PamelaObject(object):
