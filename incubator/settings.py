@@ -64,6 +64,7 @@ INSTALLED_APPS = (
     'wiki.plugins.notifications',
     'wiki.plugins.images',
     'wiki.plugins.macros',
+    'actstream',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -170,7 +171,8 @@ REDIS_PORT = 6379
 FAKE_REDIS = True
 
 USE_WAMP = False
-CROSSBAR_URL = 'ws://localhost:8080/ws'
+CROSSBAR_URL = 'http://localhost:8080/publish'
+CROSSBAR_SECRET = "Vairy secrette"
 CROSSBAR_REALM = 'realm'
 
 INFLUX_HOST = "localhost"
