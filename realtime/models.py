@@ -12,7 +12,7 @@ def action_save_handler(sender, created, instance, **kwargs):
 
     if instance.target:
         send_message(
-            key=type(instance.target).__name__ + "." + instance.verb,
+            key=type(instance.action_object).__name__ + "." + instance.verb,
             message="{user} {verb} «{action_object}» dans «{target}» ({url})",
             user=instance.actor,
             verb=instance.verb,
@@ -22,7 +22,7 @@ def action_save_handler(sender, created, instance, **kwargs):
         )
     else:
         send_message(
-            key=type(instance.target).__name__ + "." + instance.verb,
+            key=type(instance.action_object).__name__ + "." + instance.verb,
             message="{user} {verb} «{action_object}» ({url})",
             user=instance.actor,
             verb=instance.verb,
