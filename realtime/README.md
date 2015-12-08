@@ -7,8 +7,8 @@ Le routeur crossbar doit avoir un truc du genre dans sa config :
         "realm": "realm1",
         "role": "anonymous",
         "options": {
-           "secret": "Vairy secrette",
-           "key": "Much key"
+           "secret": "Vairy secrette", # CHANGE THIS !
+           "key": "incubator" # do not change
         }
     }
 }

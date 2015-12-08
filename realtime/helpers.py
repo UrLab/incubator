@@ -1,12 +1,16 @@
 from django.conf import settings
 from django.utils import timezone
 
-from incubator import crossbarconnect
+from realtime import crossbarconnect
 
 
 def send_message(key, message, *args, **kwargs):
     if settings.USE_WAMP:
-        client = crossbarconnect.Client(settings.CROSSBAR_URL, secret=settings.CROSSBAR_SECRET, key="Much key")
+        client = crossbarconnect.Client(
+            settings.CROSSBAR_URL,
+            secret=settings.CROSSBAR_SECRET,
+            key="incubator"
+        )
 
         client.publish(
             topic="incubator.actstream",
