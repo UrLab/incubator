@@ -22,7 +22,6 @@ from .decorators import private_api, one_or_zero
 from incubator.settings import (INFLUX_HOST, INFLUX_PORT, INFLUX_USER,
                                 INFLUX_PASS)
 
-
 def make_pamela():
     redis = get_redis()
     updated, maclist = get_mac(redis)
@@ -116,7 +115,7 @@ def spaceapi(request):
     response = {
         "api": "0.13",
         "space": "UrLab",
-        "logo": "https://urlab.be/urlab.png",
+        "logo": "https://urlab.be/static/img/space-invaders.png",
         "url": "https://urlab.be",
         "location": {
             "lat": 50.812915,
@@ -126,6 +125,10 @@ def spaceapi(request):
         "state": {
             "open": space_is_open(client),
             "lastchange": SpaceStatus.objects.last().time.timestamp(),
+            "icon": {
+                "open": "https://urlab.be/static/img/space-invaders-open.png",
+                "closed": "https://urlab.be/static/img/space-invaders.png"
+            }
         },
         # "events": {},
         "contact": {
