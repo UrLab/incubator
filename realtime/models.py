@@ -10,11 +10,22 @@ def action_save_handler(sender, created, instance, **kwargs):
     if not created:
         return
 
-    send_message(
-        key=type(instance.target).__name__ + "." + instance.verb,
-        message="{user} {verb} «{target}» ({url})",
-        user=instance.actor,
-        verb=instance.verb,
-        target=instance.target,
-        url=settings.ROOT_URL + instance.target.get_absolute_url()
-    )
+    if instance.target:
+        send_message(
+            key=type(instance.target).__name__ + "." + instance.verb,
+            message="{user} {verb} «{action_object}» dans «{target}» ({url})",
+            user=instance.actor,
+            verb=instance.verb,
+            action_object=instance.action_object,
+            target=instance.target,
+            url=settings.ROOT_URL + instance.target.get_absolute_url()
+        )
+    else:
+        send_message(
+            key=type(instance.target).__name__ + "." + instance.verb,
+            message="{user} {verb} «{action_object}» ({url})",
+            user=instance.actor,
+            verb=instance.verb,
+            action_object=instance.action_object,
+            url=settings.ROOT_URL + instance.action_object.get_absolute_url()
+        )

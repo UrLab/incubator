@@ -29,7 +29,7 @@ class EventAddView(CreateView):
 
     def form_valid(self, form):
         ret = super(EventAddView, self).form_valid(form)
-        action.send(self.request.user, verb='a créé', target=self.object)
+        action.send(self.request.user, verb='a créé', action_object=self.object)
 
         return ret
 
@@ -41,7 +41,7 @@ class EventEditView(UpdateView):
 
     def form_valid(self, form):
         ret = super(EventEditView, self).form_valid(form)
-        action.send(self.request.user, verb='a édité', target=self.object)
+        action.send(self.request.user, verb='a édité', action_object=self.object)
 
         return ret
 
