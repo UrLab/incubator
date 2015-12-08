@@ -16,6 +16,7 @@ from rest_framework.response import Response
 from django_pandas.io import read_frame
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
 from .djredis import get_redis, get_mac, set_space_open, space_is_open
 from .models import MacAdress, SpaceStatus, MusicOfTheDay
@@ -180,8 +181,14 @@ def spaceapi(request):
 
 
 def openings(request):
+    query = {}
+    if 'from' in request.GET:
+        query['time__gte'] = request.GET['from']
+    if 'to' in request.GET:
+        query['time__lte'] = request.GET['to']
+
     # Grab openings in a pandas dataframe
-    db_df = read_frame(SpaceStatus.objects.all())
+    db_df = read_frame(SpaceStatus.objects.filter(**query))
 
     # Drop duplicate time index
     db_df = db_df[db_df.time.diff().dt.total_seconds() > 0]
@@ -191,11 +198,24 @@ def openings(request):
     index = pd.date_range(start=db_df.time.min(), end=pd.datetime.now(), freq='H')
     df = db_df.reindex(index, method='pad')
 
-    # Group by hour and plot everything
-    df.groupby(df.index.time).is_open.mean().plot(kind='bar', figsize=(15, 7))
+    # Group by hour and plot as image
+    probs = 100*df.groupby(df.index.time).is_open.mean()
+    img = np.repeat([probs], 5, axis=0)
+    plt.imshow(img, cmap=plt.cm.RdYlGn, interpolation='none', vmin=0, vmax=100)
 
+    # Put nice ticks, title, etc...
+    ticks = np.arange(0, 24, 2)
+    plt.xticks(ticks - 0.5, ["%dh" % x for x in ticks])
+    plt.yticks([])
+    plt.grid()
+    f = tuple(x.strftime("%d/%m/%Y") for x in [df.time.min(), df.time.max()])
+    plt.title("Proportion d'ouverture de UrLab %s - %s" % f)
+    plt.colorbar()
+
+    # Wrap everything in a django response and clear matplotlib context
     response = HttpResponse(content_type="image/png")
     plt.savefig(response, format='png')
+    plt.clf()
     return response
 
 
