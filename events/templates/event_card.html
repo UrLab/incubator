@@ -1,8 +1,12 @@
-<div class="thumbnail">
-    {% if event.is_meeting %}
-        <h3><a href="{% url "view_event" event.id %}">{{ event.title }}</a></h3>
-    {% else %}
-        <h2><a href="{% url "view_event" event.id %}">{{ event.title }}</a></h2>
-    {% endif %}
-    {% include "event_time.html" %}
+<div class="panel panel-default">
+     <div class="panel-heading">
+        {% if event.is_meeting %}
+            <h3><a href="{% url "view_event" event.id %}">{{ event.title }}</a></h3>
+        {% else %}
+            <h3><a href="{% url "view_event" event.id %}">{{ event.title }}</a></h3>
+        {% endif %}
+    </div>
+    <div class="panel-body">
+        {% include "event_time.html" %}
+    </div>
 </div>
