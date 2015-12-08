@@ -169,6 +169,10 @@ REDIS_HOST = "rainbowdash.lan"
 REDIS_PORT = 6379
 FAKE_REDIS = True
 
+USE_WAMP = False
+CROSSBAR_URL = 'ws://localhost:8080/ws'
+CROSSBAR_REALM = 'realm'
+
 INFLUX_HOST = "localhost"
 INFLUX_PORT = 8086
 INFLUX_USER = "derp"
