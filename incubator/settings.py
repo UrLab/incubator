@@ -181,8 +181,13 @@ WIKI_ATTACHMENTS_EXTENSIONS = (
     'jpeg',
     'png',
     'tex',
+    'py',
     'ppt',
     'pptx',
+    'pdf',
+    'zip',
+    'tar',
+    'gz',
 )
 
 try:
