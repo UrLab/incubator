@@ -4,7 +4,7 @@ Le routeur crossbar doit avoir un truc du genre dans sa config :
     ...
     "publish": {
         "type": "publisher",
-        "realm": "realm1",
+        "realm": "urlab",
         "role": "anonymous",
         "options": {
            "secret": "Vairy secrette", # CHANGE THIS !
