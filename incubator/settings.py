@@ -64,6 +64,7 @@ INSTALLED_APPS = (
     'wiki.plugins.notifications',
     'wiki.plugins.images',
     'wiki.plugins.macros',
+    'actstream',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.db.models import Q
 from datetime import datetime
+from actstream import action
 from ics import Calendar
 from ics import Event as VEvent
 
@@ -26,11 +27,23 @@ class EventAddView(CreateView):
             'organizer': self.request.user,
         }
 
+    def form_valid(self, form):
+        ret = super(EventAddView, self).form_valid(form)
+        action.send(self.request.user, verb='a créé', target=self.object)
+
+        return ret
+
 
 class EventEditView(UpdateView):
     form_class = EventForm
     model = Event
     template_name = 'add_event.html'
+
+    def form_valid(self, form):
+        ret = super(EventEditView, self).form_valid(form)
+        action.send(self.request.user, verb='a édité', target=self.object)
+
+        return ret
 
 
 class EventDetailView(DetailView):
@@ -89,6 +102,7 @@ def short_url_maker(*keywords):
 
     return filter_func
 
+
 def ical(request):
     events = Event.objects.filter(status__exact="r")
     cal = Calendar()
@@ -116,6 +130,7 @@ def not_interested(request, pk):
     event.interested.remove(request.user)
     return HttpResponseRedirect(event.get_absolute_url())
 
+
 def export_pad(request, pk):
     event = get_object_or_404(Event, pk=pk)
     meeting = event.meeting
@@ -133,11 +148,12 @@ def export_pad(request, pk):
     meeting.save()
     return HttpResponseRedirect(event.get_absolute_url())
 
+
 def import_pad(request, pk):
     event = get_object_or_404(Event, pk=pk)
     meeting = event.meeting
     if not meeting:
-        return HttpResponseForbidden("This is not a meeting")        
+        return HttpResponseForbidden("This is not a meeting")
 
     meeting.PV = meeting.get_pad_contents()
     meeting.save()
