@@ -133,6 +133,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.template.context_processors.tz",
     'django.core.context_processors.request',
     "django.contrib.messages.context_processors.messages",
+    "space.context_processors.state",
     "sekizai.context_processors.sekizai",
 )
 
@@ -154,8 +155,8 @@ MESSAGE_TAGS = {
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': ('incubator.drf_permissions.ReadOnlyPermission',),
-    'PAGE_SIZE': 20,
+    'DEFAULT_PERMISSION_CLASSES': ('incubator.drf.ReadOnlyPermission',),
+    'DEFAULT_PAGINATION_CLASS': 'incubator.drf.AnachistPageNumberPagination',
 }
 
 # no tailing slash
@@ -173,8 +174,6 @@ INFLUX_PORT = 8086
 INFLUX_USER = "derp"
 INFLUX_PASS = "derp"
 
-STATUS_SECRETS = []
-
 LOGIN_URL = '/auth/login/'
 
 WIKI_ATTACHMENTS_EXTENSIONS = (
@@ -182,8 +181,13 @@ WIKI_ATTACHMENTS_EXTENSIONS = (
     'jpeg',
     'png',
     'tex',
+    'py',
     'ppt',
     'pptx',
+    'pdf',
+    'zip',
+    'tar',
+    'gz',
 )
 
 try:

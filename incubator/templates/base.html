@@ -22,8 +22,18 @@
         {% block head %}{% endblock %}
     </head>
     <body class="base-body">
-        <header class="base-header masthead">
+    {% if request.user.is_authenticated and request.user.username == "SupayrPoney" %}
+    <a href="http://www.reactivemanifesto.org/"> <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000" src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-red-right.png"> </a>
+    {% endif %}
+    {% if request.user.is_authenticated and request.user.username == "iTitou" %}
+    <a href="http://www.reactivemanifesto.org/"> <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000" src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-red-right.png"> </a>
+    {% endif %}
+        <header class="base-header">
+        {% if space_open %}
+            <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders-open.png"/></a></div>
+        {% else %}
             <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders.png"/></a></div>
+        {% endif %}
         </header>
         <div class="nav-wrapper">
             <div id="nav">

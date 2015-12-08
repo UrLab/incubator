@@ -6,11 +6,13 @@ from django.views.generic import CreateView, UpdateView
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.db.models import Q
+from datetime import datetime
 from ics import Calendar
 from ics import Event as VEvent
 
+from space.decorators import private_api
 
-from .serializers import EventSerializer, MeetingSerializer, HackerAgendaEventSerializer
+from .serializers import EventSerializer, MeetingSerializer, HackerAgendaEventSerializer, FullMeetingSerializer
 from .models import Event, Meeting
 from .forms import EventForm, MeetingForm
 
@@ -87,19 +89,6 @@ def short_url_maker(*keywords):
 
     return filter_func
 
-
-def import_pad(request, pk):
-    event = get_object_or_404(Event, pk=pk)
-    meeting = event.meeting
-    if meeting.PV:
-        return HttpResponseForbidden("This meeting already has a PV")
-
-    meeting.PV = meeting.get_pad_contents()
-    meeting.save()
-
-    return HttpResponseRedirect(event.get_absolute_url())
-
-
 def ical(request):
     events = Event.objects.filter(status__exact="r")
     cal = Calendar()
@@ -127,6 +116,32 @@ def not_interested(request, pk):
     event.interested.remove(request.user)
     return HttpResponseRedirect(event.get_absolute_url())
 
+def export_pad(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    meeting = event.meeting
+    if not meeting:
+        return HttpResponseForbidden("This is not a meeting")
+    if not meeting.OJ:
+        return HttpResponseForbidden("This meeting has no OJ")
+    if meeting.PV:
+        return HttpResponseForbidden("This meeting is already finished")
+    if meeting.ongoing:
+        return HttpResponseForbidden("This meeting is already ongoing")
+
+    meeting.set_pad_contents(meeting.OJ)
+    meeting.ongoing = True
+    meeting.save()
+    return HttpResponseRedirect(event.get_absolute_url())
+
+def import_pad(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    meeting = event.meeting
+    if not meeting:
+        return HttpResponseForbidden("This is not a meeting")        
+
+    meeting.PV = meeting.get_pad_contents()
+    meeting.save()
+    return HttpResponseRedirect(event.get_absolute_url())
 
 sm = short_url_maker("smartmonday")
 linux = short_url_maker("install", "party")
@@ -151,6 +166,26 @@ class EventViewSet(viewsets.ModelViewSet):
 class MeetingViewSet(viewsets.ModelViewSet):
     serializer_class = MeetingSerializer
     queryset = Meeting.objects.all()
+
+
+def get_next_meeting():
+    return Meeting.objects\
+                  .filter(event__start__gte=datetime.now())\
+                  .order_by('event__start')[0]
+
+
+@private_api(point=str)
+def add_point_to_next_meeting(request, point):
+    meeting = get_next_meeting()
+    meeting.OJ += '\n* ' + point
+    meeting.save()
+    return HttpResponse("Point added to OJ")
+
+
+class NextMeetingAPI(APIView):
+    def get(self, request, format=None):
+        data = FullMeetingSerializer(get_next_meeting(), context={'request': request}).data
+        return Response(data)
 
 
 class HackerAgendaAPI(APIView):
