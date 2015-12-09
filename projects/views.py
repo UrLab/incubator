@@ -4,6 +4,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.contrib import messages
 from datetime import datetime
 from math import ceil
 
@@ -52,10 +53,11 @@ def projects_home(request):
 def add_task(request, pk):
     if 'task_name' not in request.POST:
         return HttpResponseBadRequest("Vous n'avez pas donné de nom de tâche")
+    project = get_object_or_404(Project, pk=pk)
     task_name = request.POST['task_name'].strip()
     if not task_name or not filter(str.isalpha, task_name):
-        return HttpResponseBadRequest("Le nom de la tâche est vide")
-    project = get_object_or_404(Project, pk=pk)
+        messages.add_message(request, messages.ERROR, "Le nom de la tâche est vide")
+        return HttpResponseRedirect(reverse('view_project', args=[project.id]))
     Task.objects.create(project=project, name=task_name,
                         proposed_by=request.user)
     return HttpResponseRedirect(reverse('view_project', args=[pk]))
