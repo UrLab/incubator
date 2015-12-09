@@ -52,8 +52,11 @@ def projects_home(request):
 def add_task(request, pk):
     if 'task_name' not in request.POST:
         return HttpResponseBadRequest("Vous n'avez pas donné de nom de tâche")
+    task_name = request.POST['task_name'].strip()
+    if not task_name or not filter(str.isalpha, task_name):
+        return HttpResponseBadRequest("Le nom de la tâche est vide")
     project = get_object_or_404(Project, pk=pk)
-    Task.objects.create(project=project, name=request.POST['task_name'],
+    Task.objects.create(project=project, name=task_name,
                         proposed_by=request.user)
     return HttpResponseRedirect(reverse('view_project', args=[pk]))
 
