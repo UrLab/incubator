@@ -17,7 +17,7 @@ PAMELA
 </div>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-8">
         {% if space_open %}
             <div class="alert alert-success" role="alert">
                 Le Hackerspace est ouvert depuis {{status_change.time|timesince}}. Venez nous dire bonjour !
@@ -27,8 +27,7 @@ PAMELA
                 Le Hackerspace est fermé depuis {{status_change.time|timesince}}.
             </div>
         {% endif %}
-    </div>
-    <div class="col-md-8" id="pamela">
+        <div id="pamela"></div>
     </div>
     <div class="col-md-4">
         <p>P.A.M.E.L.A. est l'interface permettant de voir qui est actuellement connecté sur le réseau du Hackerspace.</p>
@@ -99,7 +98,7 @@ var Pamela = React.createClass({
     pamela_content: function(){
         if (this.state.unknown_mac.length + this.state.users.length == 0){
             return <div className="col-md-12 col-sm-12">
-                <h2>Il n'y a personne pour l'instant</h2>
+                <h2>Il n'y a personne au Hackerspace pour l'instant</h2>
             </div>;
         } else {
             return <div className="row-fluid">
@@ -117,12 +116,12 @@ var Pamela = React.createClass({
     },
     render: function(){
         return <div className="container-fluid">
+            {this.pamela_content()}
             <div className="row-fluid">
                 <h2 className="col-sm-12">
                     <small>Mis à jour il y a {this.state.age} secondes</small>
                 </h2>
             </div>
-            {this.pamela_content()}
         </div>
     },
     getInitialState: function(){

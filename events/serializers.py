@@ -23,3 +23,11 @@ class MeetingSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Meeting
         fields = ('id', 'event', 'OJ', 'PV', "members", 'pad')
+
+
+class FullMeetingSerializer(serializers.ModelSerializer):
+    event = EventSerializer()
+
+    class Meta:
+        model = Meeting
+        fields = ('id', 'OJ', 'PV', 'pad', "event", "members")
