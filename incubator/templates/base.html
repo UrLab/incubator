@@ -11,14 +11,16 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% render_block "css" %}
+        {% block bootstrapcss %}
         {% bootstrap_css %}
+        {% endblock %}
         {% bootstrap_javascript jquery=1 %}
 
         <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
         <link href="{% static "css/style.css" %}" rel="stylesheet">
         <title>{% block title %}UrLab{% endblock %}</title>
-        {% render_block "css" %}
         {% block head %}{% endblock %}
     </head>
     <body class="base-body">
