@@ -54,20 +54,19 @@
 
             <p>Les évènements de Urlab programmés pour les prochains jours sont :</p>
             {% if events %}
-                <dl>
+                <div class="col-lg-7">
                     {% for ev in events %}
-                        <div class="col-lg-6">
                             <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4><a href="{% url "view_event" ev.id %}">{{ ev.title }}</a></h4>
+                                </div>
                                 <div class="panel-body">
-                                    <dt>
-                                    <h4><a href="{% url "view_event" ev.id %}">{{ ev.title }}</a></h4></dt>
-                                    <dd>{{ ev.start | naturaltime | capfirst }}
-                                        <span class="fa fa-map-marker" aria-hidden="true"></span> {{ ev.place }}</dd>
+                                    {{ ev.start | naturaltime | capfirst }}
+                                        <span class="fa fa-map-marker" aria-hidden="true"></span> {{ ev.place }}
                                 </div>
                             </div>
-                        </div>
                     {% endfor %}
-                </dl>
+                </div>
 
             {% else %}
                 <p class="text-muted">Il n'y a actuellement pas d'évènements à venir</p>
