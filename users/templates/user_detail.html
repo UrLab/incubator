@@ -80,6 +80,27 @@ Profil de {{user.username}}
             <br>
             <h4>Vos adresses MAC</h4>
             <table class="table table-condensed">
+            {% if user.hide_pamela %}
+                <tr>
+                    <td>Vous êtes caché sur P.A.M.E.L.A</td>
+                    <td>
+                        <a href="{% url "show_pamela" %}" class="btn btn-primary">
+                            Apparaître
+                        </a>
+                    </td>
+                    <td></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>Vous apparaissez sur P.A.M.E.L.A</td>
+                    <td>
+                        <a href="{% url "hide_pamela" %}" class="btn btn-warning">
+                            Disparaître
+                        </a>
+                    </td>
+                    <td></td>
+                </tr>
+            {% endif %}
             {% for mac in user.macadress_set.all %}
                 <tr>
                     <td>{{mac.machine_name}}</td>
