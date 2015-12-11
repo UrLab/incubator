@@ -57,10 +57,10 @@
                 <div class="col-lg-7">
                     {% for ev in events %}
                             <div class="panel panel-default">
-                                <div class="panel-heading">
+                                <div class="panel-body">
                                     <h4><a href="{% url "view_event" ev.id %}">{{ ev.title }}</a></h4>
                                 </div>
-                                <div class="panel-body">
+                                <div class="panel-footer">
                                     {{ ev.start | naturaltime | capfirst }}
                                         <span class="fa fa-map-marker" aria-hidden="true"></span> {{ ev.place }}
                                 </div>
