@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from actstream.models import Action
 from realtime.helpers import send_message
 from django.conf import settings
+from wiki.models import ArticleRevision
 
 
 @receiver(post_save, sender=Action)
@@ -29,3 +30,19 @@ def action_save_handler(sender, created, instance, **kwargs):
             action_object=instance.action_object,
             url=settings.ROOT_URL + instance.action_object.get_absolute_url()
         )
+
+
+@receiver(post_save, sender=ArticleRevision)
+def wiki_save_handler(sender, created, instance, **kwargs):
+    if not created:
+        return
+
+    path = str(instance.article.urlpath_set.first())
+    # Root node is presented as "(root)" but may be localized
+    if path[0] == '(' and path[-1] == ')':
+        path = ''
+    url = "https://urlab.be/wiki/" + path
+
+    send_message('wiki.revision',
+                 "{user} a édité la page «{title}» du wiki ({url})",
+                 user=instance.user, title=instance.title, url=url)
