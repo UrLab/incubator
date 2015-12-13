@@ -9,7 +9,7 @@
 {% else %}
     Du {{event.start|date:"l d F Y à H:i"}} au {{event.stop|date:"l d F Y à H:i"}}.<br>
 {% endif %}
-
+<br>
 {% if event.place %}
 <span class="fa fa-map-marker" aria-hidden="true"></span>
 {{event.place}}

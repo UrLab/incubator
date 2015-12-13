@@ -15,19 +15,15 @@ Projets à UrLab
 <div class="page-header">
   <h1>
     Incubateur à projets
-    <a href="{% url "add_project" %}" class="btn btn-success">
+    <a href="{% url "add_project" %}" class="btn btn-success pull-right">
       <span class="fa fa-plus" aria-hidden="true"></span>
-          Proposer un projet
+          Proposer
     </a>
   </h1>
 </div>
 <p>
     Vous trouverez ici une grande partie des projets (en cours, sous forme de proposition ou finis) à UrLab. Tous ces projets sont ouverts à tous, n'hésitez pas à vous rajouter dans un projet pour aider, apprendre ou juste regarder.
-    Vous êtes aussi invités à
-    <a class="btn btn-success btn-xs" href="{% url "add_project" %}">
-        ajouter vos propres projets
-        <span class="fa fa-plus" aria-hidden="true"></span>
-    </a>, n'ayez pas peur, on est ouverts à tout !
+    Vous êtes aussi invités à ajouter vos propres projets ci dessus, n'ayez pas peur, on est ouverts à tout !
 </p>
 
 {% for row in projects %}
