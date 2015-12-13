@@ -64,6 +64,8 @@ INSTALLED_APPS = (
     'wiki.plugins.notifications',
     'wiki.plugins.images',
     'wiki.plugins.macros',
+    'realtime',
+    'actstream',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -160,7 +162,7 @@ REST_FRAMEWORK = {
 }
 
 # no tailing slash
-ROOT_URL = "http://urlab.be"
+ROOT_URL = "https://urlab.be"
 
 
 BANK_ACCOUNT = "BE66 0017 6764 5043"
@@ -168,6 +170,11 @@ BANK_ACCOUNT = "BE66 0017 6764 5043"
 REDIS_HOST = "rainbowdash.lan"
 REDIS_PORT = 6379
 FAKE_REDIS = True
+
+USE_WAMP = False
+CROSSBAR_URL = 'http://localhost:8080/publish'
+CROSSBAR_SECRET = "Vairy secrette"
+CROSSBAR_REALM = 'realm'
 
 INFLUX_HOST = "localhost"
 INFLUX_PORT = 8086
