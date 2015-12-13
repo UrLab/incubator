@@ -162,7 +162,7 @@ REST_FRAMEWORK = {
 }
 
 # no tailing slash
-ROOT_URL = "http://urlab.be"
+ROOT_URL = "https://urlab.be"
 
 
 BANK_ACCOUNT = "BE66 0017 6764 5043"
