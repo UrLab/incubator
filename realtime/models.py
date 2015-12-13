@@ -41,8 +41,12 @@ def wiki_save_handler(sender, created, instance, **kwargs):
     # Root node is presented as "(root)" but may be localized
     if path[0] == '(' and path[-1] == ')':
         path = ''
-    url = "https://urlab.be/wiki/" + path
+    url = settings.ROOT_URL + "/wiki/" + path
 
-    send_message('wiki.revision',
-                 "{user} a édité la page «{title}» du wiki ({url})",
-                 user=instance.user, title=instance.title, url=url)
+    send_message(
+        key='wiki.revision',
+        message="{user} a édité la page «{title}» du wiki ({url})",
+        user=instance.user,
+        title=instance.title,
+        url=url
+    )
