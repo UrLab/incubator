@@ -22,20 +22,22 @@ from .decorators import private_api, one_or_zero
 from incubator.settings import (INFLUX_HOST, INFLUX_PORT, INFLUX_USER,
                                 INFLUX_PASS)
 
+
 def make_pamela():
     redis = get_redis()
     updated, maclist = get_mac(redis)
 
     known_mac = MacAdress.objects.filter(adress__in=maclist)
     users = {mac.holder for mac in known_mac if mac.holder is not None}
-
+    visible_users = {u for u in users if not u.hide_pamela}
     unknown_mac = list(filter(lambda x: x not in [obj.adress for obj in known_mac], maclist))
 
     return {
         'raw_maclist': maclist,
         'updated': updated,
         'unknown_mac': ['xx:xx:xx:xx:' + mac[-5:] for mac in unknown_mac],
-        'users': users,
+        'users': visible_users,
+        'hidden': len(users) - len(visible_users),
     }
 
 
@@ -104,11 +106,11 @@ def spaceapi(request):
 
     if len(names) == 0:
         people_now_present = {
-            "value": 0,
+            "value": pam['hidden'],
         }
     else:
         people_now_present = {
-            "value": len(names),
+            "value": len(names) + pam['hidden'],
             "names": names,
         }
 
@@ -188,6 +190,7 @@ class PamelaObject(object):
         self.age = pamela_dict['updated']
         self.unknown_mac = pamela_dict['unknown_mac']
         self.users = pamela_dict['users']
+        self.hidden = pamela_dict['hidden']
 
 
 class PamelaViewSet(viewsets.ViewSet):

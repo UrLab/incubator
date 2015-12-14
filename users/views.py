@@ -49,6 +49,18 @@ def top(request):
     return HttpResponseRedirect(reverse('change_balance'))
 
 
+def show_pamela(request):
+    request.user.hide_pamela = False
+    request.user.save()
+    return HttpResponseRedirect(reverse('profile'))
+
+
+def hide_pamela(request):
+    request.user.hide_pamela = True
+    request.user.save()
+    return HttpResponseRedirect(reverse('profile'))
+
+
 class UserEditView(UpdateView):
     form_class = UserForm
     template_name = 'user_form.html'

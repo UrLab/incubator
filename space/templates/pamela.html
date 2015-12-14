@@ -41,6 +41,19 @@ PAMELA
                 {% bootstrap_form form %}
                 {% buttons %}
                 <button type="submit" class="btn btn-info">Ajouter à Pamela</button>
+                {% if user.hide_pamela %}
+                    <abbr title="Vous n'apparaissez actuellement pas sur ce site lorsque vous êtes sur le réseau de UrLab.">
+                        <a href="{% url "show_pamela" %}" class="btn btn-primary pull-right">
+                                Apparaître
+                        </a>
+                    </abbr></td>
+                {% else %}
+                    <abbr title="Votre pseudonyme apparaît sur ce site lorsque vous êtes sur le réseau de UrLab.">
+                        <a href="{% url "hide_pamela" %}" class="btn btn-warning pull-right">
+                            Disparaître
+                        </a>
+                    </abbr>
+                {% endif %}
                 {% endbuttons %}
             </form>
             <p class="text-muted"><small>
@@ -96,6 +109,12 @@ var PamelaNoobsBox = React.createClass({
 
 var Pamela = React.createClass({
     pamela_content: function(){
+        var hidden_text = "";
+        if (this.state.hidden > 1){
+            hidden_text = "Et " + this.state.hidden + " autres personnes";
+        } else if (this.state.hidden > 0){
+            hidden_text = "Et 1 autre personne";
+        }
         if (this.state.unknown_mac.length + this.state.users.length == 0){
             return <div className="col-md-12 col-sm-12">
                 <h2>Il n'y a personne au Hackerspace pour l'instant</h2>
@@ -109,13 +128,16 @@ var Pamela = React.createClass({
                 <div className="col-md-6 col-sm-12">
                     <h3>Inconnus</h3>
                     <PamelaNoobsBox macs={this.state.unknown_mac}/>
+                    <h4>{hidden_text}</h4>
                 </div>
             </div>;
 
         }
     },
     render: function(){
+        var total_macs = this.state.users.length + this.state.unknown_mac.length + this.state.hidden;
         return <div className="container-fluid">
+            <h3><small>Nous sommes <strong>{total_macs}</strong> pour le moment</small></h3>
             {this.pamela_content()}
             <div className="row-fluid">
                 <h2 className="col-sm-12">

@@ -57,6 +57,8 @@ class User(AbstractBaseUser):
     balance = models.DecimalField(max_digits=6, decimal_places=2, default=0, verbose_name="ardoise")
     has_key = models.BooleanField(default=False, verbose_name="possède une clé")
 
+    hide_pamela = models.BooleanField(default=False, verbose_name='caché sur pamela')
+
     # Needed for compatibility with the Django build-in User model
     groups = models.ManyToManyField(Group, blank=True)
     is_active = models.BooleanField(default=True)
