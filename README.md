@@ -21,3 +21,6 @@ Rapide brainstorming https://pad.lqdn.fr/p/incubator
 
     ./manage.py createsuperuser
     
+# View / edit Notebooks
+
+    ./manage.py shell_plus --notebook
