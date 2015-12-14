@@ -41,6 +41,19 @@ PAMELA
                 {% bootstrap_form form %}
                 {% buttons %}
                 <button type="submit" class="btn btn-info">Ajouter à Pamela</button>
+                {% if user.hide_pamela %}
+                    <abbr title="Vous n'apparaissez actuellement pas sur ce site lorsque vous êtes sur le réseau de UrLab.">
+                        <a href="{% url "show_pamela" %}" class="btn btn-primary pull-right">
+                                Apparaître
+                        </a>
+                    </abbr></td>
+                {% else %}
+                    <abbr title="Votre pseudonyme apparaît sur ce site lorsque vous êtes sur le réseau de UrLab.">
+                        <a href="{% url "hide_pamela" %}" class="btn btn-warning pull-right">
+                            Disparaître
+                        </a>
+                    </abbr>
+                {% endif %}
                 {% endbuttons %}
             </form>
             <p class="text-muted"><small>

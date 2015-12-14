@@ -82,7 +82,7 @@ Profil de {{user.username}}
             <table class="table table-condensed">
             {% if user.hide_pamela %}
                 <tr>
-                    <td>Vous êtes caché sur P.A.M.E.L.A</td>
+                    <td>Vous êtes caché sur <a href="{% url "pamela_list" %}">P.A.M.E.L.A</a></td>
                     <td><abbr title="Vous n'apparaissez actuellement pas sur ce site lorsque vous êtes sur le réseau de UrLab.">
                         <a href="{% url "show_pamela" %}" class="btn btn-primary">
                             Apparaître
@@ -92,7 +92,7 @@ Profil de {{user.username}}
                 </tr>
             {% else %}
                 <tr>
-                    <td>Vous apparaissez sur P.A.M.E.L.A</td>
+                    <td>Vous apparaissez sur <a href="{% url "pamela_list" %}">P.A.M.E.L.A</a></td>
                     <td><abbr title="Votre pseudonyme apparaît sur ce site lorsque vous êtes sur le réseau de UrLab.">
                         <a href="{% url "hide_pamela" %}" class="btn btn-warning">
                             Disparaître
