@@ -190,6 +190,7 @@ class PamelaObject(object):
         self.age = pamela_dict['updated']
         self.unknown_mac = pamela_dict['unknown_mac']
         self.users = pamela_dict['users']
+        self.hidden = pamela_dict['hidden']
 
 
 class PamelaViewSet(viewsets.ViewSet):
