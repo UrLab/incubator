@@ -17,3 +17,4 @@ requests
 django-crispy-forms
 django-filter
 ics
+django-activity-stream
