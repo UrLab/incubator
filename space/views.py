@@ -183,6 +183,19 @@ def spaceapi(request):
     return JsonResponse(response)
 
 
+def get_openings_df(freq='H', **filter_args):
+    # Grab openings in a pandas dataframe
+    df = read_frame(SpaceStatus.objects.filter(**filter_args))
+
+    # Drop duplicate time index
+    df = df[df.time.diff().dt.total_seconds() > 0]
+    df.index = df.time
+
+    # Reindex on a monotonic hourly time index
+    index = pd.date_range(start=df.time.min(), end=df.time.max(), freq='H')
+    return df.reindex(index, method='pad')
+
+
 def openings(request):
     query = {}
     if 'from' in request.GET:
@@ -190,16 +203,7 @@ def openings(request):
     if 'to' in request.GET:
         query['time__lte'] = request.GET['to']
 
-    # Grab openings in a pandas dataframe
-    db_df = read_frame(SpaceStatus.objects.filter(**query))
-
-    # Drop duplicate time index
-    db_df = db_df[db_df.time.diff().dt.total_seconds() > 0]
-    db_df.index = db_df.time
-
-    # Reindex on a monotonic hourly time index
-    index = pd.date_range(start=db_df.time.min(), end=pd.datetime.now(), freq='H')
-    df = db_df.reindex(index, method='pad')
+    df = get_openings_df(**query)
 
     # Group by hour and plot as image
     probs = 100*df.groupby(df.index.time).is_open.mean()
