@@ -74,3 +74,15 @@ body {
 .footer a {
   color: #5b94c5;
 }
+
+.feed-timesince {
+  color: #777;
+}
+
+.feed-photo {
+  height: 2.5em;
+  float:left;
+  margin-top: .3em;
+  margin-right: .5em;
+  border-radius: .25em;
+}
