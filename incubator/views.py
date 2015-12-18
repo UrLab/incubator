@@ -15,11 +15,7 @@ def home(request):
     client = get_redis()
     stream = []
     if request.user.is_authenticated():
-        stream = Action.objects.filter(public=True)
-        stream = stream.prefetch_related('target')
-        stream = stream.prefetch_related('actor')
-        stream = stream.prefetch_related('action_object')
-        stream = stream[:20]
+        stream = Action.objects.filter(public=True).prefetch_related('target', 'actor', 'action_object')[:20]
 
     return render(request, "home.html", {
         "space_open": space_is_open(client),
