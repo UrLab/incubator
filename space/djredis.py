@@ -1,10 +1,10 @@
 from redis import StrictRedis
-from incubator.settings import REDIS_HOST, REDIS_PORT, FAKE_REDIS
 from space.models import SpaceStatus
+from django.conf import settings
 
 
 def get_redis():
-    return StrictRedis(REDIS_HOST, REDIS_PORT)
+    return StrictRedis(settings.REDIS_HOST, settings.REDIS_PORT)
 
 
 def get_mac(client):
@@ -48,5 +48,5 @@ def space_is_open(client):
     return int(client.get('incubator_status')) == 1
 
 
-if FAKE_REDIS:
+if settings.FAKE_REDIS:
     from .fakeredis import *
