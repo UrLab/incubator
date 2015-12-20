@@ -8,11 +8,11 @@ from django.contrib import messages
 from datetime import datetime
 from actstream import action
 from math import ceil
-from django.contrib.auth.decorators import permission_required
+
+from users.decorators import permission_required
 from users.mixins import PermissionRequiredMixin
 
 from .serializers import ProjectSerializer
-
 from .models import Project, Task
 from .forms import ProjectForm
 

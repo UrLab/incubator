@@ -1,4 +1,4 @@
-from django.contrib.auth.decorators import permission_required
+from .decorators import permission_required
 
 
 class PermissionRequiredMixin:
@@ -9,6 +9,6 @@ class PermissionRequiredMixin:
 
     @classmethod
     def as_view(cls, **kwargs):
-        restrict = permission_required(cls.permission_required, None, True)
+        restrict = permission_required(cls.permission_required)
         view = super(PermissionRequiredMixin, cls).as_view(**kwargs)
         return restrict(view)

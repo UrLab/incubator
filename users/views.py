@@ -7,13 +7,12 @@ from django.views.generic.detail import DetailView
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.contrib.auth.decorators import permission_required
-
 from django.conf import settings
 
 from .serializers import UserSerializer
 from .models import User
 from .forms import UserForm, BalanceForm
+from .decorators import permission_required
 from stock.models import Product
 
 
