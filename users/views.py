@@ -8,7 +8,7 @@ from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 
-from incubator.settings import BANK_ACCOUNT
+from django.conf import settings
 
 from .serializers import UserSerializer
 from .models import User
@@ -18,7 +18,7 @@ from stock.models import Product
 
 def balance(request):
     return render(request, 'balance.html', {
-        'account': BANK_ACCOUNT,
+        'account': settings.BANK_ACCOUNT,
         'products': Product.objects.order_by('category'),
     })
 
