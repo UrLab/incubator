@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+Troll
+{% endblock %}
+
+{% block content %}
+<h1>
+    Tu n'es pas un troll ?
+    <small>Signale le à un administrateur du site</small>
+</h1>
+<img alt="Alerte au gogole" src="{% static "img/alert.jpg" %}"/>
+{% endblock %}
