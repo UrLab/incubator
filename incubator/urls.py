@@ -35,3 +35,9 @@ urlpatterns = patterns(
 if settings.DEBUG:
     from django.conf.urls.static import static
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+handler400 = incubator.views.error_view(400, "Erreur de requête")
+handler403 = incubator.views.error_view(403, "Accès interdit")
+handler404 = incubator.views.error_view(404, "Page introuvable")
+handler500 = incubator.views.error_view(500, "Erreur serveur")
