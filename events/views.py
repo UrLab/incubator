@@ -10,8 +10,8 @@ from datetime import datetime
 from actstream import action
 from ics import Calendar
 from ics import Event as VEvent
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth.decorators import permission_required
+from users.mixins import PermissionRequiredMixin
 
 from space.decorators import private_api
 
