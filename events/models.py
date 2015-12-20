@@ -70,6 +70,12 @@ class Event(models.Model):
 
 
 class Meeting(models.Model):
+    class Meta:
+        verbose_name = 'Réunion'
+        permissions = (
+            ("run_meeting", "Peut mener des réunions"),
+        )
+
     event = models.OneToOneField(Event, verbose_name="Événement")
     OJ = models.TextField(verbose_name='Ordre du jour', blank=True)
     PV = models.TextField(blank=True)
@@ -90,6 +96,3 @@ class Meeting(models.Model):
         if not self.pad:
             self.pad = "https://pad.lqdn.fr/p/urlab-meeting-{}".format(self.id)
         super(Meeting, self).save(*args, **kwargs)
-
-    class Meta:
-        verbose_name = "Réunion"

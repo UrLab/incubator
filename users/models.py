@@ -41,6 +41,12 @@ class CustomUserManager(UserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    class Meta:
+        verbose_name = 'Utilisateur'
+        permissions = (
+            ("change_balance", "Peut modifier son ardoise"),
+        )
+
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ['email']
     objects = CustomUserManager()
