@@ -19,8 +19,7 @@ from .models import MacAdress, SpaceStatus, MusicOfTheDay
 from .forms import MacAdressForm
 from .serializers import PamelaSerializer, SpaceStatusSerializer, MotdSerializer
 from .decorators import private_api, one_or_zero
-from incubator.settings import (INFLUX_HOST, INFLUX_PORT, INFLUX_USER,
-                                INFLUX_PASS)
+from django.conf import settings
 
 
 def make_pamela():
@@ -88,7 +87,7 @@ class DeleteMACView(DeleteView):
 def get_sensors(*sensors):
     query_template = "SELECT value FROM %s ORDER BY time DESC LIMIT 1"
     queries = ';'.join(query_template % s for s in sensors)
-    influx_credentials = (INFLUX_HOST, INFLUX_PORT, INFLUX_USER, INFLUX_PASS)
+    influx_credentials = (settings.INFLUX_HOST, settings.INFLUX_PORT, settings.INFLUX_USER, settings.INFLUX_PASS)
     client = InfluxDBClient(*influx_credentials)
     r = client.query(queries, database="hal")
     if len(sensors) == 1:
