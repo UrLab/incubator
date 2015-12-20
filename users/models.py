@@ -64,6 +64,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.username
 
     @property
+    def is_staff(self):
+        return self.is_superuser
+
+    @property
     def is_member(self):
         year = ASBLYear.objects.filter(start__gte=timezone.now(), stop__lt=timezone.now())
         return self.membership_set.filter(asbl_year=year).count() > 0
