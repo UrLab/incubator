@@ -17,7 +17,7 @@ from .models import Project, Task
 from .forms import ProjectForm
 
 
-class ProjectAddView(CreateView, PermissionRequiredMixin):
+class ProjectAddView(PermissionRequiredMixin, CreateView):
     form_class = ProjectForm
     template_name = 'add_project.html'
     permission_required = 'projects.add_project'
@@ -35,7 +35,7 @@ class ProjectAddView(CreateView, PermissionRequiredMixin):
         return ret
 
 
-class ProjectEditView(UpdateView, PermissionRequiredMixin):
+class ProjectEditView(PermissionRequiredMixin, UpdateView):
     form_class = ProjectForm
     model = Project
     template_name = 'add_project.html'

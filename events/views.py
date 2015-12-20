@@ -20,7 +20,7 @@ from .models import Event, Meeting
 from .forms import EventForm, MeetingForm
 
 
-class EventAddView(CreateView, PermissionRequiredMixin):
+class EventAddView(PermissionRequiredMixin, CreateView):
     form_class = EventForm
     template_name = 'add_event.html'
     permission_required = 'events.add_event'
@@ -37,7 +37,7 @@ class EventAddView(CreateView, PermissionRequiredMixin):
         return ret
 
 
-class EventEditView(UpdateView, PermissionRequiredMixin):
+class EventEditView(PermissionRequiredMixin, UpdateView):
     form_class = EventForm
     model = Event
     template_name = 'add_event.html'
@@ -56,7 +56,7 @@ class EventDetailView(DetailView):
     context_object_name = 'event'
 
 
-class MeetingAddView(CreateView, PermissionRequiredMixin):
+class MeetingAddView(PermissionRequiredMixin, CreateView):
     form_class = MeetingForm
     template_name = 'meeting_form.html'
     permission_required = 'events.add_meeting'
@@ -70,7 +70,7 @@ class MeetingAddView(CreateView, PermissionRequiredMixin):
         return self.object.event.get_absolute_url()
 
 
-class MeetingEditView(UpdateView, PermissionRequiredMixin):
+class MeetingEditView(PermissionRequiredMixin, UpdateView):
     form_class = MeetingForm
     template_name = 'meeting_form.html'
     model = Meeting
