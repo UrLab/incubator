@@ -1,15 +1,22 @@
 {% load humanize %}
+
 <h3>Derniers changements</h3>
+
 {% for action in stream %}
-<div class="row">
-  <div class="large-12 columns">
-    <p>
-      <strong>
-        <img src="{{ action.actor.gravatar }}" class="feed-photo"> {{ action.actor }} {{ action.verb }}
-      </strong>
+  <div class="row">
+    <div class="col-lg-1" style="font-size:180%;">
+      <img src="{{ action.actor.gravatar }}" class="user-avatar">
+    </div>
+    <div class="col-lg-11">
+      <p>
+        <strong>
+          {{ action.actor }} {{ action.verb }}
+        </strong>
         {% if action.action_object %}
             {% if action.action_object.get_absolute_url %}
-              <a href="{{ action.action_object.get_absolute_url }}">{{ action.action_object }}</a>
+              <a href="{{ action.action_object.get_absolute_url }}">
+                {{ action.action_object }}
+              </a>
             {% else %}
               {{ action.action_object }}
             {% endif %}
@@ -24,13 +31,13 @@
               <a href="{{ action.target_url }}">{{ action.target }}</a>
             {% endif %}
         {% endif %}
-      <br>
-      <span class="feed-timesince">
-        Il y a {{ action.timestamp|timesince }}
-      </span>
-    </p>
+        <br>
+        <span class="feed-timesince">
+          Il y a {{ action.timestamp|timesince }}
+        </span>
+      </p>
+    </div>
   </div>
-</div>
 {% empty %}
-<p>Il ne s'est encore rien passé.</p>
+  <p>Il ne s'est encore rien passé.</p>
 {% endfor %}

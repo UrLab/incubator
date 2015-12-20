@@ -9,6 +9,12 @@ body {
   margin-bottom: 4em;
 }
 
+.user-avatar {
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: .75em;
+}
+
 .slimg {
   width: auto;
   height: 270px;
@@ -85,4 +91,16 @@ body {
   margin-top: .3em;
   margin-right: .5em;
   border-radius: .25em;
+}
+
+#pamela {
+  font-size: 150%;
+}
+
+#pamela .user-entry {
+  padding-top: .5em;
+}
+
+#pamela .user-list {
+  list-style: none;
 }
