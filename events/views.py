@@ -10,6 +10,8 @@ from datetime import datetime
 from actstream import action
 from ics import Calendar
 from ics import Event as VEvent
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.decorators import permission_required
 
 from space.decorators import private_api
 
@@ -18,9 +20,10 @@ from .models import Event, Meeting
 from .forms import EventForm, MeetingForm
 
 
-class EventAddView(CreateView):
+class EventAddView(CreateView, PermissionRequiredMixin):
     form_class = EventForm
     template_name = 'add_event.html'
+    permission_required = 'events.add_event'
 
     def get_initial(self):
         return {
@@ -34,10 +37,11 @@ class EventAddView(CreateView):
         return ret
 
 
-class EventEditView(UpdateView):
+class EventEditView(UpdateView, PermissionRequiredMixin):
     form_class = EventForm
     model = Event
     template_name = 'add_event.html'
+    permission_required = 'events.change_event'
 
     def form_valid(self, form):
         ret = super(EventEditView, self).form_valid(form)
@@ -52,9 +56,10 @@ class EventDetailView(DetailView):
     context_object_name = 'event'
 
 
-class MeetingAddView(CreateView):
+class MeetingAddView(CreateView, PermissionRequiredMixin):
     form_class = MeetingForm
     template_name = 'meeting_form.html'
+    permission_required = 'events.add_meeting'
 
     def form_valid(self, form):
         event = get_object_or_404(Event, pk=self.kwargs['pk'])
@@ -65,10 +70,11 @@ class MeetingAddView(CreateView):
         return self.object.event.get_absolute_url()
 
 
-class MeetingEditView(UpdateView):
+class MeetingEditView(UpdateView, PermissionRequiredMixin):
     form_class = MeetingForm
     template_name = 'meeting_form.html'
     model = Meeting
+    permission_required = 'events.change_meeting'
 
     def get_success_url(self):
         return self.object.event.get_absolute_url()
@@ -131,6 +137,7 @@ def not_interested(request, pk):
     return HttpResponseRedirect(event.get_absolute_url())
 
 
+@permission_required('events.run_meeting')
 def export_pad(request, pk):
     event = get_object_or_404(Event, pk=pk)
     meeting = event.meeting
@@ -149,6 +156,7 @@ def export_pad(request, pk):
     return HttpResponseRedirect(event.get_absolute_url())
 
 
+@permission_required('events.run_meeting')
 def import_pad(request, pk):
     event = get_object_or_404(Event, pk=pk)
     meeting = event.meeting

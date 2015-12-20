@@ -8,6 +8,8 @@ from django.contrib import messages
 from datetime import datetime
 from actstream import action
 from math import ceil
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.decorators import permission_required
 
 from .serializers import ProjectSerializer
 
@@ -15,9 +17,10 @@ from .models import Project, Task
 from .forms import ProjectForm
 
 
-class ProjectAddView(CreateView):
+class ProjectAddView(CreateView, PermissionRequiredMixin):
     form_class = ProjectForm
     template_name = 'add_project.html'
+    permission_required = 'projects.add_project'
 
     def get_initial(self):
         return {
@@ -32,10 +35,11 @@ class ProjectAddView(CreateView):
         return ret
 
 
-class ProjectEditView(UpdateView):
+class ProjectEditView(UpdateView, PermissionRequiredMixin):
     form_class = ProjectForm
     model = Project
     template_name = 'add_project.html'
+    permission_required = 'projects.change_project'
 
     def form_valid(self, form):
         ret = super(ProjectEditView, self).form_valid(form)
@@ -63,6 +67,7 @@ def projects_home(request):
     })
 
 
+@permission_required('projects.add_task')
 def add_task(request, pk):
     if 'task_name' not in request.POST:
         return HttpResponseBadRequest("Vous n'avez pas donné de nom de tâche")
@@ -84,6 +89,7 @@ def add_task(request, pk):
     return HttpResponseRedirect(reverse('view_project', args=[pk]))
 
 
+@permission_required('projects.change_task')
 def complete_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.completed_by = request.user
@@ -95,6 +101,7 @@ def complete_task(request, pk):
     return HttpResponseRedirect(reverse('view_project', args=[task.project.id]))
 
 
+@permission_required('projects.change_task')
 def uncomplete_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.completed_by = None
