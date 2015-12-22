@@ -3,7 +3,7 @@ import hashlib
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import AbstractBaseUser, UserManager
+from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
 from django.contrib.auth.models import Group
 
 from incubator.models import ASBLYear
@@ -33,14 +33,20 @@ class CustomUserManager(UserManager):
         return self._create_user(username, email, password, **extra_fields)
 
     def create_superuser(self, username, email, password, **extra_fields):
-        return self._create_user(username, email, password, is_staff=True, **extra_fields)
+        return self._create_user(username, email, password, is_superuser=True, **extra_fields)
 
     def get_by_natural_key(self, username):
         # makes user matching case insensitive
         return self.get(username__iexact=username)
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
+    class Meta:
+        verbose_name = 'Utilisateur'
+        permissions = (
+            ("change_balance", "Peut modifier son ardoise"),
+        )
+
     USERNAME_FIELD = "username"
     REQUIRED_FIELDS = ['email']
     objects = CustomUserManager()
@@ -51,36 +57,21 @@ class User(AbstractBaseUser):
     edited = models.DateTimeField(auto_now=True)
     first_name = models.CharField(max_length=127, blank=True)
     last_name = models.CharField(max_length=127, blank=True)
-    is_staff = models.BooleanField(default=False, verbose_name="est administrateur")
-    is_active = models.BooleanField(default=True)
 
     balance = models.DecimalField(max_digits=6, decimal_places=2, default=0, verbose_name="ardoise")
     has_key = models.BooleanField(default=False, verbose_name="possède une clé")
 
     hide_pamela = models.BooleanField(default=False, verbose_name='caché sur pamela')
 
-    # Needed for compatibility with the Django build-in User model
-    groups = models.ManyToManyField(Group, blank=True)
-    is_active = models.BooleanField(default=True)
-
-    def has_module_perms(self, *args, **kwargs):
-        return True # TODO : is this a good idea ?
-
-    def has_perm(self, perm_list, obj=None):
-        return self.is_staff
-
-    def write_perm(self, obj):
-        if self.is_staff:
-            return True
-
-        if obj is None:
-            return False
-
     def get_short_name(self):
         return self.username
 
     def get_full_name(self):
         return self.username
+
+    @property
+    def is_staff(self):
+        return self.is_superuser
 
     @property
     def is_member(self):
@@ -90,10 +81,6 @@ class User(AbstractBaseUser):
     @property
     def absolute_balance(self):
         return abs(self.balance)
-
-    @property
-    def is_superuser(self):
-        return self.is_staff
 
     @property
     def gravatar(self):

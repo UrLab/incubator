@@ -10,6 +10,12 @@ from space.djredis import get_redis, space_is_open
 from events.models import Event
 
 
+def error_view(code, msg=""):
+    def view(request):
+        return render(request, "error.html", {'code': code, 'message': msg})
+    return view
+
+
 def home(request):
     client = get_redis()
     return render(request, "home.html", {

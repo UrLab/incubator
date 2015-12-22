@@ -7,12 +7,12 @@ from django.views.generic.detail import DetailView
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-
 from django.conf import settings
 
 from .serializers import UserSerializer
 from .models import User
 from .forms import UserForm, BalanceForm
+from .decorators import permission_required
 from stock.models import Product
 
 
@@ -23,6 +23,7 @@ def balance(request):
     })
 
 
+@permission_required('users.change_balance')
 def spend(request):
     if request.method == 'POST':
         post = request.POST.copy()
@@ -36,6 +37,7 @@ def spend(request):
     return HttpResponseRedirect(reverse('change_balance'))
 
 
+@permission_required('users.change_balance')
 def top(request):
     if request.method == 'POST':
         post = request.POST.copy()
