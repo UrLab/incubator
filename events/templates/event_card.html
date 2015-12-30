@@ -1,12 +1,40 @@
-<div class="panel panel-default">
-     <div class="panel-body">
-        {% if event.is_meeting %}
-            <h4><a href="{% url "view_event" event.id %}">{{ event.title }}</a></h4>
-        {% else %}
-            <h4><a href="{% url "view_event" event.id %}">{{ event.title }}</a></h4>
-        {% endif %}
+{% load formatting %}
+
+<div class="panel panel-default event-card">
+  <div class="panel-heading">    
+    <div class="row">
+      <div class="col-xs-2">
+        <a href="{% url "view_event" event.id %}">
+          {% if not event.picture %}
+            <img class="event-pic-thumb"
+               alt="Image manquante"
+               src="/static/img/default-event.png">
+          {% else %}
+            <img class="event-pic-thumb"
+               alt="Image manquante"
+               src="{{event.picture.url}}">
+          {% endif %}
+        </a>
+      </div>
+      <div class="col-xs-10">
+        <a href="#event-{{event.id}}-description" data-toggle="collapse">
+          <h4>
+            {{ event.title }}
+          </h4>
+        </a>
+      </div>
     </div>
-    <div class="panel-footer">
-        {% include "event_time.html" %}
-    </div>
+  </div>
+  <div id="event-{{event.id}}-description" class="panel-body collapse">
+    {{event.description|markdown}}
+    {% if request.user.is_authenticated %}
+    <a class="btn btn-default" href="{% url "edit_event" event.id %}">
+      <span class="fa fa-edit" aria-hidden="true"></span>
+      Editer
+    </a>
+    {% endif %}
+  </div>
+  <div class="panel-footer">
+    {% include "event_time.html" %}
+  </div>
 </div>

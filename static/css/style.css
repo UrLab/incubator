@@ -74,3 +74,17 @@ body {
 .footer a {
   color: #5b94c5;
 }
+
+.event-card .event-pic-thumb {
+    border-radius: 50%;
+    height: 3em;
+    transition: border-radius 0.5s;
+}
+.event-card:hover .event-pic-thumb {
+    border-radius: 25%;
+}
+
+.event-card h4 {
+    font-weight: bolder;
+    text-align: right;
+}
