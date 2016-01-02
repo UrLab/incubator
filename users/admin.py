@@ -20,7 +20,7 @@ class BalanceListFilter(admin.SimpleListFilter):
             ('debt', "Moins de -5€"),
             ('neg5', "[-5€, 0€["),
             ('z', '0€'),
-            ('pos5', "]0€, 5€["),
+            ('pos5', "]0€, 5€]"),
             ('money', "Plus de 5€"),
         )
 
@@ -59,8 +59,7 @@ class UserAdmin(admin.ModelAdmin):
     groups.allow_tags = True
     groups.short_description = u'Membre des groupes'
 
-    list_display = ('username', 'balance', 'email', 'has_key', 'is_superuser',
-                    'is_member', 'created', 'groups')
+    list_display = ('username', 'balance', 'email', 'has_key', 'is_superuser', 'created', 'groups')
     list_filter = (BalanceListFilter, 'has_key', 'is_superuser', 'created', 'last_login')
     search_fields = ('username', 'email', 'first_name', 'last_name')
 
