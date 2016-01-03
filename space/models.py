@@ -21,10 +21,17 @@ class MacAdress(models.Model):
         self.adress = self.adress.lower()
         super(MacAdress, self).save(*args, **kwargs)
 
+    class Meta:
+        verbose_name_plural = "Mac adresses"
+
 
 class SpaceStatus(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     is_open = models.BooleanField()
+
+    class Meta:
+        verbose_name = "État d'ouverture du Hackerspace"
+        verbose_name_plural = "États d'ouverture du Hackerspace"
 
 
 class MusicOfTheDay(models.Model):
@@ -37,6 +44,9 @@ class MusicOfTheDay(models.Model):
         'youtu.be': 'youtube',
         'soundcloud.com': 'soundcloud',
     }
+
+    class Meta:
+        verbose_name_plural = "Musics of the day"
 
 
 class PrivateAPIKey(models.Model):
