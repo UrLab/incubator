@@ -7,8 +7,11 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.db.models import Q
 from datetime import datetime
+from actstream import action
 from ics import Calendar
 from ics import Event as VEvent
+from users.decorators import permission_required
+from users.mixins import PermissionRequiredMixin
 
 from space.decorators import private_api
 
@@ -17,20 +20,34 @@ from .models import Event, Meeting
 from .forms import EventForm, MeetingForm
 
 
-class EventAddView(CreateView):
+class EventAddView(PermissionRequiredMixin, CreateView):
     form_class = EventForm
     template_name = 'add_event.html'
+    permission_required = 'events.add_event'
 
     def get_initial(self):
         return {
             'organizer': self.request.user,
         }
 
+    def form_valid(self, form):
+        ret = super(EventAddView, self).form_valid(form)
+        action.send(self.request.user, verb='a créé', action_object=self.object)
 
-class EventEditView(UpdateView):
+        return ret
+
+
+class EventEditView(PermissionRequiredMixin, UpdateView):
     form_class = EventForm
     model = Event
     template_name = 'add_event.html'
+    permission_required = 'events.change_event'
+
+    def form_valid(self, form):
+        ret = super(EventEditView, self).form_valid(form)
+        action.send(self.request.user, verb='a édité', action_object=self.object)
+
+        return ret
 
 
 class EventDetailView(DetailView):
@@ -39,9 +56,10 @@ class EventDetailView(DetailView):
     context_object_name = 'event'
 
 
-class MeetingAddView(CreateView):
+class MeetingAddView(PermissionRequiredMixin, CreateView):
     form_class = MeetingForm
     template_name = 'meeting_form.html'
+    permission_required = 'events.add_meeting'
 
     def form_valid(self, form):
         event = get_object_or_404(Event, pk=self.kwargs['pk'])
@@ -52,10 +70,11 @@ class MeetingAddView(CreateView):
         return self.object.event.get_absolute_url()
 
 
-class MeetingEditView(UpdateView):
+class MeetingEditView(PermissionRequiredMixin, UpdateView):
     form_class = MeetingForm
     template_name = 'meeting_form.html'
     model = Meeting
+    permission_required = 'events.change_meeting'
 
     def get_success_url(self):
         return self.object.event.get_absolute_url()
@@ -89,6 +108,7 @@ def short_url_maker(*keywords):
 
     return filter_func
 
+
 def ical(request):
     events = Event.objects.filter(status__exact="r")
     cal = Calendar()
@@ -116,6 +136,8 @@ def not_interested(request, pk):
     event.interested.remove(request.user)
     return HttpResponseRedirect(event.get_absolute_url())
 
+
+@permission_required('events.run_meeting')
 def export_pad(request, pk):
     event = get_object_or_404(Event, pk=pk)
     meeting = event.meeting
@@ -133,11 +155,13 @@ def export_pad(request, pk):
     meeting.save()
     return HttpResponseRedirect(event.get_absolute_url())
 
+
+@permission_required('events.run_meeting')
 def import_pad(request, pk):
     event = get_object_or_404(Event, pk=pk)
     meeting = event.meeting
     if not meeting:
-        return HttpResponseForbidden("This is not a meeting")        
+        return HttpResponseForbidden("This is not a meeting")
 
     meeting.PV = meeting.get_pad_contents()
     meeting.save()

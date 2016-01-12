@@ -16,6 +16,7 @@ django-resized
 requests
 django-crispy-forms
 django-filter
+django-activity-stream
 ics
 
 matplotlib

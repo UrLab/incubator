@@ -17,7 +17,7 @@ PAMELA
 </div>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-8">
         {% if space_open %}
             <div class="alert alert-success" role="alert">
                 Le Hackerspace est ouvert depuis {{status_change.time|timesince}}. Venez nous dire bonjour !
@@ -27,8 +27,7 @@ PAMELA
                 Le Hackerspace est fermé depuis {{status_change.time|timesince}}.
             </div>
         {% endif %}
-    </div>
-    <div class="col-md-8" id="pamela">
+        <div id="pamela"></div>
     </div>
     <div class="col-md-4">
         <p>P.A.M.E.L.A. est l'interface permettant de voir qui est actuellement connecté sur le réseau du Hackerspace.</p>
@@ -42,6 +41,19 @@ PAMELA
                 {% bootstrap_form form %}
                 {% buttons %}
                 <button type="submit" class="btn btn-info">Ajouter à Pamela</button>
+                {% if user.hide_pamela %}
+                    <abbr title="Vous n'apparaissez actuellement pas sur ce site lorsque vous êtes sur le réseau de UrLab.">
+                        <a href="{% url "show_pamela" %}" class="btn btn-primary pull-right">
+                                Apparaître
+                        </a>
+                    </abbr></td>
+                {% else %}
+                    <abbr title="Votre pseudonyme apparaît sur ce site lorsque vous êtes sur le réseau de UrLab.">
+                        <a href="{% url "hide_pamela" %}" class="btn btn-warning pull-right">
+                            Disparaître
+                        </a>
+                    </abbr>
+                {% endif %}
                 {% endbuttons %}
             </form>
             <p class="text-muted"><small>
@@ -97,9 +109,15 @@ var PamelaNoobsBox = React.createClass({
 
 var Pamela = React.createClass({
     pamela_content: function(){
+        var hidden_text = "";
+        if (this.state.hidden > 1){
+            hidden_text = "Et " + this.state.hidden + " autres personnes";
+        } else if (this.state.hidden > 0){
+            hidden_text = "Et 1 autre personne";
+        }
         if (this.state.unknown_mac.length + this.state.users.length == 0){
             return <div className="col-md-12 col-sm-12">
-                <h2>Il n'y a personne pour l'instant</h2>
+                <h2>Il n'y a personne au Hackerspace pour l'instant</h2>
             </div>;
         } else {
             return <div className="row-fluid">
@@ -110,19 +128,22 @@ var Pamela = React.createClass({
                 <div className="col-md-6 col-sm-12">
                     <h3>Inconnus</h3>
                     <PamelaNoobsBox macs={this.state.unknown_mac}/>
+                    <h4>{hidden_text}</h4>
                 </div>
             </div>;
 
         }
     },
     render: function(){
+        var total_macs = this.state.users.length + this.state.unknown_mac.length + this.state.hidden;
         return <div className="container-fluid">
+            <h3><small>Nous sommes <strong>{total_macs}</strong> pour le moment</small></h3>
+            {this.pamela_content()}
             <div className="row-fluid">
                 <h2 className="col-sm-12">
                     <small>Mis à jour il y a {this.state.age} secondes</small>
                 </h2>
             </div>
-            {this.pamela_content()}
         </div>
     },
     getInitialState: function(){

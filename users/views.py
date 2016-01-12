@@ -7,22 +7,23 @@ from django.views.generic.detail import DetailView
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-
-from incubator.settings import BANK_ACCOUNT
+from django.conf import settings
 
 from .serializers import UserSerializer
 from .models import User
 from .forms import UserForm, BalanceForm
+from .decorators import permission_required
 from stock.models import Product
 
 
 def balance(request):
     return render(request, 'balance.html', {
-        'account': BANK_ACCOUNT,
+        'account': settings.BANK_ACCOUNT,
         'products': Product.objects.order_by('category'),
     })
 
 
+@permission_required('users.change_balance')
 def spend(request):
     if request.method == 'POST':
         post = request.POST.copy()
@@ -36,6 +37,7 @@ def spend(request):
     return HttpResponseRedirect(reverse('change_balance'))
 
 
+@permission_required('users.change_balance')
 def top(request):
     if request.method == 'POST':
         post = request.POST.copy()
@@ -47,6 +49,18 @@ def top(request):
             messages.success(request, 'Vous avez bien rechargé {}€'.format(form.cleaned_data['value']))
             request.user.save()
     return HttpResponseRedirect(reverse('change_balance'))
+
+
+def show_pamela(request):
+    request.user.hide_pamela = False
+    request.user.save()
+    return HttpResponseRedirect(reverse('profile'))
+
+
+def hide_pamela(request):
+    request.user.hide_pamela = True
+    request.user.save()
+    return HttpResponseRedirect(reverse('profile'))
 
 
 class UserEditView(UpdateView):

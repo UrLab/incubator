@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron alert alert-danger">
+    <h1>
+        Oooops !
+        <small>Une erreur {{code}} s'est produite !</small>
+    </h1>
+    <h3>{{message}}</h3>
+    <center>
+        <img height="400" src="http://http.cat/{{code}}.jpg" alt="">
+    </center>
+</div>
+{% endblock %}

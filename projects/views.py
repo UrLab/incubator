@@ -4,18 +4,23 @@ from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.contrib import messages
 from datetime import datetime
+from actstream import action
 from math import ceil
 
-from .serializers import ProjectSerializer
+from users.decorators import permission_required
+from users.mixins import PermissionRequiredMixin
 
+from .serializers import ProjectSerializer
 from .models import Project, Task
 from .forms import ProjectForm
 
 
-class ProjectAddView(CreateView):
+class ProjectAddView(PermissionRequiredMixin, CreateView):
     form_class = ProjectForm
     template_name = 'add_project.html'
+    permission_required = 'projects.add_project'
 
     def get_initial(self):
         return {
@@ -23,11 +28,24 @@ class ProjectAddView(CreateView):
             'progress': 0,
         }
 
+    def form_valid(self, form):
+        ret = super(ProjectAddView, self).form_valid(form)
+        action.send(self.request.user, verb='a créé', action_object=self.object)
 
-class ProjectEditView(UpdateView):
+        return ret
+
+
+class ProjectEditView(PermissionRequiredMixin, UpdateView):
     form_class = ProjectForm
     model = Project
     template_name = 'add_project.html'
+    permission_required = 'projects.change_project'
+
+    def form_valid(self, form):
+        ret = super(ProjectEditView, self).form_valid(form)
+        action.send(self.request.user, verb='a édité', action_object=self.object)
+
+        return ret
 
 
 class ProjectDetailView(DetailView):
@@ -49,34 +67,58 @@ def projects_home(request):
     })
 
 
+@permission_required('projects.add_task')
 def add_task(request, pk):
     if 'task_name' not in request.POST:
         return HttpResponseBadRequest("Vous n'avez pas donné de nom de tâche")
     project = get_object_or_404(Project, pk=pk)
-    Task.objects.create(project=project, name=request.POST['task_name'],
-                        proposed_by=request.user)
+
+    task_name = request.POST['task_name'].strip()
+
+    if not task_name or not filter(str.isalpha, task_name):
+        messages.add_message(request, messages.ERROR, "Le nom de la tâche est vide")
+        return HttpResponseRedirect(reverse('view_project', args=[project.id]))
+
+    task = Task.objects.create(
+        project=project,
+        name=task_name,
+        proposed_by=request.user)
+
+    action.send(request.user, verb='a ajouté la tâche', action_object=task, target=project)
+
     return HttpResponseRedirect(reverse('view_project', args=[pk]))
 
 
+@permission_required('projects.change_task')
 def complete_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.completed_by = request.user
     task.completed_on = datetime.now()
     task.save()
+
+    action.send(request.user, verb='a fini la tâche', action_object=task, target=task.project)
+
     return HttpResponseRedirect(reverse('view_project', args=[task.project.id]))
 
 
+@permission_required('projects.change_task')
 def uncomplete_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.completed_by = None
     task.completed_on = None
     task.save()
+
+    action.send(request.user, verb='a ré-ajouté la tâche', action_object=task, target=task.project)
+
     return HttpResponseRedirect(reverse('view_project', args=[task.project.id]))
 
 
 def add_participation(request, pk):
     project = get_object_or_404(Project, pk=pk)
     project.participants.add(request.user)
+
+    action.send(request.user, verb='participe à', action_object=project)
+
     return HttpResponseRedirect(reverse('view_project', args=[pk]))
 
 
