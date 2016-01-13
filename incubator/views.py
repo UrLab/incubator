@@ -12,7 +12,9 @@ from events.models import Event
 
 def error_view(code, msg=""):
     def view(request):
-        return render(request, "error.html", {'code': code, 'message': msg})
+        response = render(request, "error.html", {'code': code, 'message': msg})
+        response.status_code = code
+        return response
     return view
 
 
