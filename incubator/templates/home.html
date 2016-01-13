@@ -49,13 +49,9 @@
             Évènements à venir
         </h2>
         {% if events %}
-            <dl>
-                {% for ev in events %}
-                <dt><h4><a href="{% url "view_event" ev.id %}">{{ ev.title }}</a></h4></dt>
-                <dd>{{ ev.start | naturaltime | capfirst }}
-                <span class="fa fa-map-marker" aria-hidden="true"></span> {{ ev.place }}</dd>
-                {% endfor %}
-            </dl>
+            {% for event in events %}
+                {% include "event_card.html" %}
+            {% endfor %}
         {% else %}
             <p class="text-muted">Il n'y a actuellement pas d'évènements à venir</p>
         {% endif %}
