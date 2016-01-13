@@ -4,133 +4,152 @@
 {% load humanize %}
 
 {% block content %}
-<div class="row">
+    <div class="row">
 
-    <div class="col-md-8">
-        {% if message and message.content != "" %}
-            <div class="alert alert-danger" role="alert">
-                {{message.content|markdown}}
+        <div class="col-md-8">
+            {% if message and message.content != "" %}
+                <div class="alert alert-danger" role="alert">
+                    {{ message.content|markdown }}
 
-            </div>
-        {% endif %}
-        <h1>
-            UrLab ?
-            {% if space_open %}
-            <a href="{% url "pamela_list" %}" class="btn btn-success">
-                {% bootstrap_icon "ok" %}
-                C'est ouvert !
-            </a>
-            {% else %}
-            <a href="{% url "pamela_list" %}" class="btn btn-danger">
-                {% bootstrap_icon "remove" %}
-                On est fermé
-            </a>
+                </div>
             {% endif %}
-        </h1>
 
-        <p>UrLab est le hackerspace de l’ULB. Il s’agit d'un laboratoire ouvert par et pour les étudiants, où l’on met à disposition une infrastructure pour qu’ils puissent y exprimer leur créativité de manière collaborative.</p>
+            <h1>
+                UrLab ?</h1>
 
-        <p>UrLab permet aux étudiants de l’ULB ayant un intérêt pour l’informatique, l’électronique ou d’une manière générale la technologie, de se rencontrer, partager et collaborer. Il peut être comparé à un laboratoire ouvert. Les thèmes abordés peuvent avoir un lien direct avec les cours mais pas nécessairement, le but étant d’explorer d’autres domaines, ou d’en approfondir. Quelques exemples sont présentés sur la page projets</p>
+            <p>UrLab est le hackerspace de l’ULB. Il s’agit d'un laboratoire ouvert par et pour les étudiants, où l’on
+                met à disposition une infrastructure pour qu’ils puissent y exprimer leur créativité de manière
+                collaborative.</p>
 
-        <h1>Un hackerspace ?</h1>
+            <p>UrLab permet aux étudiants de l’ULB ayant un intérêt pour l’informatique, l’électronique ou d’une manière
+                générale la technologie, de se rencontrer, partager et collaborer. Il peut être comparé à un laboratoire
+                ouvert. Les thèmes abordés peuvent avoir un lien direct avec les cours mais pas nécessairement, le but
+                étant d’explorer d’autres domaines, ou d’en approfondir. Quelques exemples sont présentés sur la page
+                projets</p>
 
-        <p>Le hackerspace est composé de trois facettes :
-        <ul>
-            <li>Un atelier, lieu de travail où chacun peut construire quelque chose en profitant des installations présentes ;</li>
-            <li>Un lieu de socialisation, où des groupes de gens peuvent se rencontrer et échanger des idées et collaborer sur des projets ;</li>
-            <li>L’organisation régulière de conférences et de présentations liées à l'informatique et à la technologie en général.</li>
-        </ul>
-        </p>
+            <h1>Un hackerspace ?</h1>
 
-        <p>UrLab est un lieu de rencontre pour les étudiants intéressés par la technologie. C’est un lieu où l’on développe ses projets et l’on partage ses connaissances par l’intermédiaire d’ateliers et de conférences.</p>
+            <p>Le hackerspace est composé de trois facettes :
+            <ul>
+                <li>Un atelier, lieu de travail où chacun peut construire quelque chose en profitant des installations
+                    présentes ;
+                </li>
+                <li>Un lieu de socialisation, où des groupes de gens peuvent se rencontrer et échanger des idées et
+                    collaborer sur des projets ;
+                </li>
+                <li>L’organisation régulière de conférences et de présentations liées à l'informatique et à la
+                    technologie en général.
+                </li>
+            </ul>
+            </p>
 
-        <h2>
-            <span class="fa fa-calendar-o" aria-hidden="true"></span>
-            Évènements à venir
-        </h2>
-        {% if events %}
-            <dl>
-                {% for ev in events %}
-                <dt><h4><a href="{% url "view_event" ev.id %}">{{ ev.title }}</a></h4></dt>
-                <dd>{{ ev.start | naturaltime | capfirst }}
-                <span class="fa fa-map-marker" aria-hidden="true"></span> {{ ev.place }}</dd>
-                {% endfor %}
-            </dl>
-        {% else %}
-            <p class="text-muted">Il n'y a actuellement pas d'évènements à venir</p>
-        {% endif %}
-    </div>
-    <div class="col-md-4 well">
-        <p>UrLab se trouve sur le campus du Solbosh, à l'ULB et est ouvert à tout le monde.</p>
-        <iframe width='100%' height='300px' frameBorder='0' src='https://a.tiles.mapbox.com/v4/c4ptaincrunch.o1n42mc8/attribution,zoompan,zoomwheel,geocoder.html?access_token=pk.eyJ1IjoiYzRwdGFpbmNydW5jaCIsImEiOiJUdWVRSENNIn0.qssi5TBLeBinBsXkZKiI6Q#14/50.812919/4.38443799999999'></iframe>
-        <p>
-        Pour savoir si nous sommes ouverts et qui s'y trouve actuellement, allez demander à <a href="{% url "pamela_list" %}">Pamela</a></p>
-        <hr/>
-        <div class="text-right">
-            <h3>Social</h3>
-            <a href="https://twitter.com/UrLabBxl" title="Twitter" target="_blank">
+            <p>UrLab est un lieu de rencontre pour les étudiants intéressés par la technologie. C’est un lieu où l’on
+                développe ses projets et l’on partage ses connaissances par l’intermédiaire d’ateliers et de
+                conférences.</p>
+
+            <h2>
+                <span class="fa fa-calendar-o" aria-hidden="true"></span>
+                Évènements à venir
+            </h2>
+
+            <p>Les évènements de Urlab programmés pour les prochains jours sont :</p>
+            <div class="col-md-9">
+                {% if events %}
+                    {% for event in events %}
+                        {% include "event_card.html" %}
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">Il n'y a actuellement pas d'évènements à venir</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-4 well">
+            <p>UrLab se trouve sur le campus du Solbosh, à l'ULB et est ouvert à tout le monde.</p>
+            <iframe width='100%' height='300px' frameBorder='0'
+                    src='https://a.tiles.mapbox.com/v4/c4ptaincrunch.o1n42mc8/attribution,zoompan,zoomwheel,geocoder.html?access_token=pk.eyJ1IjoiYzRwdGFpbmNydW5jaCIsImEiOiJUdWVRSENNIn0.qssi5TBLeBinBsXkZKiI6Q#14/50.812919/4.38443799999999'></iframe>
+            <p>
+            <hr/>
+            {% if space_open %}
+                <a href="{% url "pamela_list" %}" class="btn btn-success btn-group-justified">
+                    {% bootstrap_icon "ok" %}
+                    C'est ouvert !
+                </a>
+            {% else %}
+                <a href="{% url "pamela_list" %}" class="btn btn-danger btn-group-justified">
+                    {% bootstrap_icon "remove" %}
+                    On est fermé
+                </a>
+            {% endif %}
+            <hr/>
+            <div class="text-right">
+                <h3>Social</h3>
+                <a href="https://twitter.com/UrLabBxl" title="Twitter" target="_blank">
                 <span class="wow fa-stack fa-lg">
                     <i class="fa fa-square-o fa-stack-2x"></i>
                     <i class="fa fa-twitter fa-stack-1x"></i>
                 </span>
-            </a>
-            <a href="https://www.facebook.com/urlabbxl" title="Facebook" target="_blank">
+                </a>
+                <a href="https://www.facebook.com/urlabbxl" title="Facebook" target="_blank">
                 <span class="wow fa-stack fa-lg">
                     <i class="fa fa-square-o fa-stack-2x"></i>
                     <i class="fa fa-facebook fa-stack-1x"></i>
                 </span>
-            </a>
-            <a href="https://github.com/UrLab" title="GitHub" target="_blank">
+                </a>
+                <a href="https://github.com/UrLab" title="GitHub" target="_blank">
                 <span class="wow fa-stack fa-lg">
                     <i class="fa fa-square-o fa-stack-2x"></i>
                     <i class="fa fa-github fa-stack-1x"></i>
                 </span>
-            </a>
-            <a href="http://urlab.be/events/urlab.ics" title="iCal" target="_blank">
+                </a>
+                <a href="http://urlab.be/events/urlab.ics" title="iCal" target="_blank">
                 <span class="wow fa-stack fa-lg">
                     <i class="fa fa-square-o fa-stack-2x"></i>
                     <i class="fa fa-calendar fa-stack-1x"></i>
                 </span>
-            </a>
-            <a href="http://urlab.space" title="SpaceAPI" target="_blank">
+                </a>
+                <a href="http://urlab.space" title="SpaceAPI" target="_blank">
                 <span class="wow fa-stack fa-lg">
                     <i class="fa fa-square-o fa-stack-2x"></i>
                     <i class="fa fa-space-shuttle fa-stack-1x"></i>
                 </span>
-            </a>
-            <a href="http://webchat.freenode.net/?channels=urlab" title="IRC" target="_blank">
+                </a>
+                <a href="http://webchat.freenode.net/?channels=urlab" title="IRC" target="_blank">
                 <span class="wow fa-stack fa-lg">
                     <i class="fa fa-square-o fa-stack-2x"></i>
                     <i class="fa fa-slack fa-stack-1x"></i>
                 </span>
-            </a>
+                </a>
 
-            <h3>Contact</h3>
-            <h4>Mail
-                <small>
-                    <a href="mailto:contact@urlab.be">contact@urlab.be</a>
-                </small>
-            </h4>
-            <h4>Chat
-                <small>
-                    <a target="_blank" href="http://webchat.freenode.net/?channels=urlab">
-                        chat.freenode.org#urlab
-                    </a>
-                </small>
-            </h4>
-            <h4>Adresse <small>131 av. Buyl, 1050 Bruxelles</small></h4>
-            <h4>Téléphone <small>02/650.49.67</small></h4>
+                <h3>Contact</h3>
+                <h4>Mail
+                    <small>
+                        <a href="mailto:contact@urlab.be">contact@urlab.be</a>
+                    </small>
+                </h4>
+                <h4>Chat
+                    <small>
+                        <a target="_blank" href="http://webchat.freenode.net/?channels=urlab">
+                            chat.freenode.org#urlab
+                        </a>
+                    </small>
+                </h4>
+                <h4>Adresse
+                    <small>131 av. Buyl, 1050 Bruxelles</small>
+                </h4>
+                <h4>Téléphone
+                    <small>02/650.49.67</small>
+                </h4>
+            </div>
         </div>
+
     </div>
 
-</div>
-
-<script type="text/javascript">
-    $('.wow').hover(function(evt){
-        var wow = evt.target.closest('.wow');
-        $(wow).find('.fa-stack-2x').toggleClass('fa-square-o fa-square');
-        $(wow).find('.fa-stack-1x').toggleClass('fa-inverse');
-    });
-</script>
+    <script type="text/javascript">
+        $('.wow').hover(function (evt) {
+            var wow = evt.target.closest('.wow');
+            $(wow).find('.fa-stack-2x').toggleClass('fa-square-o fa-square');
+            $(wow).find('.fa-stack-1x').toggleClass('fa-inverse');
+        });
+    </script>
 
 {% endblock %}
