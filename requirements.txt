@@ -18,3 +18,4 @@ django-crispy-forms
 django-filter
 ics
 django-activity-stream
+django-analytical
