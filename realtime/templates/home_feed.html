@@ -1,0 +1,45 @@
+{% load humanize %}
+
+<h2><span class="glyphicon glyphicon-time" aria-hidden="true"></span>
+    Derniers changements</h2>
+
+{% for action in stream %}
+  <div class="row">
+    <div class="col-lg-1" style="font-size:180%;">
+      <img src="{{ action.actor.gravatar }}" class="user-avatar">
+    </div>
+    <div class="col-lg-11">
+      <p>
+        <strong>
+          {{ action.actor }} {{ action.verb }}
+        </strong>
+        {% if action.action_object %}
+            {% if action.action_object.get_absolute_url %}
+              <a href="{{ action.action_object.get_absolute_url }}">
+                {{ action.action_object }}
+              </a>
+            {% else %}
+              {{ action.action_object }}
+            {% endif %}
+        {% endif %}
+
+        {% if action.action_object and action.target %}dans{% endif %}
+
+        {% if action.target %}
+            {% if action.target.get_absolute_url %}
+              <a href="{{ action.target.get_absolute_url }}">{{ action.target }}</a>
+            {% else %}
+              <a href="{{ action.target_url }}">{{ action.target }}</a>
+            {% endif %}
+        {% endif %}
+        <br>
+        <span class="feed-timesince">
+          Il y a {{ action.timestamp|timesince }}
+        </span>
+      </p>
+    </div>
+  </div>
+  <hr>
+{% empty %}
+  <p>Il ne s'est encore rien passé.</p>
+{% endfor %}
