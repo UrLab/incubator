@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.views.generic.edit import DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.core.exceptions import PermissionDenied
+from django.views.decorators.cache import cache_page
 from django.http import JsonResponse
 from django.utils import timezone
 from influxdb import InfluxDBClient
@@ -95,6 +96,7 @@ def get_sensors(*sensors):
         return {k: next(v.get_points())['value'] for k, v in zip(sensors, r)}
 
 
+@cache_page(30)
 def spaceapi(request):
     client = get_redis()
     pam = make_pamela()
