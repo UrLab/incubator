@@ -1,6 +1,7 @@
 {% load staticfiles %}
 {% load activelink %}
 {% load bootstrap3 %}
+{% load analytical %}
 
 {% load sekizai_tags i18n wiki_tags %}
 
@@ -9,6 +10,7 @@
 <html class="no-js" lang="en" >
 
     <head>
+        {% analytical_head_top %}
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         {% render_block "css" %}
@@ -22,8 +24,10 @@
         <link href="{% static "css/style.css" %}" rel="stylesheet">
         <title>{% block title %}UrLab{% endblock %}</title>
         {% block head %}{% endblock %}
+        {% analytical_head_bottom %}
     </head>
     <body class="base-body">
+    {% analytical_body_top %}
     {% if request.user.is_authenticated and request.user.username == "SupayrPoney" %}
     <a href="http://www.reactivemanifesto.org/"> <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000" src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-red-right.png"> </a>
     {% endif %}
@@ -125,20 +129,6 @@
         </footer>
         {% render_block "js" %}
         <script src="{% static "js/navbar.js" %}"></script>
-        <!-- Piwik -->
-        <script type="text/javascript">
-          var _paq = _paq || [];
-          _paq.push(['trackPageView']);
-          _paq.push(['enableLinkTracking']);
-          (function() {
-            var u="//piwik.urlab.be/";
-            _paq.push(['setTrackerUrl', u+'piwik.php']);
-            _paq.push(['setSiteId', 2]);
-            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-            g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-          })();
-        </script>
-        <noscript><p><img src="//piwik.urlab.be/piwik.php?idsite=2" style="border:0;" alt="" /></p></noscript>
-        <!-- End Piwik Code -->
+    {% analytical_body_bottom %}
     </body>
 </html>
