@@ -151,6 +151,7 @@ def export_pad(request, pk):
         return HttpResponseForbidden("This meeting is already ongoing")
 
     meeting.set_pad_contents(meeting.OJ)
+    action.send(self.request.user, verb='a démarré', action_object=event)
     meeting.ongoing = True
     meeting.save()
     return HttpResponseRedirect(event.get_absolute_url())
@@ -164,6 +165,7 @@ def import_pad(request, pk):
         return HttpResponseForbidden("This is not a meeting")
 
     meeting.PV = meeting.get_pad_contents()
+    action.send(self.request.user, verb='a cloturé', action_object=event)
     meeting.save()
     return HttpResponseRedirect(event.get_absolute_url())
 
