@@ -20,7 +20,8 @@
             <a href="{% url "view_event" event.id %}">
               {{ event.title }}
             </a>
-            <a href="#event-{{event.id}}-description" data-toggle="collapse" class="collapsed">
+            <a href="#event-{{event.id}}-description" title="En savoir plus"
+               data-toggle="collapse" class="collapsed">
               <i class="fa fa-plus"></i>
             </a>
           </h4>
