@@ -91,3 +91,7 @@ body {
     font-weight: bolder;
     text-align: right;
 }
+
+.event-card [data-toggle="collapse"]{
+  color: grey;
+}

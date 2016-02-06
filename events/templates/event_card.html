@@ -16,11 +16,14 @@
         </a>
       </div>
       <div class="col-xs-10">
-        <a href="#event-{{event.id}}-description" data-toggle="collapse">
           <h4>
-            {{ event.title }}
+            <a href="{% url "view_event" event.id %}">
+              {{ event.title }}
+            </a>
+            <a href="#event-{{event.id}}-description" data-toggle="collapse" class="collapsed">
+              <i class="fa fa-plus"></i>
+            </a>
           </h4>
-        </a>
       </div>
     </div>
   </div>
