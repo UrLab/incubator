@@ -1,7 +1,7 @@
 {% load formatting %}
 
 <div class="panel panel-default event-card">
-  <div class="panel-heading">    
+  <div class="panel-heading">
     <div class="row">
       <div class="col-xs-2">
         <a href="{% url "view_event" event.id %}">
@@ -11,7 +11,6 @@
                src="/static/img/default-event.png">
           {% else %}
             <img class="event-pic-thumb"
-               alt="Image manquante"
                src="{{event.picture.url}}">
           {% endif %}
         </a>

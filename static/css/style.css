@@ -78,6 +78,9 @@ body {
 .event-card .event-pic-thumb {
     border-radius: 50%;
     height: 3em;
+    width: 3em;
+    object-fit: cover; /* Do not scale the image */
+    object-position: center; /* Center the image within the element */
     transition: border-radius 0.5s;
 }
 .event-card:hover .event-pic-thumb {
