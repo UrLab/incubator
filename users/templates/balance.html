@@ -2,109 +2,152 @@
 {% load bootstrap3 %}
 
 {% block title %}
-Ardoise
+    Ardoise
 {% endblock %}
 
 {% block "head" %}
-    {{ form.media  }}
+    {{ form.media }}
 {% endblock %}
 
 {% block content %}
 
-<ol class="breadcrumb">
-  <li><a href="/">UrLab</a></li>
-  <li>Membres</li>
-  <li><a href="{% url "profile" %}">{{user.username}}</a></li>
-  <li class="active">Ardoise</li>
-</ol>
+    <ol class="breadcrumb">
+        <li><a href="/">UrLab</a></li>
+        <li>Membres</li>
+        <li><a href="{% url "profile" %}">{{ user.username }}</a></li>
+        <li class="active">Ardoise</li>
+    </ol>
 
-<div class="page-header">
-  <h1>Votre ardoise <small>UBS© (UrLab banking system)</small></h1>
-</div>
-
-{% if request.user.balance < 0 %}
-<div class="alert alert-danger" role="alert">
-    Vous êtes actuellement en <strong>négatif</strong> de <strong>{{request.user.absolute_balance }}€</strong>. Pensez à recherger rapidement.
-</div>
-{% else %}
-<div class="alert alert-info" role="alert">
-    Vous avez actuellement <strong>{{request.user.balance }}€</strong> sur votre ardoise.
-</div>
-{% endif %}
-<div class="row">
-  <div class="col-md-6">
-    <h2>Liste de prix</h2>
-    {% regroup products by category as category_list %}
-    {% for category in category_list %}
-      <div class="panel panel-default">
-        <div class="panel-heading">{{category.grouper}}</div>
-        <table class="table">
-          <thead>
-              <tr>
-                <th class="col-md-3">Nom</th>
-                <th class="col-md-3">Prix</th>
-                <th class="col-md-3">Achat</th>
-              </tr>
-          </thead>
-          <tbody>
-            {% for product in category.list %}
-              <tr>
-                  <td class="col-md-3">{{product.name}}</td>
-                  <td class="col-md-3">{{product.price}}€</td>
-                  <td class="col-md-3">
-                   <form action="{% url "balance_spend" %}" method="post" class="form">
-                      {% csrf_token %}
-                      <input type="hidden" name="value" value="{{product.price}}">
-                          <button type="submit" class="btn btn-default btn-xs">
-                              Acheter {% bootstrap_icon "shopping-cart" %}
-                          </button>
-                    </form>
-                  </td>
-              </tr>
+    <div class="page-header">
+        <h1>Votre ardoise
+            <small>UBS© (UrLab banking system)</small>
+        </h1>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <h2>Liste de prix</h2>
+            {% regroup products by category as category_list %}
+            {% for category in category_list %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">{{ category.grouper }}</div>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th class="col-md-3">Nom</th>
+                            <th class="col-md-3">Prix</th>
+                            <th class="col-md-3">Achat</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in category.list %}
+                            <tr>
+                                <td class="col-md-3">{{ product.name }}</td>
+                                <td class="col-md-3">{{ product.price }}€</td>
+                                <td class="col-md-3">
+                                    <form action="{% url "balance_spend" %}" method="post" class="form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="value" value="{{ product.price }}">
+                                        <button type="submit" class="btn btn-default btn-xs">
+                                            Acheter {% bootstrap_icon "shopping-cart" %}
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    {% endfor %}
-  </div>
-  <div class="col-md-6">
-    <h2>Dépenser</h2>
-    {% if request.user.balance < -5 %}
-        <div class="alert alert-warning" role="alert">
-            Vous ne devriez pas dépenser alors que vous êtes en négatif.
         </div>
-    {% endif %}
-    <form class="form-inline" action="{% url "balance_spend" %}" method="post">
-      {% csrf_token %}
-      <div class="form-group">
-        <div class="input-group">
-            <input type="text" class="form-control" name="value" placeholder="Montant">
-            <div class="input-group-addon">€</div>
-        </div>
-      </div>
-      <button type="submit" class="btn btn-warning">
-        Dépenser
-      </button>
-    </form>
-    <h2>Verser</h2>
-    <p class="text-muted">Vous pouvez déponser directement l'argent dans la caisse.<br>
-    Pour des gros montants, faites un virement au <strong>{{account}}</strong></p>
-    <form class="form-inline" action="{% url "balance_top" %}" method="post">
-      {% csrf_token %}
-      <div class="form-group">
-        <div class="input-group">
-            <input type="text" class="form-control" name="value" placeholder="Montant">
-            <div class="input-group-addon">€</div>
-        </div>
-      </div>
-      <button type="submit" class="btn btn-success">
-        Verser
-      </button>
-    </form>
-  </div>
-</div>
+        <div class="col-md-5">
+            {% if request.user.is_authenticated %}
+                <p>
+                    {% if request.user == user %}
+                        {% if user.balance < 0 %}
+                            <div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-hand-right"
+                                                                               aria-hidden="true"></span><strong> Votre
+                                solde est négatif !</strong> Pensez à recharger au plus vite !
+                            </div>
+                        {% elif user.balance < 5 %}
+                            <div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-hand-right"
+                                                                                aria-hidden="true"></span><strong> Vous
+                                n'avez plus grand chose en stock :</strong> pensez à recharger :)
+                            </div>
+                        {% elif user.balance > 50 %}
+                            <div class="alert alert-success" role="alert"><span class="glyphicon glyphicon-thumbs-up"
+                                                                                aria-hidden="true"></span><strong> Wow
+                                !</strong> Ca en fait une somme ça !
+                            </div>
+                        {% endif %}
+                    {% endif %}
+            {% endif %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>
+                        <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span> Tirelire de
+                        {% if user.first_name or user.last_name %}
+                            {{ user.username }}<br>
+                        {% endif %}</h4>
+                </div>
+                <div class="panel-body">
+                    {% if user.balance < 0 %}
+                    <p class="text-danger">
+                        {%  else %}
+                        <p>
+                        {% endif %}
+                        <strong><span class="glyphicon glyphicon-euro" aria-hidden="true"></span> {{ user.balance }}
+                        </strong>
+                    </p>
+                </div>
+            </div>
 
-<pre class="text-muted">
+            <div class="panel panel-default">
+            <div class="panel-body">
+            <h3>Dépenser</h3>
+            {% if request.user.balance < -5 %}
+                <div class="alert alert-warning" role="alert">
+                    Vous ne devriez pas dépenser alors que vous êtes en négatif.
+                </div>
+            {% endif %}
+            <p>Le prix n'est pas dans la liste à gauche ?</p>
+            <form class="form-inline" action="{% url "balance_spend" %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="value" placeholder="Montant">
+                        <div class="input-group-addon">€</div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-warning">
+                    Dépenser
+                </button>
+            </form>
+            </div>
+            </div>
+            <div class="panel panel-default">
+            <div class="panel-body">
+            <h3>Verser</h3>
+            <p class="text-muted">Vous pouvez dépenser directement l'argent dans la caisse.<br>
+                Pour des gros montants, faites un virement au <strong>{{ account }}</strong></p>
+            <form class="form-inline" action="{% url "balance_top" %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="value" placeholder="Montant">
+                        <div class="input-group-addon">€</div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">
+                    Verser
+                </button>
+            </form>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <h2>Et en Cobol ?</h2>
+    <pre class="text-muted">
 000100 IDENTIFICATION DIVISION.
 000200 PROGRAM-ID.     URLABBANKINGSYSTEM.
 000300 AUTHOR. Asta
