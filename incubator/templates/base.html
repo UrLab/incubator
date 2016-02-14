@@ -58,16 +58,28 @@
                         <div class="collapse navbar-collapse" id="menuNavbar">
                             <ul class="nav navbar-nav">
                                 <li class="{% ifcontains "/projects/" %}active{% endifcontains %}">
-                                    <a href="{% url "projects_home" %}">Projets</a>
+                                    <a href="{% url "projects_home" %}">
+                                        <i class="fa fa-flask"></i>
+                                        Nos projets
+                                    </a>
                                 </li>
                                 <li class="{% ifcontains "/events/" %}active{% endifcontains %}">
-                                    <a href="{% url "events_home" %}">Evénements</a>
+                                    <a href="{% url "events_home" %}">
+                                        <i class="fa fa-calendar"></i>
+                                        Evénements
+                                    </a>
                                 </li>
                                 <li class="{% ifcontains "/wiki/" %}active{% endifcontains %}">
-                                    <a href="{% url "wiki:root" %}">Wiki</a>
+                                    <a href="{% url "wiki:root" %}">
+                                        <i class="fa fa-pencil-square-o"></i>
+                                        Wiki
+                                    </a>
                                 </li>
                                 <li class="{% ifcontains "/space/pamela" %}active{% endifcontains %}">
-                                    <a href="{% url "pamela_list" %}">Pamela</a>
+                                    <a href="{% url "pamela_list" %}">
+                                        <i class="fa fa-users"></i>
+                                        Pamela
+                                    </a>
                                 </li>
 
                             </ul>
