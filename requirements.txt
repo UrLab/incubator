@@ -19,3 +19,4 @@ django-filter
 ics
 django-activity-stream
 django-analytical
+django-jsonfield
