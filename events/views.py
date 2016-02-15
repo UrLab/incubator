@@ -14,6 +14,7 @@ from users.decorators import permission_required
 from users.mixins import PermissionRequiredMixin
 
 from space.decorators import private_api
+from realtime.helpers import send_message
 
 from .serializers import EventSerializer, MeetingSerializer, HackerAgendaEventSerializer, FullMeetingSerializer
 from .models import Event, Meeting
@@ -151,6 +152,9 @@ def export_pad(request, pk):
         return HttpResponseForbidden("This meeting is already ongoing")
 
     meeting.set_pad_contents(meeting.OJ)
+    send_message(key="meeting.start",
+                 message="On lance la réunion ! Pad: {url}",
+                 url=meeting.pad)
     meeting.ongoing = True
     meeting.save()
     return HttpResponseRedirect(event.get_absolute_url())
@@ -164,6 +168,7 @@ def import_pad(request, pk):
         return HttpResponseForbidden("This is not a meeting")
 
     meeting.PV = meeting.get_pad_contents()
+    action.send(request.user, verb='a cloturé', action_object=event)
     meeting.save()
     return HttpResponseRedirect(event.get_absolute_url())
 

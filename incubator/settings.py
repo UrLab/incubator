@@ -49,6 +49,8 @@ INSTALLED_APPS = (
     'rest_framework',
     'django_filters',
     'crispy_forms',
+    'analytical',
+
     'incubator',
     'events',
     'users',
@@ -197,6 +199,9 @@ WIKI_ATTACHMENTS_EXTENSIONS = (
     'tar',
     'gz',
 )
+
+PIWIK_DOMAIN_PATH = 'piwik.urlab.be'
+PIWIK_SITE_ID = '2'
 
 try:
     from incubator.local_settings import *

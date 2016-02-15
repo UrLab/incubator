@@ -19,7 +19,7 @@ from stock.models import Product
 def balance(request):
     return render(request, 'balance.html', {
         'account': settings.BANK_ACCOUNT,
-        'products': Product.objects.order_by('category'),
+        'products': Product.objects.order_by('category','name'),
     })
 
 

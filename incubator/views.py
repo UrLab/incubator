@@ -5,6 +5,7 @@ from users.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.flatpages.models import FlatPage
 from django.shortcuts import render
+from actstream.models import Action
 
 from space.djredis import get_redis, space_is_open
 from events.models import Event
@@ -12,16 +13,23 @@ from events.models import Event
 
 def error_view(code, msg=""):
     def view(request):
-        return render(request, "error.html", {'code': code, 'message': msg})
+        response = render(request, "error.html", {'code': code, 'message': msg})
+        response.status_code = code
+        return response
     return view
 
 
 def home(request):
     client = get_redis()
+    stream = []
+    if request.user.is_authenticated():
+        stream = Action.objects.filter(public=True).prefetch_related('target', 'actor', 'action_object')[:20]
+
     return render(request, "home.html", {
         "space_open": space_is_open(client),
         "message": FlatPage.objects.filter(url="/message/").first(),
         "events": Event.objects.filter(stop__gt=datetime.now(), status__exact="r"),
+        "stream": stream,
     })
 
 

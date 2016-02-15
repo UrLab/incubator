@@ -8,73 +8,70 @@ PAMELA
 {% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <h1>Pamela
-        <small>
-            a Payload for Anti-Matter Exploration and Light-nuclei Astrophysics
-        </small>
-    </h1>
-</div>
 
-<div class="row">
-    <div class="col-md-8">
-        {% if space_open %}
-            <div class="alert alert-success" role="alert">
-                Le Hackerspace est ouvert depuis {{status_change.time|timesince}}. Venez nous dire bonjour !
-            </div>
-        {% else %}
-            <div class="alert alert-danger" role="alert">
-                Le Hackerspace est fermé depuis {{status_change.time|timesince}}.
-            </div>
-        {% endif %}
-        <div id="pamela"></div>
-    </div>
-    <div class="col-md-4">
-        <p>P.A.M.E.L.A. est l'interface permettant de voir qui est actuellement connecté sur le réseau du Hackerspace.</p>
-        <h3>Ajoutez votre machine</h3>
-        <p>Tapez ceci dans un terminal pour avoir une liste de vos MAC adress : </p>
-        <pre>ip addr show</pre>
-        {% if request.user.is_authenticated %}
-            <p>Et ajoutez votre machine à Pamela : </p>
-            <form action="{% url "pamela_list" %}" method="post" class="form">
-                {% csrf_token %}
-                {% bootstrap_form form %}
-                {% buttons %}
-                <button type="submit" class="btn btn-info">Ajouter à Pamela</button>
-                {% if user.hide_pamela %}
-                    <abbr title="Vous n'apparaissez actuellement pas sur ce site lorsque vous êtes sur le réseau de UrLab.">
-                        <a href="{% url "show_pamela" %}" class="btn btn-primary pull-right">
-                                Apparaître
-                        </a>
-                    </abbr></td>
-                {% else %}
-                    <abbr title="Votre pseudonyme apparaît sur ce site lorsque vous êtes sur le réseau de UrLab.">
-                        <a href="{% url "hide_pamela" %}" class="btn btn-warning pull-right">
-                            Disparaître
-                        </a>
-                    </abbr>
-                {% endif %}
-                {% endbuttons %}
-            </form>
-            <p class="text-muted"><small>
-                * En donnant votre adresse MAC©, vous acceptez l'enregistrement de l'association entre votre pseudonyme et l'adresse matérielle de votre ordinateur sur le serveur de UrLab©. Cette information ne sera utilisée que pour afficher votre nom sur cette page. Si vous ne souhaitez pas communiquer cette information, seuls les deux derniers bytes de cette adresse sont affichés sur cette page<sup>Patent pending</sup>.
-            </small></p>
-        {% else %}
-            Connectez-vous pour pouvoir ajouter votre adresse à Pamela
-        {% endif %}
-    </div>
-</div>
+    <ol class="breadcrumb" xmlns="http://www.w3.org/1999/html">
+        <li><a href="/">UrLab</a></li>
+        <li class="active">Pamela</li>
+    </ol>
 
-<style>
-#pamela {font-size: 150%;}
-#pamela .user-avatar {
-    width: 1.5em;
-    height: 1.5em;
-    border-radius: .75em;
-}
-#pamela .user-entry {padding-top: .5em;}
-#pamela .user-list {list-style: none;}
-</style>
+    <div class="page-header">
+        <h1>Pamela
+            <small>
+                a Payload for Anti-Matter Exploration and Light-nuclei Astrophysics
+            </small>
+        </h1>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <p>P.A.M.E.L.A. est l'interface permettant de voir qui est actuellement connecté sur le réseau du
+                Hackerspace.
+                Ci dessous les gens actuellements présents :</p>
+
+            <div id="pamela"></div>
+        </div>
+        <div class="col-md-4">
+            {% if space_open %}
+                <div class="alert alert-success" role="alert">
+                    Le Hackerspace est ouvert depuis {{ status_change.time|timesince }}. Venez nous dire bonjour !
+                </div>
+            {% else %}
+                <div class="alert alert-danger" role="alert">
+                    Le Hackerspace est fermé depuis {{ status_change.time|timesince }}.
+                </div>
+            {% endif %}
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3>Ajoutez votre machine</h3></div>
+                <div class="panel-body">
+                    <p>Tapez ceci dans un terminal pour avoir une liste de vos MAC adress : </p>
+                    <pre>ip addr show</pre>
+                    {% if request.user.is_authenticated %}
+                        <p>Et ajoutez votre machine à Pamela : </p>
+                        <div>
+                            <form action="{% url "pamela_list" %}" method="post" class="form">
+                                {% csrf_token %}
+                                {% bootstrap_form form %}
+                                {% buttons %}
+                                    <button type="submit" class="btn btn-info pull-right">Ajouter à Pamela</button>
+                                {% endbuttons %}
+                            </form>
+                        </div>
+                        <p class="text-muted">
+                            <small>
+                                * En donnant votre adresse MAC©, vous acceptez l'enregistrement de l'association entre
+                                votre pseudonyme et l'adresse matérielle de votre ordinateur sur le serveur de UrLab©.
+                                Cette information ne sera utilisée que pour afficher votre nom sur cette page. Si vous
+                                ne souhaitez pas communiquer cette information, seuls les deux derniers bytes de cette
+                                adresse sont affichés sur cette page<sup>Patent pending</sup>.
+                            </small>
+                        </p>
+                    {% else %}
+                        Connectez-vous pour pouvoir ajouter votre adresse à Pamela
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
 <script src="{% static "js/react.min.js" %}"></script>
 <script src="{% static "js/react-dom.min.js" %}"></script>
 <script src="{% static "js/babel.min.js" %}"></script>

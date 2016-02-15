@@ -18,6 +18,7 @@ django-crispy-forms
 django-filter
 django-activity-stream
 ics
+django-analytical
 
 matplotlib
 pandas

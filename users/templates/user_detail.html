@@ -2,135 +2,152 @@
 {% load formatting %}
 
 {% block title %}
-Profil de {{user.username}}
+    Profil de {{user.username}}
 {% endblock %}
 
 {% block content %}
 
-<ol class="breadcrumb">
-  <li><a href="/">UrLab</a></li>
-  <li>Membres</li>
-  <li class="active">{{user.username}}</li>
-</ol>
+    <ol class="breadcrumb">
+        <li><a href="/">UrLab</a></li>
+        <li>Membres</li>
+        <li class="active">{{user.username}}</li>
+    </ol>
 
 
-<div class="page-header">
-  <h1>
-    {{user.username}}
-    {% if request.user.is_authenticated %}
-        {% if user.first_name or user.last_name %}
-            <small>({{user.first_name}} {{user.last_name}})</small>
-        {% endif %}
-    {% endif %}
-    {% if request.user == user %}
-        <a href="{% url 'user_edit' %}" class="btn btn-default">
-            <span class="fa fa-edit" aria-hidden="true"></span>
-            Editer
-        </a>
-    {% endif %}
-  </h1>
-</div>
+    <div class="page-header">
+        <h1>
+            {{user.username}}
+            {% if request.user == user %}
+                <a href="{% url 'user_edit' %}" class="btn btn-default pull-right">
+                    <span class="fa fa-edit" aria-hidden="true"></span>
+                    Editer
+                </a>
+            {% endif %}
+        </h1>
+    </div>
 
-<div class="row">
-  <div class="col-md-8">
-    <p>
-        <h3>{%if request.user == user %}Vous maintenez{% else %}{{user.username}} maintient{% endif %} les projets suivants:</h3>
-        {% for project in user.maintained_projects.all %}
-        <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
-        {% endfor %}
-    </p>
-    <p>
-        <h3>{%if request.user == user %}Vous participez{% else %}{{user.username}} participe{% endif %} aux projets suivants:</h3>
-        {% for project in user.project_set.all %}
-        <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
-        {% empty %}
-        {%if request.user == user %}
-        Vous ne participez a aucun projet :'(</br>
-        <a href="{% url 'projects_home' %}">Venez vous inscrire a l'un ou l'autre.</a>
-        {% endif %}
-        {% endfor %}
-    </p>
-  </div>
-  <div class="col-md-4">
-    {% if request.user.is_authenticated %}
-    <p>
-        {% if request.user == user %}
-            {% if user.balance < 0 %}
-            <div class="alert alert-danger" role="alert"><strong>Votre solde est négatif !</strong> Ne dépensez plus et rechargez vite !</div>
-            {% elif user.balance < 5 %}
-            <div class="alert alert-warning" role="alert"><strong>Vous n'avez plus grand chose en stock :</strong> pensez à recharger :)</div>
-            {% elif user.balance > 50 %}
-            <div class="alert alert-success" role="alert"><strong>Wow !</strong> Ca en fait une somme ça !</div>
-            {% endif %}
-        {% endif %}
-        <strong>Email :</strong> {{user.email}}<br>
-        <strong>Ardoise :</strong> {{user.balance}}€
-        {% if request.user == user %}
-            <a href="{% url 'change_balance' %}" class="btn btn-info btn-xs">Mettre à jour</a><br>
-        {% endif %}
-    </p>
-    {% endif %}
-    <p>
-        {% if request.user == user %}
-            {% if user.has_key %}
-            <span class="fa fa-key" aria-hidden="true"></span> Vous avez une clé.
-            {% else %}
-            <span class="fa fa-key" aria-hidden="true"></span> Vous n'avez pas de clé. Vous pouvez en demander une lors d'une réunion.
-            {% endif %}
-            <br>
-            <h4>Vos adresses MAC</h4>
-            <table class="table table-condensed">
-            {% if user.hide_pamela %}
-                <tr>
-                    <td>Vous êtes caché sur <a href="{% url "pamela_list" %}">P.A.M.E.L.A</a></td>
-                    <td><abbr title="Vous n'apparaissez actuellement pas sur ce site lorsque vous êtes sur le réseau de UrLab.">
-                        <a href="{% url "show_pamela" %}" class="btn btn-primary">
-                            Apparaître
-                        </a>
-                    </abbr></td>
-                    <td></td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td>Vous apparaissez sur <a href="{% url "pamela_list" %}">P.A.M.E.L.A</a></td>
-                    <td><abbr title="Votre pseudonyme apparaît sur ce site lorsque vous êtes sur le réseau de UrLab.">
-                        <a href="{% url "hide_pamela" %}" class="btn btn-warning">
-                            Disparaître
-                        </a>
-                    </abbr></td>
-                    <td></td>
-                </tr>
-            {% endif %}
-            {% for mac in user.macadress_set.all %}
-                <tr>
-                    <td>{{mac.machine_name}}</td>
-                    <td>{{mac.adress}}</td>
-                    <td>
-                        <form method="POST" action="{% url "delete_mac" mac.id %}">
-                           {% csrf_token %}
-                           <button type="submit" class="btn btn-danger btn-xs">
-                            <i class="fa fa-times"></i>
-                           </button>
-                        </form>
-                    </td>
-                </tr>
-            {% empty %}
-                <tr><td colspan="3">Vous n'avez aucune MAC Adress enregistrée</td></tr>
+    <div class="row">
+        <div class="col-md-8">
+            <p>
+            <h3>{%if request.user == user %}Vous maintenez{% else %}{{user.username}} maintient{% endif %} les projets suivants:</h3>
+            {% for project in user.maintained_projects.all %}
+                <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
             {% endfor %}
-                <tr>
-                    <td colspan="2">Ajouter une nouvelle MAC</td>
-                    <td>
-                        <a href="{% url "pamela_list" %}" class="btn btn-success btn-xs">
-                            <i class="fa fa-plus"></i>
-                        </a>
-                    </td>
-                </tr>
-            </table>
-        {% elif user.has_key %}
-        <span class="fa fa-key" aria-hidden="true"></span> {{user}} a une clé.
-        {% endif %}
-    </p>
-  </div>
-</div>
+            </p>
+            <p>
+            <h3>{%if request.user == user %}Vous participez{% else %}{{user.username}} participe{% endif %} aux projets suivants:</h3>
+            {% for project in user.project_set.all %}
+                <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
+            {% empty %}
+                {%if request.user == user %}
+                    Vous ne participez a aucun projet :'(</br>
+                    <a href="{% url 'projects_home' %}">Venez vous inscrire a l'un ou l'autre.</a>
+                {% endif %}
+            {% endfor %}
+            </p>
+        </div>
+        <div class="col-md-4">
+            {% if request.user.is_authenticated %}
+                <p>
+                    {% if request.user == user %}
+                        {% if user.balance < 0 %}
+                            <div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span><strong> Votre solde est négatif !</strong> Rechargez au plus vite !</div>
+                        {% elif user.balance < 5 %}
+                            <div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-hand-right" aria-hidden="true"></span><strong> Vous n'avez plus grand chose en stock :</strong> pensez à recharger :)</div>
+                        {% elif user.balance > 50 %}
+                            <div class="alert alert-success" role="alert"><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span><strong> Wow !</strong> Ca en fait une somme ça !</div>
+                        {% endif %}
+                    {% endif %}
+            {% endif %}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    {% if request.user.is_authenticated %}
+                        {% if user.first_name or user.last_name %}
+                            <strong>Nom :</strong> {{user.first_name}} {{user.last_name}}<br>
+                        {% endif %}
+                        <strong>Email :</strong> {{user.email}}<br>
+                        <strong>Ardoise :</strong> {{user.balance}}€
+                        {% if request.user == user %}
+                            <a href="{% url 'change_balance' %}" class="btn btn-info btn-xs">Mettre à jour</a><br>
+                        {% endif %}
+                    {% endif %}
+                    </p>
+                    <p>
+                    <hr>
+                    {% if request.user == user %}
+                        {% if user.has_key %}
+                            <span class="fa fa-key" aria-hidden="true"></span> Vous avez une clé.
+                        {% else %}
+                            <span class="fa fa-key" aria-hidden="true"></span> Vous n'avez pas de clé. Vous pouvez en demander une lors d'une réunion.
+                        {% endif %}
+                        <br>
+                        </p>
+                        </div>
+                        </div>
+                        <div class="panel panel-default">
+                        <div class="panel-body">
+                        <p>
+                        <h4>P.A.M.E.L.A.</h4>
+                        <table class="table table-condensed">
+                            {% if user.hide_pamela %}
+                                <tr>
+                                    <td>Vous êtes caché</td>
+                                    <td><abbr title="Vous n'apparaissez actuellement pas sur ce site lorsque vous êtes sur le réseau de UrLab.">
+                                        <a href="{% url "show_pamela" %}" class="btn btn-primary pull-right">
+                                            Apparaître
+                                        </a>
+                                    </abbr></td>
+                                    <td></td>
+                                </tr>
+                                <tr><td></td><td></td><td></td></tr>
+                            {% else %}
+                                <tr>
+                                    <td>Vous êtes visible</td>
+                                    <td><abbr title="Votre pseudonyme apparaît sur ce site lorsque vous êtes sur le réseau de UrLab.">
+                                        <a href="{% url "hide_pamela" %}" class="btn btn-warning pull-right">
+                                            Disparaître
+                                        </a>
+                                    </abbr></td>
+                                    <td></td>
+                                </tr>
+                                <tr><td></td><td></td><td></td></tr>
+                            {% endif %}
+                        </table>
+                        <h4>Vos adresses MAC</h4>
+                        <table class="table table-condensed">
+
+                            {% for mac in user.macadress_set.all %}
+                                <tr>
+                                    <td>{{mac.machine_name}}</td>
+                                    <td>{{mac.adress}}</td>
+                                    <td>
+                                        <form method="POST" action="{% url "delete_mac" mac.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger btn-xs">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% empty %}
+                                <tr><td colspan="3">Vous n'avez aucune MAC Adress enregistrée</td></tr>
+                            {% endfor %}
+                            <tr>
+                                <td colspan="2">Ajouter une nouvelle MAC</td>
+                                <td>
+                                    <a href="{% url "pamela_list" %}" class="btn btn-success btn-xs">
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    {% elif user.has_key %}
+                        <span class="fa fa-key" aria-hidden="true"></span> {{user}} a une clé.
+                    {% endif %}
+                    </p>
+                    </div>
+                    </div>
+        </div>
+    </div>
 
 {% endblock %}
