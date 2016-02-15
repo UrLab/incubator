@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from django.shortcuts import render
 from django.contrib import messages
@@ -195,36 +195,74 @@ def get_openings_df(freq='H', **filter_args):
     df.index = df.time
 
     # Reindex on a monotonic hourly time index
-    index = pd.date_range(start=df.time.min(), end=df.time.max(), freq='H')
+    index = pd.date_range(start=df.time.min(), end=df.time.max(), freq=freq)
     return df.reindex(index, method='pad')
 
 
-def openings(request):
-    query = {}
-    if 'from' in request.GET:
-        query['time__gte'] = request.GET['from']
-    if 'to' in request.GET:
-        query['time__lte'] = request.GET['to']
+def human_time(options):
+    days_names = ["Lundi", "Mardi", "Mercredi",
+                  "Jeudi", "Vendredi", "Samedi", "Dimanche"]
+    res = "Ouverture de UrLab: "
+    if 'weeks' in options:
+        res += "{} dernières semaines".format(options['weeks'])
+    else:
+        res += "{} - {}".format(options['from'], options['to'])
+    if 'weekday' in options:
+        res += " ({})".format(days_names[int(options['weekday'])])
+    return res
 
-    df = get_openings_df(**query)
+
+def openings(request):
+    opts = {k: request.GET[k] for k in request.GET}
+
+    # Create openings data query for requested time frame
+    query = {}
+    if 'weeks' in opts:
+        delta = timedelta(days=7*int(opts['weeks']))
+        query['time__gte'] = (datetime.now() - delta).strftime('%Y-%m-%d')
+    else:
+        if 'from' in opts:
+            query['time__gte'] = opts['from']
+        if 'to' in opts:
+            query['time__lte'] = opts['to']
+
+    # Get openings data and filter by weekday
+    df = get_openings_df(freq='H', **query)
+    if 'weekday_django' in opts:
+        # Yes...  django: 0 == sunday; pandas: 0 == monday
+        opts['weekday'] = (int(opts['weekday_django']) - 1) % 7
+    if 'weekday' in opts:
+        df = df[df.index.weekday == int(opts['weekday'])]
+
+    # Init plot
+    width = int(opts.get('width', 12))
+    height = int(opts.get('height', 8))
+    plt.figure(figsize=(width, height))
 
     # Group by hour and plot as image
     probs = 100*df.groupby(df.index.time).is_open.mean()
     img = np.repeat([probs], 5, axis=0)
-    plt.imshow(img, cmap=plt.cm.RdYlGn, interpolation='none', vmin=0, vmax=100)
+    cax = plt.imshow(img, cmap=plt.cm.RdYlGn, interpolation='none',
+                     vmin=0, vmax=100)
+    ticks = [0, 25, 50, 75, 100]
+    cbar = plt.colorbar(cax, ticks=ticks)
+    cbar.ax.set_yticklabels(['{}%'.format(t) for t in ticks])
 
-    # Put nice ticks, title, etc...
+    # Ticks && grid
     ticks = np.arange(0, 24, 2)
     plt.xticks(ticks - 0.5, ["%dh" % x for x in ticks])
     plt.yticks([])
     plt.grid()
-    f = tuple(x.strftime("%d/%m/%Y") for x in [df.time.min(), df.time.max()])
-    plt.title("Proportion d'ouverture de UrLab %s - %s" % f)
-    plt.colorbar()
+
+    # Title
+    opts['from'] = df.time.min().strftime("%d/%m/%Y")
+    opts['to'] = df.time.max().strftime("%d/%m/%Y")
+    plt.title(human_time(opts))
 
     # Wrap everything in a django response and clear matplotlib context
     response = HttpResponse(content_type="image/png")
-    plt.savefig(response, format='png')
+    plt.savefig(response, format='png', facecolor=(0, 0, 0, 0),
+                edgecolor='none', bbox_inches='tight', pad_inches=0)
     plt.clf()
     return response
 
