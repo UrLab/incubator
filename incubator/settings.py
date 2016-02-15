@@ -66,6 +66,7 @@ INSTALLED_APPS = (
     'wiki.plugins.notifications',
     'wiki.plugins.images',
     'wiki.plugins.macros',
+    'django_extensions',
     'realtime',
     'actstream',
 )
