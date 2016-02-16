@@ -16,6 +16,10 @@ django-resized
 requests
 django-crispy-forms
 django-filter
-ics
 django-activity-stream
+ics
 django-analytical
+
+matplotlib
+pandas
+django-pandas
