@@ -14,7 +14,7 @@ class EmailAdmin(admin.ModelAdmin):
     search_fields = ('subject', 'content', )
     readonly_fields = ('sent', 'approvers', 'markdown_content')
 
-    actions = ['approve', "send_email"]
+    actions = ['approve', "send_email", "send_test_email"]
 
     def get_approvers(self, obj):
         return ", ".join([u.username for u in obj.approvers.all()])
@@ -64,5 +64,29 @@ class EmailAdmin(admin.ModelAdmin):
         email.save()
 
         self.message_user(request, "L'email a été énvoyé.")
+    send_email.short_description = "Envoyer cet email A TOUT LE MONDE"
 
-    send_email.short_description = "Envoyer cet email"
+
+    def send_test_email(self, request, queryset):
+        if not queryset.count() == 1:
+            self.message_user(request, message="Vous ne devez séléctionner qu'un email à envoyer", level=messages.ERROR)
+            return
+
+        email = queryset.first()
+
+        if email.sent:
+            self.message_user(request, message="Cet email a déjà été envoyé", level=messages.ERROR)
+            return
+
+        message = EmailMultiAlternatives(
+            subject=email.subject,
+            body=email.content,
+            from_email='contact@urlab.be',
+            to=["contact-test@urlab.be"],
+            bcc=[request.user.email],
+        )
+        message.attach_alternative(email.markdown_content(), "text/html")
+        message.send()
+
+        self.message_user(request, "L'email a été énvoyé à votre adresse")
+    send_test_email.short_description = "Envoyer cet email A MOI UNIQUEMENT"
