@@ -163,6 +163,7 @@ MESSAGE_TAGS = {
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('incubator.drf.ReadOnlyPermission',),
     'DEFAULT_PAGINATION_CLASS': 'incubator.drf.AnachistPageNumberPagination',
+    'UNICODE_JSON': False,
 }
 
 # no tailing slash
