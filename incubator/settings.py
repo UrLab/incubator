@@ -69,6 +69,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'realtime',
     'actstream',
+    'redir',
 )
 
 MIDDLEWARE_CLASSES = (
