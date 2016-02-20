@@ -69,6 +69,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'realtime',
     'actstream',
+    'manmail',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -203,6 +204,8 @@ WIKI_ATTACHMENTS_EXTENSIONS = (
 
 PIWIK_DOMAIN_PATH = 'piwik.urlab.be'
 PIWIK_SITE_ID = '2'
+
+MINIMAL_MAIL_APPROVERS = 3
 
 try:
     from incubator.local_settings import *
