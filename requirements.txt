@@ -16,7 +16,14 @@ django-resized
 requests
 django-crispy-forms
 django-filter
-ics
 django-activity-stream
+ics
 django-analytical
+<<<<<<< HEAD
 django-jsonfield
+=======
+
+matplotlib
+pandas
+django-pandas
+>>>>>>> master
