@@ -49,3 +49,4 @@ def feed_reducer(stream):
 
     # We merge every group and sort again by reversed time
     sorted_smaller_stream = sorted(smaller_stream, key=lambda x: x.timestamp, reverse=True)
+    return sorted_smaller_stream
