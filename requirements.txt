@@ -19,11 +19,7 @@ django-filter
 django-activity-stream
 ics
 django-analytical
-<<<<<<< HEAD
 django-jsonfield
-=======
-
 matplotlib
 pandas
 django-pandas
->>>>>>> master
