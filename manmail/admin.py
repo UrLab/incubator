@@ -48,7 +48,7 @@ class EmailAdmin(admin.ModelAdmin):
             self.message_user(request, message="Ce message n'a pas assez d'approbateurs", level=messages.ERROR)
             return
 
-        recipients = list(map(lambda x: x.email, User.objects.all()))
+        recipients = [u.email for u in User.objects.filter(newsletter=True)]
 
         message = EmailMultiAlternatives(
             subject=email.subject,
