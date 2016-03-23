@@ -66,8 +66,10 @@ INSTALLED_APPS = (
     'wiki.plugins.notifications',
     'wiki.plugins.images',
     'wiki.plugins.macros',
+    'django_extensions',
     'realtime',
     'actstream',
+    'manmail',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -161,6 +163,7 @@ MESSAGE_TAGS = {
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('incubator.drf.ReadOnlyPermission',),
     'DEFAULT_PAGINATION_CLASS': 'incubator.drf.AnachistPageNumberPagination',
+    'UNICODE_JSON': False,
 }
 
 # no tailing slash
@@ -201,6 +204,8 @@ WIKI_ATTACHMENTS_EXTENSIONS = (
 
 PIWIK_DOMAIN_PATH = 'piwik.urlab.be'
 PIWIK_SITE_ID = '2'
+
+MINIMAL_MAIL_APPROVERS = 3
 
 try:
     from incubator.local_settings import *

@@ -59,7 +59,7 @@ class UserAdmin(admin.ModelAdmin):
     groups.allow_tags = True
     groups.short_description = u'Membre des groupes'
 
-    list_display = ('username', 'balance', 'email', 'has_key', 'is_superuser', 'created', 'groups')
+    list_display = ('username', 'balance', 'email', 'has_key', 'is_superuser', 'newsletter', 'created', 'groups')
     list_filter = (BalanceListFilter, 'has_key', 'is_superuser', 'created', 'last_login')
     search_fields = ('username', 'email', 'first_name', 'last_name')
 
@@ -68,7 +68,12 @@ class UserAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': (('username', 'email'), ('first_name', 'last_name'), ('has_key', 'hide_pamela'), 'balance')
+            'fields': (
+                ('username', 'email'),
+                ('first_name', 'last_name'),
+                ('has_key', 'hide_pamela', 'newsletter'),
+                'balance'
+            )
         }),
         (None, {
             'fields': ('password', 'last_login')

@@ -130,6 +130,11 @@
                 <h4>Téléphone
                     <small>02/650.49.67</small>
                 </h4>
+                <h3>Probabilités d'ouverture<br>
+                    <small>6 dernières semaines</small></h3>
+                <p></p>
+                <img src="{% url "openings_graph" %}?weeks=6&width=9&height=3&weekday_django={% now 'w' %}"
+                     alt="Ouverture" style="width: 100%" />
             </div>
         </div>
 
