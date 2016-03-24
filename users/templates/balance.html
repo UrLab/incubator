@@ -100,10 +100,24 @@
                     </p>
                 </div>
             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4><span class="glyphicon glyphicon-credit-card" aria-hidden="true"></span>
+                        Urlab Bank</h4>
+                </div>
+                <div class="panel-body">
+                    <strong>Nom :</strong> Cerkinfo ASBL<br>
+                    <strong>IBAN :</strong> {{ account }}<br>
+                    <strong>BIC :</strong> GEBABEBB
+                </div>
+            </div>
 
             <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                    Dépenser</h4>
+            </div>
             <div class="panel-body">
-            <h3>Dépenser</h3>
             {% if request.user.balance < -5 %}
                 <div class="alert alert-warning" role="alert">
                     Vous ne devriez pas dépenser alors que vous êtes en négatif.
@@ -125,10 +139,13 @@
             </div>
             </div>
             <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4><span class="glyphicon glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+                    Verser</h4>
+            </div>
             <div class="panel-body">
-            <h3>Verser</h3>
             <p class="text-muted">Vous pouvez dépenser directement l'argent dans la caisse.<br>
-                Pour des gros montants, faites un virement au <strong>{{ account }}</strong></p>
+                Pour des gros montants, prière de faire <strong>un virement</strong></p>
             <form class="form-inline" action="{% url "balance_top" %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
