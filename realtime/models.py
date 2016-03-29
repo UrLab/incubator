@@ -22,13 +22,17 @@ def action_save_handler(sender, created, instance, **kwargs):
             url=settings.ROOT_URL + instance.target.get_absolute_url()
         )
     else:
+        if instance.action_object:
+            urltosend = settings.ROOT_URL + instance.action_object.get_absolute_url()
+        else:
+            urltosend = settings.ROOT_URL
         send_message(
             key=type(instance.action_object).__name__ + "." + instance.verb,
             message="{user} {verb} «{action_object}» ({url})",
             user=instance.actor,
             verb=instance.verb,
             action_object=instance.action_object,
-            url=settings.ROOT_URL + instance.action_object.get_absolute_url()
+            url=urltosend
         )
 
 

@@ -8,6 +8,7 @@ from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.conf import settings
+from actstream import action
 
 from .serializers import UserSerializer
 from .models import User
@@ -31,8 +32,10 @@ def spend(request):
             post['value'] = post['value'].replace(',', '.')
         form = BalanceForm(post)
         if form.is_valid():
-            request.user.balance -= form.cleaned_data['value']
-            messages.success(request, 'Vous avez bien dépensé {}€'.format(form.cleaned_data['value']))
+            sumchanged = form.cleaned_data['value']
+            request.user.balance -= sumchanged
+            action.send(request.user, verb='a depensé {}€'.format(sumchanged), public=False)
+            messages.success(request, 'Vous avez bien dépensé {}€'.format(sumchanged))
             request.user.save()
     return HttpResponseRedirect(reverse('change_balance'))
 
@@ -45,8 +48,10 @@ def top(request):
             post['value'] = post['value'].replace(',', '.')
         form = BalanceForm(post)
         if form.is_valid():
-            request.user.balance += form.cleaned_data['value']
-            messages.success(request, 'Vous avez bien rechargé {}€'.format(form.cleaned_data['value']))
+            sumchanged = form.cleaned_data['value']
+            request.user.balance += sumchanged
+            action.send(request.user, verb='a versé {}€'.format(sumchanged), public=False)
+            messages.success(request, 'Vous avez bien rechargé {}€'.format(sumchanged))
             request.user.save()
     return HttpResponseRedirect(reverse('change_balance'))
 
