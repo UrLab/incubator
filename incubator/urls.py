@@ -30,6 +30,7 @@ urlpatterns = patterns(
     url(r'^api/', include('incubator.apiurls')),
     (r'^notifications/', get_nyt_pattern()),
     url(r'^wiki/', get_wiki_pattern()),
+    url(r'^r/(?P<short_name>.+)', 'redir.views.short_url', name='redirection'),
 )
 
 if settings.DEBUG:

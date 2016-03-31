@@ -70,6 +70,7 @@ INSTALLED_APPS = (
     'realtime',
     'actstream',
     'manmail',
+    'redir',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -5,6 +5,8 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
 from django.contrib.auth.models import Group
+from django.core.urlresolvers import reverse
+
 
 from incubator.models import ASBLYear
 
@@ -89,6 +91,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         gravatar_url = "//www.gravatar.com/avatar/" + hashlib.md5(mail).hexdigest() + "?d=wavatar"
 
         return gravatar_url
+
+    def get_absolute_url(self):
+        return reverse('user_profile', args=[self.username])
 
 
 class Membership(models.Model):

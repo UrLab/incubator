@@ -3,6 +3,8 @@ media/
 ve/
 collected_static/
 
+# IDE
+.idea
 
 
 # Byte-compiled / optimized / DLL files

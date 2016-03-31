@@ -1,12 +1,15 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
+{% load static %}
 
 {% block title %}
     Ardoise
 {% endblock %}
 
-{% block "head" %}
-    {{ form.media }}
+{% block head %}
+    {{ form.media  }}
+    <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static "js/bootstrap-multiselect.js" %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -46,7 +49,8 @@
                                 <td class="col-md-3">
                                     <form action="{% url "balance_spend" %}" method="post" class="form">
                                         {% csrf_token %}
-                                        <input type="hidden" name="value" value="{{ product.price }}">
+                                        <input type="hidden" name="name" id="id_name" value="{{ product.name }}">
+                                        <input type="hidden" name="value" id="id_value=" value="{{ product.price }}">
                                         <button type="submit" class="btn btn-default btn-xs">
                                             Acheter {% bootstrap_icon "shopping-cart" %}
                                         </button>
@@ -91,12 +95,12 @@
                 </div>
                 <div class="panel-body">
                     {% if user.balance < 0 %}
-                    <p class="text-danger">
-                        {%  else %}
+                        <p class="text-danger">
+                            {%  else %}
                         <p>
-                        {% endif %}
-                        <strong><span class="glyphicon glyphicon-euro" aria-hidden="true"></span> {{ user.balance }}
-                        </strong>
+                    {% endif %}
+                    <strong><span class="glyphicon glyphicon-euro" aria-hidden="true"></span> {{ user.balance }}
+                    </strong>
                     </p>
                 </div>
             </div>
@@ -111,54 +115,81 @@
                     <strong>BIC :</strong> GEBABEBB
                 </div>
             </div>
-
             <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-                    Dépenser</h4>
-            </div>
-            <div class="panel-body">
-            {% if request.user.balance < -5 %}
-                <div class="alert alert-warning" role="alert">
-                    Vous ne devriez pas dépenser alors que vous êtes en négatif.
+                <div class="panel-heading">
+                    <h4><span class="glyphicon glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                        Transférer</h4>
                 </div>
-            {% endif %}
-            <p>Le prix n'est pas dans la liste à gauche ?</p>
-            <form class="form-inline" action="{% url "balance_spend" %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="value" placeholder="Montant">
-                        <div class="input-group-addon">€</div>
-                    </div>
+                <div class="panel-body">
+                    <p class="text-muted">Vous pouvez directement envoyer de l'argent à votre ami.</p>
+                    <form class="form-inline" action="{% url "balance_transfer" %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                {% bootstrap_field transferForm.recipient show_label=False %}
+                            </div>
+                            <br>
+                                {% bootstrap_field transferForm.value show_label=False addon_after='€' %}
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-info">
+                            Verser
+                        </button>
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-warning">
-                    Dépenser
-                </button>
-            </form>
-            </div>
             </div>
             <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4><span class="glyphicon glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
-                    Verser</h4>
-            </div>
-            <div class="panel-body">
-            <p class="text-muted">Vous pouvez dépenser directement l'argent dans la caisse.<br>
-                Pour des gros montants, prière de faire <strong>un virement</strong></p>
-            <form class="form-inline" action="{% url "balance_top" %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="value" placeholder="Montant">
-                        <div class="input-group-addon">€</div>
-                    </div>
+                <div class="panel-heading">
+                    <h4><span class="glyphicon glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+                        Verser</h4>
                 </div>
-                <button type="submit" class="btn btn-success">
-                    Verser
-                </button>
-            </form>
+                <div class="panel-body">
+                    <p class="text-muted">Vous pouvez déposer directement l'argent dans la caisse.<br>
+                        Pour des gros montants, merci de faire <strong>un virement</strong> :-)</p>
+                    <form class="form-inline" action="{% url "balance_top" %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                {% bootstrap_field topForm.location show_label=False %}
+                            </div> <br>
+                            <div class="input-group">
+                                {% bootstrap_field topForm.value show_label=False addon_after='€' %}
+                            </div>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-success">
+                            Verser
+                        </button>
+                    </form>
+                </div>
             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                        Dépenser</h4>
+                </div>
+                <div class="panel-body">
+                    {% if request.user.balance < -5 %}
+                        <div class="alert alert-warning" role="alert">
+                            Vous ne devriez pas dépenser alors que vous êtes en négatif.
+                        </div>
+                    {% endif %}
+                    <p>Le prix n'est pas dans la liste à gauche ?</p>
+                    <form class="form-inline" action="{% url "balance_spend" %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                {% bootstrap_field spendForm.name show_label=False %}
+                            </div>
+                            <div class="input-group">
+                                {% bootstrap_field spendForm.value show_label=False addon_after='€' %}
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-warning">
+                            Dépenser
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -187,5 +218,16 @@
 100700 MAIN-LOGIC-EXIT.
 100800     EXIT.
 </pre>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#id_recipient').multiselect({
+            enableFiltering: true,
+            filterBehavior: 'text',
+            buttonWidth: '17.5em',
+            enableCaseInsensitiveFiltering: true,
+        });
+    });
+</script>
 
 {% endblock %}
