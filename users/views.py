@@ -9,6 +9,9 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.conf import settings
 from actstream import action
+from actstream.models import Action
+from space.djredis import get_redis, space_is_open
+
 
 from .serializers import UserSerializer
 from .models import User
@@ -125,6 +128,32 @@ def hide_pamela(request):
     return HttpResponseRedirect(reverse('profile'))
 
 
+def userdetail(request):
+    client = get_redis()
+    streampubtosend = []
+    streamprivtosend = []
+    STREAM_SIZE = 100
+    streamPublic = Action.objects.filter(public=True).prefetch_related('target', 'actor', 'action_object')[:STREAM_SIZE]
+    streamPrivate = Action.objects.filter(public=False).prefetch_related('target', 'actor', 'action_object')[:STREAM_SIZE]
+    i = 0
+    for a in streamPublic:
+        if a.actor == request.user:
+            streampubtosend.append(a)
+            i+=1
+            if i==5:
+                break
+    i = 0
+    for a in streamPrivate:
+        if a.actor == request.user:
+            streamprivtosend.append(a)
+            i+=1
+            if i==5:
+                break
+    return render(request, 'user_detail.html', {
+        'stream_pub': streampubtosend,
+        'stream_priv': streamprivtosend,
+    })
+
 class UserEditView(UpdateView):
     form_class = UserForm
     template_name = 'user_form.html'
@@ -139,7 +168,6 @@ class UserDetailView(DetailView):
     template_name = 'user_detail.html'
     context_object_name = 'user'
     slug_field = "username"
-
 
 class CurrentUserDetailView(UserDetailView):
     def get_object(self):
