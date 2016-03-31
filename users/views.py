@@ -33,10 +33,14 @@ def spend(request):
         form = BalanceForm(post)
         if form.is_valid():
             sumchanged = form.cleaned_data['value']
+            name = form.cleaned_data['name']
             request.user.balance -= sumchanged
-            action.send(request.user, verb='a depensé {}€'.format(sumchanged), public=False)
-            messages.success(request, 'Vous avez bien dépensé {}€'.format(sumchanged))
+            action.send(request.user, verb='a depensé {}€ pour le produit {}'.format(sumchanged, name), public=False)
+            messages.success(request, 'Vous avez bien dépensé {}€ ({})'.format(sumchanged, name))
             request.user.save()
+        else:
+            print(form.errors)
+            print(form.non_field_errors)
     return HttpResponseRedirect(reverse('change_balance'))
 
 
@@ -49,9 +53,10 @@ def top(request):
         form = BalanceForm(post)
         if form.is_valid():
             sumchanged = form.cleaned_data['value']
+            name = form.cleaned_data['name']
             request.user.balance += sumchanged
-            action.send(request.user, verb='a versé {}€'.format(sumchanged), public=False)
-            messages.success(request, 'Vous avez bien rechargé {}€'.format(sumchanged))
+            action.send(request.user, verb='a versé {}€ pour la raison {}'.format(sumchanged, name), public=False)
+            messages.success(request, 'Vous avez bien rechargé {}€ ({})'.format(sumchanged,name))
             request.user.save()
     return HttpResponseRedirect(reverse('change_balance'))
 

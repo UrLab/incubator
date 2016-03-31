@@ -46,7 +46,8 @@
                                 <td class="col-md-3">
                                     <form action="{% url "balance_spend" %}" method="post" class="form">
                                         {% csrf_token %}
-                                        <input type="hidden" name="value" value="{{ product.price }}">
+                                        <input type="hidden" name="name" id="id_name" value="{{ product.name }}">
+                                        <input type="hidden" name="value" id="id_value=" value="{{ product.price }}">
                                         <button type="submit" class="btn btn-default btn-xs">
                                             Acheter {% bootstrap_icon "shopping-cart" %}
                                         </button>
@@ -128,7 +129,9 @@
                 {% csrf_token %}
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="value" placeholder="Montant">
+                        <input type="text" class="form-control" name="name" placeholder="Nom du produit" required>
+                    </div><div class="input-group">
+                        <input type="text" class="form-control" name="value" placeholder="Montant" required>
                         <div class="input-group-addon">€</div>
                     </div>
                 </div>
@@ -150,10 +153,19 @@
                 {% csrf_token %}
                 <div class="form-group">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="value" placeholder="Montant">
+                        <label class="radio-inline">
+                          <input type="radio" name="name" id="id_name1" value="Caisse" checked> Caisse
+                        </label>
+                        <label class="radio-inline">
+                          <input type="radio" name="name" id="id_name2" value="Virement"> Virement
+                        </label>
+                        </div> <br>
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="value" placeholder="Montant" required>
                         <div class="input-group-addon">€</div>
                     </div>
                 </div>
+                <br>
                 <button type="submit" class="btn btn-success">
                     Verser
                 </button>

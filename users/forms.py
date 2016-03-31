@@ -6,7 +6,15 @@ from .models import User
 
 
 class BalanceForm(forms.Form):
-    value = forms.DecimalField(max_digits=6, decimal_places=2)
+    name = forms.CharField(
+        label = "name",
+        max_length=100
+    )
+    value = forms.DecimalField(
+        label = "value",
+        max_digits=6,
+        decimal_places=2
+    )
 
 
 class UserForm(forms.ModelForm):
