@@ -19,7 +19,7 @@ django-filter
 django-activity-stream
 ics
 django-analytical
-
+django-jsonfield
 matplotlib
 pandas
 django-pandas
