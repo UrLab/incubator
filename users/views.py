@@ -72,14 +72,16 @@ def transfer(request):
             sumchanged = form.cleaned_data['value']
             name = form.cleaned_data['name']
             otheruser = User.objects.get(username=name)
-            if otheruser != request.user:
+            if otheruser != request.user and sumchanged>0:
                 request.user.balance -= sumchanged
                 otheruser.balance += sumchanged
                 action.send(request.user, verb='a transféré {}€ à {}'.format(sumchanged, name), public=False)
                 messages.success(request, 'Vous avez bien transféré {}€ à {}'.format(sumchanged,name))
                 request.user.save()
                 otheruser.save()
-            else:
+            elif sumchanged <=0:
+                messages.error(request, "Vous ne pouvez pas transférer une somme négative")
+            elif otheruser != request.user:
                 messages.error(request, "Vous ne pouvez pas vous transférer de l'argent à vous même")
     return HttpResponseRedirect(reverse('change_balance'))
 
