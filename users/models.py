@@ -62,6 +62,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     has_key = models.BooleanField(default=False, verbose_name="possède une clé")
 
     hide_pamela = models.BooleanField(default=False, verbose_name='caché sur pamela')
+    newsletter = models.BooleanField(default=True, verbose_name='abonné à la newsletter')
 
     def get_short_name(self):
         return self.username
