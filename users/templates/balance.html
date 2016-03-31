@@ -92,12 +92,12 @@
                 </div>
                 <div class="panel-body">
                     {% if user.balance < 0 %}
-                    <p class="text-danger">
-                        {%  else %}
+                        <p class="text-danger">
+                            {%  else %}
                         <p>
-                        {% endif %}
-                        <strong><span class="glyphicon glyphicon-euro" aria-hidden="true"></span> {{ user.balance }}
-                        </strong>
+                    {% endif %}
+                    <strong><span class="glyphicon glyphicon-euro" aria-hidden="true"></span> {{ user.balance }}
+                    </strong>
                     </p>
                 </div>
             </div>
@@ -112,65 +112,94 @@
                     <strong>BIC :</strong> GEBABEBB
                 </div>
             </div>
-
             <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-                    Dépenser</h4>
-            </div>
-            <div class="panel-body">
-            {% if request.user.balance < -5 %}
-                <div class="alert alert-warning" role="alert">
-                    Vous ne devriez pas dépenser alors que vous êtes en négatif.
+                <div class="panel-heading">
+                    <h4><span class="glyphicon glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
+                        Transférer</h4>
                 </div>
-            {% endif %}
-            <p>Le prix n'est pas dans la liste à gauche ?</p>
-            <form class="form-inline" action="{% url "balance_spend" %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="name" placeholder="Nom du produit" required>
-                    </div><div class="input-group">
-                        <input type="text" class="form-control" name="value" placeholder="Montant" required>
-                        <div class="input-group-addon">€</div>
-                    </div>
+                <div class="panel-body">
+                    <p class="text-muted">Vous pouvez directement envoyer de l'argent à votre ami.</p>
+                    <form class="form-inline" action="{% url "balance_transfer" %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                <select type="text" class="form-control" name="name" id="id_name">
+                                    {% for u in userslist %}
+                                        <option>{{ u.username }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="value" placeholder="Montant" required>
+                                <div class="input-group-addon">€</div>
+                            </div>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-info">
+                            Verser
+                        </button>
+                    </form>
                 </div>
-                <button type="submit" class="btn btn-warning">
-                    Dépenser
-                </button>
-            </form>
-            </div>
             </div>
             <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4><span class="glyphicon glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
-                    Verser</h4>
-            </div>
-            <div class="panel-body">
-            <p class="text-muted">Vous pouvez dépenser directement l'argent dans la caisse.<br>
-                Pour des gros montants, prière de faire <strong>un virement</strong></p>
-            <form class="form-inline" action="{% url "balance_top" %}" method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <div class="input-group">
-                        <label class="radio-inline">
-                          <input type="radio" name="name" id="id_name1" value="Caisse" checked> Caisse
-                        </label>
-                        <label class="radio-inline">
-                          <input type="radio" name="name" id="id_name2" value="Virement"> Virement
-                        </label>
-                        </div> <br>
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="value" placeholder="Montant" required>
-                        <div class="input-group-addon">€</div>
-                    </div>
+                <div class="panel-heading">
+                    <h4><span class="glyphicon glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+                        Verser</h4>
                 </div>
-                <br>
-                <button type="submit" class="btn btn-success">
-                    Verser
-                </button>
-            </form>
+                <div class="panel-body">
+                    <p class="text-muted">Vous pouvez dépenser directement l'argent dans la caisse.<br>
+                        Pour des gros montants, prière de faire <strong>un virement</strong></p>
+                    <form class="form-inline" action="{% url "balance_top" %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                <label class="radio-inline">
+                                    <input type="radio" name="name" id="id_name1" value="Caisse" checked> Caisse
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="name" id="id_name2" value="Virement"> Virement
+                                </label>
+                            </div> <br>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="value" placeholder="Montant" required>
+                                <div class="input-group-addon">€</div>
+                            </div>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-success">
+                            Verser
+                        </button>
+                    </form>
+                </div>
             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4><span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                        Dépenser</h4>
+                </div>
+                <div class="panel-body">
+                    {% if request.user.balance < -5 %}
+                        <div class="alert alert-warning" role="alert">
+                            Vous ne devriez pas dépenser alors que vous êtes en négatif.
+                        </div>
+                    {% endif %}
+                    <p>Le prix n'est pas dans la liste à gauche ?</p>
+                    <form class="form-inline" action="{% url "balance_spend" %}" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="name" placeholder="Nom du produit" required>
+                            </div><div class="input-group">
+                            <input type="text" class="form-control" name="value" placeholder="Montant" required>
+                            <div class="input-group-addon">€</div>
+                        </div>
+                        </div>
+                        <button type="submit" class="btn btn-warning">
+                            Dépenser
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

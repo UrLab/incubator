@@ -21,6 +21,7 @@ def balance(request):
     return render(request, 'balance.html', {
         'account': settings.BANK_ACCOUNT,
         'products': Product.objects.order_by('category','name'),
+        'userslist' : User.objects.all(),
     })
 
 
@@ -58,6 +59,28 @@ def top(request):
             action.send(request.user, verb='a versé {}€ pour la raison {}'.format(sumchanged, name), public=False)
             messages.success(request, 'Vous avez bien rechargé {}€ ({})'.format(sumchanged,name))
             request.user.save()
+    return HttpResponseRedirect(reverse('change_balance'))
+
+@permission_required('users.change_balance')
+def transfer(request):
+    if request.method == 'POST':
+        post = request.POST.copy()
+        if 'value' in post:
+            post['value'] = post['value'].replace(',', '.')
+        form = BalanceForm(post)
+        if form.is_valid():
+            sumchanged = form.cleaned_data['value']
+            name = form.cleaned_data['name']
+            otheruser = User.objects.get(username=name)
+            if otheruser != request.user:
+                request.user.balance -= sumchanged
+                otheruser.balance += sumchanged
+                action.send(request.user, verb='a transféré {}€ à {}'.format(sumchanged, name), public=False)
+                messages.success(request, 'Vous avez bien transféré {}€ à {}'.format(sumchanged,name))
+                request.user.save()
+                otheruser.save()
+            else:
+                messages.error(request, "Vous ne pouvez pas vous transférer de l'argent à vous même")
     return HttpResponseRedirect(reverse('change_balance'))
 
 
