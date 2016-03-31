@@ -97,8 +97,9 @@ def transfer(request):
 
                 action.send(
                     request.user,
-                    verb='a transféré {}€ à {}'.format(sumchanged, otheruser.username),
-                    public=False
+                    verb='a transféré {}€'.format(sumchanged),
+                    target=otheruser,
+                    public=False,
                 )
                 messages.success(
                     request,
