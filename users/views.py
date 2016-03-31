@@ -12,7 +12,7 @@ from actstream import action
 
 from .serializers import UserSerializer
 from .models import User
-from .forms import UserForm, BalanceForm
+from .forms import UserForm, SpendForm, TopForm, TransferForm
 from .decorators import permission_required
 from stock.models import Product
 
@@ -21,7 +21,9 @@ def balance(request):
     return render(request, 'balance.html', {
         'account': settings.BANK_ACCOUNT,
         'products': Product.objects.order_by('category','name'),
-        'userslist' : User.objects.all(),
+        'topForm': TopForm(),
+        'spendForm': SpendForm(),
+        'transferForm': TransferForm(),
     })
 
 
@@ -31,17 +33,23 @@ def spend(request):
         post = request.POST.copy()
         if 'value' in post:
             post['value'] = post['value'].replace(',', '.')
-        form = BalanceForm(post)
+
+        form = SpendForm(post)
         if form.is_valid():
             sumchanged = form.cleaned_data['value']
             name = form.cleaned_data['name']
             request.user.balance -= sumchanged
-            action.send(request.user, verb='a depensé {}€ pour le produit {}'.format(sumchanged, name), public=False)
-            messages.success(request, 'Vous avez bien dépensé {}€ ({})'.format(sumchanged, name))
             request.user.save()
+
+            action.send(
+                request.user,
+                verb='a depensé {}€ pour le produit {}'.format(sumchanged, name),
+                public=False
+            )
+            messages.success(request, 'Vous avez bien dépensé {}€ ({})'.format(sumchanged, name))
         else:
-            print(form.errors)
-            print(form.non_field_errors)
+            messages.error(request, "Erreur, votre dépense n'a pas été enregistrée")
+
     return HttpResponseRedirect(reverse('change_balance'))
 
 
@@ -51,14 +59,23 @@ def top(request):
         post = request.POST.copy()
         if 'value' in post:
             post['value'] = post['value'].replace(',', '.')
-        form = BalanceForm(post)
+
+        form = TopForm(post)
         if form.is_valid():
             sumchanged = form.cleaned_data['value']
-            name = form.cleaned_data['name']
             request.user.balance += sumchanged
-            action.send(request.user, verb='a versé {}€ pour la raison {}'.format(sumchanged, name), public=False)
-            messages.success(request, 'Vous avez bien rechargé {}€ ({})'.format(sumchanged,name))
             request.user.save()
+
+            top_type = form.cleaned_data['location']
+            action.send(
+                request.user,
+                verb='a versé {}€ en {}'.format(sumchanged, top_type),
+                public=False
+            )
+            messages.success(request, 'Vous avez bien rechargé {}€ ({})'.format(sumchanged, top_type))
+        else:
+            messages.error(request, "Erreur, votre recharge n'a pas été enregistrée")
+
     return HttpResponseRedirect(reverse('change_balance'))
 
 @permission_required('users.change_balance')
@@ -67,22 +84,31 @@ def transfer(request):
         post = request.POST.copy()
         if 'value' in post:
             post['value'] = post['value'].replace(',', '.')
-        form = BalanceForm(post)
+
+        form = TransferForm(post)
         if form.is_valid():
             sumchanged = form.cleaned_data['value']
-            name = form.cleaned_data['name']
-            otheruser = User.objects.get(username=name)
-            if otheruser != request.user and sumchanged>0:
+            otheruser = form.cleaned_data['recipient']
+            if otheruser != request.user:
                 request.user.balance -= sumchanged
                 otheruser.balance += sumchanged
-                action.send(request.user, verb='a transféré {}€ à {}'.format(sumchanged, name), public=False)
-                messages.success(request, 'Vous avez bien transféré {}€ à {}'.format(sumchanged,name))
                 request.user.save()
                 otheruser.save()
-            elif sumchanged <=0:
-                messages.error(request, "Vous ne pouvez pas transférer une somme négative")
-            elif otheruser != request.user:
+
+                action.send(
+                    request.user,
+                    verb='a transféré {}€ à {}'.format(sumchanged, otheruser.username),
+                    public=False
+                )
+                messages.success(
+                    request,
+                    'Vous avez bien transféré {}€ à {}'.format(sumchanged,otheruser.username)
+                )
+            else:
                 messages.error(request, "Vous ne pouvez pas vous transférer de l'argent à vous même")
+        else:
+            messages.error(request, "Erreur, votre transfert n'a pas été enregistré")
+
     return HttpResponseRedirect(reverse('change_balance'))
 
 

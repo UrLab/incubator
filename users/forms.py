@@ -6,15 +6,35 @@ from .models import User
 
 
 class BalanceForm(forms.Form):
-    name = forms.CharField(
-        label = "name",
-        max_length=100
-    )
     value = forms.DecimalField(
-        label = "value",
+        label = "Montant",
         max_digits=6,
-        decimal_places=2
+        decimal_places=2,
+        min_value=0,
+        max_value=500
     )
+
+class TopForm(BalanceForm):
+    location = forms.ChoiceField(
+        choices=[
+            ('BANK', "Virement"),
+            ('CASH', "Caisse"),
+        ],
+        widget=forms.RadioSelect,
+    )
+
+class SpendForm(BalanceForm):
+    name = forms.CharField(
+        max_length=100,
+        label="Nom du produit",
+    )
+
+class TransferForm(BalanceForm):
+    recipient = forms.ModelChoiceField(
+        queryset=User.objects.order_by('username'),
+        empty_label="Bénéficiaire",
+    )
+
 
 
 class UserForm(forms.ModelForm):

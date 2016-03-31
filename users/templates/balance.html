@@ -1,12 +1,15 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
+{% load static %}
 
 {% block title %}
     Ardoise
 {% endblock %}
 
-{% block "head" %}
-    {{ form.media }}
+{% block head %}
+    {{ form.media  }}
+    <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static "js/bootstrap-multiselect.js" %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -123,17 +126,10 @@
                         {% csrf_token %}
                         <div class="form-group">
                             <div class="input-group">
-                                <select type="text" class="form-control" name="name" id="id_name">
-                                    {% for u in userslist %}
-                                        <option>{{ u.username }}</option>
-                                    {% endfor %}
-                                </select>
+                                {% bootstrap_field transferForm.recipient show_label=False %}
                             </div>
                             <br>
-                            <div class="input-group">
-                                <input type="text" class="form-control" name="value" placeholder="Montant" required>
-                                <div class="input-group-addon">€</div>
-                            </div>
+                                {% bootstrap_field transferForm.value show_label=False addon_after='€' %}
                         </div>
                         <br>
                         <button type="submit" class="btn btn-info">
@@ -154,16 +150,10 @@
                         {% csrf_token %}
                         <div class="form-group">
                             <div class="input-group">
-                                <label class="radio-inline">
-                                    <input type="radio" name="name" id="id_name1" value="Caisse" checked> Caisse
-                                </label>
-                                <label class="radio-inline">
-                                    <input type="radio" name="name" id="id_name2" value="Virement"> Virement
-                                </label>
+                                {% bootstrap_field topForm.location show_label=False %}
                             </div> <br>
                             <div class="input-group">
-                                <input type="text" class="form-control" name="value" placeholder="Montant" required>
-                                <div class="input-group-addon">€</div>
+                                {% bootstrap_field topForm.value show_label=False addon_after='€' %}
                             </div>
                         </div>
                         <br>
@@ -189,11 +179,11 @@
                         {% csrf_token %}
                         <div class="form-group">
                             <div class="input-group">
-                                <input type="text" class="form-control" name="name" placeholder="Nom du produit" required>
-                            </div><div class="input-group">
-                            <input type="text" class="form-control" name="value" placeholder="Montant" required>
-                            <div class="input-group-addon">€</div>
-                        </div>
+                                {% bootstrap_field spendForm.name show_label=False %}
+                            </div>
+                            <div class="input-group">
+                                {% bootstrap_field spendForm.value show_label=False addon_after='€' %}
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-warning">
                             Dépenser
@@ -228,5 +218,16 @@
 100700 MAIN-LOGIC-EXIT.
 100800     EXIT.
 </pre>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#id_recipient').multiselect({
+            enableFiltering: true,
+            filterBehavior: 'text',
+            buttonWidth: '17.5em',
+            enableCaseInsensitiveFiltering: true,
+        });
+    });
+</script>
 
 {% endblock %}
