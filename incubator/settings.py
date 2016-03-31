@@ -203,6 +203,10 @@ WIKI_ATTACHMENTS_EXTENSIONS = (
     'gz',
 )
 
+ACTSTREAM_SETTINGS = {
+    'USE_JSONFIELD': True
+}
+
 PIWIK_DOMAIN_PATH = 'piwik.urlab.be'
 PIWIK_SITE_ID = '2'
 

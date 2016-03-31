@@ -8,7 +8,8 @@ from wiki.models import ArticleRevision
 
 @receiver(post_save, sender=Action)
 def action_save_handler(sender, created, instance, **kwargs):
-    if not created:
+    is_quiet = instance.data is not None and instance.data.get('quiet', False)
+    if not created or is_quiet:
         return
 
     if instance.target:
