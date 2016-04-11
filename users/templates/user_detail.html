@@ -28,14 +28,17 @@
 
     <div class="row">
         <div class="col-md-8">
+            <h2><span class="glyphicon glyphicon-briefcase" aria-hidden="true"></span> Projets</h2>
+            {% if user.maintained_projects.all|length > 0 %}
+                <p>
+                <h3>{%if request.user == user %}Vous maintenez{% else %}{{user.username}} maintient{% endif %}</h3>
+                {% for project in user.maintained_projects.all %}
+                    <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
+                {% endfor %}
+                </p>
+            {% endif %}
             <p>
-            <h3>{%if request.user == user %}Vous maintenez{% else %}{{user.username}} maintient{% endif %} les projets suivants:</h3>
-            {% for project in user.maintained_projects.all %}
-                <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
-            {% endfor %}
-            </p>
-            <p>
-            <h3>{%if request.user == user %}Vous participez{% else %}{{user.username}} participe{% endif %} aux projets suivants:</h3>
+            <h3>{%if request.user == user %}Vous participez{% else %}{{user.username}} participe{% endif %}</h3>
             {% for project in user.project_set.all %}
                 <b><a href="{% url 'view_project' project.id %}">{{project.title}}</a></b> - {{project.short_description}}</br>
             {% empty %}
@@ -45,6 +48,56 @@
                 {% endif %}
             {% endfor %}
             </p>
+            <h2><span class="glyphicon glyphicon-time" aria-hidden="true"></span> Historique récent</h2>
+            {% for action in stream_pub %}
+                <p>{{ user.username }} {{ action.verb }}
+                    {% if action.action_object %}
+                        {% if action.action_object.get_absolute_url %}
+                            <a href="{{ action.action_object.get_absolute_url }}">
+                                {{ action.action_object }}
+                            </a>
+                        {% else %}
+                            {{ action.action_object }}
+                        {% endif %}
+                    {% endif %}
+                    {% if action.action_object and action.target %}dans{% endif %}
+
+                    {% if action.target %}
+                        {% if action.target.get_absolute_url %}
+                            <a href="{{ action.target.get_absolute_url }}">{{ action.target }}</a>
+                        {% else %}
+                            <a href="{{ action.target_url }}">{{ action.target }}</a>
+                        {% endif %}
+                    {% endif %}
+                    <small>( {{ action.timestamp|timesince }} )</small>
+                </p>
+            {% endfor %}
+            {%if request.user == user %}
+                <h2><span class="glyphicon glyphicon-euro" aria-hidden="true"></span> Transactions récentes <small>(Privé)</small></h2>
+                {% for action in stream_priv %}
+                    <p>{{ user.username }} {{ action.verb }}
+                        {% if action.action_object %}
+                            {% if action.action_object.get_absolute_url %}
+                                <a href="{{ action.action_object.get_absolute_url }}">
+                                    {{ action.action_object }}
+                                </a>
+                            {% else %}
+                                {{ action.action_object }}
+                            {% endif %}
+                        {% endif %}
+                        {% if action.action_object and action.target %}dans{% endif %}
+
+                        {% if action.target %}
+                            {% if action.target.get_absolute_url %}
+                                <a href="{{ action.target.get_absolute_url }}">{{ action.target }}</a>
+                            {% else %}
+                                <a href="{{ action.target_url }}">{{ action.target }}</a>
+                            {% endif %}
+                        {% endif %}
+                        <small>( {{ action.timestamp|timesince }} )</small>
+                    </p>
+                {% endfor %}
+            {% endif %}
         </div>
         <div class="col-md-4">
             {% if request.user.is_authenticated %}

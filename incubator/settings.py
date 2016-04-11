@@ -70,6 +70,7 @@ INSTALLED_APPS = (
     'realtime',
     'actstream',
     'manmail',
+    'redir',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -201,6 +202,10 @@ WIKI_ATTACHMENTS_EXTENSIONS = (
     'tar',
     'gz',
 )
+
+ACTSTREAM_SETTINGS = {
+    'USE_JSONFIELD': True
+}
 
 PIWIK_DOMAIN_PATH = 'piwik.urlab.be'
 PIWIK_SITE_ID = '2'
