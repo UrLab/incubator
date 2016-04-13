@@ -1,4 +1,4 @@
-Django>=1.8,<1.9
+Django>=1.9,<1.10
 pytest-django
 django-extensions
 ipython
@@ -16,7 +16,7 @@ django-resized
 requests
 django-crispy-forms
 django-filter
-django-activity-stream
+django-activity-stream>=0.6.1
 ics
 django-analytical
 django-jsonfield
