@@ -21,5 +21,5 @@ urlpatterns = patterns(
     url(r'^interested/(?P<pk>[0-9]+)$', login_required(interested), name='interested_event'),
 
     # Private API
-    url(r'^add_point_to_next_meeting', add_point_to_next_meeting, name='add_point_to_next_meeting'),
+    url(r'^add_point_to_next_meeting$', add_point_to_next_meeting, name='add_point_to_next_meeting'),
 )
