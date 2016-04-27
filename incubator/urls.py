@@ -17,10 +17,10 @@ urlpatterns = patterns(
     url(r'^accounts/', include('users.urls')),
     url(r'^space/', include('space.urls')),
 
-    url(r'^sm', 'events.views.sm'),
-    url(r'^linux', 'events.views.linux'),
-    url(r'^git', 'events.views.git'),
-    url(r'^ag', 'events.views.ag'),
+    url(r'^sm$', 'events.views.sm'),
+    url(r'^linux$', 'events.views.linux'),
+    url(r'^git$', 'events.views.git'),
+    url(r'^ag$', 'events.views.ag'),
 
 
     url(r'^admin/', include(admin.site.urls)),
@@ -30,7 +30,7 @@ urlpatterns = patterns(
     url(r'^api/', include('incubator.apiurls')),
     (r'^notifications/', get_nyt_pattern()),
     url(r'^wiki/', get_wiki_pattern()),
-    url(r'^r/(?P<short_name>.+)', 'redir.views.short_url', name='redirection'),
+    url(r'^r/(?P<short_name>[^/]+)/?$', 'redir.views.short_url', name='redirection'),
 )
 
 if settings.DEBUG:
