@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 # from django.core.urlresolvers import reverse
 # from django.http import HttpResponseRedirect
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.views.generic.detail import DetailView
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse
@@ -11,6 +11,7 @@ from django.conf import settings
 from actstream import action
 from actstream.models import Action
 from space.djredis import get_redis, space_is_open
+from space.decorators import private_api
 
 
 from .serializers import UserSerializer
@@ -27,6 +28,30 @@ def balance(request):
         'topForm': TopForm(),
         'spendForm': SpendForm(),
         'transferForm': TransferForm(),
+    })
+
+
+@private_api(user_qrcode=str, product_barcode=str, quantity=int)
+def buy_product_with_stock_handler(request, user_qrcode, product_barcode):
+    prod = get_object_or_404(Product, barcode=product_barcode)
+    user = get_object_or_404(User, qrcode=user_qrcode)
+    user.balance -= prod.price
+    user.save()
+    action.send(
+        user,
+        verb="a acheté {} pour {}€".format(prod.name, prod.price),
+        public=False
+    )
+    return HttpResponse("ok")
+
+
+def product_infos(request, product_barcode):
+    # => {'price', 'name'}
+    prod = get_object_or_404(Product, barcode=product_barcode)
+    return JsonResponse({
+        'name': prod.name,
+        'category': prod.category.name,
+        'price': prod.price,
     })
 
 

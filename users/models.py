@@ -59,6 +59,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     edited = models.DateTimeField(auto_now=True)
     first_name = models.CharField(max_length=127, blank=True)
     last_name = models.CharField(max_length=127, blank=True)
+    qrcode = models.TextField(default="", verbose_name='QR Code de la carte de membre')
 
     balance = models.DecimalField(max_digits=6, decimal_places=2, default=0, verbose_name="ardoise")
     has_key = models.BooleanField(default=False, verbose_name="possède une clé")
