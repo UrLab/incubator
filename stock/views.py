@@ -24,7 +24,7 @@ def product_infos(request, product_barcode):
     return JsonResponse({
         'name': prod.name,
         'category': prod.category.name,
-        'price': prod.price,
+        'price': float(prod.price),
     })
 
 

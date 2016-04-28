@@ -3,9 +3,10 @@ from django.http.response import Http404
 from space.models import PrivateAPIKey
 from users.models import User
 from stock.models import Product, Category
-from stock.views import buy_product_with_stock_handler
+from stock.views import buy_product_with_stock_handler, product_infos
 
 import pytest
+import json
 
 
 def fib(n, x1=0, x2=1):
@@ -79,3 +80,13 @@ def test_zero_quantity(rf, secret):
                            'quantity': 0})
     response = buy_product_with_stock_handler(request)
     assert type(response) == HttpResponseBadRequest
+
+
+@pytest.mark.django_db
+def test_product_info(rf, secret):
+    request = rf.get('')
+    response = product_infos(request, PRODUCT_BARCODE)
+    data = json.loads(response.content.decode())
+    assert data['price'] == 4.2
+    assert data['name'] == 'product'
+    assert data['category'] == 'category'
