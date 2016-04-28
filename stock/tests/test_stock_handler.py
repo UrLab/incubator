@@ -3,7 +3,7 @@ from django.http.response import Http404
 from space.models import PrivateAPIKey
 from users.models import User
 from stock.models import Product, Category
-from users.views import buy_product_with_stock_handler
+from stock.views import buy_product_with_stock_handler
 
 import pytest
 
