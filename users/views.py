@@ -7,6 +7,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.conf import settings
 from actstream import action
 from actstream.models import Action
 from space.djredis import get_redis
