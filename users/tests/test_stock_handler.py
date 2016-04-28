@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from space.models import PrivateAPIKey
 from users.models import User
 from stock.models import Product, Category
@@ -31,10 +31,30 @@ def secret():
 
 
 @pytest.mark.django_db
-def test_buy_product_with_stock_handler(rf, secret):
+def test_buy_product(rf, secret):
     request = rf.post('', {'secret': secret,
                            'user_qrcode': USER_QR,
                            'product_barcode': PRODUCT_BARCODE,
                            'quantity': 1})
     response = buy_product_with_stock_handler(request)
     assert type(response) == HttpResponse
+
+
+@pytest.mark.django_db
+def test_negative_quantity(rf, secret):
+    request = rf.post('', {'secret': secret,
+                           'user_qrcode': USER_QR,
+                           'product_barcode': PRODUCT_BARCODE,
+                           'quantity': -1})
+    response = buy_product_with_stock_handler(request)
+    assert type(response) == HttpResponseBadRequest
+
+
+@pytest.mark.django_db
+def test_zero_quantity(rf, secret):
+    request = rf.post('', {'secret': secret,
+                           'user_qrcode': USER_QR,
+                           'product_barcode': PRODUCT_BARCODE,
+                           'quantity': 0})
+    response = buy_product_with_stock_handler(request)
+    assert type(response) == HttpResponseBadRequest

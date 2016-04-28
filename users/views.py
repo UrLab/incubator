@@ -11,7 +11,7 @@ from django.conf import settings
 from actstream import action
 from actstream.models import Action
 from space.djredis import get_redis, space_is_open
-from space.decorators import private_api
+from space.decorators import private_api, validate
 
 
 from .serializers import UserSerializer
@@ -31,8 +31,10 @@ def balance(request):
     })
 
 
-@private_api(user_qrcode=str, product_barcode=str, quantity=int)
+@private_api(user_qrcode=str, product_barcode=str, quantity=validate(int, lambda x: x > 0))
 def buy_product_with_stock_handler(request, user_qrcode, product_barcode, quantity):
+    if quantity <= 0:
+        return HttpResponseBadRequest("Only positive quantities")
     prod = get_object_or_404(Product, barcode=product_barcode)
     user = get_object_or_404(User, qrcode=user_qrcode)
     user.balance -= quantity * prod.price

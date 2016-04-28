@@ -15,6 +15,15 @@ def one_or_zero(arg):
     raise ValueError("not one or zero")
 
 
+def validate(cast, valid=lambda x: True):
+    def func(arg):
+        r = cast(arg)
+        if not valid(r):
+            raise ValueError("Invalid value")
+        return r
+    return func
+
+
 def private_api(**required_params):
     """
     Filter incoming private API requests, and perform parameter validation and
