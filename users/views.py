@@ -32,10 +32,10 @@ def balance(request):
 
 
 @private_api(user_qrcode=str, product_barcode=str, quantity=int)
-def buy_product_with_stock_handler(request, user_qrcode, product_barcode):
+def buy_product_with_stock_handler(request, user_qrcode, product_barcode, quantity):
     prod = get_object_or_404(Product, barcode=product_barcode)
     user = get_object_or_404(User, qrcode=user_qrcode)
-    user.balance -= prod.price
+    user.balance -= quantity * prod.price
     user.save()
     action.send(
         user,
