@@ -1,4 +1,5 @@
 from django.http import HttpResponse, HttpResponseBadRequest
+from django.http.response import Http404
 from space.models import PrivateAPIKey
 from users.models import User
 from stock.models import Product, Category
@@ -38,6 +39,26 @@ def test_buy_product(rf, secret):
                            'quantity': 1})
     response = buy_product_with_stock_handler(request)
     assert type(response) == HttpResponse
+
+
+@pytest.mark.django_db
+def test_no_product(rf, secret):
+    request = rf.post('', {'secret': secret,
+                           'user_qrcode': USER_QR,
+                           'product_barcode': "007",
+                           'quantity': 1})
+    with pytest.raises(Http404):
+        buy_product_with_stock_handler(request)
+
+
+@pytest.mark.django_db
+def test_no_user(rf, secret):
+    request = rf.post('', {'secret': secret,
+                           'user_qrcode': "007",
+                           'product_barcode': PRODUCT_BARCODE,
+                           'quantity': 1})
+    with pytest.raises(Http404):
+        buy_product_with_stock_handler(request)
 
 
 @pytest.mark.django_db
