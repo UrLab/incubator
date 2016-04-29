@@ -8,6 +8,7 @@ from django.contrib import messages
 from datetime import datetime
 from actstream import action
 from math import ceil
+from itertools import groupby
 
 from users.decorators import permission_required
 from users.mixins import PermissionRequiredMixin
@@ -61,9 +62,12 @@ def clusters_of(seq, size):
 
 
 def projects_home(request):
-    projects = Project.objects.prefetch_related("participants").select_related("maintainer").order_by('-modified')
+    projects = Project.objects.prefetch_related("participants").select_related("maintainer").order_by('status', '-modified')
+    groups = {k: list(g) for k, g in groupby(projects, lambda x: x.status)}
     return render(request, "projects_home.html", {
-        'projects': clusters_of(projects, 4)
+        'progress': clusters_of(groups['i'], 4),
+        'done': clusters_of(groups['f'], 4),
+        'proposition': clusters_of(groups['p'], 4),
     })
 
 

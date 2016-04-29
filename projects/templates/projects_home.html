@@ -26,7 +26,29 @@ Projets à UrLab
     Vous êtes aussi invités à ajouter vos propres projets ci dessus, n'ayez pas peur, on est ouverts à tout !
 </p>
 
-{% for row in projects %}
+{% for row in progress %}
+    <div class="row">
+        {% for project in row %}
+          {% include "project_card.html" %}
+        {% endfor %}
+    </div>
+{% endfor %}
+
+<h1>Projets finis</h1>
+<p>Ici, vous trouverez les projets qui ont déjà été faits au hackerspace.</p>
+{% for row in done %}
+    <div class="row">
+        {% for project in row %}
+          {% include "project_card.html" %}
+        {% endfor %}
+    </div>
+{% endfor %}
+
+<h1>Propositions de projets</h1>
+<p>Parfois les gens n'ont pas le temps, pas les compétences pour faire un projet
+ou alors ont envie de le faire avec plus de monde. Parfois c'est juste une idée loufoque qui traine dans
+un coin de notre tête et qu'on veut noter quelque part...</p>
+{% for row in proposition %}
     <div class="row">
         {% for project in row %}
           {% include "project_card.html" %}
