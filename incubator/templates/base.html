@@ -7,9 +7,9 @@
 
 <!DOCTYPE html>
 <!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
-<html class="no-js" lang="en" >
+<html class="no-js" lang="en">
 
-<head>
+<head prefix="og: http://ogp.me/ns# place: http://ogp.me/ns/place# article: http://ogp.me/ns/article# fb: http://ogp.me/ns/fb#">
     {% analytical_head_top %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +25,20 @@
         <link rel="icon" href="/static/img/favicon.ico"/>
         <title>{% block title %}UrLab{% endblock %}</title>
         {% block head %}{% endblock %}
-        {% analytical_head_bottom %}
+
+        {# Open Graph for Facebook integration http://ogp.me/ #}
+        <meta property="og:site_name" content="UrLab" />
+        <meta property="og:locale" content="fr_BE" />
+        <meta property="fb:app_id" content="1563249853970263" />
+        {% block opengraph %}
+            <meta property="og:title" content="UrLab" />
+            <meta property="og:type" content="place" />
+            <meta property="og:url" content="https://urlab.be" />
+            <meta property="og:image" content="https://urlab.be/static/img/space-invaders.png" />
+            <meta property="place:location:latitude" content="50.8129409" />
+            <meta property="place:location:longitude" content="4.3844292" />
+        {% endblock %}
+    {% analytical_head_bottom %}
     </head>
     <body class="base-body">
     {% analytical_body_top %}
