@@ -1,6 +1,9 @@
 from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
-from .views import CurrentUserDetailView, balance, UserDetailView, UserEditView, spend, top, transfer, show_pamela, hide_pamela,userdetail
+from .views import (
+    balance, UserDetailView, UserEditView, spend, top, transfer, show_pamela,
+    hide_pamela, userdetail,
+)
 
 urlpatterns = patterns(
     '',

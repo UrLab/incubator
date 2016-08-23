@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.conf import settings
 from actstream import action
 from actstream.models import Action
-from space.djredis import get_redis, space_is_open
+from space.djredis import get_redis
 
 
 from .serializers import UserSerializer
