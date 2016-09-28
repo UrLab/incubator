@@ -6,6 +6,22 @@
 {{project.title}}
 {% endblock %}
 
+{% block opengraph %}
+  <meta property="og:title" content="{{project.title}}" />
+  <meta property="og:description" content="{{project.short_description}}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://urlab.be{% url "view_project" project.id %}" />
+  {% if project.picture %}
+    <meta property="og:image" content="https://urlab.be{{project.picture.url}}" />
+  {% else %}
+    <meta property="og:image" content="https://urlab.be/static/img/default-project.png" />
+  {% endif %}
+  <meta property="article:section" content="Projet" />
+  <meta property="article:author" content="{{project.maintainer.username}}" />
+  <meta property="article:published_time" content="{{project.created|date:"c"}}" />
+  <meta property="article:modified_time" content="{{project.modified|date:"c"}}" />
+{% endblock %}
+
 {% block content %}
 <style type="text/css">
 .project-detail-content img {

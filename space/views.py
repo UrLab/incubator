@@ -190,8 +190,16 @@ def get_openings_df(freq='H', **filter_args):
     # Grab openings in a pandas dataframe
     df = read_frame(SpaceStatus.objects.filter(**filter_args))
 
+    # No records found, just return a fake week, always closed
+    if len(df) == 0:
+        df = pd.DataFrame([
+            {'time': pd.datetime.now() - timedelta(days=7), 'is_open': 0},
+            {'time': pd.datetime.now(), 'is_open': 0}
+        ])
+
     # Drop duplicate time index
-    df = df[df.time.diff().dt.total_seconds() > 0]
+    delta_time = df.time.diff().dt.total_seconds()
+    df = df[np.isnan(delta_time) | (delta_time > 0)]
     df.index = df.time
 
     # Reindex on a monotonic hourly time index
