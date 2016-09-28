@@ -1,6 +1,7 @@
 from django.db import models
 from incubator import settings
 from django.core.exceptions import ValidationError
+from datetime import datetime
 import re
 import uuid
 
@@ -26,7 +27,7 @@ class MacAdress(models.Model):
 
 
 class SpaceStatus(models.Model):
-    time = models.DateTimeField(auto_now_add=True)
+    time = models.DateTimeField(default=lambda: datetime.now())
     is_open = models.BooleanField()
 
     class Meta:
