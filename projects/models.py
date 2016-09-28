@@ -18,7 +18,8 @@ User = settings.AUTH_USER_MODEL
 STATUS_CHOICES = (
     ("p", "proposition"),
     ("i", "in progress"),
-    ("f", "finished")
+    ("f", "finished"),
+    ("a", "ants are gone"),
 )
 
 
