@@ -1,5 +1,5 @@
 import pytest
-from space.graphs import get_openings_df
+from space.plots import get_openings_df
 from space.models import SpaceStatus
 
 
