@@ -24,6 +24,8 @@ STATUS_CHOICES = (
 
 
 class Project(models.Model):
+    ANT_CHAR = u"\U0001F41C"
+
     title = models.CharField(max_length=300, verbose_name='Nom')
 
     maintainer = models.ForeignKey(User, related_name="maintained_projects", verbose_name='Mainteneur')
