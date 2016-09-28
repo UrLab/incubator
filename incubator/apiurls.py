@@ -20,9 +20,8 @@ api.register(r'space/pamela', space.views.PamelaViewSet, base_name="pamela")
 api.register(r'space/motd', space.views.MotdViewSet)
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^hackeragenda', events.views.HackerAgendaAPI.as_view()),
     url(r'^events/next_meeting', events.views.NextMeetingAPI.as_view()),
     url(r'^', include(api.urls)),
-)
+]
