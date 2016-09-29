@@ -25,7 +25,6 @@ SECRET_KEY = 'cw2lz4ml1#r%=h2aax8_)=q$v(+&9&)n5xxk5g!9og%ityd!@#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -45,7 +44,6 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'bootstrap3',
     'datetimewidget',
-    'activelink',
     'rest_framework',
     'django_filters',
     'crispy_forms',
@@ -131,18 +129,28 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 MEDIA_URL = '/media/'
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.template.context_processors.debug",
-    "django.template.context_processors.i18n",
-    "django.template.context_processors.media",
-    "django.template.context_processors.static",
-    "django.template.context_processors.tz",
-    'django.core.context_processors.request',
-    "django.contrib.messages.context_processors.messages",
-    "space.context_processors.state",
-    "sekizai.context_processors.sekizai",
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.core.context_processors.request',
+                'django.contrib.messages.context_processors.messages',
+                "space.context_processors.state",
+                "sekizai.context_processors.sekizai",
+            ],
+        },
+    },
+]
+
 
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
@@ -213,6 +221,6 @@ PIWIK_SITE_ID = '2'
 MINIMAL_MAIL_APPROVERS = 3
 
 try:
-    from incubator.local_settings import *
+    from incubator.local_settings import * # NOQA
 except ImportError:
     pass
