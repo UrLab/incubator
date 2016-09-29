@@ -49,9 +49,14 @@ def wiki_save_handler(sender, created, instance, **kwargs):
         path = ''
     url = settings.ROOT_URL + "/wiki/" + path
 
+    if url:
+        message = "{user} a édité la page «{title}» du wiki ({url})"
+    else:
+        message = "{user} a créé la page «{title}» sur le wiki"
+
     send_message(
         key='wiki.revision',
-        message="{user} a édité la page «{title}» du wiki ({url})",
+        message=message,
         user=instance.user,
         title=instance.title,
         url=url
