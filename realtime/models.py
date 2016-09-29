@@ -9,7 +9,7 @@ from wiki.models import ArticleRevision
 @receiver(post_save, sender=Action)
 def action_save_handler(sender, created, instance, **kwargs):
     is_quiet = instance.data is not None and instance.data.get('quiet', False)
-    if not created or is_quiet:
+    if not created or is_quiet or not instance.public:
         return
 
     if instance.target:
