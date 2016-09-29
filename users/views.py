@@ -33,11 +33,7 @@ def balance(request):
 @permission_required('users.change_balance')
 def spend(request):
     if request.method == 'POST':
-        post = request.POST.copy()
-        if 'value' in post:
-            post['value'] = post['value'].replace(',', '.')
-
-        form = SpendForm(post)
+        form = SpendForm(request.POST)
         if form.is_valid():
             sumchanged = form.cleaned_data['value']
             name = form.cleaned_data['name']
@@ -59,11 +55,7 @@ def spend(request):
 @permission_required('users.change_balance')
 def top(request):
     if request.method == 'POST':
-        post = request.POST.copy()
-        if 'value' in post:
-            post['value'] = post['value'].replace(',', '.')
-
-        form = TopForm(post)
+        form = TopForm(request.POST)
         if form.is_valid():
             sumchanged = form.cleaned_data['value']
             request.user.balance += sumchanged
@@ -84,11 +76,7 @@ def top(request):
 @permission_required('users.change_balance')
 def transfer(request):
     if request.method == 'POST':
-        post = request.POST.copy()
-        if 'value' in post:
-            post['value'] = post['value'].replace(',', '.')
-
-        form = TransferForm(post)
+        form = TransferForm(request.POST)
         if form.is_valid():
             sumchanged = form.cleaned_data['value']
             otheruser = form.cleaned_data['recipient']
