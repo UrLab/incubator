@@ -12,6 +12,8 @@ from influxdb import InfluxDBClient
 from rest_framework import viewsets
 from rest_framework.response import Response
 
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 from datetime import timedelta
 
