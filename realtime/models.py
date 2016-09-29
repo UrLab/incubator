@@ -4,6 +4,7 @@ from actstream.models import Action
 from realtime.helpers import send_message
 from django.conf import settings
 from wiki.models import ArticleRevision
+from actstream import action
 
 
 @receiver(post_save, sender=Action)
@@ -55,3 +56,5 @@ def wiki_save_handler(sender, created, instance, **kwargs):
         title=instance.title,
         url=url
     )
+    # Add an actream line
+    action.send(instance.user, verb='a édité', action_object=instance.article)
