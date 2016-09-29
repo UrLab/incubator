@@ -1,7 +1,7 @@
 {% load staticfiles %}
-{% load activelink %}
 {% load bootstrap3 %}
 {% load analytical %}
+{% load activelink %}
 
 {% load sekizai_tags i18n wiki_tags %}
 
@@ -58,25 +58,25 @@
                 </div>
                 <div class="collapse navbar-collapse" id="menuNavbar">
                     <ul class="nav navbar-nav">
-                        <li class="{% ifcontains "/projects/" %}active{% endifcontains %}">
+                        <li class="{% active_if_contains "/projects/" %}">
                             <a href="{% url "projects_home" %}">
                                 <i class="fa fa-flask"></i>
                                 Nos projets
                             </a>
                         </li>
-                        <li class="{% ifcontains "/events/" %}active{% endifcontains %}">
+                        <li class="{% active_if_contains "/events/" %}">
                             <a href="{% url "events_home" %}">
                                 <i class="fa fa-calendar"></i>
                                 Evénements
                             </a>
                         </li>
-                        <li class="{% ifcontains "/wiki/" %}active{% endifcontains %}">
+                        <li class="{% active_if_contains "/wiki/" %}">
                             <a href="{% url "wiki:root" %}">
                                 <i class="fa fa-pencil-square-o"></i>
                                 Wiki
                             </a>
                         </li>
-                        <li class="{% ifcontains "/space/pamela" %}active{% endifcontains %}">
+                        <li class="{% active_if_contains "/space/pamela" %}">
                             <a href="{% url "pamela_list" %}">
                                 <i class="fa fa-users"></i>
                                 Pamela
@@ -109,7 +109,7 @@
                                 </ul>
                             </li>
                         {% else %}
-                            <li class="{% ifcontains "/auth/login" %}active{% endifcontains %}">
+                            <li class="{% active_if_contains "/auth/login" %}">
                                 <a href="{% url "login" %}">Login / Register</a>
                             </li>
                         {% endif %}

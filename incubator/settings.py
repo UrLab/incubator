@@ -45,7 +45,6 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'bootstrap3',
     'datetimewidget',
-    'activelink',
     'rest_framework',
     'django_filters',
     'crispy_forms',
@@ -213,6 +212,6 @@ PIWIK_SITE_ID = '2'
 MINIMAL_MAIL_APPROVERS = 3
 
 try:
-    from incubator.local_settings import *
+    from incubator.local_settings import * # NOQA
 except ImportError:
     pass
