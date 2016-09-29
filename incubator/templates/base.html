@@ -1,15 +1,15 @@
 {% load staticfiles %}
-{% load activelink %}
 {% load bootstrap3 %}
 {% load analytical %}
+{% load activelink %}
 
 {% load sekizai_tags i18n wiki_tags %}
 
 <!DOCTYPE html>
 <!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
-<html class="no-js" lang="en" >
+<html class="no-js" lang="en">
 
-<head>
+<head prefix="og: http://ogp.me/ns# place: http://ogp.me/ns/place# article: http://ogp.me/ns/article# fb: http://ogp.me/ns/fb#">
     {% analytical_head_top %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,14 +25,24 @@
         <link rel="icon" href="/static/img/favicon.ico"/>
         <title>{% block title %}UrLab{% endblock %}</title>
         {% block head %}{% endblock %}
-        {% analytical_head_bottom %}
+
+        {# Open Graph for Facebook integration http://ogp.me/ #}
+        <meta property="og:site_name" content="UrLab" />
+        <meta property="og:locale" content="fr_BE" />
+        <meta property="fb:app_id" content="1563249853970263" />
+        {% block opengraph %}
+            <meta property="og:title" content="UrLab" />
+            <meta property="og:type" content="place" />
+            <meta property="og:url" content="https://urlab.be" />
+            <meta property="og:image" content="https://urlab.be/static/img/space-invaders.png" />
+            <meta property="place:location:latitude" content="50.8129409" />
+            <meta property="place:location:longitude" content="4.3844292" />
+        {% endblock %}
+    {% analytical_head_bottom %}
     </head>
     <body class="base-body">
     {% analytical_body_top %}
     {% if request.user.is_authenticated and request.user.username == "SupayrPoney" %}
-    <a href="http://www.reactivemanifesto.org/"> <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000" src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-red-right.png"> </a>
-{% endif %}
-{% if request.user.is_authenticated and request.user.username == "iTitou" %}
     <a href="http://www.reactivemanifesto.org/"> <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000" src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-red-right.png"> </a>
 {% endif %}
 <header class="base-header">
@@ -58,25 +68,25 @@
                 </div>
                 <div class="collapse navbar-collapse" id="menuNavbar">
                     <ul class="nav navbar-nav">
-                        <li class="{% ifcontains "/projects/" %}active{% endifcontains %}">
+                        <li class="{% active_if_contains "/projects/" %}">
                             <a href="{% url "projects_home" %}">
                                 <i class="fa fa-flask"></i>
                                 Nos projets
                             </a>
                         </li>
-                        <li class="{% ifcontains "/events/" %}active{% endifcontains %}">
+                        <li class="{% active_if_contains "/events/" %}">
                             <a href="{% url "events_home" %}">
                                 <i class="fa fa-calendar"></i>
                                 Evénements
                             </a>
                         </li>
-                        <li class="{% ifcontains "/wiki/" %}active{% endifcontains %}">
+                        <li class="{% active_if_contains "/wiki/" %}">
                             <a href="{% url "wiki:root" %}">
                                 <i class="fa fa-pencil-square-o"></i>
                                 Wiki
                             </a>
                         </li>
-                        <li class="{% ifcontains "/space/pamela" %}active{% endifcontains %}">
+                        <li class="{% active_if_contains "/space/pamela" %}">
                             <a href="{% url "pamela_list" %}">
                                 <i class="fa fa-users"></i>
                                 Pamela
@@ -109,7 +119,7 @@
                                 </ul>
                             </li>
                         {% else %}
-                            <li class="{% ifcontains "/auth/login" %}active{% endifcontains %}">
+                            <li class="{% active_if_contains "/auth/login" %}">
                                 <a href="{% url "login" %}">Login / Register</a>
                             </li>
                         {% endif %}

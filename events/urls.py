@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from .views import (
     EventDetailView, EventAddView, EventEditView, MeetingAddView, MeetingEditView,
@@ -6,8 +6,7 @@ from .views import (
     add_point_to_next_meeting,
 )
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^$', events_home, name='events_home'),
     url(r'^add$', EventAddView.as_view(), name='add_event'),
     url(r'^urlab.ics$', ical, name='ical'),
@@ -22,4 +21,4 @@ urlpatterns = patterns(
 
     # Private API
     url(r'^add_point_to_next_meeting$', add_point_to_next_meeting, name='add_point_to_next_meeting'),
-)
+]

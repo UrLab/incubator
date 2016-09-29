@@ -1,8 +1,8 @@
 import hashlib
+from collections import OrderedDict
 from django.utils.crypto import get_random_string
 from django.contrib.auth.hashers import BasePasswordHasher
 from django.utils.crypto import constant_time_compare
-from django.utils.datastructures import SortedDict
 from django.contrib.auth.hashers import mask_hash
 from django.utils import six
 
@@ -58,7 +58,7 @@ class MediaWikiHasher(BasePasswordHasher):
     def safe_summary(self, encoded):  # pragma: no cover
         algorithm, salt, hash = encoded.split('$', 3)
         assert algorithm == self.algorithm
-        return SortedDict([
+        return OrderedDict([
             ('algorithm', algorithm),
             ('salt', mask_hash(salt)),
             ('hash', mask_hash(hash)),

@@ -27,6 +27,49 @@
         </h1>
     </div>
     <div class="row">
+        <div class="hidden-md hidden-lg col-sm-12">
+            {% if request.user.is_authenticated %}
+                <p>
+                    {% if request.user == user %}
+                        {% if user.balance < 0 %}
+                            <div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-hand-right"
+                                                                               aria-hidden="true"></span><strong> Votre
+                                solde est négatif !</strong> Pensez à recharger au plus vite !
+                            </div>
+                        {% elif user.balance < 5 %}
+                            <div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-hand-right"
+                                                                                aria-hidden="true"></span><strong> Vous
+                                n'avez plus grand chose en stock :</strong> pensez à recharger :)
+                            </div>
+                        {% elif user.balance > 50 %}
+                            <div class="alert alert-success" role="alert"><span class="glyphicon glyphicon-thumbs-up"
+                                                                                aria-hidden="true"></span><strong> Wow
+                                !</strong> Ca en fait une somme ça !
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </p>
+            {% endif %}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>
+                        <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span> Tirelire de
+                        {% if user.first_name or user.last_name %}
+                            {{ user.username }}<br>
+                        {% endif %}</h4>
+                </div>
+                <div class="panel-body">
+                    {% if user.balance < 0 %}
+                        <p class="text-danger">
+                            {%  else %}
+                        <p>
+                    {% endif %}
+                    <strong><span class="glyphicon glyphicon-euro" aria-hidden="true"></span> {{ user.balance }}
+                    </strong>
+                    </p>
+                </div>
+            </div>
+        </div>
         <div class="col-md-7">
             <h2>Liste de prix</h2>
             {% regroup products by category as category_list %}
@@ -64,44 +107,47 @@
             {% endfor %}
         </div>
         <div class="col-md-5">
-            {% if request.user.is_authenticated %}
-                <p>
-                    {% if request.user == user %}
-                        {% if user.balance < 0 %}
-                            <div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-hand-right"
-                                                                               aria-hidden="true"></span><strong> Votre
-                                solde est négatif !</strong> Pensez à recharger au plus vite !
-                            </div>
-                        {% elif user.balance < 5 %}
-                            <div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-hand-right"
-                                                                                aria-hidden="true"></span><strong> Vous
-                                n'avez plus grand chose en stock :</strong> pensez à recharger :)
-                            </div>
-                        {% elif user.balance > 50 %}
-                            <div class="alert alert-success" role="alert"><span class="glyphicon glyphicon-thumbs-up"
-                                                                                aria-hidden="true"></span><strong> Wow
-                                !</strong> Ca en fait une somme ça !
-                            </div>
+            <div class="hidden-sm hidden-xs">
+                {% if request.user.is_authenticated %}
+                    <p>
+                        {% if request.user == user %}
+                            {% if user.balance < 0 %}
+                                <div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-hand-right"
+                                                                                   aria-hidden="true"></span><strong> Votre
+                                    solde est négatif !</strong> Pensez à recharger au plus vite !
+                                </div>
+                            {% elif user.balance < 5 %}
+                                <div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-hand-right"
+                                                                                    aria-hidden="true"></span><strong> Vous
+                                    n'avez plus grand chose en stock :</strong> pensez à recharger :)
+                                </div>
+                            {% elif user.balance > 50 %}
+                                <div class="alert alert-success" role="alert"><span class="glyphicon glyphicon-thumbs-up"
+                                                                                    aria-hidden="true"></span><strong> Wow
+                                    !</strong> Ca en fait une somme ça !
+                                </div>
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
-            {% endif %}
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4>
-                        <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span> Tirelire de
-                        {% if user.first_name or user.last_name %}
-                            {{ user.username }}<br>
-                        {% endif %}</h4>
-                </div>
-                <div class="panel-body">
-                    {% if user.balance < 0 %}
-                        <p class="text-danger">
-                            {%  else %}
-                        <p>
-                    {% endif %}
-                    <strong><span class="glyphicon glyphicon-euro" aria-hidden="true"></span> {{ user.balance }}
-                    </strong>
                     </p>
+                {% endif %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4>
+                            <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span> Tirelire de
+                            {% if user.first_name or user.last_name %}
+                                {{ user.username }}<br>
+                            {% endif %}</h4>
+                    </div>
+                    <div class="panel-body">
+                        {% if user.balance < 0 %}
+                            <p class="text-danger">
+                                {%  else %}
+                            <p>
+                        {% endif %}
+                        <strong><span class="glyphicon glyphicon-euro" aria-hidden="true"></span> {{ user.balance }}
+                        </strong>
+                        </p>
+                    </div>
                 </div>
             </div>
             <div class="panel panel-default">
