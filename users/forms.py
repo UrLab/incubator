@@ -4,9 +4,14 @@ from django.contrib.auth import authenticate
 from django import forms
 from .models import User
 
+class TolerantDecimalField(forms.DecimalField):
+    def clean(self, value):
+        value = value.replace(',', '.')
+        return super(TolerantDecimalField, self).clean(value)
+
 
 class BalanceForm(forms.Form):
-    value = forms.DecimalField(
+    value = TolerantDecimalField(
         label = "Montant",
         max_digits=6,
         decimal_places=2,

@@ -61,6 +61,7 @@ class Event(models.Model):
 
     class Meta:
         verbose_name = "Événement"
+        ordering = ("start", "stop", )
 
 # A un OJ et un PV (composés de points)
 # On pourrait créer un pad et le remplir automatiquement puis récupérer le contenu automatiquement après la réu (optionnel)
