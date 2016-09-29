@@ -26,8 +26,12 @@ class MacAdress(models.Model):
         verbose_name_plural = "Mac adresses"
 
 
+def _auto_now():
+    return datetime.now()
+
+
 class SpaceStatus(models.Model):
-    time = models.DateTimeField(default=lambda: datetime.now())
+    time = models.DateTimeField(default=_auto_now)
     is_open = models.BooleanField()
 
     class Meta:
