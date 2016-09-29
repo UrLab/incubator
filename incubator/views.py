@@ -24,7 +24,7 @@ def home(request):
     client = get_redis()
     stream = []
     if request.user.is_authenticated():
-        STREAM_SIZE = 20 # NOQA
+        STREAM_SIZE = 20  # NOQA
         stream = Action.objects.filter(public=True).prefetch_related('target', 'actor', 'action_object')[:STREAM_SIZE * 2]
         stream = feed_reducer(stream)[:STREAM_SIZE]
 
