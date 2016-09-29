@@ -22,3 +22,4 @@ django-jsonfield
 matplotlib
 pandas
 django-pandas
+pip>8.0
