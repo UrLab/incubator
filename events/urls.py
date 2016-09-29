@@ -14,11 +14,11 @@ urlpatterns = [
     url(r'^import_pad/(?P<pk>[0-9]+)$', import_pad, name='import_pad'),
     url(r'^export_pad/(?P<pk>[0-9]+)$', export_pad, name='export_pad'),
     url(r'^(?P<pk>[0-9]+)', EventDetailView.as_view(), name='view_event'),
-    url(r'^add_meeting/(?P<pk>[0-9]+)', MeetingAddView.as_view(), name='add_meeting'),
-    url(r'^edit_meeting/(?P<pk>[0-9]+)', MeetingEditView.as_view(), name='edit_meeting'),
+    url(r'^add_meeting/(?P<pk>[0-9]+)$', MeetingAddView.as_view(), name='add_meeting'),
+    url(r'^edit_meeting/(?P<pk>[0-9]+)$', MeetingEditView.as_view(), name='edit_meeting'),
     url(r'^not_interested/(?P<pk>[0-9]+)$', login_required(not_interested), name='not_interested_event'),
     url(r'^interested/(?P<pk>[0-9]+)$', login_required(interested), name='interested_event'),
 
     # Private API
-    url(r'^add_point_to_next_meeting', add_point_to_next_meeting, name='add_point_to_next_meeting'),
+    url(r'^add_point_to_next_meeting$', add_point_to_next_meeting, name='add_point_to_next_meeting'),
 ]

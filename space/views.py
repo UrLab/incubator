@@ -1,5 +1,3 @@
-from datetime import datetime, timedelta
-
 from django.shortcuts import render
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -14,16 +12,15 @@ from influxdb import InfluxDBClient
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-from django_pandas.io import read_frame
-import pandas as pd
 import matplotlib.pyplot as plt
-import numpy as np
+from datetime import timedelta
 
 from .djredis import get_redis, get_mac, set_space_open, space_is_open
 from .models import MacAdress, SpaceStatus, MusicOfTheDay
 from .forms import MacAdressForm
 from .serializers import PamelaSerializer, SpaceStatusSerializer, MotdSerializer
 from .decorators import private_api, one_or_zero
+from .plots import weekday
 from django.conf import settings
 
 
@@ -186,78 +183,10 @@ def spaceapi(request):
     return JsonResponse(response)
 
 
-def get_openings_df(freq='H', **filter_args):
-    # Grab openings in a pandas dataframe
-    df = read_frame(SpaceStatus.objects.filter(**filter_args))
-
-    # Drop duplicate time index
-    df = df[df.time.diff().dt.total_seconds() > 0]
-    df.index = df.time
-
-    # Reindex on a monotonic hourly time index
-    index = pd.date_range(start=df.time.min(), end=df.time.max(), freq=freq)
-    return df.reindex(index, method='pad')
-
-
-def human_time(options):
-    days_names = ["Lundi", "Mardi", "Mercredi",
-                  "Jeudi", "Vendredi", "Samedi", "Dimanche"]
-    res = "Ouverture de UrLab: "
-    if 'weeks' in options:
-        res += "{} dernières semaines".format(options['weeks'])
-    else:
-        res += "{} - {}".format(options['from'], options['to'])
-    if 'weekday' in options:
-        res += " ({})".format(days_names[int(options['weekday'])])
-    return res
-
-
 def openings(request):
     opts = {k: request.GET[k] for k in request.GET}
 
-    # Create openings data query for requested time frame
-    query = {}
-    if 'weeks' in opts:
-        delta = timedelta(days=7*int(opts['weeks']))
-        query['time__gte'] = (datetime.now() - delta).strftime('%Y-%m-%d')
-    else:
-        if 'from' in opts:
-            query['time__gte'] = opts['from']
-        if 'to' in opts:
-            query['time__lte'] = opts['to']
-
-    # Get openings data and filter by weekday
-    df = get_openings_df(freq='H', **query)
-    if 'weekday_django' in opts:
-        # Yes...  django: 0 == sunday; pandas: 0 == monday
-        opts['weekday'] = (int(opts['weekday_django']) - 1) % 7
-    if 'weekday' in opts:
-        df = df[df.index.weekday == int(opts['weekday'])]
-
-    # Init plot
-    width = int(opts.get('width', 12))
-    height = int(opts.get('height', 8))
-    plt.figure(figsize=(width, height))
-
-    # Group by hour and plot as image
-    probs = 100*df.groupby(df.index.time).is_open.mean()
-    img = np.repeat([probs], 5, axis=0)
-    cax = plt.imshow(img, cmap=plt.cm.RdYlGn, interpolation='none',
-                     vmin=0, vmax=100)
-    ticks = [0, 25, 50, 75, 100]
-    cbar = plt.colorbar(cax, ticks=ticks)
-    cbar.ax.set_yticklabels(['{}%'.format(t) for t in ticks])
-
-    # Ticks && grid
-    ticks = np.arange(0, 24, 2)
-    plt.xticks(ticks - 0.5, ["%dh" % x for x in ticks])
-    plt.yticks([])
-    plt.grid()
-
-    # Title
-    opts['from'] = df.time.min().strftime("%d/%m/%Y")
-    opts['to'] = df.time.max().strftime("%d/%m/%Y")
-    plt.title(human_time(opts))
+    weekday(plt, opts)
 
     # Wrap everything in a django response and clear matplotlib context
     response = HttpResponse(content_type="image/png")
