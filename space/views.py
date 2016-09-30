@@ -92,7 +92,7 @@ def get_sensors(*sensors):
     query_template = "SELECT value FROM %s ORDER BY time DESC LIMIT 1"
     queries = ';'.join(query_template % s for s in sensors)
     influx_credentials = (settings.INFLUX_HOST, settings.INFLUX_PORT, settings.INFLUX_USER, settings.INFLUX_PASS)
-    client = InfluxDBClient(*influx_credentials)
+    client = InfluxDBClient(*influx_credentials, timeout=1)
     r = client.query(queries, database="hal")
     if len(sensors) == 1:
         return {sensors[0]: next(r.get_points())['value']}
