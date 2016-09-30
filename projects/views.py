@@ -63,7 +63,10 @@ def clusters_of(seq, size):
 
 def projects_home(request):
     projects = Project.objects.prefetch_related("participants").select_related("maintainer").order_by('status', '-modified')
-    groups = {k: list(g) for k, g in groupby(projects, lambda x: x.status)}
+
+    # group the finised and "ants are gone" projets together
+    grouper = lambda x: x.status if x.status != "a" else "f"
+    groups = {k: list(g) for k, g in groupby(projects, grouper)}
     return render(request, "projects_home.html", {
         'progress': clusters_of(groups['i'], 4),
         'done': clusters_of(groups['f'], 4),
