@@ -30,10 +30,12 @@ Install the incubator on your computer using a virtualenv for python package
 Install the incubator in a container via docker
 
     docker build -t incubator .
-    docker run --name incubatorfromspace -p 8000:8000 -d incubator
+    docker run --name incubator -p 8000:8000 -v $(pwd):/usr/src/app -d incubator
     
 Admin : poney/poney, admin/admin, 
     
 # View / Edit Notebooks
 
     ./manage.py shell_plus --notebook
+
+
