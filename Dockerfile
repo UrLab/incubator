@@ -4,6 +4,9 @@ FROM django:onbuild
 # who are we ?
 MAINTAINER UrLab
 
+# Add the path
+ADD . /usr/src/app
+
 # Update the default application repository sources list
 RUN apt-get update && apt-get -y upgrade
 
