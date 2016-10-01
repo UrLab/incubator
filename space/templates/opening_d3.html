@@ -1,0 +1,112 @@
+{% load static %}
+<svg></svg>
+<script src="{% static "js/babel.min.js" %}"></script>
+<script src="{% static "js/d3.v4.min.js" %}"></script>
+<script type="text/babel">
+(_ => {
+    function draw_openings_plot(opening_data, W=270, H=90){
+        let N = opening_data.length
+        let w = W/N, h = 0.7*H, p = W/200
+
+        let colorscale = d3.scaleLinear()
+                           .domain([0, 0.5, 1])
+                           .interpolate(d3.interpolateHcl)
+                           // Matplotlib colormap (plt.cm.RdYlGn)
+                           .range([d3.rgb('#a50026'),
+                                   d3.rgb('#feffbe'),
+                                   d3.rgb('#006837')])
+
+        const isNow = i => i == new Date().getHours()
+        const group_translate_x = i => i*(w + 2*p)
+
+        function small_big_attr(ifSmall, ifBig){
+            let ifBig_f = (typeof(ifSmall) == 'function') ? ifBig : (i => ifBig)
+            let ifSmall_f = (typeof(ifSmall) == 'function') ? ifSmall : (i => ifSmall)
+            return (i, big) => (isNow(i) || big) ? ifBig_f(i) : ifSmall_f(i)
+        }
+
+        const bar_translate_x = small_big_attr(p, 0)
+        const bar_translate_y = small_big_attr(H-h, 0)
+        const bar_height = small_big_attr(h, H)
+        const bar_width = small_big_attr(w, w+2*p-1)
+        const text_size = small_big_attr(w-p, w)
+        const text_color = small_big_attr(i => colorscale(opening_data[i]),
+                                        i => {
+            let val = Math.abs(opening_data[i] - 0.5)
+            // White on yellow (around 50%) is not readable, black instead
+            return (val < 0.15) ? 'black' : 'white'
+        })
+
+        let svg = d3.select("svg")
+                    .attr("width", W+48*p)
+                    .attr("height", H+w);
+
+        function setBig(elmt, big){
+            let group = elmt.transition().duration(200)
+
+            // Rectangle grows
+            group.select("rect")
+                 .attr("x", i => bar_translate_x(i, big))
+                 .attr("y", i => bar_translate_y(i, big))
+                 .attr("height", i => bar_height(i, big))
+                 .attr("width", i => bar_width(i, big))
+
+            // Text appears and grows
+            group.select("text")
+                 .attr("fill", i => text_color(i, big))
+                 .attr("font-size", i => text_size(i, big))
+        }
+
+        function group_mouseover(){setBig(d3.select(this), true)}
+        function group_mouseout(){setBig(d3.select(this), false)}
+
+        let groups = svg.selectAll("g")
+                        .data(d3.range(N))
+                        .enter().append("g")
+                                .attr("anchor", "middle")
+                                .attr("transform", d => `translate(${group_translate_x(d)})`)
+                                .on("mouseover", group_mouseover)
+                                .on("mouseout", group_mouseout)
+
+        let rects = groups.append("rect")
+                          .attr("fill", i => colorscale(opening_data[i]))
+                          .attr("x", i => bar_translate_x(i))
+                          .attr("y", H)
+                          .attr("width", 0)
+                          .attr("height", 0)
+
+                          // Cool wave-in effect
+                          .transition().duration(i => 50*i)
+                                       .attr("height", i => bar_height(i))
+                                       .attr("width", i => bar_width(i))
+                                       .attr("y", i => bar_translate_y(i))
+
+        let texts = groups.append("text")
+                          .text(i => `${i}-${i+1}h ${parseInt(100*opening_data[i])}%`)
+                          .attr("transform", `translate(${w},${H-p}) rotate(-90)`)
+                          .attr("font-size", i => text_size(i))
+                          .attr("font-family", "Arial")
+                          .attr("font-weight", "bolder")
+                          .attr("fill", i => text_color(i))
+
+        groups.append("text")
+              .text(i => (i % 4 == 0) ? `${i}h` : '')
+              .attr("transform", `translate(${p}, ${H+w})`)
+              .attr("fill", "black")
+              .attr("font-size", w)
+              .attr("font-family", "Arial")
+              .attr("font-weight", "bolder")
+
+        function updateNow(){
+            setBig(groups, false)
+            setTimeout(updateNow, 15000)
+        }
+        updateNow()
+    }
+
+    $(document).ready(_ => {
+        let url = '{% url "openings_graph_data" %}?weeks=6&width=9&height=3&weekday_django={% now "w" %}'
+        $.getJSON(url, data => draw_openings_plot(data.probs))
+    })
+})()
+</script>
