@@ -22,7 +22,7 @@ from .models import MacAdress, SpaceStatus, MusicOfTheDay
 from .forms import MacAdressForm
 from .serializers import PamelaSerializer, SpaceStatusSerializer, MotdSerializer
 from .decorators import private_api, one_or_zero
-from .plots import weekday_plot, weekday_probs
+from .plots import weekday_plot, weekday_probs, human_time
 from django.conf import settings
 
 
@@ -187,8 +187,10 @@ def spaceapi(request):
 
 def openings_data(request):
     opts = {k: request.GET[k] for k in request.GET}
-    res = weekday_probs(opts)
-    return JsonResponse({'probs': list(res)})
+    return JsonResponse({
+        'probs': list(weekday_probs(opts)),
+        'range': human_time(opts),
+    })
 
 
 def openings(request):
