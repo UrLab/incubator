@@ -50,7 +50,7 @@ def human_time(options):
     return res
 
 
-def weekday(ax, opts):
+def weekday_probs(opts):
     # Create openings data query for requested time frame
     if 'weeks' in opts:
         delta = pd.Timedelta(days=7*int(opts['weeks']))
@@ -66,14 +66,18 @@ def weekday(ax, opts):
     if 'weekday' in opts:
         df = df[df.index.weekday == int(opts['weekday'])]
 
+    # Group by hour and plot as image
+    by_hour = df.groupby(df.index.time).is_open
+    return by_hour.sum() / by_hour.count()
+
+
+def weekday_plot(ax, opts):
     # Init plot
     width = int(opts.get('width', 12))
     height = int(opts.get('height', 8))
     ax.figure(figsize=(width, height))
 
-    # Group by hour and plot as image
-    by_hour = df.groupby(df.index.time).is_open
-    probs = 100 * by_hour.sum() / by_hour.count()
+    probs = 100 * weekday_probs(opts)
     img = np.repeat([probs], 5, axis=0)
     cax = ax.imshow(img, cmap=ax.cm.RdYlGn, interpolation='none',
                      vmin=0, vmax=100)

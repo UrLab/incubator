@@ -22,7 +22,7 @@ from .models import MacAdress, SpaceStatus, MusicOfTheDay
 from .forms import MacAdressForm
 from .serializers import PamelaSerializer, SpaceStatusSerializer, MotdSerializer
 from .decorators import private_api, one_or_zero
-from .plots import weekday
+from .plots import weekday_plot, weekday_probs, human_time
 from django.conf import settings
 
 
@@ -92,7 +92,7 @@ def get_sensors(*sensors):
     query_template = "SELECT value FROM %s ORDER BY time DESC LIMIT 1"
     queries = ';'.join(query_template % s for s in sensors)
     influx_credentials = (settings.INFLUX_HOST, settings.INFLUX_PORT, settings.INFLUX_USER, settings.INFLUX_PASS)
-    client = InfluxDBClient(*influx_credentials)
+    client = InfluxDBClient(*influx_credentials, timeout=1)
     r = client.query(queries, database="hal")
     if len(sensors) == 1:
         return {sensors[0]: next(r.get_points())['value']}
@@ -185,10 +185,18 @@ def spaceapi(request):
     return JsonResponse(response)
 
 
+def openings_data(request):
+    opts = {k: request.GET[k] for k in request.GET}
+    return JsonResponse({
+        'probs': list(weekday_probs(opts)),
+        'range': human_time(opts),
+    })
+
+
 def openings(request):
     opts = {k: request.GET[k] for k in request.GET}
 
-    weekday(plt, opts)
+    weekday_plot(plt, opts)
 
     # Wrap everything in a django response and clear matplotlib context
     response = HttpResponse(content_type="image/png")
