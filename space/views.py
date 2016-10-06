@@ -155,7 +155,7 @@ def spaceapi(request):
             "facebook": "https://www.facebook.com/urlabbxl",
             "irc": "irc://chat.freenode.net#urlab",
             "email": "contact@urlab.be",
-            # "phone": "",
+            "phone": "+3226504967",
             "keymasters": keymasters,
         },
         "issue_report_channels": [
