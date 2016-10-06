@@ -141,7 +141,7 @@ def spaceapi(request):
         },
         "state": {
             "open": space_is_open(client),
-            "lastchange": SpaceStatus.objects.last().time.timestamp(),
+            "lastchange": round(SpaceStatus.objects.last().time.timestamp()),
             "icon": {
                 "open": "https://urlab.be/static/img/space-invaders-open.png",
                 "closed": "https://urlab.be/static/img/space-invaders.png"
