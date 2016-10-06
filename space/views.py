@@ -23,6 +23,8 @@ from .forms import MacAdressForm
 from .serializers import PamelaSerializer, SpaceStatusSerializer, MotdSerializer
 from .decorators import private_api, one_or_zero
 from .plots import weekday_plot, weekday_probs, human_time
+from users.models import User
+
 from django.conf import settings
 
 
@@ -118,6 +120,15 @@ def spaceapi(request):
             "names": names,
         }
 
+    keymasters = [
+        {
+            'name': user.username,
+            # 'irc_nick':,
+            # 'email':,
+        }
+        for user in User.objects.filter(has_key=True)
+    ]
+
     response = {
         "api": "0.13",
         "space": "UrLab",
@@ -145,7 +156,7 @@ def spaceapi(request):
             "irc": "irc://chat.freenode.net#urlab",
             "email": "contact@urlab.be",
             # "phone": "",
-            # "keymasters": "";
+            "keymasters": keymasters,
         },
         "issue_report_channels": [
             "issue_mail",
