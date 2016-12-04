@@ -174,7 +174,7 @@ def spaceapi(request):
             "name": "door_stairs"
         }]
         response["sensors"]["light"] = [{
-            "value": 100 * sensors['light_%s' % loc],
+            "value": round(100 * sensors['light_%s' % loc], 2),
             "unit": '%',
             "location": loc,
             "name": 'light_%s' % loc
