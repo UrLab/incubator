@@ -164,7 +164,6 @@ def spaceapi(request):
         ],
         "sensors": {
             "people_now_present": [people_now_present],
-            "total_member_count": User.objects.count(),
             # "beverage_supply": [42],
             # "temperature": [],
         },
