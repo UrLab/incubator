@@ -10,15 +10,15 @@ def human_time(options):
     today_name = " aujourd'hui"
     tomorrow_name = " demain"
     res = "Ouverture de UrLab: "
-    if 'days' in options:
-        if options['days'] == '0':
+    if 'future_days' in options:
+        if options['future_days'] == '0':
             res += today_name
-        elif options['days'] == '1':
+        elif options['future_days'] == '1':
             res += tomorrow_name
         else:
             try:
-                days = int(options['days'])
-                res += " dans {} jours".format(days)
+                future_days = int(options['future_days'])
+                res += " dans {} jours".format(future_days)
             except ValueError:
                 # FUCK OFF YOU TRIED TO TRICK ME
                 res += today_name
@@ -30,10 +30,10 @@ def human_time(options):
 def weekday_probs(opts):
     # check today by default
     begin_hour = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    if 'days' in opts:
+    if 'future_days' in opts:
         try:
-            days = int(opts['days'])
-            begin_hour += timezone.timedelta(days=days)
+            future_days = int(opts['future_days'])
+            begin_hour += timezone.timedelta(days=future_days)
         except ValueError:
             # YOU TRIED TO TRICK ME AGAIN YOU FOOL
             pass
