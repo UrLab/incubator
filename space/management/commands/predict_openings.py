@@ -15,12 +15,20 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # get training data until now
         now_hour = timezone.now().replace(second=0, minute=0, microsecond=0)
-        df = read_frame(SpaceStatus.objects.filter(time__lte=now_hour))
+        df = read_frame(SpaceStatus.objects.filter(time__lte=now_hour).order_by('time'))
 
         # resample by hour and set correct types
         df = df[['time', 'is_open']].drop_duplicates('time').set_index('time')
         df = df.resample('1H').ffill().dropna()
         df['is_open'] = df['is_open'].astype(np.int32)
+
+        # extend current status until now
+        last_time = df.index[-1]
+        last_value = df.loc[last_time].is_open
+        now_time = timezone.now()
+        while (last_time < now_time):
+            df.loc[last_time] = last_value
+            last_time += timezone.timedelta(hours=1)
 
         # used later to predict 24 hours in a row
         predictions = df.copy()
