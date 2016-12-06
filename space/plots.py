@@ -16,7 +16,10 @@ def human_time(options):
 
 
 def weekday_probs(opts):
+    # check today by default
     begin_hour = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    if 'tomorrow' in opts:
+        begin_hour += timezone.timedelta(days=1)
     end_hour = begin_hour + timezone.timedelta(days=1)
     df = read_frame(SpaceStatusPrediction.objects.filter(time__gte=begin_hour, time__lt=end_hour))
     return df.proba_open
