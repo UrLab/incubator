@@ -1,8 +1,8 @@
 from django_pandas.io import read_frame
 import pandas as pd
 import numpy as np
-from .models import SpaceStatus
-
+from .models import SpaceStatus, SpaceStatusPrediction
+from django.utils import timezone
 
 def get_openings_df(from_date, to_date, freq='H'):
     query = {}
@@ -51,6 +51,9 @@ def human_time(options):
 
 
 def weekday_probs(opts):
+    next_hour = timezone.now().replace(minute=0, second=0, microsecond=0) + timezone.timedelta(hours=1)
+    df = read_frame(SpaceStatusPrediction.objects.filter(time__gte=next_hour))
+    return df.proba_open
     # Create openings data query for requested time frame
     if 'weeks' in opts:
         delta = pd.Timedelta(days=7*int(opts['weeks']))
