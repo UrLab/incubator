@@ -41,8 +41,8 @@ class Command(BaseCommand):
         predictor = RandomForestClassifier(100)
         predictor.fit(X, y)
 
-        # predict the next 24hours
-        now_time = timezone.now().replace(minute=0, second=0, microsecond=0) + timezone.timedelta(hours=1)
+        # predict today and tomorrow
+        now_time = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
         tomorrow_midnight = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) + timezone.timedelta(days=2)
         while (now_time < tomorrow_midnight):
             # create features for prediction
@@ -66,5 +66,5 @@ class Command(BaseCommand):
             # create or update in db
             ssp = SpaceStatusPrediction.objects.get_or_create(time=now_time, defaults={'proba_open': proba_open})[0]
             ssp.save()
-            
+
             now_time += timezone.timedelta(hours=1)
