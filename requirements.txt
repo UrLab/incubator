@@ -23,3 +23,5 @@ matplotlib
 pandas
 django-pandas
 pip>8.0
+scipy
+sklearn
