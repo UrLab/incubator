@@ -7,19 +7,36 @@ from django.utils import timezone
 def human_time(options):
     days_names = ["Lundi", "Mardi", "Mercredi",
                   "Jeudi", "Vendredi", "Samedi", "Dimanche"]
+    today_name = " aujourd'hui"
+    tomorrow_name = " demain"
     res = "Ouverture de UrLab: "
-    if 'tomorrow' in options:
-        res += " demain"
+    if 'days' in options:
+        if options['days'] == '0':
+            res += today_name
+        elif options['days'] == '1':
+            res += tomorrow_name
+        else:
+            try:
+                days = int(options['days'])
+                res += " dans {} jours".format(days)
+            except ValueError:
+                # FUCK OFF YOU TRIED TO TRICK ME
+                res += today_name
     else:
-        res += " aujourd'hui"
+        res += today_name
     return res
 
 
 def weekday_probs(opts):
     # check today by default
     begin_hour = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    if 'tomorrow' in opts:
-        begin_hour += timezone.timedelta(days=1)
+    if 'days' in opts:
+        try:
+            days = int(opts['days'])
+            begin_hour += timezone.timedelta(days=days)
+        except ValueError:
+            # YOU TRIED TO TRICK ME AGAIN YOU FOOL
+            pass
     end_hour = begin_hour + timezone.timedelta(days=1)
     df = read_frame(SpaceStatusPrediction.objects.filter(time__gte=begin_hour, time__lt=end_hour))
     return df.proba_open

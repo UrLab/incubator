@@ -43,8 +43,8 @@ class Command(BaseCommand):
 
         # predict today and tomorrow
         now_time = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
-        tomorrow_midnight = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) + timezone.timedelta(days=2)
-        while (now_time < tomorrow_midnight):
+        end_time = now_time + timezone.timedelta(days=7)
+        while (now_time < end_time):
             # create features for prediction
             openlastweek = predictions[predictions.index == now_time + timezone.timedelta(weeks=-1)].reset_index(drop=True)
             openlastday = predictions[predictions.index == now_time + timezone.timedelta(days=-1)].reset_index(drop=True)
