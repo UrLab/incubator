@@ -38,6 +38,13 @@ class SpaceStatus(models.Model):
         verbose_name = "État d'ouverture du Hackerspace"
         verbose_name_plural = "États d'ouverture du Hackerspace"
 
+class SpaceStatusPrediction(models.Model):
+    time = models.DateTimeField(primary_key=True)
+    proba_open = models.FloatField()
+
+    class Meta:
+        verbose_name = "Prévision d'état d'ouverture du Hackerspace"
+        verbose_name_plural = "Prévisions d'état d'ouverture du Hackerspace"
 
 class MusicOfTheDay(models.Model):
     url = models.URLField()
