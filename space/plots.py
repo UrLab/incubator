@@ -46,6 +46,4 @@ def weekday_plot(ax, opts):
     ax.grid()
 
     # Title
-    opts['from'] = df.index.min().strftime("%d/%m/%Y")
-    opts['to'] = df.index.max().strftime("%d/%m/%Y")
     ax.title(human_time(opts))
