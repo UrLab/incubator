@@ -42,27 +42,29 @@ class Command(BaseCommand):
         predictor.fit(X, y)
 
         # predict the next 24hours
-        predict_time = timezone.now().replace(minute=0, second=0, microsecond=0) + timezone.timedelta(hours=1)
-        for i in range(0, 24):
-            new_time = predict_time + timezone.timedelta(hours=i)
+        now_time = timezone.now().replace(minute=0, second=0, microsecond=0) + timezone.timedelta(hours=1)
+        tomorrow_midnight = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0) + timezone.timedelta(days=2)
+        while (now_time < tomorrow_midnight):
             # create features for prediction
-            openlastweek = predictions[predictions.index == new_time + timezone.timedelta(weeks=-1)].reset_index(drop=True)
-            openlastday = predictions[predictions.index == new_time + timezone.timedelta(days=-1)].reset_index(drop=True)
-            openlasthour2 = predictions[predictions.index == new_time + timezone.timedelta(hours=-2)].reset_index(drop=True)
-            openlasthour = predictions[predictions.index == new_time + timezone.timedelta(hours=-1)].reset_index(drop=True)
+            openlastweek = predictions[predictions.index == now_time + timezone.timedelta(weeks=-1)].reset_index(drop=True)
+            openlastday = predictions[predictions.index == now_time + timezone.timedelta(days=-1)].reset_index(drop=True)
+            openlasthour2 = predictions[predictions.index == now_time + timezone.timedelta(hours=-2)].reset_index(drop=True)
+            openlasthour = predictions[predictions.index == now_time + timezone.timedelta(hours=-1)].reset_index(drop=True)
             predict_features =  [[
-                                    new_time.weekday(),
-                                    new_time.hour,
+                                    now_time.weekday(),
+                                    now_time.hour,
                                     openlastweek.loc[0].is_open if openlastweek.size > 0 else 0,
                                     openlastday.loc[0].is_open if openlastday.size > 0 else 0,
                                     openlasthour2.loc[0].is_open if openlasthour2.size > 0 else 0,
                                     openlasthour.loc[0].is_open if openlasthour.size > 0 else 0,
-                                    new_time.isocalendar()[1]
+                                    now_time.isocalendar()[1]
                                 ]]
             proba_open = predictor.predict_proba(predict_features)[0][1]
             # add current prediction to data to predict further away
-            predictions.loc[new_time] = proba_open
+            predictions.loc[now_time] = proba_open
 
             # create or update in db
-            ssp = SpaceStatusPrediction.objects.get_or_create(time=new_time, defaults={'proba_open': proba_open})[0]
+            ssp = SpaceStatusPrediction.objects.get_or_create(time=now_time, defaults={'proba_open': proba_open})[0]
             ssp.save()
+            
+            now_time += timezone.timedelta(hours=1)
