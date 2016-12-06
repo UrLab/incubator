@@ -51,8 +51,11 @@ def human_time(options):
 
 
 def weekday_probs(opts):
-    next_hour = timezone.now().replace(minute=0, second=0, microsecond=0) + timezone.timedelta(hours=1)
-    df = read_frame(SpaceStatusPrediction.objects.filter(time__gte=next_hour))
+    begin_hour = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    end_hour = begin_hour + timezone.timedelta(days=1)
+    print(begin_hour, end_hour)
+    df = read_frame(SpaceStatusPrediction.objects.filter(time__gte=begin_hour, time__lte=end_hour))
+    print(df)
     return df.proba_open
     # Create openings data query for requested time frame
     if 'weeks' in opts:
