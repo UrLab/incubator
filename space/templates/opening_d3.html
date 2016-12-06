@@ -1,11 +1,29 @@
 {% load static %}
-<svg></svg>
 <div id="plot-legend"></div>
+<svg></svg>
+<div class="btn-group text-center" data-toggle="buttons" style="width: 100%">
+  <label class="btn btn-xs btn-primary active" style="width: 24%">
+    <input type="radio" name="btn_openings" value="0" autocomplete="off" checked>Aujourd'hui
+  </label>
+  <label class="btn btn-xs btn-primary" style="width: 19%">
+    <input type="radio" name="btn_openings" value="1" autocomplete="off">Demain
+  </label>
+  <label class="btn btn-xs btn-primary" style="width: 19%">
+    <input type="radio" name="btn_openings" value="2" autocomplete="off">2 jours
+  </label>
+  <label class="btn btn-xs btn-primary" style="width: 19%">
+    <input type="radio" name="btn_openings" value="3" autocomplete="off">3 jours
+  </label>
+  <label class="btn btn-xs btn-primary" style="width: 19%">
+    <input type="radio" name="btn_openings" value="4" autocomplete="off">4 jours
+  </label>
+</div>
 <script src="{% static "js/babel.min.js" %}"></script>
 <script src="{% static "js/d3.v4.min.js" %}"></script>
 <script type="text/babel">
 (_ => {
     function draw_openings_plot(opening_data, W=270, H=90){
+        d3.select("svg").html('');
         let N = opening_data.length
         let w = W/N, h = 0.7*H, p = W/200
 
@@ -104,12 +122,20 @@
         updateNow()
     }
 
-    $(document).ready(_ => {
-        let url = '{% url "openings_graph_data" %}?future_days=0'
+    function load_data(i) {
+        let url = '{% url "openings_graph_data" %}?future_days=' + i
         $.getJSON(url, data => {
             draw_openings_plot(data.probs)
             $('#plot-legend').html(data.range)
         })
+    }
+
+    $(document).ready(_ => {
+        load_data(0)
     })
+    $('input:radio[name=btn_openings]').change(function() {
+        var val = $('input:radio[name=btn_openings]:checked').val();
+        load_data(val);
+    });
 })()
 </script>
