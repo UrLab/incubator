@@ -105,7 +105,7 @@
     }
 
     $(document).ready(_ => {
-        let url = '{% url "openings_graph_data" %}?weeks=6&width=9&height=3&weekday_django={% now "w" %}'
+        let url = '{% url "openings_graph_data" %}'
         $.getJSON(url, data => {
             draw_openings_plot(data.probs)
             $('#plot-legend').html(data.range)
