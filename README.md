@@ -29,3 +29,11 @@ Quick brainstorming https://pad.lqdn.fr/p/incubator
 # View / edit Notebooks
 
     ./manage.py shell_plus --notebook
+
+# Predictions
+    
+To get the openings predictions for the next 7 days, you have to run
+
+    ./manage.py predict_openings
+
+Doing it every hour is better because the predictions become more accurate
