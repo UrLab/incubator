@@ -10,7 +10,7 @@ from users.models import User
 @admin.register(Email)
 class EmailAdmin(admin.ModelAdmin):
     list_display = ('subject', 'sent', 'created', 'modified', 'get_approvers', 'is_sendable')
-    list_filter = ('sent' ,'created', 'modified')
+    list_filter = ('sent', 'created', 'modified')
     search_fields = ('subject', 'content', )
     readonly_fields = ('sent', 'approvers', 'markdown_content')
 
