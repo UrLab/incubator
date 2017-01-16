@@ -53,8 +53,8 @@ class EmailAdmin(admin.ModelAdmin):
         message = EmailMultiAlternatives(
             subject=email.subject,
             body=email.content,
-            from_email='contact@urlab.be',
-            to=["contact@urlab.be"],
+            from_email='Newsletter UrLab <contact@urlab.be>',
+            to=["UrLab <contact@urlab.be>"],
             bcc=recipients,
         )
         message.attach_alternative(email.markdown_content(), "text/html")
@@ -81,7 +81,7 @@ class EmailAdmin(admin.ModelAdmin):
         message = EmailMultiAlternatives(
             subject=email.subject,
             body=email.content,
-            from_email='contact@urlab.be',
+            from_email='Newsletter UrLab <contact@urlab.be>',
             to=["contact-test@urlab.be"],
             bcc=[request.user.email],
         )
