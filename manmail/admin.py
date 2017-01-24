@@ -10,7 +10,7 @@ from users.models import User
 @admin.register(Email)
 class EmailAdmin(admin.ModelAdmin):
     list_display = ('subject', 'sent', 'created', 'modified', 'get_approvers', 'is_sendable')
-    list_filter = ('sent' ,'created', 'modified')
+    list_filter = ('sent', 'created', 'modified')
     search_fields = ('subject', 'content', )
     readonly_fields = ('sent', 'approvers', 'markdown_content')
 
@@ -53,8 +53,8 @@ class EmailAdmin(admin.ModelAdmin):
         message = EmailMultiAlternatives(
             subject=email.subject,
             body=email.content,
-            from_email='contact@urlab.be',
-            to=["contact@urlab.be"],
+            from_email='Newsletter UrLab <contact@urlab.be>',
+            to=["UrLab <contact@urlab.be>"],
             bcc=recipients,
         )
         message.attach_alternative(email.markdown_content(), "text/html")
@@ -81,7 +81,7 @@ class EmailAdmin(admin.ModelAdmin):
         message = EmailMultiAlternatives(
             subject=email.subject,
             body=email.content,
-            from_email='contact@urlab.be',
+            from_email='Newsletter UrLab <contact@urlab.be>',
             to=["contact-test@urlab.be"],
             bcc=[request.user.email],
         )
