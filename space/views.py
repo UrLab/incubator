@@ -17,7 +17,7 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 from datetime import timedelta
 
-from .djredis import get_redis, get_mac, set_space_open, space_is_open
+from .djredis import get_redis, get_mac, set_space_open, space_is_open, get_hostnames
 from .models import MacAdress, SpaceStatus, MusicOfTheDay
 from .forms import MacAdressForm
 from .serializers import PamelaSerializer, SpaceStatusSerializer, MotdSerializer
@@ -31,16 +31,19 @@ from django.conf import settings
 def make_pamela():
     redis = get_redis()
     updated, maclist = get_mac(redis)
+    hostnames = get_hostnames(redis)
 
     known_mac = MacAdress.objects.filter(adress__in=maclist)
     users = {mac.holder for mac in known_mac if mac.holder is not None}
     visible_users = {u for u in users if not u.hide_pamela}
     unknown_mac = list(filter(lambda x: x not in [obj.adress for obj in known_mac], maclist))
 
+    unknown_mac = [hostnames.get(mac, 'xx:xx:xx:xx:' + mac[-5:]) for mac in unknown_mac]
+
     return {
         'raw_maclist': maclist,
         'updated': updated,
-        'unknown_mac': ['xx:xx:xx:xx:' + mac[-5:] for mac in unknown_mac],
+        'unknown_mac': unknown_mac,
         'users': visible_users,
         'hidden': len(users) - len(visible_users),
     }
