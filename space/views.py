@@ -239,10 +239,10 @@ class PamelaViewSet(viewsets.ViewSet):
 
 
 class OpeningsViewSet(viewsets.ModelViewSet):
-    queryset = SpaceStatus.objects.all()
+    queryset = SpaceStatus.objects.all().order_by('-time')
     serializer_class = SpaceStatusSerializer
 
 
 class MotdViewSet(viewsets.ModelViewSet):
-    queryset = MusicOfTheDay.objects.all()
+    queryset = MusicOfTheDay.objects.all().order_by('-day')
     serializer_class = MotdSerializer
