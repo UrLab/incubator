@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse, JsonResponse
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.shortcuts import get_object_or_404
@@ -208,7 +208,8 @@ def add_point_to_next_meeting(request, point):
     meeting = get_next_meeting()
     meeting.OJ += '\n* ' + point
     meeting.save()
-    return HttpResponse("Point added to OJ")
+    r = {'new_point': point, 'full_oj': meeting.OJ}
+    return JsonResponse(r, safe=False)
 
 
 class NextMeetingAPI(APIView):

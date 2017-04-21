@@ -33,6 +33,11 @@ def get_mac(client):
     return updated, mac.split(',')
 
 
+def get_hostnames(client):
+    r = client.hgetall("incubator_pamela_hostnames")
+    return {k.decode(): v.decode() for k, v in r.items()}
+
+
 def set_space_open(client, is_open):
     if isinstance(is_open, bool):
         is_open = 1 if is_open else 0

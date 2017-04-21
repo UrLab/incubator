@@ -45,6 +45,7 @@ class CustomUserManager(UserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'Utilisateur'
+        ordering = ['username']
         permissions = (
             ("change_balance", "Peut modifier son ardoise"),
         )
