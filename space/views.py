@@ -84,13 +84,15 @@ def full_pamela(request):
 @private_api(open=one_or_zero)
 def status_change(request, open):
     set_space_open(get_redis(), open)
-    return HttpResponse("Hackerspace is now open={}".format(open))
+    r = {'open': open}
+    return JsonResponse(r, safe=False)
 
 
 @private_api(url=str, nick=str)
 def motd_change(request, url, nick):
     MusicOfTheDay.objects.create(url=url, irc_nick=nick)
-    return HttpResponse("Music has been changed to {} by {}".format(url, nick))
+    r = {'changed_by': nick, 'url': url}
+    return JsonResponse(r, safe=False)
 
 
 class DeleteMACView(DeleteView):
