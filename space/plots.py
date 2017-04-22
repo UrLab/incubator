@@ -68,7 +68,13 @@ def weekday_probs(opts):
 
     # Group by hour and plot as image
     by_hour = df.groupby(df.index.time).is_open
-    return by_hour.sum() / by_hour.count()
+    ret = by_hour.sum() / by_hour.count()
+
+    if 'official' in opts:
+        for i in [0, 1, 2, 3, 4, 5, 6, 23]:
+            ret[i] = 0
+
+    return ret
 
 
 def weekday_plot(ax, opts):
