@@ -1,8 +1,7 @@
 import uuid
 
-from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from django.views.decorators.csrf import csrf_exempt
-import json
+from django.http import JsonResponse
 
 from .models import PrivateAPIKey
 
@@ -25,47 +24,47 @@ def private_api(**required_params):
         @csrf_exempt
         def inner(request, *args, **kwargs):
             if request.method != 'POST':
-                return HttpResponseBadRequest(json.dumps({
+                return JsonResponse({
                     "error": "Only POST requests are allowed",
                     "hint": "Provide a 'secret' POST param with your token",
-                }), content_type="application/json")
+                }, status=400)
 
             if 'secret' not in request.POST.keys():
-                return HttpResponseBadRequest(json.dumps({
+                return JsonResponse({
                     "error": "Missing 'secret' param",
                     "hint": "Provide a 'secret' POST param with your token",
-                }), content_type="application/json")
+                }, status=400)
 
             try:
                 uuid.UUID(request.POST['secret'])
             except ValueError:
                 message = 'Bad secret {} is not an uuid'.format(
                     request.POST['secret'])
-                return HttpResponseBadRequest(json.dumps({
+                return JsonResponse({
                     "error": message,
-                }), content_type="application/json")
+                }, status=400)
 
             api_key = PrivateAPIKey.objects.filter(key=request.POST['secret'], active=True).first()
             if api_key is None:
                 message = 'Bad secret {} is not in the allowed list'.format(
                     request.POST['secret'])
-                return HttpResponseForbidden(json.dumps({
+                return JsonResponse({
                     "error": message,
-                }), content_type="application/json")
+                }, status=403)
 
             params = kwargs
             for name, typecast in required_params.items():
                 if name not in request.POST.keys():
-                    return HttpResponseBadRequest(json.dumps({
+                    return JsonResponse({
                         "error": "Parameter %s is required" % name,
-                    }), content_type="application/json")
+                    }, status=400)
                 try:
                     params[name] = typecast(request.POST[name])
                 except ValueError:
-                    return HttpResponseBadRequest(json.dumps({
+                    return JsonResponse({
                         "error": "Did not understand %s=%s" % (name, request.POST[name]),
                         "hint": "Check the type of your parameter ?"
-                    }), content_type="application/json")
+                    }, status=400)
             response = some_view(request, *args, **params)
             assert response['Content-Type'] == "application/json"
             return response

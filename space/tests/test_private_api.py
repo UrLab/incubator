@@ -42,14 +42,14 @@ def secret():
 def test_get(rf):
     request = rf.get('')
     response = inner_fn(request)
-    assert isinstance(response, HttpResponseBadRequest)
+    assert response.status_code == 400
     assert j(response)['error'] == "Only POST requests are allowed"
 
 
 def test_no_secret(rf):
     request = rf.post('')
     response = inner_fn(request)
-    assert isinstance(response, HttpResponseBadRequest)
+    assert response.status_code == 400
     assert j(response)['error'] == "Missing 'secret' param"
 
 
@@ -58,7 +58,7 @@ def test_not_uuid_secret(rf, secret):
     bad_secret = 'this-is-a-bad-secret-and-not-an-uuid'
     request = rf.post('', {'secret': bad_secret})
     response = inner_fn(request)
-    assert isinstance(response, HttpResponseBadRequest)
+    assert response.status_code == 400
     assert j(response)['error'] == 'Bad secret {} is not an uuid'.format(bad_secret)
 
 
@@ -67,7 +67,7 @@ def test_bad_secret(rf, secret):
     bad_secret = uuid.uuid4()
     request = rf.post('', {'secret': bad_secret})
     response = inner_fn(request)
-    assert isinstance(response, HttpResponseForbidden)
+    assert response.status_code == 403
     assert j(response)['error'] == 'Bad secret {} is not in the allowed list'.format(bad_secret)
 
 
@@ -126,5 +126,5 @@ def test_missing_post_arg(rf, secret):
 
     request = rf.post('', {'secret': secret})
     response = inner_fn(request)
-    assert isinstance(response, HttpResponseBadRequest)
+    assert response.status_code == 400
     assert j(response)['error'] == 'Parameter var is required'
