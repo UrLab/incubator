@@ -1,4 +1,5 @@
 import uuid
+import json
 
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponse
 from space.models import PrivateAPIKey
@@ -7,12 +8,23 @@ from users.models import User
 import pytest
 
 from space.decorators import private_api
-X = HttpResponse('i am the inner fn')
+
+X = HttpResponse('{"test": "i am the inner fn"}', content_type="application/json")
+Y = HttpResponse('this is not json')
 
 
 @private_api()
 def inner_fn(request):
     return X
+
+
+@private_api()
+def bad_view(request):
+    return Y
+
+
+def j(response):
+    return json.loads(response.content.decode())
 
 
 @pytest.fixture(scope='function')
@@ -31,14 +43,14 @@ def test_get(rf):
     request = rf.get('')
     response = inner_fn(request)
     assert isinstance(response, HttpResponseBadRequest)
-    assert response.content == b"Only POST is allowed"
+    assert j(response)['error'] == "Only POST requests are allowed"
 
 
 def test_no_secret(rf):
     request = rf.post('')
     response = inner_fn(request)
     assert isinstance(response, HttpResponseBadRequest)
-    assert response.content == b"You must query this endpoint with a secret."
+    assert j(response)['error'] == "Missing 'secret' param"
 
 
 @pytest.mark.django_db
@@ -47,7 +59,7 @@ def test_not_uuid_secret(rf, secret):
     request = rf.post('', {'secret': bad_secret})
     response = inner_fn(request)
     assert isinstance(response, HttpResponseBadRequest)
-    assert response.content == bytes('Bad secret {} is not an uuid'.format(bad_secret), 'utf-8')
+    assert j(response)['error'] == 'Bad secret {} is not an uuid'.format(bad_secret)
 
 
 @pytest.mark.django_db
@@ -56,7 +68,7 @@ def test_bad_secret(rf, secret):
     request = rf.post('', {'secret': bad_secret})
     response = inner_fn(request)
     assert isinstance(response, HttpResponseForbidden)
-    assert response.content == bytes('Bad secret {} is not in the allowed list'.format(bad_secret), 'utf-8')
+    assert j(response)['error'] == 'Bad secret {} is not in the allowed list'.format(bad_secret)
 
 
 @pytest.mark.django_db
@@ -65,6 +77,13 @@ def test_simple(rf, secret):
     response = inner_fn(request)
     assert type(response) == HttpResponse
     assert response == X
+
+
+@pytest.mark.django_db
+def test_content_type(rf, secret):
+    request = rf.post('', {'secret': secret})
+    with pytest.raises(AssertionError):
+        bad_view(request)
 
 
 @pytest.mark.django_db
@@ -108,4 +127,4 @@ def test_missing_post_arg(rf, secret):
     request = rf.post('', {'secret': secret})
     response = inner_fn(request)
     assert isinstance(response, HttpResponseBadRequest)
-    assert response.content == b'Parameter var is required'
+    assert j(response)['error'] == 'Parameter var is required'
