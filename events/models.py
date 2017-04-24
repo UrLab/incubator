@@ -21,6 +21,7 @@ class Event(models.Model):
     description = models.TextField(blank=True)
     picture = ResizedImageField(size=[500, 500], upload_to='event_pictures', null=True, blank=True)
     interested = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="interesting_events")
+    facebook_event = models.UrlField()
 
     def is_only_a_day(self):
         return self.start.date() == self.stop.date()
