@@ -33,3 +33,19 @@ class FacebookGroupPost(models.Model):
 class FacebookPagePost(models.Model):
     url = models.UrlField()
     message = models.ForeignKey("propaganda.Message")
+
+
+class Poster(models.Model):
+    title = models.CharField()
+    subtitle = models.CharField()
+    sub_subtitle = models.CharField()
+
+    image_1 = models.ImageField()
+    title_1 = models.CharField()
+
+    image_2 = models.ImageField()
+    title_2 = models.CharField()
+
+    image_3 = models.ImageField()
+    title_3 = models.CharField()
+
