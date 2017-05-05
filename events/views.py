@@ -198,9 +198,15 @@ class MeetingViewSet(viewsets.ModelViewSet):
 
 
 def get_next_meeting():
-    return Meeting.objects\
-                  .filter(event__start__gte=datetime.now())\
-                  .order_by('event__start')[0]
+    return (
+        Meeting.objects
+        .filter(
+            event__start__gte=datetime.now(),
+            ongoing=False
+        )
+        .order_by('event__start')
+        .first()
+    )
 
 
 @private_api(point=str)
