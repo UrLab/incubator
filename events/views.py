@@ -212,6 +212,13 @@ def get_next_meeting():
 @private_api(point=str)
 def add_point_to_next_meeting(request, point):
     meeting = get_next_meeting()
+    if meeting is None:
+        return JsonResponse(
+            {
+                "error": "There is no future meeting",
+                "hint": "Create a new event with an OJ",
+            },
+            status=404)
     meeting.OJ += '\n* ' + point
     meeting.save()
     r = {'new_point': point, 'full_oj': meeting.OJ}
