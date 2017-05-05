@@ -82,8 +82,8 @@ class MeetingEditView(PermissionRequiredMixin, UpdateView):
 
 
 def events_home(request):
-    futureQ = Q(stop__gt=timezone.now())
-    readyQ = Q(status__exact="r")
+    futureQ = Q(stop__gt=timezone.now()) # NOQA
+    readyQ = Q(status__exact="r") # NOQA
 
     base = Event.objects.select_related('meeting')
 
