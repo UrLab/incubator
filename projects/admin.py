@@ -12,7 +12,7 @@ class TaskInline(admin.TabularInline):
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('title', 'status', 'maintainer', 'progress')
     list_filter = ('status',)
-    search_fields = ('title', 'description', 'requirements', 'content')
+    search_fields = ('title', 'short_description', 'requirements', 'content')
 
     filter_horizontal = ('participants', 'dependencies')
     inlines = (TaskInline,)
