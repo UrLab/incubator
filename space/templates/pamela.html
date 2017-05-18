@@ -27,7 +27,18 @@ PAMELA
                 Hackerspace.
                 Ci-dessous les gens actuellements présents :</p>
 
-            <div id="pamela"></div>
+            {% if should_show_pamela %}
+                {% if stealth_mode %}
+                    <br>
+                    <div class="alert alert-warning" role="alert">
+                    <b>Stealth mode activated !</b> Le hackerspace n'est pas censé être ouvert pour l'instant.<br>
+                    Vous pouvez voir pamela parce que vous êtes détenteur d'une clé mais la plus part des gens ne voient qu'une page vide !
+                    </div>
+                {% endif %}
+                <div id="pamela"></div>
+            {% else %}
+                <h2>Il n'y a personne au hackerspace pour l'instant.</h2>
+            {% endif %}
         </div>
         <div class="col-md-4">
             {% if space_open %}

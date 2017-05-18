@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 from .models import SpaceStatus
 
+from django.conf import settings
+
 
 def get_openings_df(from_date, to_date, freq='H'):
     query = {}
@@ -53,7 +55,7 @@ def human_time(options):
 def weekday_probs(opts):
     # Create openings data query for requested time frame
     if 'weeks' in opts:
-        delta = pd.Timedelta(days=7*int(opts['weeks']))
+        delta = pd.Timedelta(days=7 * int(opts['weeks']))
         now = pd.datetime.now()
         df = get_openings_df(now - delta, now)
     else:
@@ -71,8 +73,9 @@ def weekday_probs(opts):
     ret = by_hour.sum() / by_hour.count()
 
     if 'official' in opts:
-        for i in [0, 1, 2, 3, 4, 5, 6, 23]:
-            ret[i] = 0
+        for i in range(ret.index.size):
+            if i not in settings.OPEN_HOURS:
+                ret[i] = 0
 
     return ret
 
@@ -85,8 +88,9 @@ def weekday_plot(ax, opts):
 
     probs = 100 * weekday_probs(opts)
     img = np.repeat([probs], 5, axis=0)
-    cax = ax.imshow(img, cmap=ax.cm.RdYlGn, interpolation='none',
-                     vmin=0, vmax=100)
+    cax = ax.imshow(
+        img, cmap=ax.cm.RdYlGn, interpolation='none',
+        vmin=0, vmax=100)
     ticks = [0, 25, 50, 75, 100]
     cbar = ax.colorbar(cax, ticks=ticks)
     cbar.ax.set_yticklabels(['{}%'.format(t) for t in ticks])
