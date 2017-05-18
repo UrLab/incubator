@@ -82,8 +82,8 @@ class MeetingEditView(PermissionRequiredMixin, UpdateView):
 
 
 def events_home(request):
-    futureQ = Q(stop__gt=timezone.now())
-    readyQ = Q(status__exact="r")
+    futureQ = Q(stop__gt=timezone.now()) # NOQA
+    readyQ = Q(status__exact="r") # NOQA
 
     base = Event.objects.select_related('meeting')
 
@@ -198,14 +198,27 @@ class MeetingViewSet(viewsets.ModelViewSet):
 
 
 def get_next_meeting():
-    return Meeting.objects\
-                  .filter(event__start__gte=datetime.now())\
-                  .order_by('event__start')[0]
+    return (
+        Meeting.objects
+        .filter(
+            event__start__gte=datetime.now(),
+            ongoing=False
+        )
+        .order_by('event__start')
+        .first()
+    )
 
 
 @private_api(point=str)
 def add_point_to_next_meeting(request, point):
     meeting = get_next_meeting()
+    if meeting is None:
+        return JsonResponse(
+            {
+                "error": "There is no future meeting",
+                "hint": "Create a new event with an OJ",
+            },
+            status=404)
     meeting.OJ += '\n* ' + point
     meeting.save()
     r = {'new_point': point, 'full_oj': meeting.OJ}
