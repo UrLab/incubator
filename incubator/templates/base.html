@@ -120,7 +120,7 @@
                             </li>
                         {% else %}
                             <li class="{% active_if_contains "/auth/login" %}">
-                                <a href="{% url "login" %}">Login / Register</a>
+                                <a href="{% url "login" %}?next={{request.path}}">Login / Register</a>
                             </li>
                         {% endif %}
                     </ul>
