@@ -48,6 +48,8 @@ INSTALLED_APPS = (
     'django_filters',
     'crispy_forms',
     'analytical',
+    'constance',
+    'constance.backends.database',
 
     'incubator',
     'events',
@@ -219,6 +221,15 @@ PIWIK_DOMAIN_PATH = 'piwik.urlab.be'
 PIWIK_SITE_ID = '2'
 
 MINIMAL_MAIL_APPROVERS = 3
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+
+CONSTANCE_CONFIG = {
+    'PERIOD_OPEN': (True, 'Is the hackerspace supposed to be open during this period ?', bool),
+}
+
+OPEN_WEEKDAYS = [0, 1, 2, 3, 4, 5]  # Monday is day 0
+OPEN_HOURS = list(range(7, 23))
 
 try:
     from incubator.local_settings import * # NOQA
