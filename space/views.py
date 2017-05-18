@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.contrib import messages
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.views.generic.edit import DeleteView
-from django.core.urlresolvers import reverse_lazy
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.cache import cache_page
-from django.http import JsonResponse
 from django.utils import timezone
+from django.db import IntegrityError
+
 from influxdb import InfluxDBClient
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -70,7 +70,13 @@ def status_change(request, open):
 
 @private_api(url=str, nick=str)
 def motd_change(request, url, nick):
-    MusicOfTheDay.objects.create(url=url, irc_nick=nick)
+    try:
+        MusicOfTheDay.objects.create(url=url, irc_nick=nick)
+    except IntegrityError:
+        return JsonResponse({
+            "error": "A motd was already added today. Try again tomorrow.",
+            "type": "TRY_AGAIN_TOMORROW",
+        }, status=409)
     r = {'changed_by': nick, 'url': url}
     return JsonResponse(r, safe=False)
 
