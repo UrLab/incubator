@@ -224,11 +224,22 @@ MINIMAL_MAIL_APPROVERS = 3
 
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 
-CONSTANCE_CONFIG = {
-    'PERIOD_OPEN': (True, 'Is the hackerspace supposed to be open during this period ?', bool),
+
+CONSTANCE_ADDITIONAL_FIELDS = {
+    'bootstrap-alert': ['django.forms.fields.ChoiceField', {
+        'widget': 'django.forms.Select',
+        'choices': (("danger", "Rouge"), ("warning", "Orange"), ("info", "Bleu"), ("success", "Vert"))
+    }],
 }
 
-OPEN_WEEKDAYS = [0, 1, 2, 3, 4, 5]  # Monday is day 0
+CONSTANCE_CONFIG = {
+    'PERIOD_OPEN': (True, 'Is the hackerspace supposed to be open during this period ?', bool),
+    'HOMEPAGE_MESSAGE': ("", 'Message to show on the homepage (mardown accepted)', str),
+    'HOMEPAGE_MESSAGE_TYPE': ("danger", "Color of the message to show on the homepage.", "bootstrap-alert"),
+
+}
+
+OPEN_WEEKDAYS = [0, 1, 2, 3, 4]  # Monday is day 0
 OPEN_HOURS = list(range(7, 23))
 
 try:
