@@ -239,7 +239,7 @@ CONSTANCE_CONFIG = {
 
 }
 
-OPEN_WEEKDAYS = [0, 1, 2, 3, 4, 5]  # Monday is day 0
+OPEN_WEEKDAYS = [0, 1, 2, 3, 4]  # Monday is day 0
 OPEN_HOURS = list(range(7, 23))
 
 try:
