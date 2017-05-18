@@ -23,7 +23,7 @@ from .forms import MacAdressForm
 from .serializers import PamelaSerializer, SpaceStatusSerializer, MotdSerializer
 from .decorators import private_api, one_or_zero
 from .plots import weekday_plot, weekday_probs, human_time
-from .helpers import is_steath_mode, make_empty_pamela, make_pamela, user_should_see_pamela
+from .helpers import is_stealth_mode, make_empty_pamela, make_pamela, user_should_see_pamela
 from users.models import User
 
 from django.conf import settings
@@ -48,7 +48,7 @@ def pamela_list(request):
     context['space_open'] = space_is_open(get_redis())
     context['status_change'] = SpaceStatus.objects.last()
 
-    context["stealth_mode"] = is_steath_mode()
+    context["stealth_mode"] = is_stealth_mode()
     context["should_show_pamela"] = user_should_see_pamela(request.user)
 
     return render(request, "pamela.html", context)
@@ -101,7 +101,7 @@ def get_sensors(*sensors):
 @cache_page(30)
 def spaceapi(request):
     client = get_redis()
-    if is_steath_mode():
+    if is_stealth_mode():
         pam = make_empty_pamela()
     else:
         pam = make_pamela()
