@@ -16,7 +16,7 @@ Connexion
         </div>
     {% endif %}
 
-    <form method="post" action="{% url 'django.contrib.auth.views.login' %}?next={{request.path}}">
+    <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
         {% csrf_token %}
         {% bootstrap_form form %}
         {% buttons %}
