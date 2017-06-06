@@ -66,4 +66,4 @@ def make_empty_pamela():
 def user_should_see_pamela(user):
     has_key = user.is_authenticated() and user.has_key
     stealth_mode = is_stealth_mode()
-    return has_key or (not stealth_mode)
+    return has_key or user.is_superuser or (not stealth_mode)
