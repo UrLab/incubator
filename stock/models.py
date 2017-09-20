@@ -23,7 +23,6 @@ class Transaction(models.Model):
 
 
 class TransferTransaction(Transaction):
-    user = models.ForeignKey("users.User", related_name="outgoing_transfers")
     receiver = models.ForeignKey("users.User", related_name="incoming_transfers")
     amount = models.DecimalField(max_digits=6, decimal_places=2)
 
