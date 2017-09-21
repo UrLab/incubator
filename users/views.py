@@ -15,9 +15,9 @@ from space.djredis import get_redis, space_is_open
 
 from .serializers import UserSerializer
 from .models import User
-from .forms import UserForm, SpendForm, TopForm, TransferForm
+from .forms import UserForm, SpendForm, TopForm, TransferForm, ProductBuyForm
 from .decorators import permission_required
-from stock.models import Product
+from stock.models import Product, TransferTransaction, TopupTransaction, ProductTransaction, MiscTransaction
 
 
 def balance(request):
@@ -28,6 +28,26 @@ def balance(request):
         'spendForm': SpendForm(),
         'transferForm': TransferForm(),
     })
+
+
+@permission_required('users.change_balance')
+def buy_product(request):
+    if request.method == 'POST':
+        form = ProductBuyForm(request.POST)
+        if form.is_valid():
+            product = form.cleaned_data["product"]
+            price = product.price
+
+            request.user.balance -= price
+            request.user.save()
+
+            transaction = ProductTransaction(user=request.user, product=product)
+            transaction.save()
+            messages.success(request, 'Vous avez bien dépensé {}€ ({})'.format(price, product.name))
+        else:
+            messages.error(request, "Erreur, votre dépense n'a pas été enregistrée")
+
+    return HttpResponseRedirect(reverse('change_balance'))
 
 
 @permission_required('users.change_balance')

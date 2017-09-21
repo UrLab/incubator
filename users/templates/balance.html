@@ -90,10 +90,9 @@
                                 <td class="col-md-3">{{ product.name }}</td>
                                 <td class="col-md-3">{{ product.price }}€</td>
                                 <td class="col-md-3">
-                                    <form action="{% url "balance_spend" %}" method="post" class="form">
+                                    <form action="{% url "buy_product" %}" method="post" class="form">
                                         {% csrf_token %}
-                                        <input type="hidden" name="name" id="id_name" value="{{ product.name }}">
-                                        <input type="hidden" name="value" id="id_value=" value="{{ product.price }}">
+                                        <input type="hidden" name="product" id="id_name" value="{{ product.id }}">
                                         <button type="submit" class="btn btn-default btn-xs">
                                             Acheter {% bootstrap_icon "shopping-cart" %}
                                         </button>
