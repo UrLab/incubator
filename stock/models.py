@@ -13,6 +13,9 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     category = models.ForeignKey(Category)
 
+    def __str__(self):
+        return self.name
+
 
 class Transaction(models.Model):
     user = models.ForeignKey("users.User")
