@@ -106,12 +106,9 @@ def transfer(request):
                 request.user.save()
                 otheruser.save()
 
-                action.send(
-                    request.user,
-                    verb='a transféré {}€'.format(sumchanged),
-                    target=otheruser,
-                    public=False,
-                )
+                transaction = TransferTransaction(user=request.user, receiver=otheruser, amount=sumchanged)
+                transaction.save()
+
                 messages.success(
                     request,
                     'Vous avez bien transféré {}€ à {}'.format(sumchanged,otheruser.username)
