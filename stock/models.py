@@ -32,6 +32,13 @@ class TransferTransaction(Transaction):
 
 class TopupTransaction(Transaction):
     amount = models.DecimalField(max_digits=6, decimal_places=2)
+    topup_type = models.CharField(
+        max_length=20,
+        choices=[
+            ('BANK', "Virement"),
+            ('CASH', "Caisse"),
+        ],
+    )
 
 
 class ProductTransaction(Transaction):

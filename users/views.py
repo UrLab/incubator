@@ -82,11 +82,10 @@ def top(request):
             request.user.save()
 
             top_type = form.cleaned_data['location']
-            action.send(
-                request.user,
-                verb='a versé {}€ en {}'.format(sumchanged, top_type),
-                public=False
-            )
+
+            transaction = TopupTransaction(user=request.user, topup_type=top_type, amount=sumchanged)
+            transaction.save()
+
             messages.success(request, 'Vous avez bien rechargé {}€ ({})'.format(sumchanged, top_type))
         else:
             messages.error(request, "Erreur, votre recharge n'a pas été enregistrée")
