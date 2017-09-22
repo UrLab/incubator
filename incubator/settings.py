@@ -90,8 +90,20 @@ ROOT_URLCONF = 'incubator.urls'
 WSGI_APPLICATION = 'incubator.wsgi.application'
 
 SUIT_CONFIG = {
-    'ADMIN_NAME': 'UrLaB'
+    'ADMIN_NAME': 'UrLaB',
+    'SHOW_REQUIRED_ASTERISK': True,
+    'CONFIRM_UNSAVED_CHANGES': True,
+    'SEARCH_URL': '/admin/users/user/',
+    'MENU': (
+        'users',
+        {'app': "stock", 'models': ('product', 'category', 'producttransaction', 'topuptransaction', 'transfertransaction', 'misctransaction')},
+        'constance',
+        'actstream',
+        'manmail',
+        'redir',
+    )
 }
+
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
