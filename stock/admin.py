@@ -11,6 +11,7 @@ class ProductInline(admin.TabularInline):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'price',)
+    search_fields = ('name',)
 
 
 @admin.register(Category)
@@ -22,22 +23,22 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(TransferTransaction)
 class TransferTransactionAdmin(admin.ModelAdmin):
     list_display = ('user', 'receiver', 'amount', 'when')
-    search_filter = ('user__username',)
+    search_fields = ('user__username',)
 
 
 @admin.register(TopupTransaction)
 class TopupTransaction(admin.ModelAdmin):
     list_display = ('user','amount', 'when')
-    search_filter = ('user',)
+    search_fields = ('user',)
 
 
 @admin.register(ProductTransaction)
 class ProductTransaction(admin.ModelAdmin):
     list_display = ('user','product', 'when')
-    search_filter = ('user', 'product__name')
+    search_fields = ('user', 'product__name')
 
 
 @admin.register(MiscTransaction)
 class MiscTransaction(admin.ModelAdmin):
     list_display = ('user','info', 'when')
-    search_filter = ('user',)
+    search_fields = ('user',)
