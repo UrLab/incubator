@@ -60,11 +60,10 @@ def spend(request):
             request.user.balance -= sumchanged
             request.user.save()
 
-            action.send(
-                request.user,
-                verb='a depensé {}€ pour le produit {}'.format(sumchanged, name),
-                public=False
-            )
+
+            transaction = MiscTransaction(user=request.user, info=name)
+            transaction.save()
+
             messages.success(request, 'Vous avez bien dépensé {}€ ({})'.format(sumchanged, name))
         else:
             messages.error(request, "Erreur, votre dépense n'a pas été enregistrée")
