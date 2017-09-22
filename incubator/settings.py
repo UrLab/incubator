@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    'suit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -88,7 +89,9 @@ ROOT_URLCONF = 'incubator.urls'
 
 WSGI_APPLICATION = 'incubator.wsgi.application'
 
-
+SUIT_CONFIG = {
+    'ADMIN_NAME': 'UrLaB'
+}
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
@@ -134,6 +137,7 @@ MEDIA_URL = '/media/'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'incubator/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
