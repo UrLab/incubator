@@ -12,7 +12,7 @@ def space_may_be_open(instant=None):
     if instant is None:
         instant = timezone.now()
 
-    if instant.weekday not in settings.OPEN_WEEKDAYS:
+    if instant.weekday() not in settings.OPEN_WEEKDAYS:
         return False
 
     if instant.hour not in settings.OPEN_HOURS:
