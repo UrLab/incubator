@@ -1,37 +1,124 @@
 {% extends "base.html" %}
 
 {% block title %}
-Projets à UrLab
+    Projets à UrLab
 {% endblock %}
 
 {% block content %}
 
-<ol class="breadcrumb">
-  <li><a href="/">UrLab</a></li>
-  <li class="active">Projets</li>
-</ol>
+    <ol class="breadcrumb">
+        <li><a href="/">UrLab</a></li>
+        <li class="active">Projets</li>
+    </ol>
 
+    <ul class="nav nav-tabs" id="article-menu">
+        <li class="pull-left">
+            <p><strong>Incubateur a projets</strong></p>
+        </li>
+        <li class="pull-right" role="presentation">
+            <a href="#tab-proposition" class="pull-right" data-toggle="tab">
+                <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
+                <span class="hidden-xs">Proposition</span>
+            </a>
+        </li>
+        <li class="pull-right" role="presentation">
+            <a href="#tab-finished" class="pull-right" data-toggle="tab">
+                <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
+                <span class="hidden-xs">Finis</span>
+            </a>
+        </li>
+        <li class="active pull-right" role="presentation">
+            <a href="#tab-now" class="pull-right" data-toggle="tab">
+                <span class="glyphicon glyphicon-record" aria-hidden="true"></span>
+                <span class="hidden-xs">En cours</span>
+            </a>
+        </li>
+    </ul>
 
-<div class="page-header">
-  <h1>
-    Incubateur à projets
-    <a href="{% url "add_project" %}" class="btn btn-success pull-right">
-      <span class="fa fa-plus" aria-hidden="true"></span>
-          Proposer
-    </a>
-  </h1>
-</div>
-<p>
-    Vous trouverez ici une grande partie des projets (en cours, sous forme de proposition ou finis) à UrLab. Tous ces projets sont ouverts à tous, n'hésitez pas à vous rajouter dans un projet pour aider, apprendre ou juste regarder.
-    Vous êtes aussi invités à ajouter vos propres projets ci dessus, n'ayez pas peur, on est ouverts à tout !
-</p>
-
-{% for row in projects %}
     <div class="row">
-        {% for project in row %}
-          {% include "project_card.html" %}
-        {% endfor %}
+    <div class="col-lg-11">
+
+    <div id="my-tab-content" class="tab-content">
+        <div class="tab-pane active" id="tab-now">
+            <br>
+            <p>Ici, vous trouverez les projets en cours de réalisation au Hackerspace. Tous ces projets sont ouverts à tous, n'hésitez pas à vous rajouter dans un projet pour aider, apprendre ou juste regarder.
+                Vous êtes aussi invités à ajouter vos propres projets ci dessus, n'ayez pas peur, on est ouverts à tout !
+            </p>
+            {% for row in progress %}
+                <div class="row">
+                    {% for project in row %}
+                        {% include "project_card.html" %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Déjà arrivé à la fin ?</h3>
+                </div>
+                <div class="panel-body">
+                    N'oublie pas d'aller voir les
+                    <a href="#tab-finished" data-toggle="tab">
+                        <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
+                        projets finis
+                    </a>
+                    et les
+                    <a href="#tab-proposition" data-toggle="tab">
+                        <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
+                        propositions de projet!
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="tab-finished">
+            <br>
+            <p>Ici, vous trouverez les projets qui ont déjà été faits au hackerspace.</p>
+            {% for row in done %}
+                <div class="row">
+                    {% for project in row %}
+                        {% include "project_card.html" %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="tab-pane" id="tab-proposition">
+            <br>
+            <p>Parfois les gens n'ont pas le temps, pas les compétences pour faire un projet
+                ou alors ont envie de le faire avec plus de monde. Parfois c'est juste une idée loufoque qui traine dans
+                un coin de notre tête et qu'on veut noter quelque part...</p>
+            {% for row in proposition %}
+                <div class="row">
+                    {% for project in row %}
+                        {% include "project_card.html" %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+        </div>
     </div>
-{% endfor %}
+    </div>
+
+    </div>
+    <div class="row">
+    <div class="col-lg-11">
+
+    <div class="container-fluid">
+            <a href="{% url "add_project" %}" class="btn btn-success pull-right">
+                <span class="fa fa-plus" aria-hidden="true"></span>
+                Proposer
+            </a>
+    </div>
+
+    </div>
+
+    </div>
+    <div class="row"><p></p></div>
+
+
+    <!-- Owiii du javascript random au milieu de nul part, much love-->
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $('#tabs').tab();
+        });
+    </script>
 
 {% endblock %}
