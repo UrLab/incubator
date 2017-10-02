@@ -19,7 +19,9 @@ django-activity-stream>=0.6.1
 ics
 django-analytical
 django-jsonfield
+django-jsonfield-compat
 matplotlib
 pandas
 django-pandas
 pip>8.0
+django-constance[database]

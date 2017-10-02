@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.contrib import messages
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.views.generic.edit import DeleteView
-from django.core.urlresolvers import reverse_lazy
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.cache import cache_page
-from django.http import JsonResponse
 from django.utils import timezone
+from django.db import IntegrityError
+
 from influxdb import InfluxDBClient
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -17,39 +17,16 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 from datetime import timedelta
 
-from .djredis import get_redis, get_mac, set_space_open, space_is_open, get_hostnames
+from .djredis import get_redis, set_space_open, space_is_open
 from .models import MacAdress, SpaceStatus, MusicOfTheDay
 from .forms import MacAdressForm
 from .serializers import PamelaSerializer, SpaceStatusSerializer, MotdSerializer
 from .decorators import private_api, one_or_zero
 from .plots import weekday_plot, weekday_probs, human_time
+from .helpers import is_stealth_mode, make_empty_pamela, make_pamela, user_should_see_pamela
 from users.models import User
 
 from django.conf import settings
-
-
-def make_pamela():
-    redis = get_redis()
-    updated, maclist = get_mac(redis)
-    hostnames = get_hostnames(redis)
-
-    known_mac = MacAdress.objects.filter(adress__in=maclist)
-    users = {mac.holder for mac in known_mac if mac.holder is not None}
-    visible_users = {u for u in users if not u.hide_pamela}
-    invisible_users = users - visible_users
-
-    unknown_mac = list(filter(lambda x: x not in [obj.adress for obj in known_mac], maclist))
-
-    unknown_mac = [hostnames.get(mac, 'xx:xx:xx:xx:' + mac[-5:]) for mac in unknown_mac]
-
-    return {
-        'raw_maclist': maclist,
-        'updated': updated,
-        'unknown_mac': unknown_mac,
-        'users': visible_users,
-        'hidden_users': invisible_users,
-        'hidden': len(invisible_users),
-    }
 
 
 def pamela_list(request):
@@ -71,6 +48,9 @@ def pamela_list(request):
     context['space_open'] = space_is_open(get_redis())
     context['status_change'] = SpaceStatus.objects.last()
 
+    context["stealth_mode"] = is_stealth_mode()
+    context["should_show_pamela"] = user_should_see_pamela(request.user)
+
     return render(request, "pamela.html", context)
 
 
@@ -90,7 +70,13 @@ def status_change(request, open):
 
 @private_api(url=str, nick=str)
 def motd_change(request, url, nick):
-    MusicOfTheDay.objects.create(url=url, irc_nick=nick)
+    try:
+        MusicOfTheDay.objects.create(url=url, irc_nick=nick)
+    except IntegrityError:
+        return JsonResponse({
+            "error": "A motd was already added today. Try again tomorrow.",
+            "type": "TRY_AGAIN_TOMORROW",
+        }, status=409)
     r = {'changed_by': nick, 'url': url}
     return JsonResponse(r, safe=False)
 
@@ -121,7 +107,10 @@ def get_sensors(*sensors):
 @cache_page(30)
 def spaceapi(request):
     client = get_redis()
-    pam = make_pamela()
+    if is_stealth_mode():
+        pam = make_empty_pamela()
+    else:
+        pam = make_pamela()
 
     users = [u.username for u in pam['users']]
     names = pam['unknown_mac'] + users
@@ -246,7 +235,12 @@ class PamelaObject(object):
 
 class PamelaViewSet(viewsets.ViewSet):
     def list(self, request):
-        pam = PamelaObject(make_pamela())
+        if user_should_see_pamela(request.user):
+            pam_dict = make_pamela()
+        else:
+            pam_dict = make_empty_pamela()
+
+        pam = PamelaObject(pam_dict)
         serializer = PamelaSerializer(pam)
         return Response(serializer.data)
 
