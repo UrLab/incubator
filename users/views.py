@@ -9,10 +9,9 @@ from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.conf import settings
-from django.db import F
-from actstream import action
+from django.db.models import F
 from actstream.models import Action
-from space.djredis import get_redis, space_is_open
+from space.djredis import get_redis
 
 
 from .serializers import UserSerializer
