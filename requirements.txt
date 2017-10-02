@@ -25,3 +25,4 @@ pandas
 django-pandas
 pip>8.0
 django-constance[database]
+ -e git://github.com/darklow/django-suit.git@v2#egg=django-suit
