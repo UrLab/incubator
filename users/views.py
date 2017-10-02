@@ -3,6 +3,7 @@ from rest_framework import viewsets
 # from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.views.decorators.http import require_POST
 from django.views.generic.detail import DetailView
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse
@@ -31,6 +32,7 @@ def balance(request):
 
 
 @permission_required('users.change_balance')
+@require_POST
 def buy_product(request):
     if request.method == 'POST':
         form = ProductBuyForm(request.POST)
@@ -51,6 +53,7 @@ def buy_product(request):
 
 
 @permission_required('users.change_balance')
+@require_POST
 def spend(request):
     if request.method == 'POST':
         form = SpendForm(request.POST)
@@ -72,6 +75,7 @@ def spend(request):
 
 
 @permission_required('users.change_balance')
+@require_POST
 def top(request):
     if request.method == 'POST':
         form = TopForm(request.POST)
@@ -91,7 +95,9 @@ def top(request):
 
     return HttpResponseRedirect(reverse('change_balance'))
 
+
 @permission_required('users.change_balance')
+@require_POST
 def transfer(request):
     if request.method == 'POST':
         form = TransferForm(request.POST)
