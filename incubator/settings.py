@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 from django.contrib.messages import constants as messages
+import re
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
