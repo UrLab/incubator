@@ -242,6 +242,10 @@ CONSTANCE_CONFIG = {
 OPEN_WEEKDAYS = [0, 1, 2, 3, 4]  # Monday is day 0
 OPEN_HOURS = list(range(7, 23))
 
+IGNORE_LIST_RE = [
+    re.compile(r'52:54:00(:[0-9a-f]{2}){3}'), # QEMU regex
+]
+
 try:
     from incubator.local_settings import * # NOQA
 except ImportError:

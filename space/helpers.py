@@ -28,6 +28,10 @@ def is_stealth_mode():
     return (not space_may_be_open()) and (not space_is_open(get_redis()))
 
 
+def ignore_mac(mac):
+    return any(map(lambda x: x.match(mac), settings.IGNORE_LIST_RE))
+
+
 def make_pamela():
     redis = get_redis()
     updated, maclist = get_mac(redis)
@@ -38,8 +42,8 @@ def make_pamela():
     visible_users = {u for u in users if not u.hide_pamela}
     invisible_users = users - visible_users
 
-    unknown_mac = list(filter(lambda x: x not in [obj.adress for obj in known_mac], maclist))
-
+    unknown_mac = filter(lambda x: x not in [obj.adress for obj in known_mac], maclist)
+    unknown_mac = list(filter(ignore_mac, unknown_mac))
     unknown_mac = [hostnames.get(mac, 'xx:xx:xx:xx:' + mac[-5:]) for mac in unknown_mac]
 
     return {
