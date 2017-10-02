@@ -25,3 +25,4 @@ pandas
 django-pandas
 pip>8.0
 django-constance[database]
+django-suit
