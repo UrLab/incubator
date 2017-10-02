@@ -15,6 +15,7 @@ def test_valid_redir(redir):
     assert isinstance(res, HttpResponseRedirect)
 
 
+@pytest.mark.django_db
 def test_invalid_redir():
     res = Client().get('/trolilol')
     assert not isinstance(res, HttpResponseRedirect)
