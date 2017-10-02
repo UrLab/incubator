@@ -9,6 +9,7 @@ from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.conf import settings
+from django.db import F
 from actstream import action
 from actstream.models import Action
 from space.djredis import get_redis, space_is_open
@@ -40,7 +41,7 @@ def buy_product(request):
             product = form.cleaned_data["product"]
             price = product.price
 
-            request.user.balance -= price
+            request.user.balance = F('balance') - price
             request.user.save()
 
             transaction = ProductTransaction(user=request.user, product=product)
@@ -60,7 +61,7 @@ def spend(request):
         if form.is_valid():
             sumchanged = form.cleaned_data['value']
             name = form.cleaned_data['name']
-            request.user.balance -= sumchanged
+            request.user.balance = F('balance') - sumchanged
             request.user.save()
 
 
@@ -81,7 +82,7 @@ def top(request):
         form = TopForm(request.POST)
         if form.is_valid():
             sumchanged = form.cleaned_data['value']
-            request.user.balance += sumchanged
+            request.user.balance = F('balance') + sumchanged
             request.user.save()
 
             top_type = form.cleaned_data['location']
@@ -105,8 +106,8 @@ def transfer(request):
             sumchanged = form.cleaned_data['value']
             otheruser = form.cleaned_data['recipient']
             if otheruser != request.user:
-                request.user.balance -= sumchanged
-                otheruser.balance += sumchanged
+                request.user.balance = F('balance') - sumchanged
+                otheruser.balance = F('balance') + sumchanged
                 request.user.save()
                 otheruser.save()
 
