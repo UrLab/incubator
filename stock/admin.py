@@ -10,7 +10,7 @@ class ProductInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'price',)
+    list_display = ('name', 'category', 'price', 'barecode')
 
 
 @admin.register(Category)
