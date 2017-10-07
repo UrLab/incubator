@@ -118,7 +118,7 @@ def ical(request):
             name=event.title,
             begin=event.start,
             end=event.stop,
-            description=event.description,
+            description=event.get_absolute_full_url(),
             location=event.place
         )
         cal.events.append(vevent)
