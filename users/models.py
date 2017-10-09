@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
 from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 
 
 from incubator.models import ASBLYear
@@ -17,6 +18,11 @@ from incubator.models import ASBLYear
 #    un badge pourrait être "utilisateur de la reprap" et "certigfierait" que le user sait utiliser la machine
 #    Des users appartiennent à un groupe (anon, registered, membres cotisants, "bureau")
 #    Système d'emprunt (optionnel)
+
+
+def insensitive_unique_username(username):
+    if User.objects.filter(username__iexact=username).count() > 0:
+        raise ValidationError("A user named %s already exists." % username)
 
 
 class CustomUserManager(UserManager):
@@ -54,7 +60,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['email']
     objects = CustomUserManager()
 
-    username = models.CharField(max_length=30, unique=True, verbose_name="nom d'utilisateur")
+    username = models.CharField(
+        max_length=30,
+        unique=True,
+        verbose_name="nom d'utilisateur",
+        validators=[insensitive_unique_username]
+    )
     email = models.EmailField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
