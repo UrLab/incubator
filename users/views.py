@@ -151,7 +151,15 @@ def userdetail(request):
     streamprivtosend = []
     STREAM_SIZE = 100
     streamPublic = Action.objects.filter(public=True).prefetch_related('target', 'actor', 'action_object')[:STREAM_SIZE]
-    streamPrivate = Action.objects.filter(public=False).prefetch_related('target', 'actor', 'action_object')[:STREAM_SIZE]
+    # streamPrivate = Action.objects.filter(public=False).prefetch_related('target', 'actor', 'action_object')[:STREAM_SIZE]
+
+    transfers = list(request.user.transfertransaction_set.all().order_by("when")[:5])
+    topups = list(request.user.topuptransaction_set.all().order_by("when")[:5])
+    purchases = list(request.user.producttransaction_set.all().order_by("when")[:5])
+    misc = list(request.user.misctransaction_set.all().order_by("when")[:5])
+    # Sort all transactions and keep only the 5 most recent
+    all_private_transactions = sorted(transfers + topups + purchases + misc, key=lambda x: x.when, reverse=True)[:5]
+
     i = 0
     for a in streamPublic:
         if a.actor == request.user:
@@ -159,16 +167,10 @@ def userdetail(request):
             i += 1
             if i == 5:
                 break
-    i = 0
-    for a in streamPrivate:
-        if a.actor == request.user:
-            streamprivtosend.append(a)
-            i += 1
-            if i == 5:
-                break
+
     return render(request, 'user_detail.html', {
         'stream_pub': streampubtosend,
-        'stream_priv': streamprivtosend,
+        'stream_priv': all_private_transactions,
     })
 
 
