@@ -55,6 +55,20 @@ def pamela_list(request):
 
 
 @private_api()
+def get_user_mac(request):
+    qs = User.objects.all()
+    users = {x.username: [m.adress for m in x.macadress_set.all()] for x in qs}
+    return JsonResponse(users, safe=False)
+
+
+@private_api()
+def get_mac_user(request):
+    qs = MacAdress.objects.exclude(holder=None).select_related("holder")
+    macs = {x.adress: x.holder.username for x in qs}
+    return JsonResponse(macs, safe=False)
+
+
+@private_api()
 def full_pamela(request):
     data = make_pamela()
     pool = list(data['unknown_mac']) + [u.username for u in (data['hidden_users'] | data['users'])]
