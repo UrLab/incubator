@@ -46,4 +46,5 @@ class ProductTransaction(Transaction):
 
 
 class MiscTransaction(Transaction):
+    amount = models.DecimalField(max_digits=6, decimal_places=2)
     info = models.TextField()

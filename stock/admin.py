@@ -29,16 +29,16 @@ class TransferTransactionAdmin(admin.ModelAdmin):
 @admin.register(TopupTransaction)
 class TopupTransaction(admin.ModelAdmin):
     list_display = ('user','amount', 'when')
-    search_fields = ('user',)
+    search_fields = ('user__username',)
 
 
 @admin.register(ProductTransaction)
 class ProductTransaction(admin.ModelAdmin):
     list_display = ('user','product', 'when')
-    search_fields = ('user', 'product__name')
+    search_fields = ('user__username', 'product__name')
 
 
 @admin.register(MiscTransaction)
 class MiscTransaction(admin.ModelAdmin):
     list_display = ('user','info', 'when')
-    search_fields = ('user',)
+    search_fields = ('user__username',)

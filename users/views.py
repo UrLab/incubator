@@ -25,7 +25,7 @@ from stock.models import Product, TransferTransaction, TopupTransaction, Product
 def balance(request):
     return render(request, 'balance.html', {
         'account': settings.BANK_ACCOUNT,
-        'products': Product.objects.order_by('category','name'),
+        'products': Product.objects.order_by('category', 'name'),
         'topForm': TopForm(),
         'spendForm': SpendForm(),
         'transferForm': TransferForm(),
@@ -45,8 +45,8 @@ def buy_product(request):
                 request.user.balance = F('balance') - price
                 request.user.save()
 
-                transaction = ProductTransaction(user=request.user, product=product)
-                transaction.save()
+                product_transaction = ProductTransaction(user=request.user, product=product)
+                product_transaction.save()
 
             messages.success(request, 'Vous avez bien dépensé {}€ ({})'.format(price, product.name))
         else:
@@ -68,8 +68,8 @@ def spend(request):
                 request.user.balance = F('balance') - sumchanged
                 request.user.save()
 
-                transaction = MiscTransaction(user=request.user, info=name)
-                transaction.save()
+                misc_transaction = MiscTransaction(user=request.user, info=name, amount=sumchanged)
+                misc_transaction.save()
 
             messages.success(request, 'Vous avez bien dépensé {}€ ({})'.format(sumchanged, name))
         else:
@@ -92,8 +92,8 @@ def top(request):
 
                 top_type = form.cleaned_data['location']
 
-                transaction = TopupTransaction(user=request.user, topup_type=top_type, amount=sumchanged)
-                transaction.save()
+                topup_transaction = TopupTransaction(user=request.user, topup_type=top_type, amount=sumchanged)
+                topup_transaction.save()
 
             messages.success(request, 'Vous avez bien rechargé {}€ ({})'.format(sumchanged, top_type))
         else:
@@ -118,12 +118,12 @@ def transfer(request):
                     request.user.save()
                     otheruser.save()
 
-                    transaction = TransferTransaction(user=request.user, receiver=otheruser, amount=sumchanged)
-                    transaction.save()
+                    transfer_transaction = TransferTransaction(user=request.user, receiver=otheruser, amount=sumchanged)
+                    transfer_transaction.save()
 
                 messages.success(
                     request,
-                    'Vous avez bien transféré {}€ à {}'.format(sumchanged,otheruser.username)
+                    'Vous avez bien transféré {}€ à {}'.format(sumchanged, otheruser.username)
                 )
             else:
                 messages.error(request, "Vous ne pouvez pas vous transférer de l'argent à vous même")
@@ -156,20 +156,21 @@ def userdetail(request):
     for a in streamPublic:
         if a.actor == request.user:
             streampubtosend.append(a)
-            i+=1
-            if i==5:
+            i += 1
+            if i == 5:
                 break
     i = 0
     for a in streamPrivate:
         if a.actor == request.user:
             streamprivtosend.append(a)
-            i+=1
-            if i==5:
+            i += 1
+            if i == 5:
                 break
     return render(request, 'user_detail.html', {
         'stream_pub': streampubtosend,
         'stream_priv': streamprivtosend,
     })
+
 
 class UserEditView(UpdateView):
     form_class = UserForm
@@ -185,6 +186,7 @@ class UserDetailView(DetailView):
     template_name = 'user_detail.html'
     context_object_name = 'user'
     slug_field = "username"
+
 
 class CurrentUserDetailView(UserDetailView):
     def get_object(self):
