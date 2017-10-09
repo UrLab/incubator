@@ -1,0 +1,15 @@
+{% extends "admin/base.html" %}
+{% load admin_static %}
+
+{% block footer %}
+  {% if not is_popup %}
+  <div id="footer" class="footer">
+    <div class="content">
+
+      <div class="branding">{% block footer_branding %}
+        UrLab
+      {% endblock %}</div>
+    </div>
+  </div>
+  {% endif %}
+{% endblock %}

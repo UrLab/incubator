@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate
 
 from django import forms
 from .models import User
+from stock.models import Product
 
 class TolerantDecimalField(forms.DecimalField):
     def clean(self, value):
@@ -33,6 +34,11 @@ class SpendForm(BalanceForm):
         max_length=100,
         label="Nom du produit",
     )
+
+
+class ProductBuyForm(forms.Form):
+    product = forms.ModelChoiceField(queryset = Product.objects.all())
+
 
 class TransferForm(BalanceForm):
     recipient = forms.ModelChoiceField(

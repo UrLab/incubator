@@ -3,27 +3,29 @@ from rest_framework import viewsets
 # from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.views.decorators.http import require_POST
 from django.views.generic.detail import DetailView
 from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.conf import settings
-from actstream import action
+from django.db.models import F
 from actstream.models import Action
-from space.djredis import get_redis, space_is_open
+from space.djredis import get_redis
+from django.db import transaction
 
 
 from .serializers import UserSerializer
 from .models import User
-from .forms import UserForm, SpendForm, TopForm, TransferForm
+from .forms import UserForm, SpendForm, TopForm, TransferForm, ProductBuyForm
 from .decorators import permission_required
-from stock.models import Product
+from stock.models import Product, TransferTransaction, TopupTransaction, ProductTransaction, MiscTransaction
 
 
 def balance(request):
     return render(request, 'balance.html', {
         'account': settings.BANK_ACCOUNT,
-        'products': Product.objects.order_by('category','name'),
+        'products': Product.objects.order_by('category', 'name'),
         'topForm': TopForm(),
         'spendForm': SpendForm(),
         'transferForm': TransferForm(),
@@ -31,20 +33,44 @@ def balance(request):
 
 
 @permission_required('users.change_balance')
+@require_POST
+def buy_product(request):
+    if request.method == 'POST':
+        form = ProductBuyForm(request.POST)
+        if form.is_valid():
+            product = form.cleaned_data["product"]
+            price = product.price
+
+            with transaction.atomic():
+                request.user.balance = F('balance') - price
+                request.user.save()
+
+                product_transaction = ProductTransaction(user=request.user, product=product)
+                product_transaction.save()
+
+            messages.success(request, 'Vous avez bien dépensé {}€ ({})'.format(price, product.name))
+        else:
+            messages.error(request, "Erreur, votre dépense n'a pas été enregistrée")
+
+    return HttpResponseRedirect(reverse('change_balance'))
+
+
+@permission_required('users.change_balance')
+@require_POST
 def spend(request):
     if request.method == 'POST':
         form = SpendForm(request.POST)
         if form.is_valid():
             sumchanged = form.cleaned_data['value']
             name = form.cleaned_data['name']
-            request.user.balance -= sumchanged
-            request.user.save()
 
-            action.send(
-                request.user,
-                verb='a depensé {}€ pour le produit {}'.format(sumchanged, name),
-                public=False
-            )
+            with transaction.atomic():
+                request.user.balance = F('balance') - sumchanged
+                request.user.save()
+
+                misc_transaction = MiscTransaction(user=request.user, info=name, amount=sumchanged)
+                misc_transaction.save()
+
             messages.success(request, 'Vous avez bien dépensé {}€ ({})'.format(sumchanged, name))
         else:
             messages.error(request, "Erreur, votre dépense n'a pas été enregistrée")
@@ -53,27 +79,31 @@ def spend(request):
 
 
 @permission_required('users.change_balance')
+@require_POST
 def top(request):
     if request.method == 'POST':
         form = TopForm(request.POST)
         if form.is_valid():
             sumchanged = form.cleaned_data['value']
-            request.user.balance += sumchanged
-            request.user.save()
 
-            top_type = form.cleaned_data['location']
-            action.send(
-                request.user,
-                verb='a versé {}€ en {}'.format(sumchanged, top_type),
-                public=False
-            )
+            with transaction.atomic():
+                request.user.balance = F('balance') + sumchanged
+                request.user.save()
+
+                top_type = form.cleaned_data['location']
+
+                topup_transaction = TopupTransaction(user=request.user, topup_type=top_type, amount=sumchanged)
+                topup_transaction.save()
+
             messages.success(request, 'Vous avez bien rechargé {}€ ({})'.format(sumchanged, top_type))
         else:
             messages.error(request, "Erreur, votre recharge n'a pas été enregistrée")
 
     return HttpResponseRedirect(reverse('change_balance'))
 
+
 @permission_required('users.change_balance')
+@require_POST
 def transfer(request):
     if request.method == 'POST':
         form = TransferForm(request.POST)
@@ -81,20 +111,19 @@ def transfer(request):
             sumchanged = form.cleaned_data['value']
             otheruser = form.cleaned_data['recipient']
             if otheruser != request.user:
-                request.user.balance -= sumchanged
-                otheruser.balance += sumchanged
-                request.user.save()
-                otheruser.save()
 
-                action.send(
-                    request.user,
-                    verb='a transféré {}€'.format(sumchanged),
-                    target=otheruser,
-                    public=False,
-                )
+                with transaction.atomic():
+                    request.user.balance = F('balance') - sumchanged
+                    otheruser.balance = F('balance') + sumchanged
+                    request.user.save()
+                    otheruser.save()
+
+                    transfer_transaction = TransferTransaction(user=request.user, receiver=otheruser, amount=sumchanged)
+                    transfer_transaction.save()
+
                 messages.success(
                     request,
-                    'Vous avez bien transféré {}€ à {}'.format(sumchanged,otheruser.username)
+                    'Vous avez bien transféré {}€ à {}'.format(sumchanged, otheruser.username)
                 )
             else:
                 messages.error(request, "Vous ne pouvez pas vous transférer de l'argent à vous même")
@@ -127,20 +156,21 @@ def userdetail(request):
     for a in streamPublic:
         if a.actor == request.user:
             streampubtosend.append(a)
-            i+=1
-            if i==5:
+            i += 1
+            if i == 5:
                 break
     i = 0
     for a in streamPrivate:
         if a.actor == request.user:
             streamprivtosend.append(a)
-            i+=1
-            if i==5:
+            i += 1
+            if i == 5:
                 break
     return render(request, 'user_detail.html', {
         'stream_pub': streampubtosend,
         'stream_priv': streamprivtosend,
     })
+
 
 class UserEditView(UpdateView):
     form_class = UserForm
@@ -156,6 +186,7 @@ class UserDetailView(DetailView):
     template_name = 'user_detail.html'
     context_object_name = 'user'
     slug_field = "username"
+
 
 class CurrentUserDetailView(UserDetailView):
     def get_object(self):

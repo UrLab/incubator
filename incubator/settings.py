@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    'suit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -89,6 +90,20 @@ ROOT_URLCONF = 'incubator.urls'
 
 WSGI_APPLICATION = 'incubator.wsgi.application'
 
+SUIT_CONFIG = {
+    'ADMIN_NAME': 'UrLab',
+    'SHOW_REQUIRED_ASTERISK': True,
+    'CONFIRM_UNSAVED_CHANGES': True,
+    'SEARCH_URL': '/admin/users/user/',
+    'MENU': (
+        'users',
+        {'app': "stock", 'models': ('product', 'category', 'producttransaction', 'topuptransaction', 'transfertransaction', 'misctransaction')},
+        'constance',
+        'actstream',
+        'manmail',
+        'redir',
+    )
+}
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
@@ -135,6 +150,7 @@ MEDIA_URL = '/media/'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASE_DIR, 'incubator/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
