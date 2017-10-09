@@ -4,7 +4,6 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
-from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 
@@ -21,8 +20,14 @@ from incubator.models import ASBLYear
 
 
 def insensitive_unique_username(username):
-    if User.objects.filter(username__iexact=username).count() > 0:
-        raise ValidationError("A user named %s already exists." % username)
+    # Ceci est un test en prod, pardonnez mon âme.
+    # Bisous, c4.
+    user = User.objects.filter(username__iexact=username).first()
+    if user:
+        if user.username == username:
+            pass  # We already have database validation for this case
+        else:
+            raise ValidationError("A user named %s already exists." % username)
 
 
 class CustomUserManager(UserManager):
