@@ -12,6 +12,7 @@ from django.conf import settings
 from django.db.models import F
 from actstream.models import Action
 from space.djredis import get_redis
+from django.db import transaction
 
 
 from .serializers import UserSerializer
@@ -40,11 +41,13 @@ def buy_product(request):
             product = form.cleaned_data["product"]
             price = product.price
 
-            request.user.balance = F('balance') - price
-            request.user.save()
+            with transaction.atomic():
+                request.user.balance = F('balance') - price
+                request.user.save()
 
-            transaction = ProductTransaction(user=request.user, product=product)
-            transaction.save()
+                transaction = ProductTransaction(user=request.user, product=product)
+                transaction.save()
+
             messages.success(request, 'Vous avez bien dépensé {}€ ({})'.format(price, product.name))
         else:
             messages.error(request, "Erreur, votre dépense n'a pas été enregistrée")
@@ -60,12 +63,13 @@ def spend(request):
         if form.is_valid():
             sumchanged = form.cleaned_data['value']
             name = form.cleaned_data['name']
-            request.user.balance = F('balance') - sumchanged
-            request.user.save()
 
+            with transaction.atomic():
+                request.user.balance = F('balance') - sumchanged
+                request.user.save()
 
-            transaction = MiscTransaction(user=request.user, info=name)
-            transaction.save()
+                transaction = MiscTransaction(user=request.user, info=name)
+                transaction.save()
 
             messages.success(request, 'Vous avez bien dépensé {}€ ({})'.format(sumchanged, name))
         else:
@@ -81,13 +85,15 @@ def top(request):
         form = TopForm(request.POST)
         if form.is_valid():
             sumchanged = form.cleaned_data['value']
-            request.user.balance = F('balance') + sumchanged
-            request.user.save()
 
-            top_type = form.cleaned_data['location']
+            with transaction.atomic():
+                request.user.balance = F('balance') + sumchanged
+                request.user.save()
 
-            transaction = TopupTransaction(user=request.user, topup_type=top_type, amount=sumchanged)
-            transaction.save()
+                top_type = form.cleaned_data['location']
+
+                transaction = TopupTransaction(user=request.user, topup_type=top_type, amount=sumchanged)
+                transaction.save()
 
             messages.success(request, 'Vous avez bien rechargé {}€ ({})'.format(sumchanged, top_type))
         else:
@@ -105,13 +111,15 @@ def transfer(request):
             sumchanged = form.cleaned_data['value']
             otheruser = form.cleaned_data['recipient']
             if otheruser != request.user:
-                request.user.balance = F('balance') - sumchanged
-                otheruser.balance = F('balance') + sumchanged
-                request.user.save()
-                otheruser.save()
 
-                transaction = TransferTransaction(user=request.user, receiver=otheruser, amount=sumchanged)
-                transaction.save()
+                with transaction.atomic():
+                    request.user.balance = F('balance') - sumchanged
+                    otheruser.balance = F('balance') + sumchanged
+                    request.user.save()
+                    otheruser.save()
+
+                    transaction = TransferTransaction(user=request.user, receiver=otheruser, amount=sumchanged)
+                    transaction.save()
 
                 messages.success(
                     request,
