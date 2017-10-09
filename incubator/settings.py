@@ -91,7 +91,7 @@ ROOT_URLCONF = 'incubator.urls'
 WSGI_APPLICATION = 'incubator.wsgi.application'
 
 SUIT_CONFIG = {
-    'ADMIN_NAME': 'UrLaB',
+    'ADMIN_NAME': 'UrLab',
     'SHOW_REQUIRED_ASTERISK': True,
     'CONFIRM_UNSAVED_CHANGES': True,
     'SEARCH_URL': '/admin/users/user/',
