@@ -118,7 +118,7 @@ def ical(request):
             name=event.title,
             begin=event.start,
             end=event.stop,
-            description=event.description,
+            description=event.get_absolute_full_url(),
             location=event.place
         )
         cal.events.append(vevent)
@@ -182,12 +182,13 @@ from rest_framework import filters
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     queryset = Event.objects.all()
-    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter,)
+    filter_backends = (DjangoFilterBackend, filters.OrderingFilter,)
     ordering_fields = ('start', 'stop')
     filter_fields = ('place', 'start', 'stop', 'status', 'organizer', 'meeting')
 
