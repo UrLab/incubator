@@ -75,26 +75,7 @@
             {%if request.user == user %}
                 <h2><span class="glyphicon glyphicon-euro" aria-hidden="true"></span> Transactions récentes <small>(Privé)</small></h2>
                 {% for action in stream_priv %}
-                    <p>{{ user.username }} {{ action.verb }}
-                        {% if action.action_object %}
-                            {% if action.action_object.get_absolute_url %}
-                                <a href="{{ action.action_object.get_absolute_url }}">
-                                    {{ action.action_object }}
-                                </a>
-                            {% else %}
-                                {{ action.action_object }}
-                            {% endif %}
-                        {% endif %}
-                        {% if action.action_object and action.target %}dans{% endif %}
-
-                        {% if action.target %}
-                            {% if action.target.get_absolute_url %}
-                                <a href="{{ action.target.get_absolute_url }}">{{ action.target }}</a>
-                            {% else %}
-                                <a href="{{ action.target_url }}">{{ action.target }}</a>
-                            {% endif %}
-                        {% endif %}
-                        <small>( {{ action.timestamp|timesince }} )</small>
+                    <p>{{ action }} <small>( {{ action.when|timesince }} )</small>
                     </p>
                 {% endfor %}
             {% endif %}
