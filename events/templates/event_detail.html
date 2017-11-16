@@ -34,10 +34,17 @@
                 {% with interested=event.interested.all %}
                   {% if interested.count == 0 %}
                     Personne n'est intéressé pour l'instant
-                  {% elif interested.count == 1 %}
-                    Une personne est intéressée
                   {% else %}
-                    {{interested.count}} personnes sont intéressés
+                    {% if interested.count == 1 %}
+                      Une personne est intéressée
+                    {% else %}
+                      {{interested.count}} personnes sont intéressés
+                    {% endif %}
+                    <ul>
+                    {% for person in interested %}
+                      <li>{{person}}</li>
+                    {% endfor %}
+                    </ul>
                   {% endif %}
                   {% if request.user in interested %}
                     <a class="btn btn-primary btn-xs" href="{% url "not_interested_event" event.id %}">
