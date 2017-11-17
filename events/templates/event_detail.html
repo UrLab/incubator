@@ -40,11 +40,17 @@
                     {% else %}
                       {{interested.count}} personnes sont intéressés
                     {% endif %}
-                    <ul>
-                    {% for person in interested %}
-                      <li>{{person}}</li>
-                    {% endfor %}
-                    </ul>
+                    <div class="dropdown">
+                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                        Interested People
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        {% for person in interested %}
+                          <li><a href="{% url "user_profile" person.username %}">{{person}}</a></li>
+                        {% endfor %}
+                      </ul>
+                    </div>
                   {% endif %}
                   {% if request.user in interested %}
                     <a class="btn btn-primary btn-xs" href="{% url "not_interested_event" event.id %}">
