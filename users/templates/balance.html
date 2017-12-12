@@ -72,6 +72,37 @@
         </div>
         <div class="col-md-7">
             <h2>Liste de prix</h2>
+                {% if favorites %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Your Favorites</div>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th class="col-md-3">Nom</th>
+                                <th class="col-md-3">Prix</th>
+                                <th class="col-md-3">Achat</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for product in favorites %}
+                                <tr>
+                                    <td class="col-md-3">{{ product.name }}</td>
+                                    <td class="col-md-3">{{ product.price }}€</td>
+                                    <td class="col-md-3">
+                                        <form action="{% url "buy_product" %}" method="post" class="form">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="product" id="id_name" value="{{ product.id }}">
+                                            <button type="submit" class="btn btn-default btn-xs">
+                                                Acheter {% bootstrap_icon "shopping-cart" %}
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
             {% regroup products by category as category_list %}
             {% for category in category_list %}
                 <div class="panel panel-default">

@@ -9,7 +9,7 @@ from django.views.generic import UpdateView
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.conf import settings
-from django.db.models import F
+from django.db.models import F, Count
 from actstream.models import Action
 from space.djredis import get_redis
 from django.db import transaction
@@ -23,9 +23,11 @@ from stock.models import Product, TransferTransaction, TopupTransaction, Product
 
 
 def balance(request):
+    favorites = Product.objects.filter(producttransaction__user=request.user).annotate(Count("producttransaction")).order_by("-producttransaction__count")[:5]
     return render(request, 'balance.html', {
         'account': settings.BANK_ACCOUNT,
         'products': Product.objects.order_by('category', 'name'),
+        'favorites': favorites,
         'topForm': TopForm(),
         'spendForm': SpendForm(),
         'transferForm': TransferForm(),
