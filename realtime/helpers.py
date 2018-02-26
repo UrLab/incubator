@@ -6,9 +6,6 @@ from django.utils import timezone
 
 from realtime import crossbarconnect
 
-TIMEFMT = '%Y-%m-%d %H:%M:%S'
-
-
 def send_message(key, message, *args, **kwargs):
     if settings.USE_WAMP:
         try:
@@ -46,8 +43,12 @@ def publish_space_state(is_open):
                 text = "Le hackerspace est ouvert ! Rainbows /o/"
             else:
                 text = "Le hackerspace est fermé !"
-            now = timezone.now().strftime(TIMEFMT)
-            client.publish('hal.eventstream', key='space_status', text=text, time=now)
+            client.publish(
+                'hal.eventstream',
+                key='space_status',
+                text=text,
+                time=timezone.now().isoformat(),
+            )
         except Exception:
             traceback.print_exc()
             try:
