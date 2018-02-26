@@ -6,6 +6,8 @@ from django.utils import timezone
 
 from realtime import crossbarconnect
 
+TIMEFMT = '%Y-%m-%d %H:%M:%S'
+
 
 def send_message(key, message, *args, **kwargs):
     if settings.USE_WAMP:
@@ -30,6 +32,29 @@ def send_message(key, message, *args, **kwargs):
             except ImportError:
                 print("No Sentry")
 
+
+def publish_space_state(is_open):
+    if settings.USE_WAMP:
+        try:
+            client = crossbarconnect.Client(
+                settings.CROSSBAR_URL,
+                secret=settings.CROSSBAR_SECRET,
+                key="incubator"
+            )
+
+            if is_open:
+                text = "Le hackerspace est ouvert ! Rainbows /o/"
+            else:
+                text = "Le hackerspace est fermé !"
+            now = timezone.now().strftime(TIMEFMT)
+            client.publish('hal.eventstream', key='space_status', text=text, time=now)
+        except Exception:
+            traceback.print_exc()
+            try:
+                from raven.contrib.django.raven_compat.models import client
+                client.captureException()
+            except ImportError:
+                print("No Sentry")
 
 
 def unique_everseen(iterable, key):
