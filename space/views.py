@@ -25,6 +25,7 @@ from .decorators import private_api, one_or_zero
 from .plots import weekday_plot, weekday_probs, human_time
 from .helpers import is_stealth_mode, make_empty_pamela, make_pamela, user_should_see_pamela
 from users.models import User
+from realtime.helpers import publish_space_state
 
 from django.conf import settings
 
