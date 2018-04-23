@@ -50,6 +50,9 @@ class TopupTransaction(Transaction):
 class ProductTransaction(Transaction):
     product = models.ForeignKey("stock.Product")
 
+    def price(self):
+        return self.product.price
+
     def __str__(self):
         return "{} a dépensé {}€ pour le produit {}".format(self.user, self.product.price, self.product)
 

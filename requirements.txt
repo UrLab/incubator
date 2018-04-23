@@ -4,7 +4,7 @@ django-extensions
 ipython
 django-debug-toolbar<1.6,>=1.5
 django-bootstrap3
-djangorestframework
+djangorestframework==3.5.3
 django-datetime-widget
 Markdown
 redis

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Product, TransferTransaction, TopupTransaction, TopupTransaction, ProductTransaction, MiscTransaction
+from .models import Category, Product, TransferTransaction, TopupTransaction, ProductTransaction, MiscTransaction
 
 
 class ProductInline(admin.TabularInline):
@@ -28,17 +28,18 @@ class TransferTransactionAdmin(admin.ModelAdmin):
 
 @admin.register(TopupTransaction)
 class TopupTransaction(admin.ModelAdmin):
-    list_display = ('user','amount', 'when')
+    list_display = ('user', 'amount', 'topup_type', 'when')
     search_fields = ('user__username',)
+    list_filter = ('topup_type',)
 
 
 @admin.register(ProductTransaction)
 class ProductTransaction(admin.ModelAdmin):
-    list_display = ('user','product', 'when')
+    list_display = ('user', 'price', 'product', 'when')
     search_fields = ('user__username', 'product__name')
 
 
 @admin.register(MiscTransaction)
 class MiscTransaction(admin.ModelAdmin):
-    list_display = ('user','info', 'when')
+    list_display = ('user', 'amount', 'info', 'when')
     search_fields = ('user__username',)
