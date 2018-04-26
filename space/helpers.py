@@ -49,7 +49,7 @@ def make_pamela():
     unknown_mac = [mac for mac in unknown_mac if should_keep(mac)]
 
     # Match unknown macs to the hostname or hide a part if we don't have a hostname
-    unknown_mac = [hostnames.get(mac, 'xx:xx:xx:xx:' + mac[-5:]) for mac in unknown_mac]
+    unknown_mac = list({hostnames.get(mac, 'xx:xx:xx:xx:' + mac[-5:]) for mac in unknown_mac})
 
     return {
         'raw_maclist': maclist,
