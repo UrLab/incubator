@@ -21,7 +21,7 @@ class Product(models.Model):
 
 class Barcode(models.Model):
     product = models.ForeignKey("stock.Product")
-    code = models.CharField(max_length=50)
+    code = models.CharField(max_length=150)
 
     def __str__(self):
         return self.code
