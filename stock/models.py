@@ -20,6 +20,9 @@ class Product(models.Model):
 
 
 class Barcode(models.Model):
+    class Meta:
+        unique_together = ("product", "code")
+
     product = models.ForeignKey("stock.Product")
     code = models.CharField(max_length=150)
 
@@ -33,8 +36,8 @@ class StockRefill(models.Model):
         to track each individual stock that was updated.
     """
     user = models.ForeignKey("users.User", null=True, blank=True, on_delete=models.SET_NULL,
-                             help_text="The person responsible for this stock refilling. \
-                             Ideally the person who did the data entry after shopping")
+                             help_text="The person responsible for this stock refilling."
+                             "Ideally the person who did the data entry after shopping")
     when = models.DateTimeField(default=timezone.now)
     updates = models.ManyToManyField(to="stock.Product", through="stock.ProductRefill",
                                      help_text="All the product stocks that were updated in this refill")
@@ -47,7 +50,12 @@ class ProductRefill(models.Model):
     """
     Many to many intermediary table used in order to store the product stock being updated with its quantity
     Regrouped in StockRefill.
+
+    Has signals that trigger upon creation and upon an update. See signals.py
     """
+    class Meta:
+        unique_together = ("refill", "product")
+
     refill = models.ForeignKey("stock.StockRefill", help_text="The refill that generated this update")
     product = models.ForeignKey("stock.Product", help_text="The product whose stock was refilled")
     amount = models.IntegerField(help_text="The quantity by which the stock was increased")
@@ -57,11 +65,11 @@ class ProductRefill(models.Model):
 
 
 class Transaction(models.Model):
-    user = models.ForeignKey("users.User")
-    when = models.DateTimeField(auto_now_add=True)
-
     class Meta:
         abstract = True
+
+    user = models.ForeignKey("users.User")
+    when = models.DateTimeField(auto_now_add=True)
 
 
 class TransferTransaction(Transaction):
