@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.core.validators import MinValueValidator
 
 
 class Category(models.Model):
@@ -58,7 +59,9 @@ class ProductRefill(models.Model):
 
     refill = models.ForeignKey("stock.StockRefill", help_text="The refill that generated this update")
     product = models.ForeignKey("stock.Product", help_text="The product whose stock was refilled")
-    amount = models.IntegerField(help_text="The quantity by which the stock was increased")
+    amount = models.PositiveIntegerField(help_text="The quantity by which the stock was increased",
+                                         validators=[MinValueValidator(1, message="You cannot add a negative amount of stock")]
+                                         )
 
     def __str__(self):
         return "Refill of {} by {} unit(s)".format(self.product, self.amount)
