@@ -14,6 +14,7 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     category = models.ForeignKey(Category)
+    # The amount of the product we have in stock. Updated by signals on the ProductRefill model
     stock_amount = models.IntegerField(default=0)
 
     def __str__(self):
@@ -28,7 +29,7 @@ class Barcode(models.Model):
     code = models.CharField(max_length=150)
 
     def __str__(self):
-        return self.code
+        return "Barcode |{}| for {}".format(self.code, self.product)
 
 
 class StockRefill(models.Model):
