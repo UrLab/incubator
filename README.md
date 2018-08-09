@@ -17,7 +17,7 @@ Quick brainstorming https://pad.lqdn.fr/p/incubator
   
   ```sudo dnf install libtiff-devel libjpeg-devel libzip-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel python3-devel python3-setuptools python3-virtualenv```
 
-#### Setup
+### Setup
 
     virtualenv -p python3 ve3 # or virtualenv-3 -p python3 ve3
     source ve3/bin/activate
