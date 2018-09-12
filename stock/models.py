@@ -98,7 +98,9 @@ class TopupTransaction(Transaction):
         return "{} a versé {}€ sur son ardoise. ({})".format(self.user, self.amount, self.get_topup_type_display())
 
 
-class ProductTransaction(Transaction):
+class ProductTransaction(models.Model):
+    user = models.ForeignKey("users.User", null=True, blank=True)
+    when = models.DateTimeField(auto_now_add=True)
     product = models.ForeignKey("stock.Product")
 
     def price(self):
