@@ -1,0 +1,16 @@
+<h2>
+    <span class="fa fa-calendar-o" aria-hidden="true"></span>
+    Évènements à venir
+</h2>
+
+<p>Les évènements de Urlab programmés pour les prochains jours sont :</p>
+
+<div class={% if not user.is_authenticated %}"col-md-9"{% else %}""{% endif %}>
+    {% if events %}
+        {% for event in events %}
+            {% include "event_card.html" %}
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">Il n'y a actuellement pas d'évènements à venir</p>
+    {% endif %}
+</div>
