@@ -14,6 +14,7 @@ import space.views
 
 urlpatterns = [
     url(r'^$', incubator.views.home, name='home'),
+    url(r'^new/', incubator.views.new, name='new'),
     url(r'^spaceapi.json$', space.views.spaceapi, name="spaceapi"),
     url(r'^events/', include('events.urls')),
     url(r'^projects/', include('projects.urls')),

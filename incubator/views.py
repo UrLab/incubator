@@ -37,6 +37,9 @@ def home(request):
         "stream": stream,
     })
 
+def new(request):
+    return render(request, "new.html")
+
 
 class RegisterView(CreateView):
     template_name = 'registration/register.html'
