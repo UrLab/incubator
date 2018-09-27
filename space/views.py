@@ -1,3 +1,4 @@
+from datetime import timedelta
 from django.shortcuts import render
 from django.contrib import messages
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -12,17 +13,12 @@ from influxdb import InfluxDBClient
 from rest_framework import viewsets
 from rest_framework.response import Response
 
-import matplotlib as mpl
-mpl.use('Agg')
-import matplotlib.pyplot as plt
-from datetime import timedelta
-
 from .djredis import get_redis, set_space_open, space_is_open
 from .models import MacAdress, SpaceStatus, MusicOfTheDay
 from .forms import MacAdressForm
 from .serializers import PamelaSerializer, SpaceStatusSerializer, MotdSerializer
 from .decorators import private_api, one_or_zero
-from .plots import weekday_plot, weekday_probs, human_time
+from .plots import weekday_probs, human_time
 from .helpers import is_stealth_mode, make_empty_pamela, make_pamela, user_should_see_pamela
 from users.models import User
 from realtime.helpers import publish_space_state
@@ -222,19 +218,6 @@ def openings_data(request):
         'probs': list(weekday_probs(opts)),
         'range': human_time(opts),
     })
-
-
-def openings(request):
-    opts = {k: request.GET[k] for k in request.GET}
-
-    weekday_plot(plt, opts)
-
-    # Wrap everything in a django response and clear matplotlib context
-    response = HttpResponse(content_type="image/png")
-    plt.savefig(response, format='png', facecolor=(0, 0, 0, 0),
-                edgecolor='none', bbox_inches='tight', pad_inches=0)
-    plt.clf()
-    return response
 
 
 class PamelaObject(object):
