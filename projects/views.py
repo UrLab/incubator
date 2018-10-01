@@ -68,9 +68,9 @@ def projects_home(request):
     grouper = lambda x: x.status if x.status != "a" else "f"
     groups = {k: list(g) for k, g in groupby(projects, grouper)}
     return render(request, "projects_home.html", {
-        'progress': clusters_of(groups['i'], 4),
-        'done': clusters_of(groups['f'], 4),
-        'proposition': clusters_of(groups['p'], 4),
+        'progress': clusters_of(groups.get('i',[]), 4),
+        'done': clusters_of(groups.get('f',[]), 4),
+        'proposition': clusters_of(groups.get('p',[]), 4),
     })
 
 

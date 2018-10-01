@@ -4,7 +4,7 @@ django-extensions
 ipython
 django-debug-toolbar<1.6,>=1.5
 django-bootstrap3
-djangorestframework==3.5.3
+djangorestframework<3.7.0
 django-datetime-widget
 Markdown
 redis
@@ -20,7 +20,6 @@ ics
 django-analytical
 django-jsonfield
 django-jsonfield-compat
-matplotlib
 pandas
 django-pandas
 pip>8.0

@@ -78,30 +78,3 @@ def weekday_probs(opts):
                 ret[i] = 0
 
     return ret
-
-
-def weekday_plot(ax, opts):
-    # Init plot
-    width = int(opts.get('width', 12))
-    height = int(opts.get('height', 8))
-    ax.figure(figsize=(width, height))
-
-    probs = 100 * weekday_probs(opts)
-    img = np.repeat([probs], 5, axis=0)
-    cax = ax.imshow(
-        img, cmap=ax.cm.RdYlGn, interpolation='none',
-        vmin=0, vmax=100)
-    ticks = [0, 25, 50, 75, 100]
-    cbar = ax.colorbar(cax, ticks=ticks)
-    cbar.ax.set_yticklabels(['{}%'.format(t) for t in ticks])
-
-    # Ticks && grid
-    ticks = np.arange(0, 24, 2)
-    ax.xticks(ticks - 0.5, ["%dh" % x for x in ticks])
-    ax.yticks([])
-    ax.grid()
-
-    # Title
-    opts['from'] = df.index.min().strftime("%d/%m/%Y")
-    opts['to'] = df.index.max().strftime("%d/%m/%Y")
-    ax.title(human_time(opts))
