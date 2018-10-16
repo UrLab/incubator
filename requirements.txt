@@ -6,7 +6,7 @@ django-debug-toolbar<1.6,>=1.5
 django-bootstrap3
 djangorestframework<3.7.0
 django-datetime-widget
-Markdown
+Markdown==2.6.11
 redis
 Pillow
 wiki
