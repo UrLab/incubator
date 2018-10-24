@@ -71,3 +71,28 @@ def update_product_stock_on_refill_delete(instance, **kwargs):
     """
     instance.product.stock_amount = F("stock_amount") - instance.amount
     instance.product.save()
+
+
+@receiver(post_save, sender="stock.ProductTransaction")
+def decrease_product_stock_on_transaction_create(instance, created, **kwargs):
+    """
+    Signal responsible for decreasing a product's stock when a transaction concerning that product
+        happens.
+    """
+    if not created:
+        return
+
+    product = instance.product
+    product.stock_amount = F("stock_amount") - 1
+    product.save()
+
+
+@receiver(post_delete, sender="stock.ProductTransaction")
+def increase_product_stock_on_transaction_delete(instance, **kwargs):
+    """
+    Signal responsible for increasing a product's stock when a transaction concerning that product
+        is deleted.
+    """
+    product = instance.product
+    product.stock_amount = F("stock_amount") + 1
+    product.save()
