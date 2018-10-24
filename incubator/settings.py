@@ -189,6 +189,10 @@ MESSAGE_TAGS = {
 
 
 REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'users.api_auth.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
     'DEFAULT_PERMISSION_CLASSES': ('incubator.drf.ReadOnlyPermission',),
     'DEFAULT_PAGINATION_CLASS': 'incubator.drf.AnachistPageNumberPagination',
     'UNICODE_JSON': False,
