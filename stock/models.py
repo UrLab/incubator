@@ -22,11 +22,8 @@ class Product(models.Model):
 
 
 class Barcode(models.Model):
-    class Meta:
-        unique_together = ("product", "code")
-
     product = models.ForeignKey("stock.Product")
-    code = models.CharField(max_length=150)
+    code = models.CharField(max_length=150, unique=True)
 
     def __str__(self):
         return "Barcode |{}| for {}".format(self.code, self.product)
@@ -102,9 +99,18 @@ class ProductTransaction(models.Model):
     user = models.ForeignKey("users.User", null=True, blank=True)
     when = models.DateTimeField(auto_now_add=True)
     product = models.ForeignKey("stock.Product")
+    paid_price = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        editable=False,
+        help_text="The price for which the product was sold at the time of the transaction"
+    )
 
-    def price(self):
-        return self.product.price
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            # Populate the price at the moment the transaction was created
+            self.paid_price = self.product.price
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return "{} a dépensé {}€ pour le produit {}".format(self.user, self.product.price, self.product)

@@ -59,7 +59,7 @@ class TopupTransaction(admin.ModelAdmin):
 
 @admin.register(ProductTransaction)
 class ProductTransaction(admin.ModelAdmin):
-    list_display = ('user', 'price', 'product', 'when')
+    list_display = ('user', 'paid_price', 'product', 'when')
     search_fields = ('user__username', 'product__name')
 
 
