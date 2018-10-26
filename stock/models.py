@@ -32,14 +32,20 @@ class Barcode(models.Model):
 class StockRefill(models.Model):
     """
     Represents a stock refilling event. Tracks who and when refilled the stock, uses ProductRefill in order
-        to track each individual stock that was updated.
+        to track each individual stock that was increased.
     """
-    user = models.ForeignKey("users.User", null=True, blank=True, on_delete=models.SET_NULL,
-                             help_text="The person responsible for this stock refilling."
-                             "Ideally the person who did the data entry after shopping")
+    user = models.ForeignKey(
+        "users.User", null=True, blank=True, on_delete=models.SET_NULL,
+        help_text=(
+            "The person responsible for this stock refilling."
+            "Ideally the person who did the data entry after shopping"
+        )
+    )
     when = models.DateTimeField(default=timezone.now)
-    updates = models.ManyToManyField(to="stock.Product", through="stock.ProductRefill",
-                                     help_text="All the product stocks that were updated in this refill")
+    updates = models.ManyToManyField(
+        to="stock.Product", through="stock.ProductRefill",
+        help_text="All the product stocks that were increased in this refill"
+    )
 
     def __str__(self):
         return "Stock refilled by {} on {}".format(self.user, self.when)
@@ -47,7 +53,8 @@ class StockRefill(models.Model):
 
 class ProductRefill(models.Model):
     """
-    Many to many intermediary table used in order to store the product stock being updated with its quantity
+    Many to many intermediary table used in order to store the product stock being increased and its quantity
+
     Regrouped in StockRefill.
 
     Has signals that trigger upon creation and upon an update. See signals.py
@@ -57,9 +64,10 @@ class ProductRefill(models.Model):
 
     refill = models.ForeignKey("stock.StockRefill", help_text="The refill that generated this update")
     product = models.ForeignKey("stock.Product", help_text="The product whose stock was refilled")
-    amount = models.PositiveIntegerField(help_text="The quantity by which the stock was increased",
-                                         validators=[MinValueValidator(1, message="You cannot add a negative amount of stock")]
-                                         )
+    amount = models.PositiveIntegerField(
+        help_text="The quantity by which the stock was increased",
+        validators=[MinValueValidator(1, message="You cannot add a negative amount of stock")]
+    )
 
     def __str__(self):
         return "Refill of {} by {} unit(s)".format(self.product, self.amount)
