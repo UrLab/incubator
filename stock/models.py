@@ -73,6 +73,52 @@ class ProductRefill(models.Model):
         return "Refill of {} by {} unit(s)".format(self.product, self.amount)
 
 
+class Stocktaking(models.Model):
+    """
+    Represents a stock taking event. Tracks who and when checked the inventory, uses InventoryLine in order
+        to track each individual stock that was updated.
+    """
+    user = models.ForeignKey(
+        "users.User", null=True, blank=True, on_delete=models.SET_NULL,
+        help_text=("The person responsible for this stock taking.")
+    )
+    when = models.DateTimeField(default=timezone.now)
+    updates = models.ManyToManyField(
+        to="stock.Product", through="stock.StocktakeLine",
+        help_text="All the product stocks that were updated in this inventory"
+    )
+
+    def __str__(self):
+        return "Inventory taken by {} on {}".format(self.user, self.when)
+
+
+class StocktakeLine(models.Model):
+    """
+    Many to many intermediary table used in order to store the product stock being updated during
+        inventory of stock.
+    """
+    class Meta:
+        unique_together = ("stock_taking", "product")
+
+    stock_taking = models.ForeignKey(
+        "stock.Stocktaking",
+        help_text="The stocktaking that generated this update"
+    )
+    product = models.ForeignKey("stock.Product", help_text="The product whose stock was refilled")
+    old_amount = models.PositiveIntegerField(help_text="Amount before the inventory")
+    new_amount = models.PositiveIntegerField(
+        help_text="Amount as counted by the inventory",
+        validators=[MinValueValidator(0, message="You cannot have a negative amount of stock")]
+    )
+
+    @property
+    def delta(self):
+        return self.new_amount - self.old_amount
+
+    def __str__(self):
+        return "Refill of {} by {} unit(s)".format(self.product, self.amount)
+
+
 class Transaction(models.Model):
     class Meta:
         abstract = True

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (Category, Product, TransferTransaction, TopupTransaction, ProductTransaction,
-                     MiscTransaction, Barcode, StockRefill, ProductRefill)
+                     MiscTransaction, Barcode, StockRefill, ProductRefill, StocktakeLine, Stocktaking)
 
 
 class ProductInline(admin.TabularInline):
@@ -16,6 +16,11 @@ class BarcodeInline(admin.TabularInline):
 
 class ProductRefillInline(admin.TabularInline):
     model = ProductRefill
+    extra = 1
+
+
+class StocktakeLineInline(admin.TabularInline):
+    model = StocktakeLine
     extra = 1
 
 
@@ -42,6 +47,12 @@ class BarcodeAdmin(admin.ModelAdmin):
 class StockRefillAdmin(admin.ModelAdmin):
     list_display = ("user", "when")
     inlines = (ProductRefillInline,)
+
+
+@admin.register(Stocktaking)
+class StocktakingAdmin(admin.ModelAdmin):
+    list_display = ("user", "when")
+    inlines = (StocktakeLineInline,)
 
 
 @admin.register(TransferTransaction)
