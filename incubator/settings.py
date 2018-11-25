@@ -275,6 +275,7 @@ OTHER_RANGES = [
     "00:ca:fe",  # Xen
     "52:54:00",  # Qemu
     "00:15:5D",  # Hyper-V
+    "b8:27:eb",  # Raspberry-Pi
 ]
 
 MAC_RANGES = EXPRESSIF_RANGES + VMWARE_RANGES + OTHER_RANGES
