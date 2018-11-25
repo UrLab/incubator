@@ -25,14 +25,14 @@ PAMELA
         <div class="col-md-8">
             <p>P.A.M.E.L.A. est l'interface permettant de voir qui est actuellement connecté sur le réseau du
                 Hackerspace.
-                Ci-dessous les gens actuellements présents :</p>
+                Ci-dessous les gens actuellement présents :</p>
 
             {% if should_show_pamela %}
                 {% if stealth_mode %}
                     <br>
                     <div class="alert alert-warning" role="alert">
                     <b>Stealth mode activated !</b> Le hackerspace n'est pas censé être ouvert pour l'instant.<br>
-                    Vous pouvez voir pamela parce que vous êtes détenteur d'une clé mais la plus part des gens ne voient qu'une page vide !
+                    Vous pouvez voir pamela parce que vous êtes détenteur d'une clé mais la plupart des gens ne voient qu'une page vide !
                     </div>
                 {% endif %}
                 <div id="pamela"></div>
