@@ -6,7 +6,7 @@ from .models import Project
 class ProjectForm(ModelForm):
     class Meta:
         model = Project
-        exclude = ['organizer']
+        exclude = ['organizer','likes']
 
         widgets = {
             'content': Textarea(attrs={'rows': 25}),
