@@ -59,20 +59,18 @@ INSTALLED_APPS = (
     'projects',
     'space',
     'stock',
+    'wiki',
     'django_nyt',
     'mptt',
     'sekizai',
     'sorl.thumbnail',
-    'wiki',
-    'wiki.plugins.attachments',
-    'wiki.plugins.notifications',
-    'wiki.plugins.images',
-    'wiki.plugins.macros',
     'django_extensions',
     'realtime',
     'actstream',
     'manmail',
     'redir',
+    'reversion',
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -102,6 +100,7 @@ SUIT_CONFIG = {
         'actstream',
         'manmail',
         'redir',
+        'wiki',
     )
 }
 
@@ -216,7 +215,7 @@ INFLUX_PASS = "derp"
 
 LOGIN_URL = '/auth/login/'
 
-WIKI_ATTACHMENTS_EXTENSIONS = (
+"""WIKI_ATTACHMENTS_EXTENSIONS = (
     'jpg',
     'jpeg',
     'png',
@@ -228,7 +227,7 @@ WIKI_ATTACHMENTS_EXTENSIONS = (
     'zip',
     'tar',
     'gz',
-)
+)"""
 
 ACTSTREAM_SETTINGS = {
     'USE_JSONFIELD': True
