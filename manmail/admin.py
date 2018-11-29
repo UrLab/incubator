@@ -26,7 +26,7 @@ class EmailAdmin(admin.ModelAdmin):
 
     def approve(self, request, queryset):
         if not queryset.count() == 1:
-            self.message_user(request, message="Vous ne devez séléctionner qu'un email à approuver", level=messages.ERROR)
+            self.message_user(request, message="Vous ne devez sélectionner qu'un email à approuver", level=messages.ERROR)
             return
         email = queryset.first()
         email.approvers.add(request.user)
@@ -35,7 +35,7 @@ class EmailAdmin(admin.ModelAdmin):
 
     def send_email(self, request, queryset):
         if not queryset.count() == 1:
-            self.message_user(request, message="Vous ne devez séléctionner qu'un email à envoyer", level=messages.ERROR)
+            self.message_user(request, message="Vous ne devez sélectionner qu'un email à envoyer", level=messages.ERROR)
             return
 
         email = queryset.first()
@@ -63,13 +63,13 @@ class EmailAdmin(admin.ModelAdmin):
         email.sent = True
         email.save()
 
-        self.message_user(request, "L'email a été énvoyé.")
+        self.message_user(request, "L'email a été envoyé.")
     send_email.short_description = "Envoyer cet email A TOUT LE MONDE"
 
 
     def send_test_email(self, request, queryset):
         if not queryset.count() == 1:
-            self.message_user(request, message="Vous ne devez séléctionner qu'un email à envoyer", level=messages.ERROR)
+            self.message_user(request, message="Vous ne devez sélectionner qu'un email à envoyer", level=messages.ERROR)
             return
 
         email = queryset.first()
@@ -88,5 +88,5 @@ class EmailAdmin(admin.ModelAdmin):
         message.attach_alternative(email.markdown_content(), "text/html")
         message.send()
 
-        self.message_user(request, "L'email a été énvoyé à votre adresse")
-    send_test_email.short_description = "Envoyer cet email A MOI UNIQUEMENT"
+        self.message_user(request, "L'email a été envoyé à votre adresse")
+    send_test_email.short_description = "Envoyer cet email À MOI UNIQUEMENT"
