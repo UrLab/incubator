@@ -43,6 +43,8 @@ class Project(models.Model):
     short_description = models.CharField(max_length=1000, verbose_name="Description courte")
     content = models.TextField(verbose_name="Contenu", blank=True)
 
+    likes = models.ManyToManyField(User, related_name ="likes")
+
     class Meta:
         verbose_name = "Projet"
 

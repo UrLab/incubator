@@ -101,6 +101,17 @@
         Ne plus participer</br>
       </a></br>
     {% endif %}
+    {% if user not in project.likes.all %}
+      <a href="{% url 'project_like' project.id%}" class="btn btn-primary btn-xs">
+        <i class="glyphicon glyphicon-thumbs-up"></i>
+        Like<span class="badge">{{project.likes.count}}</span></br>
+      </a></br>
+    {% else %}
+      <a href="{% url 'project_unlike' project.id%}" class="btn btn-danger btn-xs">
+        <i class="glyphicon glyphicon-thumbs-down"></i>
+        Unlike<span class="badge">{{project.likes.count}}</span></br>
+      </a></br>
+    {% endif %}
     <br>
     {% if project.picture %}
       <img src="{{project.picture.url}}"  class="img-thumbnail">

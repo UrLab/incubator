@@ -134,6 +134,17 @@ def remove_participation(request, pk):
     project.participants.remove(request.user)
     return HttpResponseRedirect(reverse('view_project', args=[pk]))
 
+def like(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    project.likes.add(request.user)
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def unlike(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    project.likes.remove(request.user)
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()

@@ -4,7 +4,7 @@ from django.views.decorators.http import require_POST
 from .views import (
     ProjectDetailView, ProjectAddView, ProjectEditView,
     projects_home, add_participation, remove_participation,
-    add_task, complete_task, uncomplete_task)
+    add_task, complete_task, uncomplete_task, like, unlike)
 
 urlpatterns = [
     url(r'^$', projects_home, name='projects_home'),
@@ -16,4 +16,6 @@ urlpatterns = [
     url(r'^uncomplete/(?P<pk>[0-9]+)$', uncomplete_task, name='uncomplete_task'),
     url(r'^participe/(?P<pk>[0-9]+)$', login_required(add_participation), name='project_add_participation'),
     url(r'^noparticipe/(?P<pk>[0-9]+)$', login_required(remove_participation), name='project_remove_participation'),
+    url(r'^like/(?P<pk>[0-9]+)$', login_required(like), name='project_like'),
+    url(r'^unlike/(?P<pk>[0-9]+)$', login_required(unlike), name='project_unlike'),
 ]
