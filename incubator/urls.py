@@ -4,13 +4,14 @@ from django.contrib import admin
 import incubator.views
 import incubator.apiurls
 from incubator import settings
-from wiki.urls import get_pattern as get_wiki_pattern
+# from wiki.urls import get_pattern as get_wiki_pattern
 from django_nyt.urls import get_pattern as get_nyt_pattern
 
 import redir.views
 import events.views
 import incubator.views
 import space.views
+import wiki.views
 
 urlpatterns = [
     url(r'^$', incubator.views.home, name='home'),
@@ -19,6 +20,7 @@ urlpatterns = [
     url(r'^projects/', include('projects.urls')),
     url(r'^accounts/', include('users.urls')),
     url(r'^space/', include('space.urls')),
+    url(r'^wiki/', include('wiki.urls')),
 
     url(r'^sm$', events.views.sm),
     url(r'^linux$', events.views.linux),
@@ -31,7 +33,6 @@ urlpatterns = [
 
     url(r'^api/', include('incubator.apiurls')),
     url(r'^notifications/', get_nyt_pattern()),
-    url(r'^wiki/', get_wiki_pattern()),
     url(r'^r/(?P<short_name>[^/]+)/?$', redir.views.short_url, name='redirection'),
 ]
 
