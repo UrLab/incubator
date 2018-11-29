@@ -3,7 +3,7 @@
 {% load analytical %}
 {% load activelink %}
 
-{% load sekizai_tags i18n wiki_tags %}
+{% load sekizai_tags %}
 
 <!DOCTYPE html>
 <!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
@@ -81,7 +81,7 @@
                             </a>
                         </li>
                         <li class="{% active_if_contains "/wiki/" %}">
-                            <a href="{% url "wiki:root" %}">
+                            <a href="{% url "wiki_home" %}">
                                 <i class="fa fa-pencil-square-o"></i>
                                 Wiki
                             </a>
