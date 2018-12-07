@@ -113,11 +113,22 @@
     </div>
     <div class="row"><p></p></div>
 
+{% endblock %}
 
-    <!-- Owiii du javascript random au milieu de nul part, much love-->
+{% block js %}
     <script type="text/javascript">
         jQuery(document).ready(function ($) {
             $('#tabs').tab();
+
+            $('#article-menu a').click(function (e) {
+                e.preventDefault();
+                window.location.hash = $(this).attr('href');  // set hash in url
+                $(this).tab('show');
+            });
+            if (window.location.hash) {
+                // if hash in url, show corresponding tab
+                $('a[href*="' + window.location.hash + '"]').tab("show");
+            }
         });
     </script>
 
