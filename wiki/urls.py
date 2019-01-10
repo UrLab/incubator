@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
-from . import views
+from .views import (wiki_home,)
 
 urlpatterns = [
-    url(r'^$', views.wiki_home, name='wiki_home'),
+    url(r'^$', wiki_home, name='wiki_home'),
 ]
