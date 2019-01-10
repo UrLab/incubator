@@ -9,7 +9,6 @@ from django_nyt.urls import get_pattern as get_nyt_pattern
 
 import redir.views
 import events.views
-import incubator.views
 import space.views
 import wiki.views
 
