@@ -5,5 +5,46 @@
 {% endblock %}
 
 {% block content %}
-    <h1>On ne documente pas son hackerspace à UrLab !</h1>
+
+    <ol class="breadcrumb">
+        <li><a href="/">UrLab</a></li>
+        <li class="active">Wiki</li>
+    </ol>
+
+    <ul class="nav nav-tabs" id="article-menu">
+        <li class="pull-left">
+            <p><strong>Articles du Wiki</strong></p>
+        </li>
+    </ul>
+
+    <div class="row">
+    <div class="col-lg-11">
+
+
+        <div id="my-tab-content" class="tab-content">
+            <div class="tab-pane active" id="tab-now">
+                <br>
+                {% for row in progress %}
+                    <div class="row">
+                        {% for project in row %}
+                            {% include "wiki_card.html" %}
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    <div class="row">
+        <div class="col-lg-11">
+            <div class="container-fluid">
+                <a href="{% url "add_article" %}" class="btn btn-success pull-right">
+                    <span class="fa fa-plus" aria-hidden="true"></span>
+                    Nouvel article
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row"><p></p></div>
+
 {% endblock %}
