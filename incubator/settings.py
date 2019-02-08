@@ -69,7 +69,6 @@ INSTALLED_APPS = (
     'actstream',
     'manmail',
     'redir',
-    'reversion',
 
 )
 
