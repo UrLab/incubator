@@ -1,9 +1,7 @@
 from django.db import models
 from datetime import datetime
-import reversion
 
 
-@reversion.register()
 class Article(models.Model):
     title = models.CharField(max_length=200, verbose_name="Nom")
     creator = models.CharField(max_length=50)
@@ -16,16 +14,7 @@ class Article(models.Model):
         verbose_name = "Article"
 
     def save(self, *args, **kwargs):
-        # Declare a revision block.
-        with reversion.create_revision():
-
-            # Save a new model instance.
-            obj = Article()
-            obj.save()
-
-            # Store some meta-information.
-            reversion.set_user(request.user)
-            reversion.set_comment("Created revision 1")
+        pass
 
     def __str__(self):
         return self.title
