@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load formatting %}
+{% load humanize %}
+
+{% block title %}
+{{article.title}}
+{% endblock %}
+
+{% block content %}
+<ol class="breadcrumb">
+  <li><a href="/">UrLab</a></li>
+  <li><a href="{% url "projects_home" %}">wiki</a></li>
+  <li class="active">{{article.title}}</li>
+</ol>
+
+    <h1>
+        {{article.title}}
+        <a class="btn btn-default" href="{% url "edit_article" article.id %}">
+            <span class="fa fa-edit" aria-hidden="true"></span>
+            Editer
+        </a>
+    </h1>
+{{article.content|markdown}}
+{% endblock %}
