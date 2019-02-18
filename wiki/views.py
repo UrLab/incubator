@@ -3,6 +3,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
 from users.mixins import PermissionRequiredMixin
 from datetime import datetime
+from actstream import action
 
 from .models import Article
 from .forms import ArticleForm
@@ -13,7 +14,7 @@ def wiki_home(request):
 class ArticleAddView(PermissionRequiredMixin, CreateView):
     form_class = ArticleForm
     template_name = 'add_article.html'
-    permission_required = 'projects.add_project'
+    permission_required = ''
 
     def get_initial(self):
         return {
@@ -28,11 +29,12 @@ class ArticleAddView(PermissionRequiredMixin, CreateView):
 
         return ret
 
+
 class ArticleEditView(PermissionRequiredMixin, UpdateView):
     form_class = ArticleForm
     model = Article
     template_name = 'add_article.html'
-    permission_required = 'projects.change_project'
+    permission_required = ''
 
     def form_valid(self, form):
         ret = super(ArticleEditView, self).form_valid(form)
