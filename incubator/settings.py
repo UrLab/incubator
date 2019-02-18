@@ -52,6 +52,7 @@ INSTALLED_APPS = (
     'analytical',
     'constance',
     'constance.backends.database',
+    'simple_history',
 
     'incubator',
     'events',
@@ -81,6 +82,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware',
 )
 
 ROOT_URLCONF = 'incubator.urls'
