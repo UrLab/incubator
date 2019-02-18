@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.urlresolvers import reverse
+from simple_history.models import HistoricalRecords
 from datetime import datetime
 
 
@@ -9,12 +11,13 @@ class Article(models.Model):
     last_modified = models.DateTimeField(auto_now=True, blank=True)
     content = models.TextField(verbose_name="Contenu", blank=True)
     nbr_revision = models.IntegerField(default=0)
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = "Article"
 
-    def save(self, *args, **kwargs):
-        pass
-
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('view_article', args=[self.id])
