@@ -9,7 +9,11 @@ from .models import Article
 from .forms import ArticleForm
 
 def wiki_home(request):
-    return render(request, "wiki_home.html", {})
+    articles = Article.objects.all()
+
+    return render(request, "wiki_home.html", {
+        'all': articles,
+    })
 
 class ArticleAddView(PermissionRequiredMixin, CreateView):
     form_class = ArticleForm
