@@ -3,6 +3,13 @@ from django.core.urlresolvers import reverse
 from simple_history.models import HistoricalRecords
 from datetime import datetime
 
+CATEGORY = (
+    ("p", "project"),
+    ("f", "food"),
+    ("m", "miscellaneous"),
+    ("o", "objects"),
+)
+
 
 class Article(models.Model):
     title = models.CharField(max_length=200, verbose_name="Nom")
@@ -12,6 +19,7 @@ class Article(models.Model):
     content = models.TextField(verbose_name="Contenu", blank=True)
     nbr_revision = models.IntegerField(default=0)
     history = HistoricalRecords()
+    category = models.CharField(max_length=1, choices=CATEGORY)
 
     class Meta:
         verbose_name = "Article"
