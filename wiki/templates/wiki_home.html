@@ -24,13 +24,11 @@
         <div id="my-tab-content" class="tab-content">
             <div class="tab-pane active" id="tab-now">
                 <br>
-                {% for row in progress %}
-                    <div class="row">
-                        {% for project in row %}
-                            {% include "wiki_card.html" %}
+                    <div class="all">
+                        {% for article in all %}
+                            <li><a href='{% url "view_article" article.pk %}'>{{article.title}}</a></li>
                         {% endfor %}
                     </div>
-                {% endfor %}
             </div>
         </div>
 
