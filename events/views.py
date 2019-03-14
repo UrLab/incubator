@@ -96,22 +96,8 @@ def events_home(request):
         'past': clusters_of(pastEvent, 5),
         'incubation': clusters_of(IncubatingEvent, 5),
     }
-
     return render(request, "events_home.html", context)
 
-
-def events_past(request):
-    print("im in event past")
-    futureQ = Q(stop__gt=timezone.now()) # NOQA
-    readyQ = Q(status__exact="r") # NOQA
-
-    base = Event.objects.select_related('meeting')
-
-    context = {
-        'past': base.filter(~futureQ & readyQ).order_by('-start'),
-    }
-
-    return render(request, "events_past.html", context)
 
 def short_url_maker(*keywords):
     def filter_func(request):
