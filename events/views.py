@@ -12,6 +12,7 @@ from ics import Calendar
 from ics import Event as VEvent
 from users.decorators import permission_required
 from users.mixins import PermissionRequiredMixin
+from math import ceil
 
 from space.decorators import private_api
 from realtime.helpers import send_message
@@ -19,6 +20,7 @@ from realtime.helpers import send_message
 from .serializers import EventSerializer, MeetingSerializer, HackerAgendaEventSerializer, FullMeetingSerializer
 from .models import Event, Meeting
 from .forms import EventForm, MeetingForm
+from projects.views import clusters_of
 
 
 class EventAddView(PermissionRequiredMixin, CreateView):
@@ -86,14 +88,17 @@ def events_home(request):
     readyQ = Q(status__exact="r") # NOQA
 
     base = Event.objects.select_related('meeting')
-
+    futureEvent = base.filter(futureQ & readyQ).order_by('start')
+    pastEvent = base.filter(~futureQ & readyQ).order_by('-start')
+    IncubatingEvent = base.filter(~readyQ).order_by('-id')
     context = {
-        'future': base.filter(futureQ & readyQ).order_by('start'),
-        'past': base.filter(~futureQ & readyQ).order_by('-start')[:5],
-        'incubation': base.filter(~readyQ).order_by('-id')[:5],
+        'future': clusters_of(futureEvent, 5),
+        'past': clusters_of(pastEvent, 5),
+        'incubation': clusters_of(IncubatingEvent, 5),
     }
 
     return render(request, "events_home.html", context)
+
 
 def events_past(request):
     print("im in event past")
