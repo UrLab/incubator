@@ -1,70 +1,141 @@
 {% extends "base.html" %}
 
 {% block title %}
-Evénements de UrLab
+    Evénements de UrLab
 {% endblock %}
 
 {% block content %}
 
-<ol class="breadcrumb">
-  <li><a href="/">UrLab</a></li>
-  <li class="active">Événements</li>
-</ol>
+    <ol class="breadcrumb">
+      <li><a href="/">UrLab</a></li>
+      <li class="active">Événements</li>
+    </ol>
 
-<div class="page-header">
-  <h1>
-    Événements de UrLab
-    <a href="{% url "add_event" %}" class="btn btn-success pull-right">
-      <span class="fa fa-plus" aria-hidden="true"></span>
-          Proposer
-    </a>
-  </h1>
-</div>
+    <ul class="nav nav-tabs" id="article-menu">
+        <li class="pull-left">
+            <p><strong>Nos Events</strong></p>
+            <p>
+            Abonnez vous à <a href="http://urlab.be/events/urlab.ics">notre flux ics (ical)</a> pour être toujours au courant des derniers événements :
+            </p>
 
-<div class="row">
-  <div class="col-md-6">
-    <h1>
-        <span class="fa fa-calendar-o" aria-hidden="true"></span>
-        Evénements futurs
-    </h1>
-    <p>
-      Vous pouvez vous abonner à notre flux ics (ical) pour être toujours au courant des derniers événements :
-      <a href="http://urlab.be/events/urlab.ics">http://urlab.be/events/urlab.ics</a>
-    </p>
-    {% if future %}
-        {% for event in future %}
-          {% include "event_card.html" %}
-        {% endfor %}
-    {% else %}
-    Mamamia ! Il n'y a rien de prévu dans le futur ! Vite, <a href="{% url "add_event" %}">crée un événement</a> !
-    {% endif %}
+        </li>
 
-  </div>
-  <div class="col-md-6">
-    <h1>
-      <span class="fa fa-flask" aria-hidden="true"></span>
-      Incubateur à événement
-    </h1>
-    {% for event in incubation %}
-      {% include "event_card.html" %}
-    {% empty %}
-      <p>Il n'y a aucun événement en incubation pour l'instant</p>
-    {% endfor %}
+        <li class="pull-right" role="presentation">
+            <a href="#tab-past" class="pull-right" data-toggle="tab">
+                <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
+                <span class="hidden-xs">Passé</span>
+            </a>
+        </li>
+        <li class="pull-right" role="presentation">
+            <a href="#tab-incubation" class="pull-right" data-toggle="tab">
+                <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
+                <span class="hidden-xs">En incubation</span>
+            </a>
+        </li>
+        <li class="active pull-right" role="presentation">
+            <a href="#tab-futur" class="pull-right" data-toggle="tab">
+                <span class="glyphicon glyphicon-record" aria-hidden="true"></span>
+                <span class="hidden-xs">Futur</span>
+            </a>
+        </li>
+    </ul>
 
-    <h1>
-        <span class="fa fa-clock-o" aria-hidden="true"></span>
-        Evénements passés
-    </h1>
-    {% for event in past %}
-      {% include "event_card.html" %}
-    {% empty %}
-      <p>Il n'y a aucun événement passé, future is NOW !</p>
-    {% endfor %}
-    <a href="{% url "events_past" %}"> Evénements passés suite...<a>
-  </div>
-</div>
+    <div class="row">
+    <div class="col-lg-11">
+
+    <div id="my-tab-content" class="tab-content">
+        <div class="tab-pane active" id="tab-futur">
+            <br>
+            <p>
+              Vous retrouverez ici les événements à venir. Viendez ce sera bien !
+            </p>
+              {% for row in future %}
+                <div class="row">
+                    {% for event in row %}
+                        {% include "event_card.html" %}
+                    {% endfor %}
+                </div>
+                {% empty %}
+                Mamamia ! Il n'y a rien de prévu dans le futur ! Vite, <a href="{% url "add_event" %}">crée un événement</a> !
+              {% endfor %}
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Déjà arrivé à la fin ?</h3>
+                </div>
+                <div class="panel-body">
+                    N'oublie pas d'aller voir les
+                    <a href="#tab-incubation" data-toggle="tab">
+                        <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
+                        événements en incubation
+                    </a>
+                    et les
+                    <a href="#tab-past" data-toggle="tab">
+                        <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
+                        événements passés
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane" id="tab-incubation">
+            <br>
+            <p>
+              Vous retrouverez ici tout les événemnts en incubation. C'est à dire
+               les événements que nous pensons organiser un jour mais pour lesquels
+                nous n'avons pas encore trouver de dates.
+            </p>
+            {% for row in incubation %}
+                <div class="row">
+                    {% for event in row %}
+                        {% include "event_card.html" %}
+                    {% endfor %}
+                </div>
+                {% empty %}
+                <p>Il n'y a aucun événement passé, future is NOW !</p>
+            {% endfor %}
+        </div>
+        <div class="tab-pane" id="tab-past">
+            <br>
+            <p>
+              Vous retrouverez ici tout les événements passés. Sur certains vous
+               trouverez des ressources intéréssante pour en apprendre plus sur le
+                sujet si vous n'avez pas pu venir à l'événement ou aimeriez appronfondir la matière.
+            </p>
+            {% for row in past %}
+                <div class="row">
+                    {% for event in row %}
+                        {% include "event_card.html" %}
+                    {% endfor %}
+                </div>
+                {% empty %}
+                <p>Il n'y a aucun événement passé, future is NOW !</p>
+            {% endfor %}
+
+        </div>
+    </div>
+    </div>
+
+    </div>
+    <div class="row">
+    <div class="col-lg-11">
+
+    <div class="container-fluid">
+            <a href="{% url "add_event" %}" class="btn btn-success pull-right">
+                <span class="fa fa-plus" aria-hidden="true"></span>
+                Proposer
+            </a>
+    </div>
+
+    </div>
+
+    </div>
+    <div class="row"><p></p></div>
 
 
-
+    <!-- Owiii du javascript random au milieu de nul part, much love-->
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $('#tabs').tab();
+        });
+    </script>
 
 {% endblock %}
