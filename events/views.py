@@ -12,7 +12,6 @@ from ics import Calendar
 from ics import Event as VEvent
 from users.decorators import permission_required
 from users.mixins import PermissionRequiredMixin
-from math import ceil
 
 from space.decorators import private_api
 from realtime.helpers import send_message
