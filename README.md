@@ -9,7 +9,7 @@ Quick brainstorming https://pad.lqdn.fr/p/incubator
     
   - Running on Ubuntu
   
-  ``sudo apt-get install python3-dev python3-setuptools libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev python3-pip``
+  ``sudo apt-get install python3-dev python3-setuptools libtiff5-dev libjpeg62 zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev python3-pip``
 
 ``sudo pip3 install virtualenv``
     
