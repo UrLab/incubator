@@ -1,5 +1,6 @@
 import hashlib
 
+from django import forms
 from django.conf import settings
 from django.db import models
 from django.utils import timezone
@@ -83,6 +84,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     hide_pamela = models.BooleanField(default=False, verbose_name='caché sur pamela')
     newsletter = models.BooleanField(default=True, verbose_name='abonné à la newsletter')
     is_active = models.BooleanField(default=True, verbose_name='Utilisateur actif')
+    description = models.TextField(default="", verbose_name="Description", max_length=255)#, widget=forms.Textarea(attrs={'placeholder': 'Ajouter une description', 'style':'resize:none;'}))
 
     def get_short_name(self):
         return self.username
