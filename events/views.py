@@ -94,6 +94,7 @@ def events_home(request):
         'future': clusters_of(futureEvent, 5),
         'past': clusters_of(pastEvent, 5),
         'incubation': clusters_of(IncubatingEvent, 5),
+        'event_page': True,
     }
     return render(request, "events_home.html", context)
 
