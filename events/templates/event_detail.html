@@ -14,7 +14,7 @@
 </ol>
 
 <div class="page-header">
-  <h1>
+  <h1 style=" word-wrap: break-word">
     {{event.title}}
     <a class="btn btn-default" href="{% url "edit_event" event.id %}">
         <span class="fa fa-edit" aria-hidden="true"></span>
@@ -82,7 +82,7 @@
     </div>
   {% endif %}
   {% if not event.meeting %}
-      <div class="col-md-8">
+      <div class="col-md-8" style=" word-wrap: break-word">
         <h2>Description</h2>
         {{event.description|markdown}}
       </div>
