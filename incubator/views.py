@@ -35,6 +35,7 @@ def home(request):
         "message_type": dyn_config.HOMEPAGE_MESSAGE_TYPE,
         "events": Event.objects.filter(stop__gt=datetime.now(), status__exact="r"),
         "stream": stream,
+        "event_page": False,
     })
 
 
