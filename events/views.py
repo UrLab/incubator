@@ -91,9 +91,9 @@ def events_home(request):
     pastEvent = base.filter(~futureQ & readyQ).order_by('-start')
     IncubatingEvent = base.filter(~readyQ).order_by('-id')
     context = {
-        'future': clusters_of(futureEvent, 5),
-        'past': clusters_of(pastEvent, 5),
-        'incubation': clusters_of(IncubatingEvent, 5),
+        'future': clusters_of(futureEvent, 4),
+        'past': clusters_of(pastEvent, 4),
+        'incubation': clusters_of(IncubatingEvent, 4),
         'event_page': True,
     }
     return render(request, "events_home.html", context)
