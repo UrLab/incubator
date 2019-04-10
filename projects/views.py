@@ -67,11 +67,12 @@ def projects_home(request):
     # group the finised and "ants are gone" projets together
     grouper = lambda x: x.status if x.status != "a" else "f"
     groups = {k: list(g) for k, g in groupby(projects, grouper)}
-    return render(request, "projects_home.html", {
-        'progress': clusters_of(groups.get('i',[]), 4),
-        'done': clusters_of(groups.get('f',[]), 4),
-        'proposition': clusters_of(groups.get('p',[]), 4),
-    })
+    context = {
+        'progress': clusters_of(groups.get('i', []), 4),
+        'done': clusters_of(groups.get('f', []), 4),
+        'proposition': clusters_of(groups.get('p', []), 4),
+    }
+    return render(request, "projects_home.html", context)
 
 
 @permission_required('projects.add_task')
