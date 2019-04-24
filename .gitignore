@@ -1,6 +1,7 @@
 incubator/local_settings.py
 media/
 ve/
+ve3/
 collected_static/
 
 # IDE
