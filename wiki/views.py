@@ -24,7 +24,6 @@ class ArticleAddView(PermissionRequiredMixin, CreateView):
         return {
             'creator': self.request.user,
             'created': datetime.now(),
-            'nbr_revision': 0,
         }
 
     def form_valid(self, form):
@@ -40,6 +39,12 @@ class ArticleEditView(PermissionRequiredMixin, UpdateView):
     template_name = 'add_article.html'
     permission_required = ''
 
+    def get_initial(self):
+        return {
+            'creator': self.request.user,
+            'created': datetime.now(),
+        }
+
     def form_valid(self, form):
         ret = super(ArticleEditView, self).form_valid(form)
         action.send(self.request.user, verb='a édité', action_object=self.object)
@@ -50,3 +55,6 @@ class ArticleDetailView(DetailView):
     model = Article
     template_name = 'article_detail.html'
     context_object_name = 'article'
+
+class ArticleOldDetailView(ArticleDetailView):
+    pass
