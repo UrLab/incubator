@@ -21,6 +21,7 @@ class Article(models.Model):
     content = models.TextField(verbose_name="Contenu", blank=True)
     nbr_revision = models.IntegerField(default=0)
     history = HistoricalRecords()
+    commit = models.TextField(verbose_name="commit", blank=True)
     category = models.CharField(max_length=1, choices=CATEGORY)
 
     class Meta:
@@ -31,7 +32,6 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse('view_article', args=[self.id])
-
 
 class ProjectLinkedArticle(Article):
     project = models.ForeignKey('projects.Project', on_delete=models.CASCADE)
