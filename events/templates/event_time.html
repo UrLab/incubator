@@ -1,13 +1,13 @@
 <span class="fa fa-calendar" aria-hidden="true"></span>
 
 {% if event.start == None %}
-    Cet événement n'a pas encore de date prévue <br>
+    Cet événement n'a pas encore de date prévue
 {% elif event.has_no_duration %}
     Le {{event.start|date:"l d F Y"}}, à {{event.start|date:"H:i"}}.
 {% elif event.is_only_a_day %}
     Le {{event.start|date:"l d F Y"}}, de {{event.start|date:"H:i"}} à {{event.stop|date:"H:i"}}.
 {% else %}
-    Du {{event.start|date:"l d F Y à H:i"}} au {{event.stop|date:"l d F Y à H:i"}}.<br>
+    Du {{event.start|date:"l d F Y à H:i"}} au {{event.stop|date:"l d F Y à H:i"}}.
 {% endif %}
 <br>
 {% if event.place %}
