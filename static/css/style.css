@@ -23,8 +23,13 @@ body {
 }
 
 .project-card-description {
-    height: 3em;
-    overflow: hidden;
+  height: 3em;
+  overflow: hidden;
+}
+
+.project-card-title {
+  width: 100%;
+  overflow-wrap: break-word;
 }
 
 .base-header {
@@ -35,15 +40,15 @@ body {
 }
 
 #nav.affix {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index:10;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index:10;
 }
 
 .nav-wrapper
 {
-    min-height:70px;
+  min-height:70px;
 }
 
 #home-logo {

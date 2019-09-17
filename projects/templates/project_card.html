@@ -1,10 +1,3 @@
-<style>
-  h3 {
-    width: 220px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-</style>
 <div class="col-sm-6 col-md-3">
   <div class="thumbnail">
     <a href="{% url "view_project" project.id %}">
@@ -15,7 +8,7 @@
     {% endif %}
     </a>
     <div class="caption">
-      <h3 class="row-fluid">
+      <h3 class="row-fluid project-card-title">
           {{ project.title }}
       </h3>
       <div class="row-fluid progress">
