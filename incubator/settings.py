@@ -289,3 +289,6 @@ try:
     from incubator.local_settings import * # NOQA
 except ImportError:
     pass
+
+
+EVENTS_PER_PAGE = 40

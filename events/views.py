@@ -12,6 +12,7 @@ from ics import Calendar
 from ics import Event as VEvent
 from users.decorators import permission_required
 from users.mixins import PermissionRequiredMixin
+from incubator.settings import EVENTS_PER_PAGE
 
 from space.decorators import private_api
 from realtime.helpers import send_message
@@ -19,7 +20,6 @@ from realtime.helpers import send_message
 from .serializers import EventSerializer, MeetingSerializer, HackerAgendaEventSerializer, FullMeetingSerializer
 from .models import Event, Meeting
 from .forms import EventForm, MeetingForm
-from projects.views import clusters_of
 
 
 class EventAddView(PermissionRequiredMixin, CreateView):
@@ -83,20 +83,43 @@ class MeetingEditView(PermissionRequiredMixin, UpdateView):
 
 
 def events_home(request):
-    futureQ = Q(stop__gt=timezone.now()) # NOQA
-    readyQ = Q(status__exact="r") # NOQA
+    futureQ = Q(stop__gt=timezone.now())  # NOQA
+    readyQ = Q(status__exact="r")  # NOQA
+
+    # Par défaut on envoie la page 0 des evenement futurs
+    offset = request.GET.get("offset")
+    type = request.GET.get("type")
+    print(type)
+    offset = int(offset) if offset is not None else 0
+    type = type if type is not None else "future"
 
     base = Event.objects.select_related('meeting')
-    futureEvent = base.filter(futureQ & readyQ).order_by('start')
-    pastEvent = base.filter(~futureQ & readyQ).order_by('-start')
-    IncubatingEvent = base.filter(~readyQ).order_by('-id')
-    context = {
-        'future': clusters_of(futureEvent, 4),
-        'past': clusters_of(pastEvent, 4),
-        'incubation': clusters_of(IncubatingEvent, 4),
-        'event_page': True,
-    }
-    return render(request, "events_home.html", context)
+    isLastPage = False
+    if type == "future":
+        futureEvent = base.filter(futureQ & readyQ).order_by('start')
+        # non, ca dépend de l'offset
+        if (offset+1)*EVENTS_PER_PAGE < len(futureEvent):
+            context = futureEvent[offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
+        else:
+            context = futureEvent[offset*EVENTS_PER_PAGE:]
+            isLastPage = True  # Pour pouvoir dire qu'il n'y a pas plus de page
+    elif type == "past":
+        pastEvent = base.filter(~futureQ & readyQ).order_by('-start')
+        if (offset+1)*EVENTS_PER_PAGE < len(pastEvent):
+            context = pastEvent[offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
+        else:
+            context = pastEvent[offset*EVENTS_PER_PAGE:]
+            isLastPage = True  # Pour pouvoir dire qu'il n'y a pas plus de page
+    elif type == "incubation":
+        incubatingEvent = base.filter(~readyQ).order_by('-id')
+        if (offset+1)*EVENTS_PER_PAGE < len(incubatingEvent):
+            context = incubatingEvent[offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
+        else:
+            context = incubatingEvent[offset*EVENTS_PER_PAGE:]
+            isLastPage = True  # Pour pouvoir dire qu'il n'y a pas plus de page
+
+    vars = {'events': context, 'last': isLastPage, 'type': type, 'offset': offset}
+    return render(request, "events_home.html", vars)
 
 
 def short_url_maker(*keywords):
