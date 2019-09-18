@@ -27,7 +27,7 @@ body {
   overflow: hidden;
 }
 
-.project-card-title {
+.card-title {
   width: 100%;
   overflow-wrap: break-word;
 }
