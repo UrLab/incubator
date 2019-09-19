@@ -57,4 +57,4 @@ class ArticleDetailView(DetailView):
     context_object_name = 'article'
 
 class ArticleOldDetailView(ArticleDetailView):
-    pass
+    template_name = 'article_old_detail.html'
