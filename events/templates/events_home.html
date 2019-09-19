@@ -130,7 +130,10 @@
     <div class="col-lg-11">
     <nav aria-label="page_buton">
       <ul class="pager">
-        {% if offset == 0 %}
+        {% if last and offset == 0 %}
+          <li class="previous disabled"><a>Older <span aria-hidden="true">&larr;</span></a></li>
+          <li class="next disabled"><a>Newer <span aria-hidden="true">&rarr;</span></a></li>
+        {% elif offset == 0 %}
           <li class="previous disabled"><a>Older <span aria-hidden="true">&larr;</span></a></li>
           <li class="next"><a href="" id="linkNew">Newer <span aria-hidden="true">&rarr;</span></a></li>
          {% elif last %}
