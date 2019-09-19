@@ -4,6 +4,6 @@
    <div class = "panel-body">
       <p class="card-text"> modifiée le {{ revision.last_modified }} par: {{ revision.creator }} <br/>
       commentaire: {{ revision.commit}}</p>
-      <a href="{% url "view_version" article.id %}" class="btn btn-primary stretched-link">Visualiser</a>
+      <a href="{% url "view_old_version" revision.pk %}" class="btn btn-primary stretched-link">Visualiser</a>
    </div>
 </div>
