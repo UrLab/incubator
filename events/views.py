@@ -97,7 +97,6 @@ def events_home(request):
     isLastPage = False
     if type == "future":
         futureEvent = base.filter(futureQ & readyQ).order_by('start')
-        # non, ca dépend de l'offset
         if (offset+1)*EVENTS_PER_PAGE < len(futureEvent):
             context = futureEvent[offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
         else:
@@ -197,6 +196,7 @@ def import_pad(request, pk):
     action.send(request.user, verb='a cloturé', action_object=event)
     meeting.save()
     return HttpResponseRedirect(event.get_absolute_url())
+
 
 sm = short_url_maker("smartmonday")
 linux = short_url_maker("install", "party")
