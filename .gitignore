@@ -5,6 +5,7 @@ collected_static/
 
 # IDE
 .idea
+.vscode
 
 
 # Byte-compiled / optimized / DLL files

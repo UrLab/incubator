@@ -38,7 +38,7 @@
         {% else %}
           <li class="pull-right" role="presentation">
         {% endif %}
-            <a href="/events?type=incubation&offset=0" class="pull-right"> <!-- Pour incrementer le off et pas mettre 10 if On verra plus tard dans les bouttons mais c'est ce que je fais | Regarde Django template language-->
+            <a href="/events?type=incubation&offset=0" class="pull-right">
                 <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
                 <span class="hidden-xs">En incubation</span>
             </a>
@@ -79,18 +79,19 @@
               {% endif %}
             </p>
               <div class="row">
-                  {% for event in events %}
-                      {% include "event_card.html" %}
-                  {% endfor %}
-              </div>
-              <div class="clearfix">
+                {% for event in events %}
+                    {% include "event_card.html" %}
+                    {% if forloop.counter|divisibleby:4%}
+                      <div class="clearfix"></div>
+                    {% endif %}
+                {% endfor %}
               </div>
               {% if events|length == 0 %}
                 {% if type == "future" %}
                   Mamamia ! Il n'y a rien de prévu dans le futur ! Vite, <a href="{% url "add_event" %}">crée un événement</a> !
                 {% elif type == "past" %}
                   Il n'y a aucun événement passé, future is NOW !
-                {% else %} <!--  essaye mtn-->
+                {% else %}
                   Aucun évenement n'est en incubation :/
                 {% endif %}
               {% endif %}
@@ -107,13 +108,13 @@
                     </a>
                     {% endif %}
                     {% if type == "future" or type == "incubation" %}
-                    <a href="/events?type=past&offset=0"" data-toggle="tab">
+                    <a href="/events?type=past&offset=0">
                         <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
                         événements passés
                     </a>
                     {% endif %}
                     {% if type == "incubation" or type == "past" %}
-                    <a href="/events?type=future&offset=0" >
+                    <a href="/events?type=future&offset=0">
                         <span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span>
                         événements en futur
                     </a>
@@ -130,24 +131,17 @@
     <nav aria-label="page_buton">
       <ul class="pager">
         {% if offset == 0 %}
-          <li class="previous disabled"><a href="" id="linkOld">Older <span aria-hidden="true">&larr;</span></a></li>
+          <li class="previous disabled"><a>Older <span aria-hidden="true">&larr;</span></a></li>
           <li class="next"><a href="" id="linkNew">Newer <span aria-hidden="true">&rarr;</span></a></li>
          {% elif last %}
           <li class="previous"><a href="" id="linkOld">Older <span aria-hidden="true">&larr;</span></a></li>
-          <li class="next disabled"><a href="" id="linkNew">Newer <span aria-hidden="true">&rarr;</span></a></li>
+          <li class="next disabled"><a>Newer <span aria-hidden="true">&rarr;</span></a></li>
         {% else %}
-          <li class="previous"><a href="" id="linkOld"">Older <span aria-hidden="true">&larr;</span></a></li>
+          <li class="previous"><a href="" id="linkOld">Older <span aria-hidden="true">&larr;</span></a></li>
           <li class="next"><a href="" id="linkNew">Newer <span aria-hidden="true">&rarr;</span></a></li>
         {% endif  %}
       </ul>
     </nav>
-
-    <script>
-      var current_offset = {{offset}};
-      // Normalement ca suffit Y(praise the sun) Okay ca marche j'ai test NICE
-      document.getElementById("linkOld").href="/events?type={{type}}&offset=" + (current_offset-1);
-      document.getElementById("linkNew").href="/events?type={{type}}&offset=" + (current_offset+1);
-    </script>
 
     <div class="container-fluid">
             <a href="{% url "add_event" %}" class="btn btn-success pull-right">
@@ -167,6 +161,9 @@
         jQuery(document).ready(function ($) {
             $('#tabs').tab();
         });
+        var current_offset = {{offset}};
+        document.getElementById("linkOld").href="/events?type={{type}}&offset=" + (current_offset-1);
+        document.getElementById("linkNew").href="/events?type={{type}}&offset=" + (current_offset+1);
     </script>
 
 {% endblock %}
