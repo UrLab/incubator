@@ -133,12 +133,23 @@
                         <p class="row-fluid text-center"  style="height: 5em" >
                           {% include "event_time.html" %}
                         </p>
-                        {% if request.user.is_authenticated %}
-                        <a class="btn btn-default" href="{% url "edit_event" event.id %}">
-                          <span class="fa fa-edit" aria-hidden="true"></span>
-                          Editer
-                        </a>
-                        {% endif %}
+                        <p class="row-fluid text-center">
+                            <a href="{% url "view_event" event.id %}" class="btn btn-primary" role="button">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                                Voir
+                            </a>
+                            {% if request.user != event.organizer and request.user not in event.interested.all %}
+                              <a href="{% url "interested_event" event.id %}" class="btn btn-default" role="button">
+                                  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                  Participer
+                              </a>
+                            {% else %}
+                              <a href="{% url "edit_event" event.id %}" class="btn btn-default" role="button">
+                                  <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                                  Editer
+                              </a>
+                            {% endif %}
+                        </p>
 
                       </div>
                     </div>
