@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.shortcuts import get_object_or_404
@@ -87,40 +87,41 @@ def events_home(request):
     readyQ = Q(status__exact="r")  # NOQA
 
     # Par défaut on envoie la page 0 des evenement futurs
-    offset = request.GET.get("offset")
-    type = request.GET.get("type")
-    offset = int(offset) if offset is not None else 0
+    offset = request.GET.get("offset", 0)
+    type = request.GET.get("type", "future")
+    try:
+        offset = int(offset) if offset is not None else 0
+    except ValueError:
+        return HttpResponseBadRequest(
+            "La valeur de l'offset n'est pas correcte")
+
     type = type if type is not None else "future"
 
     base = Event.objects.select_related('meeting')
     isLastPage = False
+
     if type == "future":
-        futureEvent = base.filter(futureQ & readyQ).order_by('start')
-        nbPages = len(futureEvent)//EVENTS_PER_PAGE
-        if (offset+1)*EVENTS_PER_PAGE < len(futureEvent):
-            context = futureEvent[  # Takes a slice of the event array
-                offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
-        else:
-            context = futureEvent[offset*EVENTS_PER_PAGE:]
-            isLastPage = True  # Pour pouvoir dire qu'il n'y a pas plus de page
+        events = base.filter(futureQ & readyQ).order_by('start')
     elif type == "past":
-        pastEvent = base.filter(~futureQ & readyQ).order_by('-start')
-        nbPages = len(pastEvent)//EVENTS_PER_PAGE
-        if (offset+1)*EVENTS_PER_PAGE < len(pastEvent):
-            context = pastEvent[  # Takes a slice of the event array
-                offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
-        else:
-            context = pastEvent[offset*EVENTS_PER_PAGE:]
-            isLastPage = True  # Pour pouvoir dire qu'il n'y a pas plus de page
+        events = base.filter(~futureQ & readyQ).order_by('-start')
     elif type == "incubation":
-        incubatingEvent = base.filter(~readyQ).order_by('-id')
-        nbPages = len(incubatingEvent)//EVENTS_PER_PAGE
-        if (offset+1)*EVENTS_PER_PAGE < len(incubatingEvent):
-            context = incubatingEvent[  # Takes a slice of the event array
-                offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
-        else:
-            context = incubatingEvent[offset*EVENTS_PER_PAGE:]
-            isLastPage = True  # Pour pouvoir dire qu'il n'y a pas plus de page
+        events = base.filter(~readyQ).order_by('-id')
+    else:
+        return HttpResponseBadRequest("Le type d'évenement n'est pas correct")
+
+    nbPages = events.count()//EVENTS_PER_PAGE
+
+    if offset > nbPages or offset < 0:
+        return HttpResponseBadRequest("La valeur de l'offset doit être \
+            comprise entre 0 et {}".format(nbPages))
+
+
+    if (offset+1)*EVENTS_PER_PAGE < events.count():
+        context = events[  # Takes a slice of the event array
+            offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
+    else:
+        context = events[offset*EVENTS_PER_PAGE:]
+        isLastPage = True  # Pour pouvoir dire qu'il n'y a pas plus de page
 
     vars = {
         'events': context,
