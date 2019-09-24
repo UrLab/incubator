@@ -10,8 +10,6 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.conf import settings
 from django.db.models import F, Count
-from actstream.models import Action
-from space.djredis import get_redis
 from django.db import transaction
 
 
@@ -147,36 +145,6 @@ def hide_pamela(request):
     return HttpResponseRedirect(reverse('profile'))
 
 
-def userdetail(request):
-    client = get_redis()
-    streampubtosend = []
-    streamprivtosend = []
-    STREAM_SIZE = 100
-    TRANSACTION_NUM = 5 # Number of transactions to be shown on the page
-    streamPublic = Action.objects.filter(public=True).prefetch_related('target', 'actor', 'action_object')[:STREAM_SIZE]
-    # streamPrivate = Action.objects.filter(public=False).prefetch_related('target', 'actor', 'action_object')[:STREAM_SIZE]
-
-    transfers = list(request.user.transfertransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
-    topups = list(request.user.topuptransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
-    purchases = list(request.user.producttransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
-    misc = list(request.user.misctransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
-    # Sort all transactions and keep only the TRANSACTION_NUM most recent
-    all_private_transactions = sorted(transfers + topups + purchases + misc, key=lambda x: x.when, reverse=True)[:TRANSACTION_NUM]
-
-    i = 0
-    for a in streamPublic:
-        if a.actor == request.user:
-            streampubtosend.append(a)
-            i += 1
-            if i == TRANSACTION_NUM:
-                break
-
-    return render(request, 'user_detail.html', {
-        'stream_pub': streampubtosend,
-        'stream_priv': all_private_transactions,
-    })
-
-
 class UserEditView(UpdateView):
     form_class = UserForm
     template_name = 'user_form.html'
@@ -191,6 +159,32 @@ class UserDetailView(DetailView):
     template_name = 'user_detail.html'
     context_object_name = 'user'
     slug_field = "username"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        request = self.request
+
+        TRANSACTION_NUM = 5  # Number of transactions to be shown on the page
+
+        # Public
+        streampubtosend = self.object.actor_actions.filter(public=True)\
+            .prefetch_related('target', 'actor', 'action_object')[:TRANSACTION_NUM]
+
+        # Private
+        all_private_transactions = []
+        if request.user == self.object:
+            transfers = list(request.user.transfertransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
+            topups = list(request.user.topuptransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
+            purchases = list(request.user.producttransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
+            misc = list(request.user.misctransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
+            # Sort all transactions and keep only the TRANSACTION_NUM most recent
+            all_private_transactions = sorted(transfers + topups + purchases + misc, key=lambda x: x.when, reverse=True)[:TRANSACTION_NUM]
+
+        context['stream_pub'] = streampubtosend
+        context['stream_priv'] = all_private_transactions
+
+        return context
+
 
 
 class CurrentUserDetailView(UserDetailView):
