@@ -115,7 +115,6 @@ def events_home(request):
         return HttpResponseBadRequest("La valeur de l'offset doit être \
             comprise entre 0 et {}".format(nbPages))
 
-
     if (offset+1)*EVENTS_PER_PAGE < events.count():
         context = events[  # Takes a slice of the event array
             offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
