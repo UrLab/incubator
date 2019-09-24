@@ -1,9 +1,9 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
-from .views import balance, UserDetailView, UserEditView, spend, top, transfer, show_pamela, hide_pamela, userdetail, buy_product
+from .views import balance, UserDetailView, CurrentUserDetailView, UserEditView, spend, top, transfer, show_pamela, hide_pamela, buy_product
 
 urlpatterns = [
-    url(r'^profile$', login_required(userdetail), name='profile'),
+    url(r'^profile$', login_required(CurrentUserDetailView.as_view()), name='profile'),
     url(r'^edit$', login_required(UserEditView.as_view()), name='user_edit'),
     url(r'^balance$', login_required(balance), name='change_balance'),
     url(r'^balance/spend$', login_required(spend), name='balance_spend'),
