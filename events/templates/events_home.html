@@ -7,33 +7,50 @@
 {% block content %}
 
     <ol class="breadcrumb">
-      <li><a href="/">UrLab</a></li>
-      <li class="active">Événements</li>
+        <li><a href="/">UrLab</a></li>
+        <li><a href="/events/">Événements</a></li>
+        <li class="active">{{ type }}</li>
     </ol>
 
     <ul class="nav nav-tabs" id="article-menu">
         <li class="pull-left">
             <p><strong>Nos Events</strong></p>
             <p>
-            Abonnez vous à <a href="http://urlab.be/events/urlab.ics">notre flux ics (ical)</a> pour être toujours au courant des derniers événements :
+                Abonnez vous à <a href="http://urlab.be/events/urlab.ics">notre flux ics (ical)</a> pour être toujours au courant des derniers événements :
             </p>
 
         </li>
 
-        <li class="pull-right" role="presentation">
-            <a href="#tab-past" class="pull-right" data-toggle="tab">
+        {% if type == "past" %}
+            <li class="active pull-right" role="presentation">
+        {% else %}
+            <li class="pull-right" role="presentation">
+        {% endif %}
+            <a href="/events?type=past&offset=0" class="pull-right">
                 <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
                 <span class="hidden-xs">Passé</span>
             </a>
         </li>
-        <li class="pull-right" role="presentation">
-            <a href="#tab-incubation" class="pull-right" data-toggle="tab">
+
+
+        {% if type == "incubation" %}
+            <li class="active pull-right" role="presentation">
+        {% else %}
+            <li class="pull-right" role="presentation">
+        {% endif %}
+            <a href="/events?type=incubation&offset=0" class="pull-right">
                 <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
                 <span class="hidden-xs">En incubation</span>
             </a>
         </li>
-        <li class="active pull-right" role="presentation">
-            <a href="#tab-futur" class="pull-right" data-toggle="tab">
+
+
+        {% if type == "future" %}
+            <li class="active pull-right" role="presentation">
+        {% else %}
+            <li class="pull-right" role="presentation">
+        {% endif %}
+            <a href="/events?type=future&offset=0" class="pull-right" >
                 <span class="glyphicon glyphicon-record" aria-hidden="true"></span>
                 <span class="hidden-xs">Futur</span>
             </a>
@@ -47,99 +64,200 @@
         <div class="tab-pane active" id="tab-futur">
             <br>
             <p>
-              Vous retrouverez ici les événements à venir. Viendez ce sera bien !
+              {% if type == "future" %}
+                Vous retrouverez ici les événements à venir. Viendez ce sera bien !
+              {% endif %}
+              {% if type == "incubation" %}
+                Vous retrouverez ici tout les événemnts en incubation. C'est à dire
+                les événements que nous pensons organiser un jour mais pour lesquels
+                nous n'avons pas encore trouver de dates.
+              {% endif %}
+              {% if type == "past" %}
+                Vous retrouverez ici tout les événements passés. Sur certains vous
+                trouverez des ressources intéréssante pour en apprendre plus sur le
+                sujet si vous n'avez pas pu venir à l'événement ou aimeriez appronfondir la matière.
+              {% endif %}
             </p>
-              {% for row in future %}
-                <div class="row">
-                    {% for event in row %}
-                        {% include "event_card.html" %}
-                    {% endfor %}
-                </div>
-                <div class="clearfix"></div>
-                {% empty %}
+
+            {% if nbPage > 1 %}
+            <nav>
+              <ul class="pagination">
+                <!-- Previous button -->
+                {% if offset == 1 %}
+                <li class="page-item disabled">
+                  <a class="page-link" id="linkOldup">Précédent</a>
+                {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="" id="linkOldup">Précédent</a>
+                {% endif %}
+                </li>
+
+                <!-- Pages buttons -->
+                {% for x in range %}
+                  {% if x == offset %}
+                  <li class="page-item active">
+                    <a class="page-link" href="">{{x}} <span class="sr-only">(current)</span></a>
+                  </li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" id="link{{x}}up" href="">{{x}}</a></li>
+                  {% endif %}
+                {% endfor %}
+
+                <!-- Next Button -->
+                {% if last %}
+                <li class="page-item disabled">
+                  <a class="page-link">Suivant</a>
+                {% else %}
+                <li class="page-item">
+                  <a class="page-link" id="linkNewup" href="">Suivant</a>
+                {% endif %}
+                </li>
+              </ul>
+            </nav>
+            {% endif %}
+              <div class="row">
+                {% for event in events %}{% load formatting %}
+                  <div class="col-sm-6 col-md-3">
+                    <div class="thumbnail">
+                      <a href="{% url "view_event" event.id %}">
+                        {% if not event.picture %}
+                        <img src="/static/img/default-event.png" style="height: 15em; width:100%; object-fit: cover;">
+                      {% else %}
+                        <img src="{{event.picture.url}}" style="height: 15em; width:100%; object-fit: cover;">
+                      {% endif %}
+                      </a>
+                      <div class="caption">
+                        <h4 class="row-fluid card-title">
+                            {{ event.title }}
+                        </h4>
+                        <p class="row-fluid text-center"  style="height: 5em" >
+                          {% include "event_time.html" %}
+                        </p>
+                        {% if request.user.is_authenticated %}
+                        <a class="btn btn-default" href="{% url "edit_event" event.id %}">
+                          <span class="fa fa-edit" aria-hidden="true"></span>
+                          Editer
+                        </a>
+                        {% endif %}
+
+                      </div>
+                    </div>
+                  </div>
+                  {% if forloop.counter|divisibleby:4%}
+                    <div class="clearfix"></div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            {% if events|length == 0 %}
+              {% if type == "future" %}
                 Mamamia ! Il n'y a rien de prévu dans le futur ! Vite, <a href="{% url "add_event" %}">crée un événement</a> !
-              {% endfor %}
+              {% elif type == "past" %}
+                Il n'y a aucun événement passé, future is NOW !
+              {% else %}
+                Aucun évenement n'est en incubation :/
+              {% endif %}
+            {% endif %}
+
+            {% if nbPage > 1 %}
+            <nav>
+              <ul class="pagination">
+                <!-- Previous button -->
+                {% if offset == 1 %}
+                <li class="page-item disabled">
+                  <a class="page-link" id="linkOlddown">Précédent</a>
+                {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="" id="linkOlddown">Précédent</a>
+                {% endif %}
+                </li>
+
+                <!-- Pages buttons -->
+                {% for x in range %}
+                  {% if x == offset %}
+                  <li class="page-item active">
+                    <a class="page-link" href="">{{x}} <span class="sr-only">(current)</span></a>
+                  </li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" id="link{{x}}down" href="">{{x}}</a></li>
+                  {% endif %}
+                {% endfor %}
+
+                <!-- Next Button -->
+                {% if last %}
+                <li class="page-item disabled">
+                  <a class="page-link">Suivant</a>
+                {% else %}
+                <li class="page-item">
+                  <a class="page-link" id="linkNewdown" href="">Suivant</a>
+                {% endif %}
+                </li>
+              </ul>
+            </nav>
+            {% endif %}
+
             <div class="panel panel-success">
                 <div class="panel-heading">
                     <h3 class="panel-title">Déjà arrivé à la fin ?</h3>
                 </div>
                 <div class="panel-body">
                     N'oublie pas d'aller voir les
-                    <a href="#tab-incubation" data-toggle="tab">
+                    {% if type == "future" or type == "past" %}
+                    <a href="/events?type=incubation&offset=0">
                         <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
                         événements en incubation
                     </a>
-                    et les
-                    <a href="#tab-past" data-toggle="tab">
+                    {% endif %}
+                    {% if type == "future" or type == "incubation" %}
+                    <a href="/events?type=past&offset=0">
                         <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
                         événements passés
                     </a>
+                    {% endif %}
+                    {% if type == "incubation" or type == "past" %}
+                    <a href="/events?type=future&offset=0">
+                        <span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span>
+                        événements en futur
+                    </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
-        <div class="tab-pane" id="tab-incubation">
-            <br>
-            <p>
-              Vous retrouverez ici tout les événemnts en incubation. C'est à dire
-               les événements que nous pensons organiser un jour mais pour lesquels
-                nous n'avons pas encore trouver de dates.
-            </p>
-            {% for row in incubation %}
-                <div class="row">
-                    {% for event in row %}
-                        {% include "event_card.html" %}
-                    {% endfor %}
-                </div>
-                <div class="clearfix"></div>
-                {% empty %}
-                <p>Il n'y a aucun événement passé, future is NOW !</p>
-            {% endfor %}
-        </div>
-        <div class="tab-pane" id="tab-past">
-            <br>
-            <p>
-              Vous retrouverez ici tout les événements passés. Sur certains vous
-               trouverez des ressources intéréssante pour en apprendre plus sur le
-                sujet si vous n'avez pas pu venir à l'événement ou aimeriez appronfondir la matière.
-            </p>
-            {% for row in past %}
-                <div class="row">
-                    {% for event in row %}
-
-                        {% include "event_card.html" %}
-                    {% endfor %}
-                </div>
-                <div class="clearfix"></div>
-                {% empty %}
-                <p>Il n'y a aucun événement passé, future is NOW !</p>
-            {% endfor %}
-
-        </div>
-    </div>
+      </div>
     </div>
 
     </div>
     <div class="row">
-    <div class="col-lg-11">
-
-    <div class="container-fluid">
-            <a href="{% url "add_event" %}" class="btn btn-success pull-right">
-                <span class="fa fa-plus" aria-hidden="true"></span>
-                Proposer
-            </a>
-    </div>
-
-    </div>
-
+      <div class="col-lg-11">
+        <div class="container-fluid">
+          <a href="{% url "add_event" %}" class="btn btn-success pull-right">
+            <span class="fa fa-plus" aria-hidden="true"></span>
+            Proposer
+          </a>
+        </div>
+      </div>
     </div>
     <div class="row"><p></p></div>
 
 
     <!-- Owiii du javascript random au milieu de nul part, much love-->
     <script type="text/javascript">
-        jQuery(document).ready(function ($) {
-            $('#tabs').tab();
-        });
-    </script>
+        var current_offset = {{offset}} - 1;
+
+        if(current_offset > 0){
+          document.getElementById("linkOldup").href="/events?type={{type}}&offset=" + (current_offset-1);
+          document.getElementById("linkOlddown").href="/events?type={{type}}&offset=" + (current_offset-1);
+        }
+        if('{{last}}' != 'True'){
+          document.getElementById("linkNewup").href="/events?type={{type}}&offset=" + (current_offset+1);
+          document.getElementById("linkNewdown").href="/events?type={{type}}&offset=" + (current_offset+1);
+        }
+
+        for(var x=0;x<{{nbPage}}+1;x++){
+          if(x != current_offset){
+            document.getElementById("link" + (x+1) + "up").href="/events?type={{type}}&offset=" + x;
+            document.getElementById("link" + (x+1) + "down").href="/events?type={{type}}&offset=" + x;
+          }
+        }
+      </script>
 
 {% endblock %}

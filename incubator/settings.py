@@ -259,6 +259,8 @@ CONSTANCE_CONFIG = {
 OPEN_WEEKDAYS = [0, 1, 2, 3, 4]  # Monday is day 0
 OPEN_HOURS = list(range(7, 23))
 
+EVENTS_PER_PAGE = 40
+
 EXPRESSIF_RANGES = [
     "18:fe:34", "24:0a:c4", "24:b2:de", "2c:3a:e8", "30:ae:a4", "3c:71:bf",
     "54:5a:a6", "5c:cf:7f", "60:01:94", "68:c6:3a", "84:0d:8e", "84:f3:eb",
