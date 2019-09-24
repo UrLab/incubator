@@ -7,24 +7,24 @@
 {% block content %}
 
     <ol class="breadcrumb">
-      <li><a href="/">UrLab</a></li>
-      <li><a href="/events/">Événements</a></li>
-      <li class="active">{{ type }}</li>
+        <li><a href="/">UrLab</a></li>
+        <li><a href="/events/">Événements</a></li>
+        <li class="active">{{ type }}</li>
     </ol>
 
     <ul class="nav nav-tabs" id="article-menu">
         <li class="pull-left">
             <p><strong>Nos Events</strong></p>
             <p>
-            Abonnez vous à <a href="http://urlab.be/events/urlab.ics">notre flux ics (ical)</a> pour être toujours au courant des derniers événements :
+                Abonnez vous à <a href="http://urlab.be/events/urlab.ics">notre flux ics (ical)</a> pour être toujours au courant des derniers événements :
             </p>
 
         </li>
 
         {% if type == "past" %}
-          <li class="active pull-right" role="presentation">
+            <li class="active pull-right" role="presentation">
         {% else %}
-          <li class="pull-right" role="presentation">
+            <li class="pull-right" role="presentation">
         {% endif %}
             <a href="/events?type=past&offset=0" class="pull-right">
                 <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
@@ -34,9 +34,9 @@
 
 
         {% if type == "incubation" %}
-          <li class="active pull-right" role="presentation">
+            <li class="active pull-right" role="presentation">
         {% else %}
-          <li class="pull-right" role="presentation">
+            <li class="pull-right" role="presentation">
         {% endif %}
             <a href="/events?type=incubation&offset=0" class="pull-right">
                 <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
@@ -46,9 +46,9 @@
 
 
         {% if type == "future" %}
-          <li class="active pull-right" role="presentation">
+            <li class="active pull-right" role="presentation">
         {% else %}
-          <li class="pull-right" role="presentation">
+            <li class="pull-right" role="presentation">
         {% endif %}
             <a href="/events?type=future&offset=0" class="pull-right" >
                 <span class="glyphicon glyphicon-record" aria-hidden="true"></span>
@@ -78,23 +78,123 @@
                 sujet si vous n'avez pas pu venir à l'événement ou aimeriez appronfondir la matière.
               {% endif %}
             </p>
+
+            {% if nbPage > 1 %}
+            <nav>
+              <ul class="pagination">
+                <!-- Previous button -->
+                {% if offset == 1 %}
+                <li class="page-item disabled">
+                  <a class="page-link" id="linkOldup">Précédent</a>
+                {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="" id="linkOldup">Précédent</a>
+                {% endif %}
+                </li>
+
+                <!-- Pages buttons -->
+                {% for x in range %}
+                  {% if x == offset %}
+                  <li class="page-item active">
+                    <a class="page-link" href="">{{x}} <span class="sr-only">(current)</span></a>
+                  </li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" id="link{{x}}up" href="">{{x}}</a></li>
+                  {% endif %}
+                {% endfor %}
+
+                <!-- Next Button -->
+                {% if last %}
+                <li class="page-item disabled">
+                  <a class="page-link">Suivant</a>
+                {% else %}
+                <li class="page-item">
+                  <a class="page-link" id="linkNewup" href="">Suivant</a>
+                {% endif %}
+                </li>
+              </ul>
+            </nav>
+            {% endif %}
               <div class="row">
-                {% for event in events %}
-                    {% include "event_card.html" %}
-                    {% if forloop.counter|divisibleby:4%}
-                      <div class="clearfix"></div>
-                    {% endif %}
+                {% for event in events %}{% load formatting %}
+                  <div class="col-sm-6 col-md-3">
+                    <div class="thumbnail">
+                      <a href="{% url "view_event" event.id %}">
+                        {% if not event.picture %}
+                        <img src="/static/img/default-event.png" style="height: 15em; width:100%; object-fit: cover;">
+                      {% else %}
+                        <img src="{{event.picture.url}}" style="height: 15em; width:100%; object-fit: cover;">
+                      {% endif %}
+                      </a>
+                      <div class="caption">
+                        <h4 class="row-fluid card-title">
+                            {{ event.title }}
+                        </h4>
+                        <p class="row-fluid text-center"  style="height: 5em" >
+                          {% include "event_time.html" %}
+                        </p>
+                        {% if request.user.is_authenticated %}
+                        <a class="btn btn-default" href="{% url "edit_event" event.id %}">
+                          <span class="fa fa-edit" aria-hidden="true"></span>
+                          Editer
+                        </a>
+                        {% endif %}
+
+                      </div>
+                    </div>
+                  </div>
+                  {% if forloop.counter|divisibleby:4%}
+                    <div class="clearfix"></div>
+                  {% endif %}
                 {% endfor %}
               </div>
-              {% if events|length == 0 %}
-                {% if type == "future" %}
-                  Mamamia ! Il n'y a rien de prévu dans le futur ! Vite, <a href="{% url "add_event" %}">crée un événement</a> !
-                {% elif type == "past" %}
-                  Il n'y a aucun événement passé, future is NOW !
-                {% else %}
-                  Aucun évenement n'est en incubation :/
-                {% endif %}
+            {% if events|length == 0 %}
+              {% if type == "future" %}
+                Mamamia ! Il n'y a rien de prévu dans le futur ! Vite, <a href="{% url "add_event" %}">crée un événement</a> !
+              {% elif type == "past" %}
+                Il n'y a aucun événement passé, future is NOW !
+              {% else %}
+                Aucun évenement n'est en incubation :/
               {% endif %}
+            {% endif %}
+
+            {% if nbPage > 1 %}
+            <nav>
+              <ul class="pagination">
+                <!-- Previous button -->
+                {% if offset == 1 %}
+                <li class="page-item disabled">
+                  <a class="page-link" id="linkOlddown">Précédent</a>
+                {% else %}
+                <li class="page-item">
+                  <a class="page-link" href="" id="linkOlddown">Précédent</a>
+                {% endif %}
+                </li>
+
+                <!-- Pages buttons -->
+                {% for x in range %}
+                  {% if x == offset %}
+                  <li class="page-item active">
+                    <a class="page-link" href="">{{x}} <span class="sr-only">(current)</span></a>
+                  </li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" id="link{{x}}down" href="">{{x}}</a></li>
+                  {% endif %}
+                {% endfor %}
+
+                <!-- Next Button -->
+                {% if last %}
+                <li class="page-item disabled">
+                  <a class="page-link">Suivant</a>
+                {% else %}
+                <li class="page-item">
+                  <a class="page-link" id="linkNewdown" href="">Suivant</a>
+                {% endif %}
+                </li>
+              </ul>
+            </nav>
+            {% endif %}
+
             <div class="panel panel-success">
                 <div class="panel-heading">
                     <h3 class="panel-title">Déjà arrivé à la fin ?</h3>
@@ -122,51 +222,42 @@
                 </div>
             </div>
         </div>
-    </div>
+      </div>
     </div>
 
     </div>
     <div class="row">
-    <div class="col-lg-11">
-    <nav aria-label="page_buton">
-      <ul class="pager">
-        {% if last and offset == 0 %}
-          <li class="previous disabled"><a>Older <span aria-hidden="true">&larr;</span></a></li>
-          <li class="next disabled"><a>Newer <span aria-hidden="true">&rarr;</span></a></li>
-        {% elif offset == 0 %}
-          <li class="previous disabled"><a>Older <span aria-hidden="true">&larr;</span></a></li>
-          <li class="next"><a href="" id="linkNew">Newer <span aria-hidden="true">&rarr;</span></a></li>
-         {% elif last %}
-          <li class="previous"><a href="" id="linkOld">Older <span aria-hidden="true">&larr;</span></a></li>
-          <li class="next disabled"><a>Newer <span aria-hidden="true">&rarr;</span></a></li>
-        {% else %}
-          <li class="previous"><a href="" id="linkOld">Older <span aria-hidden="true">&larr;</span></a></li>
-          <li class="next"><a href="" id="linkNew">Newer <span aria-hidden="true">&rarr;</span></a></li>
-        {% endif  %}
-      </ul>
-    </nav>
-
-    <div class="container-fluid">
-            <a href="{% url "add_event" %}" class="btn btn-success pull-right">
-                <span class="fa fa-plus" aria-hidden="true"></span>
-                Proposer
-            </a>
-    </div>
-
-    </div>
-
+      <div class="col-lg-11">
+        <div class="container-fluid">
+          <a href="{% url "add_event" %}" class="btn btn-success pull-right">
+            <span class="fa fa-plus" aria-hidden="true"></span>
+            Proposer
+          </a>
+        </div>
+      </div>
     </div>
     <div class="row"><p></p></div>
 
 
     <!-- Owiii du javascript random au milieu de nul part, much love-->
     <script type="text/javascript">
-        jQuery(document).ready(function ($) {
-            $('#tabs').tab();
-        });
-        var current_offset = {{offset}};
-        document.getElementById("linkOld").href="/events?type={{type}}&offset=" + (current_offset-1);
-        document.getElementById("linkNew").href="/events?type={{type}}&offset=" + (current_offset+1);
-    </script>
+        var current_offset = {{offset}} - 1;
+
+        if(current_offset > 0){
+          document.getElementById("linkOldup").href="/events?type={{type}}&offset=" + (current_offset-1);
+          document.getElementById("linkOlddown").href="/events?type={{type}}&offset=" + (current_offset-1);
+        }
+        if('{{last}}' != 'True'){
+          document.getElementById("linkNewup").href="/events?type={{type}}&offset=" + (current_offset+1);
+          document.getElementById("linkNewdown").href="/events?type={{type}}&offset=" + (current_offset+1);
+        }
+
+        for(var x=0;x<{{nbPage}}+1;x++){
+          if(x != current_offset){
+            document.getElementById("link" + (x+1) + "up").href="/events?type={{type}}&offset=" + x;
+            document.getElementById("link" + (x+1) + "down").href="/events?type={{type}}&offset=" + x;
+          }
+        }
+      </script>
 
 {% endblock %}

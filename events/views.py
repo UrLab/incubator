@@ -89,7 +89,6 @@ def events_home(request):
     # Par défaut on envoie la page 0 des evenement futurs
     offset = request.GET.get("offset")
     type = request.GET.get("type")
-    print(type)
     offset = int(offset) if offset is not None else 0
     type = type if type is not None else "future"
 
@@ -97,27 +96,39 @@ def events_home(request):
     isLastPage = False
     if type == "future":
         futureEvent = base.filter(futureQ & readyQ).order_by('start')
+        nbPages = len(futureEvent)//EVENTS_PER_PAGE
         if (offset+1)*EVENTS_PER_PAGE < len(futureEvent):
-            context = futureEvent[offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
+            context = futureEvent[  # Takes a slice of the event array
+                offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
         else:
             context = futureEvent[offset*EVENTS_PER_PAGE:]
             isLastPage = True  # Pour pouvoir dire qu'il n'y a pas plus de page
     elif type == "past":
         pastEvent = base.filter(~futureQ & readyQ).order_by('-start')
+        nbPages = len(pastEvent)//EVENTS_PER_PAGE
         if (offset+1)*EVENTS_PER_PAGE < len(pastEvent):
-            context = pastEvent[offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
+            context = pastEvent[  # Takes a slice of the event array
+                offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
         else:
             context = pastEvent[offset*EVENTS_PER_PAGE:]
             isLastPage = True  # Pour pouvoir dire qu'il n'y a pas plus de page
     elif type == "incubation":
         incubatingEvent = base.filter(~readyQ).order_by('-id')
+        nbPages = len(incubatingEvent)//EVENTS_PER_PAGE
         if (offset+1)*EVENTS_PER_PAGE < len(incubatingEvent):
-            context = incubatingEvent[offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
+            context = incubatingEvent[  # Takes a slice of the event array
+                offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
         else:
             context = incubatingEvent[offset*EVENTS_PER_PAGE:]
             isLastPage = True  # Pour pouvoir dire qu'il n'y a pas plus de page
 
-    vars = {'events': context, 'last': isLastPage, 'type': type, 'offset': offset}
+    vars = {
+        'events': context,
+        'last': isLastPage,
+        'type': type,
+        'offset': offset+1,
+        'nbPage': nbPages,
+        'range': range(1, nbPages+2)}
     return render(request, "events_home.html", vars)
 
 
