@@ -25,6 +25,10 @@ Quick brainstorming https://pad.lqdn.fr/p/incubator
     ./manage.py migrate
     ./manage.py runserver
 
+## MQTT backend
+
+    pip install paho-mqtt
+
 ### Create a user
 
     ./manage.py createsuperuser
