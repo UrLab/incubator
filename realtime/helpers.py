@@ -11,7 +11,6 @@ if settings.USE_MQTT:
     import paho.mqtt.client as mqtt
 
 def send_message(key, message, *args, **kwargs):
-    print("MESSAGE")
     if settings.USE_WAMP:
         try:
             client = crossbarconnect.Client(
