@@ -1,9 +1,9 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from .views import (
-    EventDetailView, EventAddView, EventEditView, MeetingAddView, MeetingEditView,
-    events_home, ical, not_interested, interested, import_pad, export_pad,
-    add_point_to_next_meeting,
+    EventDetailView, EventAddView, EventEditView, MeetingAddView,
+    MeetingEditView, events_home, ical, not_interested, interested, import_pad,
+    export_pad, add_point_to_next_meeting,
 )
 
 urlpatterns = [
