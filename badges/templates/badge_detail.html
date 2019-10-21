@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% load formatting %}
+
+{% block title %}
+    Badge {{ badge.name }}
+{% endblock %}
+
+{% block content %}
+
+<ol class="breadcrumb">
+    <li><a href="/">UrLab</a></li>
+    <li>Badges</li>
+    <li class="active">{{ badge.name }}</li>
+</ol>
+
+<div class="page-header">
+    <h1>
+        {{ badge.name }}
+    </h1>
+    <!-- <small>{{ badge.description }}</small> -->
+
+    <div class="row">
+        <div class="col-md-4 col-md-push-8">
+            <h4>Icône :</h4>
+            <div class="text-center">
+                <img src="{{ badge.icon.url }}" style="width: 75%;" class="img-rounded" alt="Badge pic">
+            </div>
+            <hr>
+            <h4>Description : </h4>
+            {{ badge.description|markdown }}
+        </div>
+        <div class="col-md-8 col-md-pull-4 project-detail-content">
+            <h2>
+                Possesseurs du badge :
+            </h2>
+            <table class="table table-striped">
+                <tr>
+                    <th class="col-md-2">
+                        Utilisateur
+                    </th>
+                    <th class="col-md-2">
+                        Niveau
+                    </th>
+                    <th class="col-md-2">
+                        Points
+                    </th>
+                    <th class="col-md-1">
+                        attribué le
+                    </th>
+                    <th class="col-md-2">
+                        par
+                    </th>
+                </tr>
+                <tbody>
+                    {% for badgeWear in wearers %}
+                    <tr>
+                        <td class="col-md-2">
+                            <a href="/accounts/{{ badgeWear.user.username }}">
+                                <img src="{{ badgeWear.user.gravatar }}" class="user-avatar">
+                                {{ badgeWear.user.username }}
+                            </a>
+                        </td>
+                        <td class="col-md-2">
+                            {{ badgeWear.get_level_display }}
+                            {% if is_master %}
+                            <a {% if badgeWear.level != "MAI" %} href="/badges/up/{{ badgeWear.user.username }}/{{ badgeWear.badge.pk }}/" {% else %} style="color: grey;" {% endif %}>
+                                <i class="fa fa-arrow-up"></i>
+                            </a>
+                            <a {% if badgeWear.level != "INI" %} href="/badges/down/{{ badgeWear.user.username }}/{{ badgeWear.badge.pk }}/" {% else %} style="color: grey;" {% endif %}>
+                                <i class="fa fa-arrow-down"></i>
+                            </a>
+                            {% endif %}
+                        </td>
+                        <td class="col-md-2">
+                            {{ badgeWear.action_counter }} pt{{ badgeWear.action_counter|pluralize:"s" }}
+                        </td>
+                        <td class="col-md-1">
+                            {{ badgeWear.timestamp|date:"d/m/Y" }}
+                        </td>
+                        <td class="col-md-2">
+                            <a href="/accounts/{{ badgeWear.attributor.username }}">
+                                <img src="{{ badgeWear.attributor.gravatar }}" class="user-avatar">
+                                {{ badgeWear.attributor.username }}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

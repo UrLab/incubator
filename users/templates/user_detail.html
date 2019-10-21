@@ -185,6 +185,62 @@
                     </p>
                     </div>
                     </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <p>
+                                <h4>BADGE{{ user.badgewear_set.all|length|pluralize:"s" }}</h4>
+                                <table class="table table-condensed container-fluid col-md-12">
+                                    {% if user.badgewear_set.all|length != 0 %}
+                                    <p>
+                                        {% if request.user == user %}
+                                        Vo{{ user.badgewear_set.all|length|pluralize:"tre,s" }} badge{{ user.badgewear_set.all|length|pluralize:"s" }}
+                                        {% else %}
+                                        Badge{{ user.badgewear_set.all|length|pluralize:"s" }} de {{ user.username }}
+                                        {% endif %}
+                                    </p>
+                                    <tr>
+                                        <td class="col-md-4">
+                                        </td>
+                                        <td class="col-md-4">
+                                            nom :
+                                        </td>
+                                        <td class="col-md-4">
+                                            niveau :
+                                        </td>
+                                    </tr>
+                                    {% for badgeWear in user.badgewear_set.all %}
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <img src="{{ badgeWear.badge.icon.url }}" style="width: 50%;" class="img-circle" alt="Badge pic">
+                                        </td>
+                                        <td class="col-md-4">
+                                            <span class="align-baseline">
+                                                <a href="/badges/{{ badgeWear.badge.pk }}/">
+                                                    {{ badgeWear.badge.name }}
+                                                </a>
+                                            </span>
+                                        </td>
+                                        <td class="col-md-4">
+                                            <span class="align-bottom">
+                                                {{ badgeWear.get_level_display }}
+                                            </span>
+                                        </td>
+                                     </tr>
+                                    {% endfor %}
+                                    {% else %}
+                                    <tr>
+                                        <td>Vous n'avez encore aucun badge !</td>
+                                        <td>
+                                        </td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </table>
+                            </p>
+                        </div>
+                    </div>
         </div>
     </div>
 
