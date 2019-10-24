@@ -38,10 +38,10 @@
                     <th class="col-md-2">
                         Utilisateur
                     </th>
-                    <th class="col-md-2">
+                    <th class="col-md-3">
                         Niveau
                     </th>
-                    <th class="col-md-2">
+                    <th class="col-md-1">
                         Points
                     </th>
                     <th class="col-md-1">
@@ -60,18 +60,18 @@
                                 {{ badgeWear.user.username }}
                             </a>
                         </td>
-                        <td class="col-md-2">
+                        <td class="col-md-3">
                             {{ badgeWear.get_level_display }}
                             {% if is_master %}
                             <a {% if badgeWear.level != "MAI" %} href="/badges/up/{{ badgeWear.user.username }}/{{ badgeWear.badge.pk }}/" {% else %} style="color: grey;" {% endif %}>
                                 <i class="fa fa-arrow-up"></i>
                             </a>
-                            <a {% if badgeWear.level != "INI" %} href="/badges/down/{{ badgeWear.user.username }}/{{ badgeWear.badge.pk }}/" {% else %} style="color: grey;" {% endif %}>
+                            <a {% if badgeWear.level != "RAC" %} href="/badges/down/{{ badgeWear.user.username }}/{{ badgeWear.badge.pk }}/" {% else %} style="color: grey;" {% endif %}>
                                 <i class="fa fa-arrow-down"></i>
                             </a>
                             {% endif %}
                         </td>
-                        <td class="col-md-2">
+                        <td class="col-md-1">
                             {{ badgeWear.action_counter }} pt{{ badgeWear.action_counter|pluralize:"s" }}
                         </td>
                         <td class="col-md-1">
