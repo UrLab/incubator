@@ -1,0 +1,54 @@
+{% extends "base.html" %} 
+{% load formatting %}
+
+{% block title %} 
+    Badges 
+{% endblock %} 
+ 
+{% block content %}
+
+<ol class="breadcrumb">
+    <li><a href="/">UrLab</a></li>
+    <li><a href="/badges/">Badges</a></li>
+</ol>
+
+<div class="page-header">
+    <h1>
+        Badges
+    </h1>
+
+    <table class="table table-striped">
+        <tr>
+            <th class="col-md-2">
+                Badge
+            </th>
+            <th class="col-md-8">
+                Description
+            </th>
+            <th class="col-md-2">
+                N° de membres
+            </th>
+        </tr>
+        <tbody>
+            {% for badge in badges %}
+            <tr>
+                <td class="col-md-2">
+                    <img src="{{ badge.icon.url }}" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-rounded" >
+
+                    <a href="/badges/{{ badge.pk }}">
+                        {{ badge.name }}
+                    </a>
+                </td>
+                <td class="col-md-8">
+                    {{ badge.description|markdown }}
+                </td>
+                <td class="col-md-2">
+                    {{ badge.num_wears }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

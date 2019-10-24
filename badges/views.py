@@ -2,12 +2,26 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
 from django.views.generic.detail import DetailView
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView
 from users.models import User
+from django.db.models import Count
 from django.utils import timezone
 
 
 from .models import Badge, BadgeWear
+
+class BadgeHomeView(ListView):
+    model = Badge
+    template_name = 'badges_home.html'
+    context_object_name = 'badges'
+    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['badges'] = self.object_list.annotate(num_wears=Count('badgewear'))
+
+        return context
 
 
 class BadgeDetailView(DetailView):
