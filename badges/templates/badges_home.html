@@ -1,15 +1,15 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% load formatting %}
 
-{% block title %} 
-    Badges 
-{% endblock %} 
- 
+{% block title %}
+    Badges
+{% endblock %}
+
 {% block content %}
 
 <ol class="breadcrumb">
     <li><a href="/">UrLab</a></li>
-    <li><a href="/badges/">Badges</a></li>
+    <li class="active">Badges</li>
 </ol>
 
 <div class="page-header">
@@ -40,7 +40,7 @@
                     </a>
                 </td>
                 <td class="col-md-8">
-                    {{ badge.description|markdown }}
+                    {{ badge.description|markdown|truncatechars:120 }}
                 </td>
                 <td class="col-md-2">
                     {{ badge.num_wears }}

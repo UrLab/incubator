@@ -15,11 +15,13 @@ class Badge(models.Model):
 
 
 class BadgeWear(models.Model):
+    RAC_BID = "RAC"
     INITIATE = "INI"
     DISCIPLE = "DIS"
     MASTER = "MAI"
 
     LEVEL_CHOICES = (
+        (RAC_BID, "Raclure de bidet"),
         (INITIATE, "Initié"),
         (DISCIPLE, "Disciple"),
         (MASTER, "Maître"),

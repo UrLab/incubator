@@ -14,7 +14,7 @@ class BadgeHomeView(ListView):
     model = Badge
     template_name = 'badges_home.html'
     context_object_name = 'badges'
-    
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -74,7 +74,11 @@ def promote_user(request, action="", username="", pk=""):
             badge_wear.level = "MAI"
         if badge_wear.level == "INI":
             badge_wear.level = "DIS"
+        if badge_wear.level == "RAC":
+            badge_wear.level = "INI"
     elif action == "down":
+        if badge_wear.level == "INI":
+            badge_wear.level = "RAC"
         if badge_wear.level == "DIS":
             badge_wear.level = "INI"
         if badge_wear.level == "MAI":
