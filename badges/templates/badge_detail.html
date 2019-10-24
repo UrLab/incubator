@@ -86,6 +86,14 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {% if is_master %}
+                <div class="container-fluid">
+                    <a href="/badges/add/" class="btn btn-success pull-right">
+                        <span class="fa fa-plus" aria-hidden="true"></span>
+                        Ajouter un utilisateur
+                    </a>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

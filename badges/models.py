@@ -8,6 +8,7 @@ from incubator import settings
 class Badge(models.Model):
     name = models.CharField(max_length=30, unique=True)
     description = models.TextField()
+    hidden = models.BooleanField(default=False)
     icon = models.ImageField(blank=True, null=True)
 
     def __str__(self):

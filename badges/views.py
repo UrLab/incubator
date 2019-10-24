@@ -7,8 +7,9 @@ from users.models import User
 from django.db.models import Count
 from django.utils import timezone
 
-
+from .forms import BadgeWearForm
 from .models import Badge, BadgeWear
+
 
 class BadgeHomeView(ListView):
     model = Badge
@@ -46,10 +47,10 @@ class BadgeDetailView(DetailView):
 
 
 class BadgeWearAddView(CreateView):
-    form_class = BadgeWear
+    form_class = BadgeWearForm
     template_name = 'add_badgewear.html'
 
-    def get_initial(self):
+    def get_initial(self, *args, **kwargs):
         return {
             'attributor': self.request.user,
         }

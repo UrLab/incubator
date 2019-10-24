@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %}
+Attribuer un badge
+{% endblock %}
+
+{% block head %}
+    {{ form.media  }}
+    <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static "js/bootstrap-multiselect.js" %}"></script>
+{% endblock %}
+
+{% block content %}
+    <form action="" method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <button type="submit" class="btn btn-primary">
+            Ajouter le badge
+        </button>
+        {% endbuttons %}
+    </form>
+
+{% endblock %}
