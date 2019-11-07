@@ -22,7 +22,11 @@
         <div class="col-md-4 col-md-push-8">
             <h4>Icône :</h4>
             <div class="text-center">
-                <img src="{{ badge.icon.url }}" style="width: 75%;" class="img-rounded" alt="Badge pic">
+                {% if not badge.icon %}
+                    <img src="/static/img/default-event.png" style="width: 75%;" class="img-rounded" alt="Badge pic">
+                {% else %}
+                    <img src="{{ badge.icon.url }}" style="width: 75%;" class="img-rounded" alt="Badge pic">
+                {% endif %}
             </div>
             <hr>
             <h4>Description : </h4>

@@ -33,7 +33,11 @@
             {% for badge in badges %}
             <tr>
                 <td class="col-md-2">
-                    <img src="{{ badge.icon.url }}" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-rounded" >
+                    {% if not badge.icon %}
+                        <img src="/static/img/default-event.png" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
+                    {% else %}
+                        <img src="{{ badge.icon.url }}" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
+                    {% endif %}
 
                     <a href="/badges/{{ badge.pk }}">
                         {{ badge.name }}

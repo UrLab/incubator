@@ -212,7 +212,11 @@
                                     {% for badgeWear in user.badgewear_set.all %}
                                     <tr>
                                         <td class="col-md-4">
-                                            <img src="{{ badgeWear.badge.icon.url }}" style="width: 50%;" class="img-circle" alt="Badge pic">
+                                            {% if not badgeWear.badge.icon %}
+                                                <img src="/static/img/default-event.png" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
+                                            {% else %}
+                                                <img src="{{ badgeWear.badge.icon.url }}" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
+                                            {% endif %}
                                         </td>
                                         <td class="col-md-4">
                                             <span class="align-baseline">
