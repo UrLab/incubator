@@ -34,7 +34,7 @@ class BadgeWear(models.Model):
 
     badge = models.ForeignKey('Badge')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur')
-    level = models.CharField(max_length=3, choices=LEVEL_CHOICES, default=INITIATE)
+    level = models.CharField(max_length=3, choices=LEVEL_CHOICES, default=RAC_BID)
     action_counter = models.PositiveIntegerField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
     attributor = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Attributeur', related_name="attributed")

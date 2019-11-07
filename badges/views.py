@@ -16,7 +16,6 @@ class BadgeHomeView(ListView):
     template_name = 'badges_home.html'
     context_object_name = 'badges'
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
@@ -37,7 +36,6 @@ class BadgeDetailView(DetailView):
         context['badge'] = self.object
         context['wearers'] = badge_wear
         user_level = badge_wear.filter(user=self.request.user)
-        print(user_level)
         if len(user_level) == 1 and user_level[0].level == "MAI":
             context['is_master'] = True
         else:
@@ -46,15 +44,38 @@ class BadgeDetailView(DetailView):
         return context
 
 
-class BadgeWearAddView(CreateView):
-    form_class = BadgeWearForm
-    template_name = 'add_badgewear.html'
+def BadgeWearAddView(request, pk=0):
+    if pk == 0:
+        return HttpResponseRedirect(reverse('badges_home_view'))
 
-    def get_initial(self, *args, **kwargs):
-        return {
-            'attributor': self.request.user,
-        }
+    form = BadgeWearForm()
+    badge = get_object_or_404(Badge, pk=pk)
+    badgeWear = request.user.badgewear_set.filter(badge=badge)
 
+    if not badgeWear or badgeWear[0].level != "MAI":
+        return HttpResponseForbidden("Vous n'avez pas \
+            les droits pour effectuer cette action")
+
+    if request.method == "POST":
+        form = BadgeWearForm(request.POST)
+
+        if form.is_valid():
+
+            badgeWear = BadgeWear(user=form.cleaned_data['user'])
+            badgeWear.badge = badge
+            badgeWear.level = form.cleaned_data['level']
+            badgeWear.action_counter = 0
+            badgeWear.timestamp = timezone.now()
+            badgeWear.attributor = request.user
+            badgeWear.save()
+
+            return HttpResponseRedirect(
+                reverse('badge_view', kwargs={"pk": pk}))
+    else:
+        return render(
+            request, 'add_badgewear.html',
+            {'form': form, 'badge': badge}
+        )
 
 def promote_user(request, action="", username="", pk=""):
     try:

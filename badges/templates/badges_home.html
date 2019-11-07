@@ -31,25 +31,27 @@
         </tr>
         <tbody>
             {% for badge in badges %}
-            <tr>
-                <td class="col-md-2">
-                    {% if not badge.icon %}
-                        <img src="/static/img/default-event.png" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
-                    {% else %}
-                        <img src="{{ badge.icon.url }}" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
-                    {% endif %}
+                {% if not badge.hidden %}
+                <tr>
+                    <td class="col-md-2">
+                        {% if not badge.icon %}
+                            <img src="/static/img/default-event.png" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
+                        {% else %}
+                            <img src="{{ badge.icon.url }}" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
+                        {% endif %}
 
-                    <a href="/badges/{{ badge.pk }}">
-                        {{ badge.name }}
-                    </a>
-                </td>
-                <td class="col-md-8">
-                    {{ badge.description|markdown|truncatechars:120 }}
-                </td>
-                <td class="col-md-2">
-                    {{ badge.num_wears }}
-                </td>
-            </tr>
+                        <a href="/badges/{{ badge.pk }}">
+                            {{ badge.name }}
+                        </a>
+                    </td>
+                    <td class="col-md-8">
+                        {{ badge.description|markdown|truncatechars:120 }}
+                    </td>
+                    <td class="col-md-2">
+                        {{ badge.num_wears }}
+                    </td>
+                </tr>
+                {% endif %}
             {% endfor %}
         </tbody>
     </table>

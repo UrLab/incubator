@@ -13,6 +13,7 @@ Attribuer un badge
 {% endblock %}
 
 {% block content %}
+    <h2>Ajouter le badge "{{ badge.name }}" à un utilisateur</h2>
     <form action="" method="post" class="form">
         {% csrf_token %}
         {% bootstrap_form form %}
