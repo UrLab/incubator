@@ -44,7 +44,7 @@
             {{article.content|markdown}}
         </div>
         <div class="tab-pane" id="tab-old">
-            {% for revision in article.history.all %}
+            {% for revision in article_content_history %}
                 <div class="revision">
                     {% include "revision.html" %}
                 </div>
