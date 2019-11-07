@@ -17,6 +17,7 @@ def wiki_home(request):
 
 class ArticleAddView(PermissionRequiredMixin, CreateView):
     form_class = ArticleForm
+    model = Article
     template_name = 'add_article.html'
     permission_required = ''
 
@@ -41,8 +42,8 @@ class ArticleEditView(PermissionRequiredMixin, UpdateView):
 
     def get_initial(self):
         return {
-            'creator': self.request.user,
-            'created': datetime.now(),
+            'last_modifier': self.request.user,
+            'last_modified': datetime.now(),
         }
 
     def form_valid(self, form):
@@ -55,6 +56,7 @@ class ArticleDetailView(DetailView):
     model = Article
     template_name = 'article_detail.html'
     context_object_name = 'article'
+    article_content_history = Article.history.all()
 
 class ArticleOldDetailView(ArticleDetailView):
     template_name = 'article_old_detail.html'
