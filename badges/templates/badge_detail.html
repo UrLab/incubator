@@ -14,6 +14,7 @@
 </ol>
 
 <div class="page-header">
+    {% if authorized %}
     <h1>
         {{ badge.name }}
     </h1>
@@ -100,6 +101,11 @@
             {% endif %}
         </div>
     </div>
+    {% else %}
+    <h1>
+        Mystère et boule de gomme
+    </h1>
+    {% endif %}
 </div>
 
 {% endblock %}

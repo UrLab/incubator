@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
 from django.views.generic.detail import DetailView
-from django.views.generic import CreateView, UpdateView, ListView
+from django.views.generic import ListView
 from users.models import User
 from django.db.models import Count
 from django.utils import timezone
@@ -30,7 +30,14 @@ class BadgeDetailView(DetailView):
     context_object_name = 'badge'
 
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data(**kwargs)
+        if not BadgeWear.objects.filter(badge=self.object, user=self.request.user):
+            context['authorized'] = False
+            return context
+
+        context['authorized'] = True
+
         badge_wear = BadgeWear.objects.filter(badge=self.object)
 
         context['badge'] = self.object
@@ -76,6 +83,7 @@ def BadgeWearAddView(request, pk=0):
             request, 'add_badgewear.html',
             {'form': form, 'badge': badge}
         )
+
 
 def promote_user(request, action="", username="", pk=""):
     try:
