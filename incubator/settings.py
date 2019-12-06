@@ -210,6 +210,9 @@ CROSSBAR_URL = 'http://localhost:8080/publish'
 CROSSBAR_SECRET = "Vairy secrette"
 CROSSBAR_REALM = 'realm'
 
+USE_MQTT = False
+MQTT_HOST = "localhost"
+
 INFLUX_HOST = "localhost"
 INFLUX_PORT = 8086
 INFLUX_USER = "derp"
