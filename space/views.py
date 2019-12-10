@@ -74,9 +74,10 @@ def full_pamela(request):
 
 @private_api(open=one_or_zero)
 def status_change(request, open):
-    set_space_open(get_redis(), open)
     r = {'open': open}
-    publish_space_state(open)
+    if bool(open) != space_is_open(get_redis()):
+        set_space_open(get_redis(), open)
+        publish_space_state(open)
     return JsonResponse(r, safe=False)
 
 

@@ -5,6 +5,15 @@ from django import forms
 from .models import User
 from stock.models import Product
 
+from .models import User
+
+class UserDescriptionForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["description", ]
+
+
+
 class TolerantDecimalField(forms.DecimalField):
     def clean(self, value):
         value = value.replace(',', '.')
@@ -51,7 +60,7 @@ class TransferForm(BalanceForm):
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email', 'newsletter']
+        fields = ['first_name', 'last_name', 'email', 'newsletter', 'description']
 
 
 class UserCreationForm(forms.ModelForm):

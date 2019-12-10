@@ -102,8 +102,12 @@
                         <strong>Email :</strong> {{user.email}}<br>
                         <strong>Ardoise :</strong> {{user.balance}}€
                         {% if request.user == user %}
-                            <a href="{% url 'change_balance' %}" class="btn btn-info btn-xs">Mettre à jour</a><br>
+                            <a href="{% url 'change_balance' %}" class="btn btn-info btn-xs">Mettre à jour</a>
                         {% endif %}
+                        <br>
+                        <div style="width:100%;">
+                          <strong>Description :</strong> {{user.description}}
+                        </div>
                     {% endif %}
                     </p>
                     <p>
