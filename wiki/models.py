@@ -17,8 +17,8 @@ class Article(models.Model):
     title = models.CharField(max_length=200, verbose_name="Nom")
     creator = models.CharField(max_length=50)
     created = models.DateTimeField(auto_now_add=True)
-    last_modified = models.DateTimeField(auto_now=True, blank=True)
     last_modifier = models.CharField(max_length=50, default="")
+    last_modified = models.DateTimeField(auto_now=True, blank=True)
     content = models.TextField(verbose_name="Contenu", blank=True)
     history = HistoricalRecords()
     commit = models.TextField(verbose_name="commit", blank=True)
@@ -31,7 +31,7 @@ class Article(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('view_article', args=[self.id])
+        return reverse('view_article', args=[self.pk])
 
 class ProjectLinkedArticle(Article):
     project = models.ForeignKey('projects.Project', on_delete=models.CASCADE)
