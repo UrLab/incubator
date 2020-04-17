@@ -43,7 +43,6 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'debug_toolbar',
     'bootstrap3',
     'datetimewidget',
     'rest_framework',
