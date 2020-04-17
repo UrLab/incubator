@@ -3,8 +3,12 @@
 {% load humanize %}
 <div class="well">
         <p>UrLab se trouve sur le campus du Solbosh, à l'ULB et est ouvert à tout le monde.</p>
-        <iframe width="350" height="350"
-                src="https://maps.google.com/maps?q=UrLab&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+        <iframe width="350" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" 
+                src="https://www.openstreetmap.org/export/embed.html?bbox=4.381763935089112%2C50.811717774952974%2C4.387128353118897%2C50.814127731978864&amp;layer=mapnik&amp;marker=50.812922769009084%2C4.384446144104004">
+        </iframe><br/>
+        <small>
+            <a href="https://www.openstreetmap.org/?mlat=50.81292&amp;mlon=4.38445#map=18/50.81292/4.38445">View Larger Map</a>
+        </small>
         <p>
     <hr/>
     {% if space_open %}
