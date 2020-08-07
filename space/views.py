@@ -1,7 +1,7 @@
 from datetime import timedelta
 from django.shortcuts import render
 from django.contrib import messages
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.views.generic.edit import DeleteView
 from django.core.exceptions import PermissionDenied

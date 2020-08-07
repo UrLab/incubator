@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^git$', events.views.git),
     url(r'^ag$', events.views.ag),
 
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'^auth/', include('django.contrib.auth.urls')),
     url(r'^register/', incubator.views.RegisterView.as_view(), name="register"),
 

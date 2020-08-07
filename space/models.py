@@ -16,7 +16,7 @@ def validate_mac(value):
 class MacAdress(models.Model):
     adress = models.CharField(max_length=17, unique=True, verbose_name='MAC address', validators=[validate_mac])
     machine_name = models.CharField(blank=True, max_length=100, verbose_name='Nom de la machine')
-    holder = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
+    holder = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         self.adress = self.adress.lower()
@@ -60,7 +60,7 @@ class PrivateAPIKey(models.Model):
         verbose_name_plural = "Clefs d'accès à l'API privée"
 
     key = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name='Clef')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur', on_delete=models.CASCADE)
     name = models.CharField(max_length=250, verbose_name='Utilisée pour')
     active = models.BooleanField(default=False)
 

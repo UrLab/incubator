@@ -43,7 +43,6 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'debug_toolbar',
     'bootstrap3',
     'datetimewidget',
     'rest_framework',
@@ -75,12 +74,11 @@ INSTALLED_APPS = (
     'redir',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
@@ -154,14 +152,13 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.i18n',
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
-                'django.core.context_processors.request',
+                'django.template.context_processors.request',
                 'django.contrib.messages.context_processors.messages',
                 "space.context_processors.state",
                 "sekizai.context_processors.sekizai",

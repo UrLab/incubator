@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView

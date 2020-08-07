@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib import messages
 from datetime import datetime

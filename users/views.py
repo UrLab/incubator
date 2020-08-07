@@ -1,12 +1,10 @@
 from rest_framework import viewsets
-# from django.core.urlresolvers import reverse
-# from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views.decorators.http import require_POST
 from django.views.generic.detail import DetailView
 from django.views.generic import UpdateView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
 from django.conf import settings
 from django.db.models import F, Count

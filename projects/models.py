@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.core.validators import MaxValueValidator
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import timezone
 from datetime import timedelta
 from django_resized import ResizedImageField
@@ -28,7 +28,7 @@ class Project(models.Model):
 
     title = models.CharField(max_length=300, verbose_name='Nom')
 
-    maintainer = models.ForeignKey(User, related_name="maintained_projects", verbose_name='Mainteneur')
+    maintainer = models.ForeignKey(User, related_name="maintained_projects", verbose_name='Mainteneur', on_delete=models.DO_NOTHING)
     participants = models.ManyToManyField(User, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
@@ -62,13 +62,13 @@ class Project(models.Model):
 
 
 class Task(models.Model):
-    project = models.ForeignKey(Project, related_name='tasks', verbose_name='Projet')
+    project = models.ForeignKey(Project, related_name='tasks', verbose_name='Projet', on_delete=models.CASCADE)
     name = models.CharField(max_length=300, verbose_name='Nom')
 
-    proposed_by = models.ForeignKey(User, related_name='proposed_tasks', verbose_name='Proposé par')
+    proposed_by = models.ForeignKey(User, related_name='proposed_tasks', verbose_name='Proposé par', on_delete=models.DO_NOTHING)
     proposed_on = models.DateTimeField(verbose_name='Date de création', auto_now_add=True)
 
-    completed_by = models.ForeignKey(User, related_name='completed_tasks', verbose_name='Réalisé par', null=True, blank=True)
+    completed_by = models.ForeignKey(User, related_name='completed_tasks', verbose_name='Réalisé par', null=True, blank=True, on_delete=models.SET_NULL)
     completed_on = models.DateTimeField(verbose_name='Date de réalisation', null=True, blank=True)
 
     @property

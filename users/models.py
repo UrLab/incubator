@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.exceptions import ValidationError
 
 
@@ -117,5 +117,5 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Membership(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    asbl_year = models.ForeignKey('incubator.ASBLYear')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    asbl_year = models.ForeignKey('incubator.ASBLYear', on_delete=models.CASCADE)
