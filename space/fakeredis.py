@@ -27,5 +27,5 @@ def space_is_open(client):
     try:
         with open('/tmp/spacestatus', 'r') as f:
             return f.read().strip() == "True"
-    except:
-        return True
+    except Exception:
+        return False
