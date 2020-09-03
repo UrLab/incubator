@@ -66,7 +66,6 @@ class EmailAdmin(admin.ModelAdmin):
         self.message_user(request, "L'email a été énvoyé.")
     send_email.short_description = "Envoyer cet email A TOUT LE MONDE"
 
-
     def send_test_email(self, request, queryset):
         if not queryset.count() == 1:
             self.message_user(request, message="Vous ne devez séléctionner qu'un email à envoyer", level=messages.ERROR)

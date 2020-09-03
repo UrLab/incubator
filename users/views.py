@@ -19,7 +19,8 @@ from stock.models import Product, TransferTransaction, TopupTransaction, Product
 
 
 def balance(request):
-    favorites = Product.objects.filter(producttransaction__user=request.user).annotate(Count("producttransaction")).order_by("-producttransaction__count")[:5]
+    favorites = Product.objects.filter(producttransaction__user=request.user).annotate(
+        Count("producttransaction")).order_by("-producttransaction__count")[:5]
     return render(request, 'balance.html', {
         'account': settings.BANK_ACCOUNT,
         'products': Product.objects.order_by('category', 'name'),
@@ -176,7 +177,8 @@ class UserDetailView(DetailView):
             purchases = list(request.user.producttransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
             misc = list(request.user.misctransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
             # Sort all transactions and keep only the TRANSACTION_NUM most recent
-            all_private_transactions = sorted(transfers + topups + purchases + misc, key=lambda x: x.when, reverse=True)[:TRANSACTION_NUM]
+            all_private_transactions = sorted(
+                transfers + topups + purchases + misc, key=lambda x: x.when, reverse=True)[:TRANSACTION_NUM]
 
         context['stream_pub'] = streampubtosend
         context['stream_priv'] = all_private_transactions
@@ -184,10 +186,9 @@ class UserDetailView(DetailView):
         return context
 
 
-
 class CurrentUserDetailView(UserDetailView):
     def get_object(self):
-            return self.request.user
+        return self.request.user
 
 
 class UserViewSet(viewsets.ModelViewSet):

@@ -21,6 +21,12 @@ from .serializers import EventSerializer, MeetingSerializer, HackerAgendaEventSe
 from .models import Event, Meeting
 from .forms import EventForm, MeetingForm
 
+from rest_framework import filters
+from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 class EventAddView(PermissionRequiredMixin, CreateView):
     form_class = EventForm
@@ -109,26 +115,26 @@ def events_home(request):
     else:
         return HttpResponseBadRequest("Le type d'évenement n'est pas correct")
 
-    nbPages = events.count()//EVENTS_PER_PAGE
+    nbPages = events.count() // EVENTS_PER_PAGE
 
     if offset > nbPages or offset < 0:
         return HttpResponseBadRequest("La valeur de l'offset doit être \
             comprise entre 0 et {}".format(nbPages))
 
-    if (offset+1)*EVENTS_PER_PAGE < events.count():
+    if (offset + 1) * EVENTS_PER_PAGE < events.count():
         context = events[  # Takes a slice of the event array
-            offset*EVENTS_PER_PAGE:(offset+1)*EVENTS_PER_PAGE]
+            offset * EVENTS_PER_PAGE:(offset + 1) * EVENTS_PER_PAGE]
     else:
-        context = events[offset*EVENTS_PER_PAGE:]
+        context = events[offset * EVENTS_PER_PAGE:]
         isLastPage = True  # Pour pouvoir dire qu'il n'y a pas plus de page
 
     vars = {
         'events': context,
         'last': isLastPage,
         'type': type,
-        'offset': offset+1,
+        'offset': offset + 1,
         'nbPage': nbPages,
-        'range': range(1, nbPages+2)}
+        'range': range(1, nbPages + 2)}
     return render(request, "events_home.html", vars)
 
 
@@ -213,13 +219,6 @@ sm = short_url_maker("smartmonday")
 linux = short_url_maker("install", "party")
 git = short_url_maker("workshop", "git")
 ag = short_url_maker("AG", "mandat")
-
-
-from rest_framework import filters
-from rest_framework import viewsets
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
 
 
 class EventViewSet(viewsets.ModelViewSet):

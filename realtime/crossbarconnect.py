@@ -1,19 +1,19 @@
 ###############################################################################
-##
-##  Copyright (C) 2012-2014 Tavendo GmbH
-##
-##  Licensed under the Apache License, Version 2.0 (the "License");
-##  you may not use this file except in compliance with the License.
-##  You may obtain a copy of the License at
-##
-##      http://www.apache.org/licenses/LICENSE-2.0
-##
-##  Unless required by applicable law or agreed to in writing, software
-##  distributed under the License is distributed on an "AS IS" BASIS,
-##  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-##  See the License for the specific language governing permissions and
-##  limitations under the License.
-##
+#
+#  Copyright (C) 2012-2014 Tavendo GmbH
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
 ###############################################################################
 
 __all__ = ['Client']
@@ -26,7 +26,7 @@ except ImportError:
 
 import sys
 
-_HAS_SSL_CLIENT_CONTEXT = sys.version_info >= (2,7,9)
+_HAS_SSL_CLIENT_CONTEXT = sys.version_info >= (2, 7, 9)
 
 import json
 import hmac
@@ -40,7 +40,6 @@ from six.moves.urllib import parse
 from six.moves.http_client import HTTPConnection, HTTPSConnection
 
 
-
 def _utcnow():
     """
     Get current time in UTC as ISO 8601 string.
@@ -48,7 +47,6 @@ def _utcnow():
     """
     now = datetime.utcnow()
     return now.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z"
-
 
 
 def _parse_url(url):
@@ -77,11 +75,12 @@ def _parse_url(url):
     else:
         ppath = "/"
         path = ppath
-    return {'secure': parsed.scheme == "https",
-              'host': parsed.hostname,
-              'port': port,
-              'path': path}
-
+    return {
+        'secure': parsed.scheme == "https",
+        'host': parsed.hostname,
+        'port': port,
+        'path': path
+    }
 
 
 class Client:
@@ -89,7 +88,7 @@ class Client:
     Crossbar.io HTTP bridge client.
     """
 
-    def __init__(self, url, key = None, secret = None, timeout = 5, context = None):
+    def __init__(self, url, key=None, secret=None, timeout=5, context=None):
         """
         Create a new Crossbar.io push client.
         The only mandatory argument is the Push service endpoint of the Crossbar.io
@@ -141,17 +140,17 @@ class Client:
             if not _HAS_SSL:
                 raise Exception("Bridge URL is using HTTPS, but Python SSL module is missing")
             if _HAS_SSL_CLIENT_CONTEXT:
-                self._connection = HTTPSConnection(self._endpoint['host'],
-                        self._endpoint['port'], timeout = timeout, context = context)
+                self._connection = HTTPSConnection(
+                    self._endpoint['host'],
+                    self._endpoint['port'], timeout=timeout, context=context)
             else:
-                self._connection = HTTPSConnection(self._endpoint['host'],
-                        self._endpoint['port'], timeout = timeout)
+                self._connection = HTTPSConnection(
+                    self._endpoint['host'],
+                    self._endpoint['port'], timeout=timeout)
         else:
-            self._connection = HTTPConnection(self._endpoint['host'],
-                    self._endpoint['port'], timeout = timeout)
-
-
-
+            self._connection = HTTPConnection(
+                self._endpoint['host'],
+                self._endpoint['port'], timeout=timeout)
 
     def publish(self, topic, *args, **kwargs):
         """
@@ -174,8 +173,7 @@ class Client:
             topic = six.u(topic)
         assert(type(topic) == six.text_type)
 
-        ## this will get filled and later serialized into HTTP/POST body
-        ##
+        # this will get filled and later serialized into HTTP/POST body
         event = {
             'topic': topic
         }
@@ -191,7 +189,7 @@ class Client:
             event['kwargs'] = kwargs
 
         try:
-            body = json.dumps(event, separators = (',',':'))
+            body = json.dumps(event, separators=(',', ':'))
             if six.PY3:
                 body = body.encode('utf8')
 
@@ -204,7 +202,7 @@ class Client:
         }
 
         if self._key:
-            ## if the request is to be signed, create extra fields and signature
+            # if the request is to be signed, create extra fields and signature
             params['key'] = self._key
             params['nonce'] = random.randint(0, 9007199254740992)
 
@@ -224,14 +222,14 @@ class Client:
 
         path = "{0}?{1}".format(parse.quote(self._endpoint['path']), parse.urlencode(params))
 
-        ## now issue the HTTP/POST
-        ##
+        # now issue the HTTP/POST
         self._connection.request('POST', path, body, self._endpoint['headers'])
         response = self._connection.getresponse()
         response_body = response.read().decode()
 
         if response.status != 202:
-            raise Exception("publication request failed {0} [{1}] - {2}".format(response.status, response.reason, response_body))
+            raise Exception(
+                "publication request failed {0} [{1}] - {2}".format(response.status, response.reason, response_body))
 
         try:
             res = json.loads(response_body)
