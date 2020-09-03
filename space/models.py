@@ -1,7 +1,8 @@
 from django.db import models
 from incubator import settings
 from django.core.exceptions import ValidationError
-from datetime import datetime
+from django.utils import timezone
+# from datetime import datetime
 import re
 import uuid
 
@@ -27,7 +28,7 @@ class MacAdress(models.Model):
 
 
 def _auto_now():
-    return datetime.now()
+    return timezone.now()
 
 
 class SpaceStatus(models.Model):

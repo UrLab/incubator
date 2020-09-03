@@ -45,15 +45,15 @@
         </div>
 
         <div class="tab-pane" id="tab-old">
-            {% if not article_content_history %}
+            {% if not article.history.all %}
                 <p>C'est vide ici</p>
             {% else %}
-                {% for revision in article_content_history %}
+                {% for revision in article.history.all %}
                     <div class = "panel panel-default">
                         <div class = "panel-body">
-                            <p class="card-text"> modifié le {{ revision.last_modified }} par: {{ revision.creator }} <br/>
+                            <p class="card-text"> modifié le {{ revision.last_modified }} par: {{ revision.last_modifier }} <br/>
                             commentaire: {{ revision.commit}}</p>
-                        <a href="{% url "view_old_version" revision.pk %}" class="btn btn-primary stretched-link">Visualiser</a>
+                        <a href="{% url "view_old_version" article.pk revision.pk %}" class="btn btn-primary stretched-link">Visualiser</a>
                         </div>
                     </div>
                 {% endfor %}
