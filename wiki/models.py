@@ -1,8 +1,8 @@
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from simple_history.models import HistoricalRecords
-from datetime import datetime
-from projects.models import Project
+# from datetime import datetime
+# from projects.models import Project
 
 CATEGORY = (
     ("p", "Project"),
@@ -32,6 +32,7 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse('view_article', args=[self.pk])
+
 
 class ProjectLinkedArticle(Article):
     project = models.ForeignKey('projects.Project', on_delete=models.CASCADE)

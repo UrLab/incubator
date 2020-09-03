@@ -3,8 +3,6 @@
 {% load analytical %}
 {% load activelink %}
 
-{% load sekizai_tags i18n wiki_tags %}
-
 <!DOCTYPE html>
 <!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
 <html class="no-js" lang="en">
@@ -13,7 +11,6 @@
     {% analytical_head_top %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% render_block "css" %}
     {% block bootstrapcss %}
         {% bootstrap_css %}
     {% endblock %}
@@ -81,7 +78,7 @@
                             </a>
                         </li>
                         <li class="{% active_if_contains "/wiki/" %}">
-                            <a href="{% url "wiki:root" %}">
+                            <a href="{% url "wiki_home" %}">
                                 <i class="fa fa-pencil-square-o"></i>
                                 Wiki
                             </a>
@@ -154,7 +151,6 @@
         </p>
     </div>
 </footer>
-{% render_block "js" %}
 <script src="{% static "js/navbar.js" %}"></script>
 {% analytical_body_bottom %}
 </body>

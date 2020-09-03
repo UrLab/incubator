@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'analytical',
     'constance',
     'constance.backends.database',
+    'simple_history',
 
     'incubator',
     'events',
@@ -60,6 +61,7 @@ INSTALLED_APPS = (
     'stock',
     'django_nyt',
     'mptt',
+    'wiki',
     'sekizai',
     'sorl.thumbnail',
     'django_extensions',

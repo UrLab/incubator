@@ -8,12 +8,14 @@ from actstream import action
 from .models import Article
 from .forms import ArticleForm
 
+
 def wiki_home(request):
     articles = Article.objects.all()
 
     return render(request, "wiki_home.html", {
         'all': articles,
     })
+
 
 class ArticleAddView(PermissionRequiredMixin, CreateView):
     form_class = ArticleForm
@@ -52,11 +54,13 @@ class ArticleEditView(PermissionRequiredMixin, UpdateView):
 
         return ret
 
+
 class ArticleDetailView(DetailView):
     model = Article
     template_name = 'article_detail.html'
     context_object_name = 'article'
     article_content_history = Article.history.all()
+
 
 class ArticleOldDetailView(ArticleDetailView):
     template_name = 'article_old_detail.html'

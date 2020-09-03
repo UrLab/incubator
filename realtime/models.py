@@ -3,8 +3,8 @@ from django.dispatch import receiver
 from actstream.models import Action
 from realtime.helpers import send_message
 from django.conf import settings
-from wiki.models import ArticleRevision
-from actstream import action
+# from wiki.models import ArticleRevision
+# from actstream import action
 
 
 @receiver(post_save, sender=Action)
@@ -37,7 +37,7 @@ def action_save_handler(sender, created, instance, **kwargs):
             url=urltosend
         )
 
-
+'''
 @receiver(post_save, sender=ArticleRevision)
 def wiki_save_handler(sender, created, instance, **kwargs):
     if not created:
@@ -63,3 +63,4 @@ def wiki_save_handler(sender, created, instance, **kwargs):
     )
     # Add an actream line
     action.send(instance.user, verb='a édité', action_object=instance.article)
+'''
