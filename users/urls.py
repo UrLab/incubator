@@ -1,6 +1,8 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
-from .views import balance, UserDetailView, CurrentUserDetailView, UserEditView, spend, top, transfer, show_pamela, hide_pamela, buy_product
+from .views import (
+    balance, UserDetailView, CurrentUserDetailView,
+    UserEditView, spend, top, transfer, show_pamela, hide_pamela, buy_product)
 
 urlpatterns = [
     url(r'^profile$', login_required(CurrentUserDetailView.as_view()), name='profile'),

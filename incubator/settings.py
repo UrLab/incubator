@@ -92,7 +92,16 @@ SUIT_CONFIG = {
     'SEARCH_URL': '/admin/users/user/',
     'MENU': (
         'users',
-        {'app': "stock", 'models': ('product', 'category', 'producttransaction', 'topuptransaction', 'transfertransaction', 'misctransaction')},
+        {
+            'app': "stock",
+            'models': (
+                'product',
+                'category',
+                'producttransaction',
+                'topuptransaction',
+                'transfertransaction',
+                'misctransaction')
+        },
         'constance',
         'actstream',
         'manmail',

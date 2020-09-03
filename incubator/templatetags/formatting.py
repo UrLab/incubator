@@ -1,4 +1,3 @@
-import re
 import markdown
 
 from django import template

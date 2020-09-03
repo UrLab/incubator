@@ -207,7 +207,7 @@ def spaceapi(request):
             "location": loc,
             "name": 'light_%s' % loc
         } for loc in ('inside', 'outside')]
-    except:
+    except Exception:
         pass
 
     return JsonResponse(response)

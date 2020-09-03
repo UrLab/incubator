@@ -10,6 +10,3 @@ class RealtimeConfig(AppConfig):
         from wiki.models import Article
         # registry.register(ArticleRevision)
         registry.register(Article)
-
-
-

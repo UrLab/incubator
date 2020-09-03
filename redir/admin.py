@@ -9,4 +9,5 @@ class RedirectionAdmin(admin.ModelAdmin):
     list_display = ('name', 'target')
     search_fields = ('name', 'target')
 
+
 admin.site.register(Redirection, RedirectionAdmin)

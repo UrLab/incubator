@@ -28,7 +28,8 @@ class Project(models.Model):
 
     title = models.CharField(max_length=300, verbose_name='Nom')
 
-    maintainer = models.ForeignKey(User, related_name="maintained_projects", verbose_name='Mainteneur', on_delete=models.DO_NOTHING)
+    maintainer = models.ForeignKey(
+        User, related_name="maintained_projects", verbose_name='Mainteneur', on_delete=models.DO_NOTHING)
     participants = models.ManyToManyField(User, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
@@ -65,10 +66,12 @@ class Task(models.Model):
     project = models.ForeignKey(Project, related_name='tasks', verbose_name='Projet', on_delete=models.CASCADE)
     name = models.CharField(max_length=300, verbose_name='Nom')
 
-    proposed_by = models.ForeignKey(User, related_name='proposed_tasks', verbose_name='Proposé par', on_delete=models.DO_NOTHING)
+    proposed_by = models.ForeignKey(
+        User, related_name='proposed_tasks', verbose_name='Proposé par', on_delete=models.DO_NOTHING)
     proposed_on = models.DateTimeField(verbose_name='Date de création', auto_now_add=True)
 
-    completed_by = models.ForeignKey(User, related_name='completed_tasks', verbose_name='Réalisé par', null=True, blank=True, on_delete=models.SET_NULL)
+    completed_by = models.ForeignKey(
+        User, related_name='completed_tasks', verbose_name='Réalisé par', null=True, blank=True, on_delete=models.SET_NULL)
     completed_on = models.DateTimeField(verbose_name='Date de réalisation', null=True, blank=True)
 
     @property

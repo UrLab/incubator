@@ -4,9 +4,10 @@ import re
 from space.helpers import should_keep
 from django.conf import settings
 
+
 def test_should_keep():
     # Test if the qemu regex is in config it should not keep it
-    
+
     qemu = "52:54:00:dd:6f:15"
     regexes = settings.IGNORE_LIST_RE
 
