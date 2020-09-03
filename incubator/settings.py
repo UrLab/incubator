@@ -281,8 +281,3 @@ IGNORE_LIST_RE = [
     re.compile(prefix + r'(:[0-9a-f]{2}){3}')
     for prefix in MAC_RANGES
 ]
-
-try:
-    from incubator.local_settings import * # NOQA
-except ImportError:
-    pass
