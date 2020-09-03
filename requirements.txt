@@ -15,7 +15,6 @@ django-bootstrap3==14.1.0
 django-classy-tags==1.0.0
 django-constance==2.7.0
 django-crispy-forms==1.8.0
-git+https://github.com/fgrimau/django-datetime-widget@2213db213065753690786b33d1ccf0d163c99fbe
 django-extensions==2.2.5
 django-filter==2.3.0
 django-js-asset==1.2.2
