@@ -44,7 +44,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.flatpages',
     'bootstrap3',
-    'datetimewidget',
     'rest_framework',
     'django_filters',
     'crispy_forms',
