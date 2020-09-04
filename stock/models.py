@@ -63,3 +63,17 @@ class MiscTransaction(Transaction):
 
     def __str__(self):
         return "{} a dépensé {}€ pour {}".format(self.user, self.amount, self.info)
+
+
+class Payment(Transaction):
+    payment_method = (
+        ('a', 'Card'),
+        ('b', 'Cash'),
+    )
+
+    amout = models.DecimalField(max_digits=6, decimal_places=2)
+    method = models.CharField(max_length=1, choices=payment_method)
+    picture = ResizedImageField(size=[500, 500], upload_to='souches', null=True, blank=True)
+
+    def __str__(self):
+        return "Achat d'un montant de {} vérifié par {} ({})".format(self.amount, self.user, self.get_method_display())

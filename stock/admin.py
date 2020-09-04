@@ -1,6 +1,8 @@
 from django.contrib import admin
 
-from .models import Category, Product, TransferTransaction, TopupTransaction, ProductTransaction, MiscTransaction
+from .models import (
+    Category, Product, TransferTransaction,
+    TopupTransaction, ProductTransaction, MiscTransaction, Payment)
 
 
 class ProductInline(admin.TabularInline):
@@ -43,3 +45,11 @@ class ProductTransaction(admin.ModelAdmin):
 class MiscTransaction(admin.ModelAdmin):
     list_display = ('user', 'amount', 'info', 'when')
     search_fields = ('user__username',)
+
+
+@admin.register(Payment)
+class PaymentAdmin(models.ModelAdmin):
+    list_display = ('user', 'amount', 'method', 'when')
+    search_fields = ('user__username')
+
+    list_filter = ('method', 'user')
