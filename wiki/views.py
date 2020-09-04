@@ -13,7 +13,11 @@ def wiki_home(request):
     articles = Article.objects.all()
 
     return render(request, "wiki_home.html", {
-        'all': articles,
+        'project': articles.filter(category="p"),
+        'food': articles.filter(category="f"),
+        'miscellaneous': articles.filter(category="m"),
+        'objects': articles.filter(category="o"),
+        'hackerspace': articles.filter(category="h"),
     })
 
 

@@ -1,48 +1,107 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Wiki UrLab
+Wiki UrLab
 {% endblock %}
 
 {% block content %}
 
-    <ol class="breadcrumb">
-        <li><a href="/">UrLab</a></li>
-        <li class="active">Wiki</li>
-    </ol>
+<ol class="breadcrumb">
+    <li><a href="/">UrLab</a></li>
+    <li class="active">Wiki</li>
+</ol>
 
-    <ul class="nav nav-tabs" id="article-menu">
-        <li class="pull-left">
-            <p><strong>Articles du Wiki</strong></p>
-        </li>
-    </ul>
+<ul class="nav nav-tabs" id="article-menu">
+    <li class="pull-left">
+        <p><strong>Article du wiki</strong></p>
+    </li>
+    <li class="pull-right" role="presentation">
+        <a href="#tab-project" class="pull-right" data-toggle="tab">
+            <span class="fas fa-flask" aria-hidden="true"></span>
+            <span class="hidden-xs">Project</span>
+        </a>
+    </li>
+    <li class="pull-right" role="presentation">
+        <a href="#tab-food" class="pull-right" data-toggle="tab">
+            <span class="fas fa-pizza-slice" aria-hidden="true"></span>
+            <span class="hidden-xs">Nourriture</span>
+        </a>
+    </li>
+    <li class="pull-right" role="presentation">
+        <a href="#tab-miscellaneous" class="pull-right" data-toggle="tab">
+            <span class="far fa-snowflake" aria-hidden="true"></span>
+            <span class="hidden-xs">Divers</span>
+        </a>
+    </li>
+    <li class="pull-right" role="presentation">
+        <a href="#tab-objects" class="pull-right" data-toggle="tab">
+            <span class="fas fa-box-open" aria-hidden="true"></span>
+            <span class="hidden-xs">Objects</span>
+        </a>
+    </li>
+    <li class="active pull-right" role="presentation">
+        <a href="#tab-hackerspace" class="pull-right" data-toggle="tab">
+            <span class="fas fa-fire-extinguisher" aria-hidden="true"></span>
+            <span class="hidden-xs">Hackerspace</span>
+        </a>
+    </li>
+</ul>
 
-    <div class="row">
-    <div class="col-lg-11">
+<div class="row">
 
-
-        <div id="my-tab-content" class="tab-content">
-            <div class="tab-pane active" id="tab-now">
-                <br>
-                    <div class="all">
-                        {% for article in all %}
-                            <li><a href='{% url "view_article" article.pk %}'>{{article.title}}</a></li>
-                        {% endfor %}
-                    </div>
+    <div class="col col-lg-10">
+        <div id="my-tab-content" class="tab-content" style="margin-top:15px">
+            <div class="tab-pane active" id="tab-hackerspace">
+                <ul class="list-group">
+                    {% for article in hackerspace %}
+                    <li class="list-group-item"><a href='{% url "view_article" article.pk %}'>{{article.title}}</a></li>
+                    {% endfor %}
+                </ul>
             </div>
-        </div>
-
-    <div class="row">
-        <div class="col-lg-11">
-            <div class="container-fluid">
-                <a href="{% url "add_article" %}" class="btn btn-success pull-right">
-                    <span class="fa fa-plus" aria-hidden="true"></span>
-                    Nouvel article
-                </a>
+            <div class="tab-pane" id="tab-objects">
+                <ul class="list-group">
+                    {% for article in objects %}
+                    <li class="list-group-item"><a href='{% url "view_article" article.pk %}'>{{article.title}}</a></li>
+                    {% endfor %}
+                </ul>
             </div>
+            <div class="tab-pane" id="tab-miscellaneous">
+                <ul class="list-group">
+                    {% for article in miscellaneous %}
+                    <li class="list-group-item"><a href='{% url "view_article" article.pk %}'>{{article.title}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="tab-pane" id="tab-food">
+                <ul class="list-group">
+                    {% for article in food %}
+                    <li class="list-group-item"><a href='{% url "view_article" article.pk %}'>{{article.title}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="tab-pane" id="tab-project">
+                <ul class="list-group">
+                    {% for article in project %}
+                    <li class="list-group-item"><a href='{% url "view_article" article.pk %}'>{{article.title}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
         </div>
     </div>
 
-    <div class="row"><p></p></div>
+    <div class="col col-lg-2" style="margin-top: 15px">
+        <a type= "button" href="{% url "add_article" %}" class="btn btn-success pull-right">
+            <span style="color:#ffffff"> <span class="fa fa-plus" aria-hidden="true"></span> Nouvel article </span>
+        </a>
+    </div>
+</div> 
+
+<!-- Owiii du javascript random au milieu de nul part, much love-->
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('#tabs').tab();
+    });
+</script>
 
 {% endblock %}
