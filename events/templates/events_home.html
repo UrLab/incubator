@@ -21,21 +21,34 @@ Evénements de UrLab
 
   <li class="nav-item" >
     <a href="/events?type=future&offset=0" class="nav-link {% if type == "future" %} active {% endif %}" role="tab">
-      <span class="glyphicon glyphicon-record" aria-hidden="true"></span>
+      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bullseye" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path fill-rule="evenodd" d="M8 13A5 5 0 1 0 8 3a5 5 0 0 0 0 10zm0 1A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/>
+  <path fill-rule="evenodd" d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/>
+  <path d="M9.5 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+</svg>
       <span class="hidden-xs">Futur</span>
     </a>
   </li>
 
   <li class="nav-item" >
     <a href="/events?type=incubation&offset=0" class="nav-link {% if type == "incubation" %} active {% endif %}" role="tab">
-      <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
+      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-easel" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8.473.337a.5.5 0 0 0-.946 0L6.954 2h2.092L8.473.337zM12.15 11h-1.058l1.435 4.163a.5.5 0 0 0 .946-.326L12.15 11zM8.5 11h-1v2.5a.5.5 0 0 0 1 0V11zm-3.592 0H3.85l-1.323 3.837a.5.5 0 1 0 .946.326L4.908 11z"/>
+  <path fill-rule="evenodd" d="M14 3H2v7h12V3zM2 2a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
+</svg>
       <span class="hidden-xs">En incubation</span>
     </a>
   </li>
 
   <li class="nav-item" >
     <a href="/events?type=past&offset=0" class="nav-link {% if type == "past" %} active {% endif %}" role="tab">
-      <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
+      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-suit-club-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M11.5 4.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
+  <path d="M8 9a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0zm7 0a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
+  <path d="M5.602 14.153c.5-.758 1.224-1.98 1.83-3.498.187-.467.949-.467 1.136 0a19.816 19.816 0 0 0 1.83 3.498c.231.35-.02.847-.438.847H6.04c-.419 0-.67-.497-.438-.847z"/>
+  <path d="M7 7h2v4H7V7z"/>
+</svg>
       <span class="hidden-xs">Passé</span>
     </a>
   </li>
@@ -130,7 +143,9 @@ Evénements de UrLab
                   </a>
                   {% if request.user != event.organizer and request.user not in event.interested.all %}
                   <a href="{% url "interested_event" event.id %}" class="btn btn-outline-dark" role="button">
-                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-star-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+</svg>
                     Participer
                   </a>
                   {% else %}
@@ -207,19 +222,29 @@ Evénements de UrLab
             N'oublie pas d'aller voir les
             {% if type == "future" or type == "past" %}
             <a href="/events?type=incubation&offset=0">
-              <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
+              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-easel" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M8.473.337a.5.5 0 0 0-.946 0L6.954 2h2.092L8.473.337zM12.15 11h-1.058l1.435 4.163a.5.5 0 0 0 .946-.326L12.15 11zM8.5 11h-1v2.5a.5.5 0 0 0 1 0V11zm-3.592 0H3.85l-1.323 3.837a.5.5 0 1 0 .946.326L4.908 11z"/>
+  <path fill-rule="evenodd" d="M14 3H2v7h12V3zM2 2a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
+</svg>
               événements en incubation
             </a>
             {% endif %}
             {% if type == "future" or type == "incubation" %}
             <a href="/events?type=past&offset=0">
-              <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
+              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-suit-club-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path d="M11.5 4.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
+  <path d="M8 9a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0zm7 0a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z"/>
+  <path d="M5.602 14.153c.5-.758 1.224-1.98 1.83-3.498.187-.467.949-.467 1.136 0a19.816 19.816 0 0 0 1.83 3.498c.231.35-.02.847-.438.847H6.04c-.419 0-.67-.497-.438-.847z"/>
+  <path d="M7 7h2v4H7V7z"/>
+</svg>
               événements passés
             </a>
             {% endif %}
             {% if type == "incubation" or type == "past" %}
             <a href="/events?type=future&offset=0">
-              <span class="glyphicon glyphicon-folder-close" aria-hidden="true"></span>
+              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-folder-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <path fill-rule="evenodd" d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.826a2 2 0 0 1-1.991-1.819l-.637-7a1.99 1.99 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3zm-8.322.12C1.72 3.042 1.95 3 2.19 3h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981l.006.139z"/>
+</svg>
               événements en futur
             </a>
             {% endif %}

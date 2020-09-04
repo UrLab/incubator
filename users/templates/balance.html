@@ -29,49 +29,6 @@
         </h1>
     </div>
     <div class="row">
-        <div class="hidden-md hidden-lg col-sm-12">
-            {% if request.user.is_authenticated %}
-                <p>
-                    {% if request.user == user %}
-                        {% if user.balance < 0 %}
-                            <div class="alert alert-danger" role="alert"><span class="glyphicon glyphicon-hand-right"
-                                                                               aria-hidden="true"></span><strong> Votre
-                                solde est négatif !</strong> Pensez à recharger au plus vite !
-                            </div>
-                        {% elif user.balance < 5 %}
-                            <div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-hand-right"
-                                                                                aria-hidden="true"></span><strong> Vous
-                                n'avez plus grand chose en stock :</strong> pensez à recharger :)
-                            </div>
-                        {% elif user.balance > 50 %}
-                            <div class="alert alert-success" role="alert"><span class="glyphicon glyphicon-thumbs-up"
-                                                                                aria-hidden="true"></span><strong> Wow
-                                !</strong> Ca en fait une somme ça !
-                            </div>
-                        {% endif %}
-                    {% endif %}
-                </p>
-            {% endif %}
-            <div class="card">
-                <div class="card-header">
-                    <h4>
-                        <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span> Tirelire de
-                        {% if user.first_name or user.last_name %}
-                            {{ user.username }}<br>
-                        {% endif %}</h4>
-                </div>
-                <div class="card-body">
-                    {% if user.balance < 0 %}
-                        <p class="text-danger">
-                            {%  else %}
-                        <p>
-                    {% endif %}
-                    <strong> € {{ user.balance }}
-                    </strong>
-                    </p>
-                </div>
-            </div>
-        </div>
         <div class="col-md-7">
             <h2>Liste de prix</h2>
                 {% if favorites %}
@@ -174,7 +131,7 @@
                         {% endif %}
                     </p>
                 {% endif %}
-                <div class="card">
+                <div class="card mb-3">
                     <div class="card-header">
                         <h4>
                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-cash-stack" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
