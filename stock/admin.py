@@ -48,8 +48,8 @@ class MiscTransaction(admin.ModelAdmin):
 
 
 @admin.register(Payment)
-class PaymentAdmin(models.ModelAdmin):
+class PaymentAdmin(admin.ModelAdmin):
     list_display = ('user', 'amount', 'method', 'when')
-    search_fields = ('user__username')
+    search_fields = ('user__username',)
 
     list_filter = ('method', 'user')

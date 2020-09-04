@@ -71,9 +71,9 @@ class Payment(Transaction):
         ('b', 'Cash'),
     )
 
-    amout = models.DecimalField(max_digits=6, decimal_places=2)
+    amount = models.DecimalField(max_digits=6, decimal_places=2)
     method = models.CharField(max_length=1, choices=payment_method)
-    picture = ResizedImageField(size=[500, 500], upload_to='souches', null=True, blank=True)
+    picture = models.ImageField(upload_to='souches', null=True, blank=True)
 
     def __str__(self):
         return "Achat d'un montant de {} vérifié par {} ({})".format(self.amount, self.user, self.get_method_display())
