@@ -29,17 +29,18 @@
   max-height: 750px;
 }
 </style>
-
-<ol class="breadcrumb">
-  <li><a href="/">UrLab</a></li>
-  <li><a href="{% url "projects_home" %}">Projets</a></li>
-  <li class="active">{{project.title}}</li>
-</ol>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">UrLab</a></li>
+    <li class="breadcrumb-item"><a href="{% url "projects_home" %}">Projets</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{project.title}}</li>
+  </ol>
+</nav>
 
 <div class="page-header">
   <h1>
     {{project.title}} <small>{{project.short_description}}</small>
-    <a class="btn btn-default" href="{% url "edit_project" project.id %}">
+    <a class="btn btn-primary" href="{% url "edit_project" project.id %}">
         <span class="fa fa-edit" aria-hidden="true"></span>
         Editer
     </a>
@@ -49,7 +50,23 @@
 </div>
 
 <div class="row">
-  <div class="col-md-4 col-md-push-8">
+  <div class="col-md-8 col-md-pull-4 project-detail-content">
+    {% if project.stalled %}
+      <div class="alert alert-warning" role="alert">
+        Ce projet est maintenu par
+        <a href="{% url 'user_profile' project.maintainer.username %}">
+          {{project.maintainer.username}}
+        </a> mais il semblerait qu'il n'ait plus été mis à jour depuis longtemps !<br>
+        Si il vous intérese, n'hésitez pas à contacter son mainteneur et à prendre la main sur le projet.
+      </div>
+    {% endif %}
+    {{project.content|markdown}}
+  </div>
+
+  <div class="col-md-4">
+    {% if project.picture %}
+      <img src="{{project.picture.url}}"  class="img-thumbnail">
+    {% endif %}
     {% if project.status == 'i' %}
         <div class="progress">
             <div class="progress-bar" role="progressbar" aria-valuenow="{{project.progress}}" aria-valuemin="0" aria-valuemax="100" style="min-width: 2em; width:{{project.progress}}%">
@@ -102,23 +119,8 @@
       </a></br>
     {% endif %}
     <br>
-    {% if project.picture %}
-      <img src="{{project.picture.url}}"  class="img-thumbnail">
-    {% endif %}
     <br>
     {% include "project_tasks_list.html" %}
-  </div>
-  <div class="col-md-8 col-md-pull-4 project-detail-content">
-    {% if project.stalled %}
-      <div class="alert alert-warning" role="alert">
-        Ce projet est maintenu par
-        <a href="{% url 'user_profile' project.maintainer.username %}">
-          {{project.maintainer.username}}
-        </a> mais il semblerait qu'il n'ait plus été mis à jour depuis longtemps !<br>
-        Si il vous intérese, n'hésitez pas à contacter son mainteneur et à prendre la main sur le projet.
-      </div>
-    {% endif %}
-    {{project.content|markdown}}
   </div>
 </div>
 

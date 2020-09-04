@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 {% load static %}
 {% load humanize %}
 
@@ -9,10 +9,12 @@ PAMELA
 
 {% block content %}
 
-    <ol class="breadcrumb" xmlns="http://www.w3.org/1999/html">
-        <li><a href="/">UrLab</a></li>
-        <li class="active">Pamela</li>
+    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">UrLab</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Pamela</li>
     </ol>
+    </nav>
 
     <div class="page-header">
         <h1>Pamela
@@ -50,9 +52,9 @@ PAMELA
                     Le Hackerspace est fermé depuis {{ status_change.time|timesince }}.
                 </div>
             {% endif %}
-            <div class="panel panel-default">
-                <div class="panel-heading"><h3>Ajoutez votre machine</h3></div>
-                <div class="panel-body">
+            <div class="card">
+                <div class="card-header"><h3>Ajoutez votre machine</h3></div>
+                <div class="card-body">
                     <p>Tapez ceci dans un terminal pour avoir une liste de vos MAC adress : </p>
                     <pre>ip addr show</pre>
                     {% if request.user.is_authenticated %}

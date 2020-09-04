@@ -1,5 +1,5 @@
 {% load static %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 {% load analytical %}
 {% load activelink %}
 
@@ -7,151 +7,163 @@
 <!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
 <html class="no-js" lang="en">
 
-<head prefix="og: http://ogp.me/ns# place: http://ogp.me/ns/place# article: http://ogp.me/ns/article# fb: http://ogp.me/ns/fb#">
+<head
+    prefix="og: http://ogp.me/ns# place: http://ogp.me/ns/place# article: http://ogp.me/ns/article# fb: http://ogp.me/ns/fb#">
     {% analytical_head_top %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% block bootstrapcss %}
-        {% bootstrap_css %}
+    {% bootstrap_css %}
     {% endblock %}
     {% bootstrap_javascript jquery=1 %}
 
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-        <script src="https://kit.fontawesome.com/ba8a2a8bc9.js" crossorigin="anonymous"></script>
-        <link href="{% static "css/style.css" %}" rel="stylesheet">
-        <link rel="icon" href="/static/img/favicon.ico"/>
-        <title>{% block title %}UrLab{% endblock %}</title>
-        {% block head %}{% endblock %}
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <script src="https://kit.fontawesome.com/ba8a2a8bc9.js" crossorigin="anonymous"></script>
+    <link href="{% static "css/style.css" %}" rel="stylesheet">
+    <link rel="icon" href="/static/img/favicon.ico" />
+    <title>{% block title %}UrLab{% endblock %}</title>
+    {% block head %}{% endblock %}
 
-        {# Open Graph for Facebook integration http://ogp.me/ #}
-        <meta property="og:site_name" content="UrLab" />
-        <meta property="og:locale" content="fr_BE" />
-        <meta property="fb:app_id" content="1563249853970263" />
-        {% block opengraph %}
-            <meta property="og:title" content="UrLab" />
-            <meta property="og:type" content="place" />
-            <meta property="og:url" content="https://urlab.be" />
-            <meta property="og:image" content="https://urlab.be/static/img/space-invaders.png" />
-            <meta property="place:location:latitude" content="50.8129409" />
-            <meta property="place:location:longitude" content="4.3844292" />
-        {% endblock %}
+    {# Open Graph for Facebook integration http://ogp.me/ #}
+    <meta property="og:site_name" content="UrLab" />
+    <meta property="og:locale" content="fr_BE" />
+    <meta property="fb:app_id" content="1563249853970263" />
+    {% block opengraph %}
+    <meta property="og:title" content="UrLab" />
+    <meta property="og:type" content="place" />
+    <meta property="og:url" content="https://urlab.be" />
+    <meta property="og:image" content="https://urlab.be/static/img/space-invaders.png" />
+    <meta property="place:location:latitude" content="50.8129409" />
+    <meta property="place:location:longitude" content="4.3844292" />
+    {% endblock %}
     {% analytical_head_bottom %}
-    </head>
-    <body class="base-body">
+</head>
+
+<body class="base-body">
     {% analytical_body_top %}
     {% if request.user.is_authenticated and request.user.username == "SupayrPoney" %}
-    <a href="http://www.reactivemanifesto.org/"> <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000" src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-red-right.png"> </a>
-{% endif %}
-<header class="base-header">
-    {% if space_open %}
-        <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders-open.png"/></a></div>
-    {% else %}
-        <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders.png"/></a></div>
+    <a href="http://www.reactivemanifesto.org/"> <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
+            src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-red-right.png"> </a>
     {% endif %}
-</header>
-<div class="nav-wrapper">
-    <div id="nav">
-        <nav class="navbar navbar-default navbar-static-top navbar-shadow" >
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menuNavbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="/">
-                        <img src="/static/img/space_invader.png" height=20 width=20 />
+    <header class="base-header">
+        {% if space_open %}
+        <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders-open.png" /></a></div>
+        {% else %}
+        <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders.png" /></a></div>
+        {% endif %}
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-rounded shadow">
+        <a class="navbar-brand" href="/">
+            <img src="/static/img/space_invader.png" height=20 width=20 /></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item {% active_if_contains "/projects/" %}">
+                    <a class="nav-link" href="{% url "projects_home" %}">
+                        <i class="fa fa-flask"></i>
+                        Nos projets
                     </a>
-                </div>
-                <div class="collapse navbar-collapse" id="menuNavbar">
-                    <ul class="nav navbar-nav">
-                        <li class="{% active_if_contains "/projects/" %}">
-                            <a href="{% url "projects_home" %}">
-                                <i class="fa fa-flask"></i>
-                                Nos projets
-                            </a>
-                        </li>
-                        <li class="{% active_if_contains "/events/" %}">
-                            <a href="{% url "events_home" %}">
-                                <i class="fa fa-calendar"></i>
-                                Evénements
-                            </a>
-                        </li>
-                        <li class="{% active_if_contains "/wiki/" %}">
-                            <a href="{% url "wiki_home" %}">
-                                <i class="fa fa-pencil-square-o"></i>
-                                Wiki
-                            </a>
-                        </li>
-                        <li class="{% active_if_contains "/space/pamela" %}">
-                            <a href="{% url "pamela_list" %}">
-                                <i class="fa fa-users"></i>
-                                Pamela
-                            </a>
-                        </li>
+                </li>
+                <li class="nav-item {% active_if_contains "/events/" %}">
+                    <a class="nav-link" href="{% url "events_home" %}">
+                        <i class="fa fa-calendar"></i>
+                        Evénements
+                    </a>
+                </li>
+                <li class="nav-item {% active_if_contains "/wiki/" %}">
+                    <a class="nav-link" href="{% url "wiki_home" %}">
+                        <i class="fa fa-pencil-square-o"></i>
+                        Wiki
+                    </a>
+                </li>
+                <li class="nav-item {% active_if_contains "/space/pamela" %}">
+                    <a class="nav-link" href="{% url "pamela_list" %}">
+                        <i class="fa fa-users"></i>
+                        Pamela
+                    </a>
+                </li>
 
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        {% if request.user.is_authenticated %}
-                            <li><a href="{% url "profile" %}">{% bootstrap_icon "user" %} {{request.user.username}} </a></li>
-                            <li><a href="{% url "change_balance" %}">{% bootstrap_icon "euro" %} Ardoise</a></li>
-                        {% endif %}
-                        {% if request.user.is_staff %}
-                            <li role="separator" class="divider"></li>
-                            <li><a href="/admin">
-                                {% bootstrap_icon "wrench" %}
-                                Administration</a></li>
-                        {% endif %}
-                        {% if request.user.is_authenticated %}
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                    {% bootstrap_icon "cog" %}
-                                    <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="/about/">About</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="{% url "password_change" %}">Changer de mot de passe</a></li>
-                                    <li><a href="{% url "logout" %}?next=/">{% bootstrap_icon "disconnect" %}Déconnexion</a></li>
-                                </ul>
-                            </li>
-                        {% else %}
-                            <li class="{% active_if_contains "/auth/login" %}">
-                                <a href="{% url "login" %}?next={{request.path}}">Login / Register</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </div>
-</div>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url "profile" %}">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-person-fill" fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+                        </svg>
+                        {{request.user.username}} 
+                    </a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="{% url "change_balance" %}">€ Ardoise</a></li>
+                {% endif %}
+                {% if request.user.is_staff %}
+                <li role="separator" class="divider"></li>
+                <li class="nav-item"><a class="nav-link" href="/admin">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-wrench" fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364L.102 2.223zm13.37 9.019L13 11l-.471.242-.529.026-.287.445-.445.287-.026.529L11 13l.242.471.026.529.445.287.287.445.529.026L13 15l.471-.242.529-.026.287-.445.445-.287.026-.529L15 13l-.242-.471-.026-.529-.445-.287-.287-.445-.529-.026z" />
+                        </svg>
+                        Administration</a></li>
+                {% endif %}
+                {% if request.user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-gear" fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M8.837 1.626c-.246-.835-1.428-.835-1.674 0l-.094.319A1.873 1.873 0 0 1 4.377 3.06l-.292-.16c-.764-.415-1.6.42-1.184 1.185l.159.292a1.873 1.873 0 0 1-1.115 2.692l-.319.094c-.835.246-.835 1.428 0 1.674l.319.094a1.873 1.873 0 0 1 1.115 2.693l-.16.291c-.415.764.42 1.6 1.185 1.184l.292-.159a1.873 1.873 0 0 1 2.692 1.116l.094.318c.246.835 1.428.835 1.674 0l.094-.319a1.873 1.873 0 0 1 2.693-1.115l.291.16c.764.415 1.6-.42 1.184-1.185l-.159-.291a1.873 1.873 0 0 1 1.116-2.693l.318-.094c.835-.246.835-1.428 0-1.674l-.319-.094a1.873 1.873 0 0 1-1.115-2.692l.16-.292c.415-.764-.42-1.6-1.185-1.184l-.291.159A1.873 1.873 0 0 1 8.93 1.945l-.094-.319zm-2.633-.283c.527-1.79 3.065-1.79 3.592 0l.094.319a.873.873 0 0 0 1.255.52l.292-.16c1.64-.892 3.434.901 2.54 2.541l-.159.292a.873.873 0 0 0 .52 1.255l.319.094c1.79.527 1.79 3.065 0 3.592l-.319.094a.873.873 0 0 0-.52 1.255l.16.292c.893 1.64-.902 3.434-2.541 2.54l-.292-.159a.873.873 0 0 0-1.255.52l-.094.319c-.527 1.79-3.065 1.79-3.592 0l-.094-.319a.873.873 0 0 0-1.255-.52l-.292.16c-1.64.893-3.433-.902-2.54-2.541l.159-.292a.873.873 0 0 0-.52-1.255l-.319-.094c-1.79-.527-1.79-3.065 0-3.592l.319-.094a.873.873 0 0 0 .52-1.255l-.16-.292c-.892-1.64.902-3.433 2.541-2.54l.292.159a.873.873 0 0 0 1.255-.52l.094-.319z" />
+                            <path fill-rule="evenodd"
+                                d="M8 5.754a2.246 2.246 0 1 0 0 4.492 2.246 2.246 0 0 0 0-4.492zM4.754 8a3.246 3.246 0 1 1 6.492 0 3.246 3.246 0 0 1-6.492 0z" />
+                        </svg>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="{% url "password_change" %}">Changer de mot de passe</a>
+                        <a class="dropdown-item" href="{% url "logout" %}?next=/">Déconnexion</a>
+                    </div>
+                </li>
+                {% else %}
+                <li class="{% active_if_contains "/auth/login" %}">
+                    <a class="nav-link" href="{% url "login" %}">Login / Register</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
 
-<div class="container">
-    {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-    <br>
-    {% block content %}
-    {% endblock %}
-</div>
-<footer class="footer">
     <div class="container">
-        <p class="text-muted">
-            Made with love at
-            <a href="http://urlab.be">
-                <img src="/static/img/small-urlab.png" style="height: 1em;">
-                UrLab</a> — Code on <a href="http://github.com/UrLab/incubator">GitHub</a>
-            — <a href="/api">We haz an API</a>
-            — <a href="http://cerkinfo.be">
-            <img style="height: 1.0em;" src="/static/img/small-ci.png">
-            Cerkinfo </a> —
-
-            ULB — Scientia vincere tenebras
-        </p>
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+        <br>
+        {% block content %}
+        {% endblock %}
     </div>
-</footer>
-<script src="{% static "js/navbar.js" %}"></script>
-{% analytical_body_bottom %}
+    <footer class="footer">
+        <div class="container">
+            <p class="text-muted">
+                Made with love at
+                <a href="http://urlab.be">
+                    <img src="/static/img/small-urlab.png" style="height: 1em;">
+                    UrLab</a> — Code on <a href="http://github.com/UrLab/incubator">GitHub</a>
+                — <a href="/api">We haz an API</a>
+                — <a href="http://cerkinfo.be">
+                    <img style="height: 1.0em;" src="/static/img/small-ci.png">
+                    Cerkinfo </a> —
+
+                ULB — Scientia vincere tenebras
+            </p>
+        </div>
+    </footer>
+    <script src="{% static "js/navbar.js" %}"></script>
+    {% analytical_body_bottom %}
 </body>
+
 </html>

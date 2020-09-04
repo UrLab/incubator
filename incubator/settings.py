@@ -43,7 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'bootstrap3',
+    'bootstrap4',
     'rest_framework',
     'django_filters',
     'crispy_forms',

@@ -6,43 +6,45 @@ Wiki UrLab
 
 {% block content %}
 
-<ol class="breadcrumb">
-    <li><a href="/">UrLab</a></li>
-    <li class="active">Wiki</li>
-</ol>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">UrLab</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Wiki</li>
+  </ol>
+</nav>
 
-<ul class="nav nav-tabs" id="article-menu">
-    <li class="pull-left">
+<ul class="nav nav-tabs justify-content-end" id="article-menu" role="tablist">
+    <li class="nav-item mr-auto">
         <p><strong>Article du wiki</strong></p>
     </li>
-    <li class="pull-right" role="presentation">
-        <a href="#tab-project" class="pull-right" data-toggle="tab">
-            <span class="fas fa-flask" aria-hidden="true"></span>
+    <li class="nav-item">
+        <a href="#tab-hackerspace" class="nav-link active" data-toggle="tab" role="tab" aria-selected="true">
+            <span class="fas fa-fire-extinguisher" ></span>
+            <span class="hidden-xs">Hackerspace</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="#tab-project" class="nav-link" data-toggle="tab" role="tab" aria-selected="false">
+            <span class="fas fa-flask" ></span>
             <span class="hidden-xs">Project</span>
         </a>
     </li>
-    <li class="pull-right" role="presentation">
-        <a href="#tab-food" class="pull-right" data-toggle="tab">
-            <span class="fas fa-pizza-slice" aria-hidden="true"></span>
+    <li class="nav-item">
+        <a href="#tab-food" class="nav-link" data-toggle="tab" role="tab" aria-selected="false">
+            <span class="fas fa-pizza-slice" ></span>
             <span class="hidden-xs">Nourriture</span>
         </a>
     </li>
-    <li class="pull-right" role="presentation">
-        <a href="#tab-miscellaneous" class="pull-right" data-toggle="tab">
-            <span class="far fa-snowflake" aria-hidden="true"></span>
+    <li class="nav-item">
+        <a href="#tab-miscellaneous" class="nav-link" data-toggle="tab" role="tab" aria-selected="false">
+            <span class="far fa-snowflake" ></span>
             <span class="hidden-xs">Divers</span>
         </a>
     </li>
-    <li class="pull-right" role="presentation">
-        <a href="#tab-objects" class="pull-right" data-toggle="tab">
-            <span class="fas fa-box-open" aria-hidden="true"></span>
+    <li class="nav-item">
+        <a href="#tab-objects" class="nav-link" data-toggle="tab" role="tab" aria-selected="false">
+            <span class="fas fa-box-open" ></span>
             <span class="hidden-xs">Objects</span>
-        </a>
-    </li>
-    <li class="active pull-right" role="presentation">
-        <a href="#tab-hackerspace" class="pull-right" data-toggle="tab">
-            <span class="fas fa-fire-extinguisher" aria-hidden="true"></span>
-            <span class="hidden-xs">Hackerspace</span>
         </a>
     </li>
 </ul>
@@ -50,37 +52,37 @@ Wiki UrLab
 <div class="row">
 
     <div class="col col-lg-10">
-        <div id="my-tab-content" class="tab-content" style="margin-top:15px">
-            <div class="tab-pane active" id="tab-hackerspace">
-                <ul class="list-group">
+        <div class="tab-content" id="my-tab-content" style="margin-top:15px">
+            <div class="tab-pane show active" id="tab-hackerspace">
+                <ul class="list-group-flush">
                     {% for article in hackerspace %}
                     <li class="list-group-item"><a href='{% url "view_article" article.pk %}'>{{article.title}}</a></li>
                     {% endfor %}
                 </ul>
             </div>
             <div class="tab-pane" id="tab-objects">
-                <ul class="list-group">
+                <ul class="list-group-flush">
                     {% for article in objects %}
                     <li class="list-group-item"><a href='{% url "view_article" article.pk %}'>{{article.title}}</a></li>
                     {% endfor %}
                 </ul>
             </div>
             <div class="tab-pane" id="tab-miscellaneous">
-                <ul class="list-group">
+                <ul class="list-group-flush">
                     {% for article in miscellaneous %}
                     <li class="list-group-item"><a href='{% url "view_article" article.pk %}'>{{article.title}}</a></li>
                     {% endfor %}
                 </ul>
             </div>
             <div class="tab-pane" id="tab-food">
-                <ul class="list-group">
+                <ul class="list-group-flush">
                     {% for article in food %}
                     <li class="list-group-item"><a href='{% url "view_article" article.pk %}'>{{article.title}}</a></li>
                     {% endfor %}
                 </ul>
             </div>
             <div class="tab-pane" id="tab-project">
-                <ul class="list-group">
+                <ul class="list-group-flush">
                     {% for article in project %}
                     <li class="list-group-item"><a href='{% url "view_article" article.pk %}'>{{article.title}}</a></li>
                     {% endfor %}

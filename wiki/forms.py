@@ -6,7 +6,7 @@ from .models import Article
 class ArticleForm(ModelForm):
     class Meta:
         model = Article
-        exclude = ['creator', 'last_modified', 'last_modifier']
+        exclude = ['creator', 'last_modifier']
 
         widgets = {
             'content': Textarea(attrs={'rows': 20}),
