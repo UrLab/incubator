@@ -184,17 +184,11 @@
                     <form class="form-inline" action="{% url "balance_transfer" %}" method="post">
                         {% csrf_token %}
                         <div class="form-group">
-                            <div class="col">
-                                <div class="input-group">
-                                    {% bootstrap_field transferForm.recipient show_label=False %}
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                {% bootstrap_field transferForm.value show_label=False addon_after='€' %}
-                            </div>
+                            <!--pour changer le width y a un bout de js en bas-->
+                            {% bootstrap_field transferForm.recipient show_label=False %}
+                            {% bootstrap_field transferForm.value show_label=False addon_after='€' %}
                         </div>
-                        <br>
-                        <button type="submit" class="btn btn-info">
+                        <button type="submit" class="btn btn-info mt-2">
                             Verser
                         </button>
                     </form>
@@ -213,15 +207,12 @@
                         Pour des gros montants, merci de faire <strong>un virement</strong> :-)</p>
                     <form class="form-inline" action="{% url "balance_top" %}" method="post">
                         {% csrf_token %}
-                        <div class="form-group">
-                            <div class="input-group">
-                                {% bootstrap_field topForm.location layout='horizontal' show_label=False %}
-                            </div> <br>
-                            <div class="input-group">
+                            <div class="col-sm-3">
+                                {% bootstrap_field topForm.location show_label=False %}
+                            </div>
+                            <div class="col">
                                 {% bootstrap_field topForm.value show_label=False addon_after='€' %}
                             </div>
-                        </div>
-                        <br>
                         <button type="submit" class="btn btn-success">
                             Verser
                         </button>
@@ -246,14 +237,12 @@
                     <form class="form-inline" action="{% url "balance_spend" %}" method="post">
                         {% csrf_token %}
                         <div class="form-group">
-                            <div class="input-group">
                                 {% bootstrap_field spendForm.name show_label=False %}
-                            </div>
-                            <div class="input-group">
+                            <div class="col-sm-4">
                                 {% bootstrap_field spendForm.value show_label=False addon_after='€' %}
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-warning">
+                        <button type="submit" class="btn btn-warning mt-2">
                             Dépenser
                         </button>
                     </form>
@@ -292,7 +281,7 @@
         $('#id_recipient').multiselect({
             enableFiltering: true,
             filterBehavior: 'text',
-            buttonWidth: '17.5em',
+            buttonWidth: '10em',
             enableCaseInsensitiveFiltering: true,
         });
     });
