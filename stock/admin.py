@@ -60,6 +60,6 @@ class PaymentAdmin(admin.ModelAdmin):
 
 
 @admin.register(FundZone)
-class FundZoneAdmin(admin.ModelAdmin):    
+class FundZoneAdmin(admin.ModelAdmin):
     list_display = ('name', 'method', 'balance')
     search_fields = ('name',)
