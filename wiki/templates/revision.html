@@ -1,7 +1,7 @@
 {% load formatting %}
 
-<div class = "panel panel-default">
-   <div class = "panel-body">
+<div class = "card">
+   <div class = "card-body">
       <p class="card-text"> modifié le {{ revision.last_modified }} par: {{ revision.creator }} <br/>
       commentaire: {{ revision.commit}}</p>
       <a href="{% url "view_old_version" revision.pk %}" class="btn btn-primary stretched-link">Visualiser</a>

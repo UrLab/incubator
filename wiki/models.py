@@ -1,24 +1,27 @@
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from simple_history.models import HistoricalRecords
 # from datetime import datetime
 # from projects.models import Project
 
+User = settings.AUTH_USER_MODEL
+
 CATEGORY = (
-    ("p", "Project"),
-    ("f", "Food"),
-    ("m", "Miscellaneous"),
-    ("o", "Objects"),
+    ("p", "Projets"),
+    ("n", "Nourriture"),
+    ("d", "Divers"),
+    ("o", "Objets"),
     ("h", "Hackerspace")
 )
 
 
 class Article(models.Model):
     title = models.CharField(max_length=200, verbose_name="Nom")
-    creator = models.CharField(max_length=50)
+    creator = models.ForeignKey(User, related_name="writted_article", verbose_name="Auteur", on_delete=models.DO_NOTHING)
     created = models.DateTimeField(auto_now_add=True)
     last_modifier = models.CharField(max_length=50, default="")
-    last_modified = models.DateTimeField(auto_now=True, blank=True)
+    last_modified = models.DateTimeField(auto_now=True)
     content = models.TextField(verbose_name="Contenu", blank=True)
     history = HistoricalRecords()
     commit = models.TextField(verbose_name="commit", blank=True)

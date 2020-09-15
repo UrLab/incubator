@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
-from users.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from actstream import action
 
@@ -14,47 +14,38 @@ def wiki_home(request):
 
     return render(request, "wiki_home.html", {
         'project': articles.filter(category="p"),
-        'food': articles.filter(category="f"),
-        'miscellaneous': articles.filter(category="m"),
+        'food': articles.filter(category="n"),
+        'miscellaneous': articles.filter(category="d"),
         'objects': articles.filter(category="o"),
         'hackerspace': articles.filter(category="h"),
     })
 
 
-class ArticleAddView(PermissionRequiredMixin, CreateView):
+class ArticleAddView(LoginRequiredMixin, CreateView):
     form_class = ArticleForm
-    model = Article
     template_name = 'add_article.html'
-    permission_required = ''
-
-    def get_initial(self):
-        return {
-            'creator': self.request.user,
-            'created': timezone.now(),
-            'last_modifier': self.request.user,
-            'last_modified': timezone.now(),
-        }
+    login_url = '/auth/login/'
+    redirect_field_name = 'redirect_to'
 
     def form_valid(self, form):
+        form.instance.creator = self.request.user
+        form.instance.last_modifier = self.request.user.get_username()
         ret = super(ArticleAddView, self).form_valid(form)
         action.send(self.request.user, verb='a créé', action_object=self.object)
 
         return ret
 
 
-class ArticleEditView(PermissionRequiredMixin, UpdateView):
+class ArticleEditView(LoginRequiredMixin, UpdateView):
     form_class = ArticleForm
     model = Article
     template_name = 'add_article.html'
-    permission_required = ''
-
-    def get_initial(self):
-        return {
-            'last_modifier': self.request.user,
-            'last_modified': timezone.now(),
-        }
+    login_url = '/auth/login/'
+    redirect_field_name = 'redirect_to'
 
     def form_valid(self, form):
+        form.instance.last_modifier = self.request.user.get_username()
+        form.instance.last_modified = timezone.now()
         ret = super(ArticleEditView, self).form_valid(form)
         action.send(self.request.user, verb='a édité', action_object=self.object)
 

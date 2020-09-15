@@ -14,7 +14,7 @@ from constance import config as dyn_config
 
 
 def error_view(code, msg=""):
-    def view(request, excpetion=""):
+    def view(request, exception=""):
         response = render(request, "error.html", {'code': code, 'message': msg})
         response.status_code = code
         return response

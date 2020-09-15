@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 {% load static %}
 
 {% block title %}
@@ -8,8 +8,8 @@ Formulaire article
 
 {% block head %}
     {{ form.media  }}
-    <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet">
-    <script type="text/javascript" src="{% static "js/bootstrap-multiselect.js" %}"></script>
+    <!-- <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet"> -->
+    <!-- <script type="text/javascript" src="{% static "js/bootstrap-multiselect.js" %}"></script> -->
 {% endblock %}
 
 {% block content %}
@@ -23,7 +23,7 @@ Formulaire article
     {% endbuttons %}
 </form>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     $(document).ready(function() {
         $('#id_participants').multiselect({
             enableFiltering: true,
@@ -39,6 +39,6 @@ Formulaire article
             enableCaseInsensitiveFiltering: true,
         });
     });
-</script>
+</script> -->
 
 {% endblock %}

@@ -6,37 +6,56 @@ Projets à UrLab
 
 {% block content %}
 
-<ol class="breadcrumb">
-    <li><a href="/">UrLab</a></li>
-    <li class="active">Projets</li>
-</ol>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">UrLab</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Projets</li>
+    </ol>
+</nav>
 
-<ul class="nav nav-tabs" id="article-menu">
-    <li class="pull-left">
+<ul class="nav nav-tabs justify-content-end" id="article-menu" role="tablist">
+    <li class="nav-item mr-auto">
         <p><strong>Incubateur a projets</strong></p>
     </li>
-    <li class="pull-right" role="presentation">
-        <a href="#tab-proposition" class="pull-right" data-toggle="tab">
-            <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
-            <span class="hidden-xs">Proposition</span>
+    <li class="nav-item">
+        <a href="#tab-now" class="nav-link active" data-toggle="tab" role="tab">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-bullseye" fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                <path fill-rule="evenodd" d="M8 13A5 5 0 1 0 8 3a5 5 0 0 0 0 10zm0 1A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" />
+                <path fill-rule="evenodd" d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" />
+                <path d="M9.5 8a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
+            </svg>
+            <span class="hidden-xs">En cours</span>
         </a>
     </li>
-    <li class="pull-right" role="presentation">
-        <a href="#tab-finished" class="pull-right" data-toggle="tab">
-            <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
+    <li class="nav-item">
+        <a href="#tab-finished" class="nav-link" data-toggle="tab" role="tab">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-award" fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M9.669.864L8 0 6.331.864l-1.858.282-.842 1.68-1.337 1.32L2.6 6l-.306 1.854 1.337 1.32.842 1.68 1.858.282L8 12l1.669-.864 1.858-.282.842-1.68 1.337-1.32L13.4 6l.306-1.854-1.337-1.32-.842-1.68L9.669.864zm1.196 1.193l-1.51-.229L8 1.126l-1.355.702-1.51.229-.684 1.365-1.086 1.072L3.614 6l-.25 1.506 1.087 1.072.684 1.365 1.51.229L8 10.874l1.356-.702 1.509-.229.684-1.365 1.086-1.072L12.387 6l.248-1.506-1.086-1.072-.684-1.365z" />
+                <path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1 4 11.794z" />
+            </svg>
             <span class="hidden-xs">Finis</span>
         </a>
     </li>
-    <li class="active pull-right" role="presentation">
-        <a href="#tab-now" class="pull-right" data-toggle="tab">
-            <span class="glyphicon glyphicon-record" aria-hidden="true"></span>
-            <span class="hidden-xs">En cours</span>
+    <li class="nav-item">
+        <a href="#tab-proposition" class="nav-link" data-toggle="tab" role="tab">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-easel" fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M8.473.337a.5.5 0 0 0-.946 0L6.954 2h2.092L8.473.337zM12.15 11h-1.058l1.435 4.163a.5.5 0 0 0 .946-.326L12.15 11zM8.5 11h-1v2.5a.5.5 0 0 0 1 0V11zm-3.592 0H3.85l-1.323 3.837a.5.5 0 1 0 .946.326L4.908 11z" />
+                <path fill-rule="evenodd"
+                    d="M14 3H2v7h12V3zM2 2a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z" />
+            </svg>
+            <span class="hidden-xs">Proposition</span>
         </a>
     </li>
 </ul>
 
 <div class="row">
-    <div class="col-lg-11">
+    <div class="col">
 
         <div id="my-tab-content" class="tab-content">
             <div class="tab-pane active" id="tab-now">
@@ -54,19 +73,33 @@ Projets à UrLab
                 </div>
                 <div class="clearfix"></div>
                 {% endfor %}
-                <div class="panel panel-success">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Déjà arrivé à la fin ?</h3>
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h3 class="card-title">Déjà arrivé à la fin ?</h3>
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         N'oublie pas d'aller voir les
                         <a href="#tab-finished" data-toggle="tab">
-                            <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-easel" fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M8.473.337a.5.5 0 0 0-.946 0L6.954 2h2.092L8.473.337zM12.15 11h-1.058l1.435 4.163a.5.5 0 0 0 .946-.326L12.15 11zM8.5 11h-1v2.5a.5.5 0 0 0 1 0V11zm-3.592 0H3.85l-1.323 3.837a.5.5 0 1 0 .946.326L4.908 11z" />
+                                <path fill-rule="evenodd"
+                                    d="M14 3H2v7h12V3zM2 2a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z" />
+                            </svg>
                             projets finis
                         </a>
                         et les
                         <a href="#tab-proposition" data-toggle="tab">
-                            <span class="glyphicon glyphicon-leaf" aria-hidden="true"></span>
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-suit-club-fill"
+                                fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11.5 4.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z" />
+                                <path
+                                    d="M8 9a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0zm7 0a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0z" />
+                                <path
+                                    d="M5.602 14.153c.5-.758 1.224-1.98 1.83-3.498.187-.467.949-.467 1.136 0a19.816 19.816 0 0 0 1.83 3.498c.231.35-.02.847-.438.847H6.04c-.419 0-.67-.497-.438-.847z" />
+                                <path d="M7 7h2v4H7V7z" />
+                            </svg>
                             propositions de projet!
                         </a>
                     </div>
@@ -105,9 +138,9 @@ Projets à UrLab
 
 </div>
 <div class="row">
-    <div class="col-lg-11">
+    <div class="col">
 
-        <div class="container-fluid">
+        <div class="container-fluid mt-3">
             <a href="{% url "add_project" %}" class="btn btn-success pull-right">
                 <span class="fa fa-plus" aria-hidden="true"></span>
                 Proposer
