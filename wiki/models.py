@@ -8,10 +8,10 @@ from simple_history.models import HistoricalRecords
 User = settings.AUTH_USER_MODEL
 
 CATEGORY = (
-    ("p", "Project"),
-    ("f", "Nourriture"),
-    ("m", "Divers"),
-    ("o", "Objects"),
+    ("p", "Projets"),
+    ("n", "Nourriture"),
+    ("d", "Divers"),
+    ("o", "Objets"),
     ("h", "Hackerspace")
 )
 

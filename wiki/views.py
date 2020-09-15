@@ -14,8 +14,8 @@ def wiki_home(request):
 
     return render(request, "wiki_home.html", {
         'project': articles.filter(category="p"),
-        'food': articles.filter(category="f"),
-        'miscellaneous': articles.filter(category="m"),
+        'food': articles.filter(category="n"),
+        'miscellaneous': articles.filter(category="d"),
         'objects': articles.filter(category="o"),
         'hackerspace': articles.filter(category="h"),
     })
