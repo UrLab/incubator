@@ -18,7 +18,7 @@ from .models import MacAdress, SpaceStatus, MusicOfTheDay
 from .forms import MacAdressForm
 from .serializers import PamelaSerializer, SpaceStatusSerializer, MotdSerializer
 from .decorators import private_api, one_or_zero
-from .plots import weekday_probs, human_time
+# from .plots import weekday_probs, human_time
 from .helpers import is_stealth_mode, make_empty_pamela, make_pamela, user_should_see_pamela
 from users.models import User
 from realtime.helpers import publish_space_state
@@ -214,10 +214,10 @@ def spaceapi(request):
 
 
 def openings_data(request):
-    opts = {k: request.GET[k] for k in request.GET}
+    # opts = {k: request.GET[k] for k in request.GET}
     return JsonResponse({
-        'probs': list(weekday_probs(opts)),
-        'range': human_time(opts),
+        'probs': 0,  # list(weekday_probs(opts)),
+        'range': 0,  # human_time(opts),
     })
 
 
