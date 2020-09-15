@@ -59,7 +59,7 @@
                 <p>C'est vide ici</p>
             {% else %}
                 {% for revision in article.history.all %}
-                    <div class = "card">
+                    <div class = "card" style="margin-bottom: 1em">
                         <div class = "card-header">
                             {{ revision.last_modified }}
                         </div>
