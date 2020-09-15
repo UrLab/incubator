@@ -43,7 +43,7 @@
                       {{interested.count}} personnes sont intéressés
                     {% endif %}
                     <div class="dropdown">
-                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                         Interested People
                         <span class="caret"></span>
                       </button>
@@ -107,7 +107,7 @@
               Editer
           </a>
           {% if not event.meeting.ongoing and not event.meeting.PV %}
-            <a href="{% url "export_pad" event.id %}" class="btn btn-default btn-sm">
+            <a href="{% url "export_pad" event.id %}" class="btn btn-secondary btn-sm">
               <span class="fa fa-upload" aria-hidden="true"></span>
               Exporter l'ordre du jour sur le pad
             </a>
@@ -127,7 +127,7 @@
               <span class="fa fa-edit" aria-hidden="true"></span>
               Editer
           </a>
-          <a href="{% url "import_pad" event.id %}" class="btn btn-default btn-sm">
+          <a href="{% url "import_pad" event.id %}" class="btn btn-secondary btn-sm">
             <span class="fa fa-download" aria-hidden="true"></span>
             Importer le PV depuis le pad
           </a>

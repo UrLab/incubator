@@ -8,8 +8,8 @@
 
 {% block head %}
     {{ form.media  }}
-    <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet">
-    <script type="text/javascript" src="{% static "js/bootstrap-multiselect.js" %}"></script>
+    <!-- <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet"> -->
+    <!-- <script type="text/javascript" src="{% static "js/bootstrap-multiselect.js" %}"></script> -->
 {% endblock %}
 
 {% block content %}
@@ -183,10 +183,10 @@
                     <p class="text-muted">Vous pouvez directement envoyer de l'argent à votre ami.</p>
                     <form class="form-inline" action="{% url "balance_transfer" %}" method="post">
                         {% csrf_token %}
-                        <div class="form-group">
+                        <div class="row">
                             <!--pour changer le width y a un bout de js en bas-->
-                            {% bootstrap_field transferForm.recipient show_label=False %}
-                            {% bootstrap_field transferForm.value show_label=False addon_after='€' %}
+                            {% bootstrap_field transferForm.recipient show_label=False form_group_class="col-lg-5 col-md-12" %}
+                            {% bootstrap_field transferForm.value show_label=False addon_after='€' form_group_class="col-lg-7 col-md-12" %}
                         </div>
                         <button type="submit" class="btn btn-info mt-2">
                             Verser
@@ -276,7 +276,7 @@
 100800     EXIT.
 </pre>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     $(document).ready(function() {
         $('#id_recipient').multiselect({
             enableFiltering: true,
@@ -285,6 +285,6 @@
             enableCaseInsensitiveFiltering: true,
         });
     });
-</script>
+</script> -->
 
 {% endblock %}

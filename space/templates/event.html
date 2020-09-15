@@ -37,7 +37,7 @@
         <div id="event-{{event.id}}-description" class="card-body collapse" style="word-wrap: break-word">
           {{event.description|markdown}}
           {% if request.user.is_authenticated %}
-          <a class="btn btn-default" href="{% url "edit_event" event.id %}">
+          <a class="btn btn-secondary" href="{% url "edit_event" event.id %}">
             <span class="fa fa-edit" aria-hidden="true"></span>
             Editer
           </a>
