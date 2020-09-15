@@ -138,7 +138,7 @@ Profil de {{user.username}}
                 <strong>Email :</strong> {{user.email}}<br>
                 <strong>Ardoise :</strong> {{user.balance}}€
                 {% if request.user == user %}
-                <a href="{% url 'change_balance' %}" class="btn btn-info btn-xs">Mettre à jour</a>
+                <a href="{% url 'change_balance' %}" class="btn btn-info btn-sm">Mettre à jour</a>
                 {% endif %}
                 <br>
                 <div style="width:100%;">
@@ -208,7 +208,7 @@ Profil de {{user.username}}
                         <td>
                             <form method="POST" action="{% url "delete_mac" mac.id %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-danger btn-xs">
+                                <button type="submit" class="btn btn-danger btn-sm">
                                     <i class="fa fa-times"></i>
                                 </button>
                             </form>
@@ -222,7 +222,7 @@ Profil de {{user.username}}
                     <tr>
                         <td colspan="2">Ajouter une nouvelle MAC</td>
                         <td>
-                            <a href="{% url "pamela_list" %}" class="btn btn-success btn-xs">
+                            <a href="{% url "pamela_list" %}" class="btn btn-success btn-sm">
                                 <i class="fa fa-plus"></i>
                             </a>
                         </td>

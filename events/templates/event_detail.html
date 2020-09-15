@@ -55,11 +55,11 @@
                     </div>
                   {% endif %}
                   {% if request.user in interested %}
-                    <a class="btn btn-primary btn-xs" href="{% url "not_interested_event" event.id %}">
+                    <a class="btn btn-primary btn-sm" href="{% url "not_interested_event" event.id %}">
                       Plus moi
                     </a>
                   {% else %}
-                    <a class="btn btn-primary btn-xs" href="{% url "interested_event" event.id %}">
+                    <a class="btn btn-primary btn-sm" href="{% url "interested_event" event.id %}">
                       {% if interested.count == 0%}
                         Je le suis !
                       {% else %}
@@ -70,7 +70,7 @@
                 {% endwith %}
             </p>
             {% if request.user.is_authenticated and not event.meeting %}
-              <p>Cet événement n'a pas d'ordre du jour. <a href="{% url "add_meeting" event.id %}" class="btn btn-outline-dark btn-xs">Ajouter un OJ</a></p>
+              <p>Cet événement n'a pas d'ordre du jour. <a href="{% url "add_meeting" event.id %}" class="btn btn-outline-dark btn-sm">Ajouter un OJ</a></p>
             {% endif %}
         </div>
     </div>
@@ -102,12 +102,12 @@
       <h3>
         Ordre du jour
         {% if request.user.is_authenticated %}
-          <a class="btn btn-outline-dark btn-xs"  href="{% url "edit_meeting" event.meeting.id %}">
+          <a class="btn btn-outline-dark btn-sm"  href="{% url "edit_meeting" event.meeting.id %}">
               <span class="fa fa-edit" aria-hidden="true"></span>
               Editer
           </a>
           {% if not event.meeting.ongoing and not event.meeting.PV %}
-            <a href="{% url "export_pad" event.id %}" class="btn btn-default btn-xs">
+            <a href="{% url "export_pad" event.id %}" class="btn btn-default btn-sm">
               <span class="fa fa-upload" aria-hidden="true"></span>
               Exporter l'ordre du jour sur le pad
             </a>
@@ -123,11 +123,11 @@
       <h3>
         Compte rendu
         {% if request.user.is_authenticated %}
-          <a class="btn btn-outline-dark btn-xs"  href="{% url "edit_meeting" event.meeting.id %}">
+          <a class="btn btn-outline-dark btn-sm"  href="{% url "edit_meeting" event.meeting.id %}">
               <span class="fa fa-edit" aria-hidden="true"></span>
               Editer
           </a>
-          <a href="{% url "import_pad" event.id %}" class="btn btn-default btn-xs">
+          <a href="{% url "import_pad" event.id %}" class="btn btn-default btn-sm">
             <span class="fa fa-download" aria-hidden="true"></span>
             Importer le PV depuis le pad
           </a>
