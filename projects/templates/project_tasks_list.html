@@ -20,7 +20,7 @@
             {% if request.user.is_authenticated %}</a>{% endif %}
           {% endif %}
         </div>
-        <div class="col-xs-10 pull-right">
+        <div class="col-xs-10 pl-3">
           {{task.name}}
         </div>
       </div>
@@ -46,13 +46,9 @@
       <div class="row">
         <form action="{% url "add_task" project.id %}" method="post" class="form">
           {% csrf_token %}
-          <div class="col-xs-1">
-            <i class="fa fa-2x fa-plus-square"></i>
-          </div>
-          <div class="col-xs-10 pull-right">
-            <input type="text" name="task_name" placeholder="Nouvelle tâche"/>
-            <button type="submit" class="btn btn-primary pull-right">Ajouter</button>
-          </div>
+          <i class="fa fa-2x fa-plus-square"></i>
+          <input type="text" name="task_name" placeholder="Nouvelle tâche"/>
+          <button type="submit" class="btn btn-primary pull-right">Ajouter</button>
         </form>
       </div>
     </li>

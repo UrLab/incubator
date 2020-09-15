@@ -6,7 +6,7 @@ from django.views.generic import CreateView, UpdateView
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.db.models import Q
-from datetime import datetime
+# from datetime import datetime
 from actstream import action
 from ics import Calendar
 from ics import Event as VEvent
@@ -238,7 +238,7 @@ def get_next_meeting():
     return (
         Meeting.objects
         .filter(
-            event__start__gte=datetime.now(),
+            event__start__gte=timezone.now(),
             ongoing=False
         )
         .order_by('event__start')
