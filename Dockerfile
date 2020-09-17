@@ -1,22 +1,71 @@
-FROM django:onbuild
-# FOR DEV ONLY
+###########
+# BUILDER #
+###########
 
-# who are we ?
-MAINTAINER UrLab
+# pull official base image
+FROM python:3.8.3-alpine as builder
 
-# Add the path
-ADD . /usr/src/app
+# set work directory
+WORKDIR /usr/src/app
 
-# Update the default application repository sources list
-RUN apt-get update && apt-get -y upgrade
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Install the packages needed
-RUN apt-get install -y python3-dev python3-setuptools libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
+# install psycopg2 & Pillow dependencies
+RUN apk update \
+    && apk add postgresql-dev gcc python3-dev musl-dev \
+    && apk add jpeg-dev zlib-dev libjpeg build-base
 
-# South
-RUN ./manage.py migrate
+# lint
+RUN pip install --upgrade pip
+RUN pip install flake8
+COPY . .
+RUN flake8 --ignore=E501,F401,F811,E731,E402,F403 .
 
-# create some superuser for ya
-RUN echo "from django.contrib.auth import get_user_model; User = get_user_model() ;User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python manage.py shell
-RUN echo "from django.contrib.auth import get_user_model; User = get_user_model() ;User.objects.create_superuser('root', 'root@example.com', 'root')" | python manage.py shell
-RUN echo "from django.contrib.auth import get_user_model; User = get_user_model() ;User.objects.create_superuser('poney', 'poney@example.com', 'poney')" | python manage.py shell
+# install dependencies
+COPY ./requirements.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+
+#########
+# FINAL #
+#########
+
+# pull official base image
+FROM python:3.8.3-alpine
+
+# create directory for the app user
+RUN mkdir -p /home/app
+
+# create the app user
+RUN addgroup -S app && adduser -S app -G app
+
+# create the appropriate directories
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+RUN mkdir $APP_HOME
+RUN mkdir $APP_HOME/collected_static
+RUN mkdir $APP_HOME/media
+WORKDIR $APP_HOME
+
+# install dependencies
+RUN apk update && apk add libpq libjpeg-turbo
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements.txt .
+RUN pip install --no-cache /wheels/*
+
+# copy entrypoint-prod.sh
+COPY ./entrypoint.sh $APP_HOME
+
+# copy project
+COPY . $APP_HOME
+
+# chown all the files to the app user
+RUN chown -R app:app $APP_HOME
+
+# change to the app user
+USER app
+
+# run entrypoint.prod.sh
+ENTRYPOINT ["/home/app/web/entrypoint.sh"]
