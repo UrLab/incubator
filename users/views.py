@@ -6,6 +6,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic import UpdateView
 from django.urls import reverse
 from django.contrib import messages
+from django.contrib.auth import login, authenticate
 from django.conf import settings
 from django.db.models import F, Count
 from django.db import transaction
@@ -29,6 +30,22 @@ def balance(request):
         'spendForm': SpendForm(),
         'transferForm': TransferForm(),
     })
+
+
+@require_POST
+def login_view(request):
+    username = request.POST.get("username", "")
+    password = request.POST.get("password", "")
+
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        next = request.GET.get("next", "/")
+        next = next if next != "" else "/"
+        return HttpResponseRedirect(next)
+    else:
+        messages.error(request, "Aucun compte correspondant à cet identifiant n'a été trouvé")
+        return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
 
 @permission_required('users.change_balance')

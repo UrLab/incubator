@@ -16,7 +16,7 @@ Connexion
         </div>
         {% endif %}
 
-        <form method="post" action="{% url 'admin:login' %}?next={{request.GET.next}}">
+        <form method="post" action="{% url 'login_view' %}?next={{request.GET.next}}">
             {% csrf_token %}
             {% bootstrap_form form %}
             {% buttons %}

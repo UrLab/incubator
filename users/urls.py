@@ -2,7 +2,8 @@ from django.urls import path
 from django.contrib.auth.decorators import login_required
 from .views import (
     balance, UserDetailView, CurrentUserDetailView,
-    UserEditView, spend, top, transfer, show_pamela, hide_pamela, buy_product)
+    UserEditView, spend, top, transfer, show_pamela, hide_pamela, buy_product,
+    login_view)
 
 urlpatterns = [
     path('profile', login_required(CurrentUserDetailView.as_view()), name='profile'),
@@ -15,4 +16,5 @@ urlpatterns = [
     path('show_pamela', login_required(show_pamela), name='show_pamela'),
     path('hide_pamela', login_required(hide_pamela), name='hide_pamela'),
     path('<slug:slug>', UserDetailView.as_view(), name='user_profile'),
+    path('login/', login_view, name="login_view"),
 ]
