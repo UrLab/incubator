@@ -32,6 +32,7 @@ urlpatterns = [
     path('api/', include('incubator.apiurls')),
     path('notifications/', get_nyt_pattern()),
     path('wiki/', include('wiki.urls')),
+    path('stock/', include('stock.urls')),
     path('r/<slug:short_name>', redir.views.short_url, name='redirection'),
 ]
 

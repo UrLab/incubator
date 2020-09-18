@@ -70,7 +70,7 @@ class FundZone(models.Model):
         ('BANK', "Virement"),
         ('CASH', "Caisse"),
     )
-    
+
     name = models.CharField(max_length=50)
     method = models.CharField(max_length=4, choices=payment_method)
 
@@ -84,14 +84,18 @@ class FundZone(models.Model):
                 total += payment.amount
         return total + sum(trans.amount for trans in TopupTransaction.objects.filter(topup_type=self.method))
 
+    @property
+    def payments(self):
+        return PaymentTransaction.objects.filter(zone=self).order_by('-when')
+
     def __str__(self):
         return self.name
 
 
 class PaymentTransaction(Transaction):
     ways = (
-        ('a', 'out'),
-        ('b', 'in'),
+        ('a', 'Dépense'),
+        ('b', 'Réception'),
     )
 
     amount = models.DecimalField(max_digits=6, decimal_places=2)
@@ -100,4 +104,5 @@ class PaymentTransaction(Transaction):
     zone = models.ForeignKey('stock.FundZone', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return "Achat d'un montant de {} vérifié par {} ({})".format(self.amount, self.user, self.zone.name)
+        return "{} d'un de {}€ vérifié par {}".format(
+            self.get_way_display(), self.amount, self.user)

@@ -11,6 +11,10 @@ class ProductInline(admin.TabularInline):
     extra = 1
 
 
+class PaymentTransactionInline(admin.TabularInline):
+    model = PaymentTransaction
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'price',)
@@ -63,3 +67,4 @@ class PaymentAdmin(admin.ModelAdmin):
 class FundZoneAdmin(admin.ModelAdmin):
     list_display = ('name', 'method', 'balance')
     search_fields = ('name',)
+    inlines = (PaymentTransactionInline, )
