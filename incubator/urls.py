@@ -15,10 +15,13 @@ import space.views
 urlpatterns = [
     path('', incubator.views.home, name='home'),
     path('spaceapi.json', space.views.spaceapi, name="spaceapi"),
+
     path('events/', include('events.urls')),
     path('projects/', include('projects.urls')),
     path('accounts/', include('users.urls')),
     path('space/', include('space.urls')),
+    path('wiki/', include('wiki.urls')),
+    path('stock/', include('stock.urls')),
 
     path('sm', events.views.sm),
     path('linux', events.views.linux),
@@ -27,12 +30,9 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('auth/', include('django.contrib.auth.urls')),
-    path('register/', incubator.views.RegisterView.as_view(), name="register"),
 
     path('api/', include('incubator.apiurls')),
     path('notifications/', get_nyt_pattern()),
-    path('wiki/', include('wiki.urls')),
-    path('stock/', include('stock.urls')),
     path('r/<slug:short_name>', redir.views.short_url, name='redirection'),
 ]
 
