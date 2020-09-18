@@ -4,7 +4,7 @@ from django.contrib import admin
 import incubator.views
 import incubator.apiurls
 from incubator import settings
-from wiki.urls import get_pattern as get_wiki_pattern
+# from wiki.urls import get_pattern as get_wiki_pattern
 from django_nyt.urls import get_pattern as get_nyt_pattern
 
 import redir.views
@@ -31,7 +31,7 @@ urlpatterns = [
 
     path('api/', include('incubator.apiurls')),
     path('notifications/', get_nyt_pattern()),
-    path('wiki/', get_wiki_pattern()),
+    path('wiki/', include('wiki.urls')),
     path('r/<slug:short_name>', redir.views.short_url, name='redirection'),
 ]
 

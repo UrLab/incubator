@@ -52,7 +52,6 @@ class ProductBuyForm(forms.Form):
 class TransferForm(BalanceForm):
     recipient = forms.ModelChoiceField(
         queryset=User.objects.order_by('username'),
-        empty_label="Bénéficiaire",
     )
 
 

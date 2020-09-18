@@ -19,7 +19,8 @@ class Event(models.Model):
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name='Etat')
     organizer = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Organisateur', on_delete=models.DO_NOTHING)
     description = models.TextField(blank=True)
-    picture = ResizedImageField(size=[500, 500], upload_to='event_pictures', null=True, blank=True)
+    picture = ResizedImageField(
+        size=[500, 500], crop=['middle', 'center'], quality=100, upload_to='event_pictures', null=True, blank=True)
     interested = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="interesting_events")
 
     def is_only_a_day(self):

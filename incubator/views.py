@@ -1,5 +1,5 @@
-from datetime import datetime
-
+# from datetime import datetime
+from django.utils import timezone
 from django.views.generic.edit import CreateView
 from users.forms import UserCreationForm
 from django.contrib.auth import login
@@ -14,7 +14,7 @@ from constance import config as dyn_config
 
 
 def error_view(code, msg=""):
-    def view(request, excpetion=""):
+    def view(request, exception=""):
         response = render(request, "error.html", {'code': code, 'message': msg})
         response.status_code = code
         return response
@@ -33,7 +33,7 @@ def home(request):
         "space_open": space_is_open(client),
         "message": dyn_config.HOMEPAGE_MESSAGE,
         "message_type": dyn_config.HOMEPAGE_MESSAGE_TYPE,
-        "events": Event.objects.filter(stop__gt=datetime.now(), status__exact="r"),
+        "events": Event.objects.filter(stop__gt=timezone.now(), status__exact="r"),
         "stream": stream,
         "event_page": False,
     })

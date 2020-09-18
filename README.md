@@ -32,17 +32,7 @@ Quick brainstorming https://pad.lqdn.fr/p/incubator
 ### Create a user
 
     ./manage.py createsuperuser
-    
-## Docker
-Install the incubator in a container via docker
 
-    docker build -t incubator .
-    docker run --name incubatorfromspace -p 8000:8000 -d incubator
-    
-Admin : poney/poney, admin/admin, 
-    
 # View / Edit Notebooks
 
     ./manage.py shell_plus --notebook
-
-

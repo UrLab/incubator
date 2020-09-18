@@ -10,8 +10,8 @@
   {% for event in events %}
     {% load formatting %}
     <div class={% if event_page %}"col-sm-6 col-md-3"{% else %}""{% endif %}>
-      <div class="panel panel-default event-card">
-        <div class="panel-heading">
+      <div class="card event-card">
+        <div class="card-header">
           <div class="row">
             <div class="col-xs-2">
               <a href="{% url "view_event" event.id %}">
@@ -34,16 +34,16 @@
             </div>
           </div>
         </div>
-        <div id="event-{{event.id}}-description" class="panel-body collapse" style="word-wrap: break-word">
+        <div id="event-{{event.id}}-description" class="card-body collapse" style="word-wrap: break-word">
           {{event.description|markdown}}
           {% if request.user.is_authenticated %}
-          <a class="btn btn-default" href="{% url "edit_event" event.id %}">
+          <a class="btn btn-secondary" href="{% url "edit_event" event.id %}">
             <span class="fa fa-edit" aria-hidden="true"></span>
             Editer
           </a>
           {% endif %}
         </div>
-        <div class="panel-footer">
+        <div class="card-footer">
           {% include "event_time.html" %}
         </div>
       </div>
