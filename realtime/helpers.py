@@ -10,6 +10,7 @@ from realtime import crossbarconnect
 if settings.USE_MQTT:
     import paho.mqtt.client as mqtt
 
+
 def send_message(key, message, *args, **kwargs):
     if settings.USE_WAMP:
         try:

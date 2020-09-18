@@ -38,9 +38,7 @@
             return (val < 0.15) ? 'black' : 'white'
         })
 
-        let svg = d3.select("svg")
-                    .attr("width", W+48*p)
-                    .attr("height", H+2*w);
+        let svg = d3.select("svg").attr("width", W+48*p).attr("height", H+2*w);
 
         function setBig(elmt, big){
             let group = elmt.transition().duration(200)

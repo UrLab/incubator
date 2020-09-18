@@ -1,13 +1,12 @@
 from rest_framework import viewsets
-# from django.core.urlresolvers import reverse
-# from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views.decorators.http import require_POST
 from django.views.generic.detail import DetailView
 from django.views.generic import UpdateView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import messages
+from django.contrib.auth import login, authenticate
 from django.conf import settings
 from django.db.models import F, Count
 from django.db import transaction
@@ -21,7 +20,8 @@ from stock.models import Product, TransferTransaction, TopupTransaction, Product
 
 
 def balance(request):
-    favorites = Product.objects.filter(producttransaction__user=request.user).annotate(Count("producttransaction")).order_by("-producttransaction__count")[:5]
+    favorites = Product.objects.filter(producttransaction__user=request.user).annotate(
+        Count("producttransaction")).order_by("-producttransaction__count")[:5]
     return render(request, 'balance.html', {
         'account': settings.BANK_ACCOUNT,
         'products': Product.objects.order_by('category', 'name'),
@@ -30,6 +30,22 @@ def balance(request):
         'spendForm': SpendForm(),
         'transferForm': TransferForm(),
     })
+
+
+@require_POST
+def login_view(request):
+    username = request.POST.get("username", "")
+    password = request.POST.get("password", "")
+
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        next = request.GET.get("next", "/")
+        next = next if next != "" else "/"
+        return HttpResponseRedirect(next)
+    else:
+        messages.error(request, "Aucun compte correspondant à cet identifiant n'a été trouvé")
+        return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
 
 @permission_required('users.change_balance')
@@ -178,7 +194,8 @@ class UserDetailView(DetailView):
             purchases = list(request.user.producttransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
             misc = list(request.user.misctransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
             # Sort all transactions and keep only the TRANSACTION_NUM most recent
-            all_private_transactions = sorted(transfers + topups + purchases + misc, key=lambda x: x.when, reverse=True)[:TRANSACTION_NUM]
+            all_private_transactions = sorted(
+                transfers + topups + purchases + misc, key=lambda x: x.when, reverse=True)[:TRANSACTION_NUM]
 
         context['stream_pub'] = streampubtosend
         context['stream_priv'] = all_private_transactions
@@ -186,10 +203,9 @@ class UserDetailView(DetailView):
         return context
 
 
-
 class CurrentUserDetailView(UserDetailView):
     def get_object(self):
-            return self.request.user
+        return self.request.user
 
 
 class UserViewSet(viewsets.ModelViewSet):

@@ -9,6 +9,10 @@ body {
   margin-bottom: 4em;
 }
 
+h1 small{
+    font-size: 0.7em;color: gray;
+}
+
 .user-avatar {
   width: 1.5em;
   height: 1.5em;
