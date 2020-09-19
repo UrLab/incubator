@@ -39,7 +39,7 @@ export SQL_USER=<USERNAME>
 export SQL_HOST=<HOST>
 export SQL_PORT=<PORT>
 ```
-µ
+
 ## MQTT backend
 
     pip install paho-mqtt
