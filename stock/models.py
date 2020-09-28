@@ -102,6 +102,7 @@ class PaymentTransaction(Transaction):
     way = models.CharField(max_length=1, default="a", choices=ways)
     receipt = models.FileField(upload_to='souches', null=True, blank=True)
     zone = models.ForeignKey('stock.FundZone', on_delete=models.SET_NULL, null=True, blank=True)
+    comments = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return "{} d'un montant de {}€ vérifié par {}".format(
