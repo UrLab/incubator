@@ -1,8 +1,5 @@
 # from datetime import datetime
 from django.utils import timezone
-from django.views.generic.edit import CreateView
-from users.forms import UserCreationForm
-from django.contrib.auth import login
 from django.shortcuts import render
 from actstream.models import Action
 
@@ -37,22 +34,3 @@ def home(request):
         "stream": stream,
         "event_page": False,
     })
-
-
-class RegisterView(CreateView):
-    template_name = 'registration/register.html'
-    form_class = UserCreationForm
-    success_url = '/'
-
-    def get_initial(self):
-        initial = super(RegisterView, self).get_initial()
-        initial = initial.copy()
-        initial['username'] = self.request.GET.get("username")
-        return initial
-
-    def form_valid(self, form):
-        ret = super(RegisterView, self).form_valid(form)
-        user = form.auth_user()
-        if user:
-            login(self.request, user)
-        return ret
