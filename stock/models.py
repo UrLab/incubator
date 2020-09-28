@@ -104,5 +104,5 @@ class PaymentTransaction(Transaction):
     zone = models.ForeignKey('stock.FundZone', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
-        return "{} d'un de {}€ vérifié par {}".format(
+        return "{} d'un montant de {}€ vérifié par {}".format(
             self.get_way_display(), self.amount, self.user)
