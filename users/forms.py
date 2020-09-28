@@ -5,13 +5,11 @@ from django import forms
 from .models import User
 from stock.models import Product
 
-from .models import User
 
 class UserDescriptionForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ["description", ]
-
 
 
 class TolerantDecimalField(forms.DecimalField):
@@ -22,12 +20,13 @@ class TolerantDecimalField(forms.DecimalField):
 
 class BalanceForm(forms.Form):
     value = TolerantDecimalField(
-        label = "Montant",
+        label="Montant",
         max_digits=6,
         decimal_places=2,
         min_value=0,
         max_value=500
     )
+
 
 class TopForm(BalanceForm):
     location = forms.ChoiceField(
@@ -38,6 +37,7 @@ class TopForm(BalanceForm):
         widget=forms.RadioSelect,
     )
 
+
 class SpendForm(BalanceForm):
     name = forms.CharField(
         max_length=100,
@@ -46,15 +46,13 @@ class SpendForm(BalanceForm):
 
 
 class ProductBuyForm(forms.Form):
-    product = forms.ModelChoiceField(queryset = Product.objects.all())
+    product = forms.ModelChoiceField(queryset=Product.objects.all())
 
 
 class TransferForm(BalanceForm):
     recipient = forms.ModelChoiceField(
         queryset=User.objects.order_by('username'),
-        empty_label="Bénéficiaire",
     )
-
 
 
 class UserForm(forms.ModelForm):

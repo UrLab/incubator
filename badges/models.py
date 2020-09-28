@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from incubator import settings
 
 # systeme de badges pour gerer le niveau d'expertise
@@ -14,6 +14,10 @@ class Badge(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def userlist(self):
+        return [bw.user.username for bw in self.badgewear_set.all()]
 
 
 class BadgeWear(models.Model):
@@ -32,12 +36,15 @@ class BadgeWear(models.Model):
     class Meta:
         unique_together = ("user", "badge")
 
-    badge = models.ForeignKey('Badge')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur')
+    badge = models.ForeignKey('Badge', on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur', on_delete=models.CASCADE)
     level = models.CharField(max_length=3, choices=LEVEL_CHOICES, default=INITIATE)
     action_counter = models.PositiveIntegerField(default=0)
     timestamp = models.DateTimeField(auto_now_add=True)
-    attributor = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Attributeur', related_name="attributed")
+    attributor = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True,
+        verbose_name='Attributeur', related_name="attributed",
+        on_delete=models.SET_NULL)
 
     def get_absolute_url(self):
         return reverse('badge_view', args=[self.badge.pk])

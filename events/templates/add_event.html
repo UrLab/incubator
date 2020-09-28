@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 {% load static %}
 
 {% block title %}
@@ -8,8 +8,10 @@ Formulaire d'événement
 
 {% block head %}
     {{ form.media  }}
-    <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet">
-    <script type="text/javascript" src="{% static "js/bootstrap-multiselect.js" %}"></script>
+    <!-- <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+    <!-- <script type="text/javascript" src="{% static "js/bootstrap-multiselect.js" %}"></script> -->
 {% endblock %}
 
 {% block content %}
@@ -31,6 +33,17 @@ Formulaire d'événement
             buttonWidth: '100%',
             enableCaseInsensitiveFiltering: true,
 
+        });
+    });
+
+    $(function () {
+        $("#id_start").datetimepicker({
+            format: 'd/m/Y H:i',
+        });
+    });
+    $(function () {
+        $("#id_stop").datetimepicker({
+            format: 'd/m/Y H:i',
         });
     });
 </script>

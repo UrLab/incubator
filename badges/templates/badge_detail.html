@@ -7,11 +7,13 @@
 
 {% block content %}
 
-<ol class="breadcrumb">
-    <li><a href="/">UrLab</a></li>
-    <li><a href="/badges/">Badges</a></li>
-    <li class="active">{{ badge.name }}</li>
-</ol>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">UrLab</a></li>
+        <li class="breadcrumb-item"><a href="/badges/">Badges</a></li>
+        <li class="breadcrumb-item active">{{ badge.name }}</li>
+    </ol>
+</nav>
 
 <div class="page-header">
     {% if authorized %}
@@ -95,7 +97,7 @@
                 <div class="container-fluid">
                     <a href="/badges/add/{{ badge.pk }}/" class="btn btn-success pull-right">
                         <span class="fa fa-plus" aria-hidden="true"></span>
-                        Ajouter un utilisateur
+                        Attribuer le badge
                     </a>
                 </div>
             {% endif %}
@@ -105,6 +107,9 @@
     <h1>
         Mystère et boule de gomme
     </h1>
+    <p>
+        Pour accéder à cette page vous devez posséder le badge "{{ badge.name }}"
+    </p>
     {% endif %}
 </div>
 

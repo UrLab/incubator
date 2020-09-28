@@ -8,8 +8,8 @@
 {% block content %}
 
 <ol class="breadcrumb">
-    <li><a href="/">UrLab</a></li>
-    <li class="active">Badges</li>
+    <li class="breadcrumb-item"><a href="/">UrLab</a></li>
+    <li class="breadcrumb-item active">Badges</li>
 </ol>
 
 <div class="page-header">
@@ -31,7 +31,7 @@
         </tr>
         <tbody>
             {% for badge in badges %}
-                {% if not badge.hidden %}
+                {% if not badge.hidden or request.user.username in badge.userlist %}
                 <tr>
                     <td class="col-md-2">
                         {% if not badge.icon %}

@@ -1,13 +1,14 @@
 from datetime import timedelta
 from django.shortcuts import render
 from django.contrib import messages
-from django.core.urlresolvers import reverse, reverse_lazy
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.urls import reverse, reverse_lazy
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views.generic.edit import DeleteView
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.cache import cache_page
 from django.utils import timezone
 from django.db import IntegrityError
+from django.core.paginator import Paginator
 
 from influxdb import InfluxDBClient
 from rest_framework import viewsets
@@ -18,7 +19,7 @@ from .models import MacAdress, SpaceStatus, MusicOfTheDay
 from .forms import MacAdressForm
 from .serializers import PamelaSerializer, SpaceStatusSerializer, MotdSerializer
 from .decorators import private_api, one_or_zero
-from .plots import weekday_probs, human_time
+# from .plots import weekday_probs, human_time
 from .helpers import is_stealth_mode, make_empty_pamela, make_pamela, user_should_see_pamela
 from users.models import User
 from realtime.helpers import publish_space_state
@@ -207,17 +208,17 @@ def spaceapi(request):
             "location": loc,
             "name": 'light_%s' % loc
         } for loc in ('inside', 'outside')]
-    except:
+    except Exception:
         pass
 
     return JsonResponse(response)
 
 
 def openings_data(request):
-    opts = {k: request.GET[k] for k in request.GET}
+    # opts = {k: request.GET[k] for k in request.GET}
     return JsonResponse({
-        'probs': list(weekday_probs(opts)),
-        'range': human_time(opts),
+        'probs': 0,  # list(weekday_probs(opts)),
+        'range': 0,  # human_time(opts),
     })
 
 
@@ -253,3 +254,18 @@ class OpeningsViewSet(viewsets.ModelViewSet):
 class MotdViewSet(viewsets.ModelViewSet):
     queryset = MusicOfTheDay.objects.all().order_by('-day')
     serializer_class = MotdSerializer
+
+
+def motd(request, page):
+    print(page)
+
+    list_music = MusicOfTheDay.objects.all().order_by('-day')
+    p = Paginator(list_music, 40)
+    context = {
+        'has_next': p.page(page).has_next(),
+        'has_previous': p.page(page).has_previous(),
+        'page_range': p.page_range,
+        'page': p.page(page),
+    }
+
+    return render(request, "motd.html", context)

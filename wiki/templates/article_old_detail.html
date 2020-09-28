@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load formatting %}
+{% load humanize %}
+
+{% block title %}
+{{article.title}}
+{% endblock %}
+
+{% block content %}
+    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">UrLab</a></li>
+        <li class="breadcrumb-item"><a href="{% url "wiki_home" %}">Wiki</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{article.title}}</li>
+    </ol>
+    </nav>
+
+    <ul class="nav nav-tabs" id="article-menu">
+        <li class="pull-left">
+            <h1>{{article.title}}</h1>
+        </li>
+        
+    </ul>
+    
+    <div class="tab-pane active" id="tab-current">
+        {{article.content|markdown}}
+    </div>
+
+{% endblock %}

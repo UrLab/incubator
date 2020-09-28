@@ -1,5 +1,4 @@
 from django.forms import ModelForm, Textarea
-from datetimewidget.widgets import DateTimeWidget
 
 from django import forms
 
@@ -7,21 +6,14 @@ from .models import Event, Meeting
 
 
 class EventForm(ModelForm):
+    # date = forms.DateTimeField(input_formats=['%d/%m/%Y %H:%M'])
+
     class Meta:
         model = Event
+
         fields = '__all__'
 
         widgets = {
-            'start': DateTimeWidget(
-                attrs={'id': "start"},
-                usel10n=True,
-                bootstrap_version=3
-            ),
-            'stop': DateTimeWidget(
-                attrs={'id': "stop"},
-                usel10n=True,
-                bootstrap_version=3
-            ),
             'description': Textarea(attrs={'rows': 15}),
         }
 

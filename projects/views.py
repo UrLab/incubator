@@ -2,10 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import viewsets
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib import messages
-from datetime import datetime
+from django.utils import timezone
+# from datetime import datetime
 from actstream import action
 from math import ceil
 from itertools import groupby
@@ -101,7 +102,7 @@ def add_task(request, pk):
 def complete_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.completed_by = request.user
-    task.completed_on = datetime.now()
+    task.completed_on = timezone.now()
     task.save()
 
     action.send(request.user, verb='a fini la tâche', action_object=task, target=task.project)
