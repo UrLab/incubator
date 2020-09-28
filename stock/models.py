@@ -100,7 +100,7 @@ class PaymentTransaction(Transaction):
 
     amount = models.DecimalField(max_digits=6, decimal_places=2)
     way = models.CharField(max_length=1, default="a", choices=ways)
-    receipt = models.ImageField(upload_to='souches', null=True, blank=True)
+    receipt = models.FileField(upload_to='souches', null=True, blank=True)
     zone = models.ForeignKey('stock.FundZone', on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
