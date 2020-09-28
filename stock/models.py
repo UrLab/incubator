@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -103,6 +104,7 @@ class PaymentTransaction(Transaction):
     receipt = models.FileField(upload_to='souches', null=True, blank=True)
     zone = models.ForeignKey('stock.FundZone', on_delete=models.SET_NULL, null=True, blank=True)
     comments = models.CharField(max_length=200, null=True, blank=True)
+    payment_date = models.DateField(default=timezone.now)
 
     def __str__(self):
         return "{} d'un montant de {}€ vérifié par {}".format(
