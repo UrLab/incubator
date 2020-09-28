@@ -90,13 +90,10 @@ def BadgeWearAddView(request, pk=0):
 
 
 def promote_user(request, action="", username="", pk=""):
-    try:
-        user = get_object_or_404(User, username=username)
-        badge = get_object_or_404(Badge, pk=int(pk))
-        badge_wear = get_object_or_404(BadgeWear, badge=badge, user=user)
-    except ValueError:
-        return HttpResponseBadRequest(
-            "La valeur d'ID n'est pas correcte")
+    user = get_object_or_404(User, username=username)
+    badge = get_object_or_404(Badge, pk=int(pk))
+    badge_wear = get_object_or_404(BadgeWear, badge=badge, user=user)
+
 
     if get_object_or_404(BadgeWear, badge=badge, user=request.user).level != "MAI":
         return HttpResponseForbidden(
