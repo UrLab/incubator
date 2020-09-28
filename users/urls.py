@@ -12,7 +12,7 @@ urlpatterns = [
     path('balance/transfer', login_required(views.transfer), name='balance_transfer'),
     path('show_pamela', login_required(views.show_pamela), name='show_pamela'),
     path('hide_pamela', login_required(views.hide_pamela), name='hide_pamela'),
-    path('<slug:slug>', views.UserDetailView.as_view(), name='user_profile'),
+    path('<str:slug>', views.UserDetailView.as_view(), name='user_profile'),
     path('login/', views.login_view, name="login_view"),
     path('register/', views.RegisterView.as_view(), name="register"),
 ]
