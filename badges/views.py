@@ -94,7 +94,6 @@ def promote_user(request, action="", username="", pk=""):
     badge = get_object_or_404(Badge, pk=int(pk))
     badge_wear = get_object_or_404(BadgeWear, badge=badge, user=user)
 
-
     if get_object_or_404(BadgeWear, badge=badge, user=request.user).level != "MAI":
         return HttpResponseForbidden(
             "Vous n'avez pas les droits requis pour \
