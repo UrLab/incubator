@@ -19,6 +19,9 @@ class Badge(models.Model):
     def userlist(self):
         return [bw.user.username for bw in self.badgewear_set.all()]
 
+    def get_absolute_url(self):
+        return reverse('badge_view', args=[self.pk])
+
 
 class BadgeWear(models.Model):
     RAC_BID = "RAC"

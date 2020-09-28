@@ -7,6 +7,7 @@ from users.models import User
 from django.db.models import Count
 from django.utils import timezone
 
+from actstream import action
 from .forms import BadgeWearForm
 from .models import Badge, BadgeWear
 
@@ -75,6 +76,9 @@ def BadgeWearAddView(request, pk=0):
             badgeWear.timestamp = timezone.now()
             badgeWear.attributor = request.user
             badgeWear.save()
+
+            if not badge.hidden:
+                action.send(form.cleaned_data['user'], verb='a recu le badge', action_object=badge)
 
             return HttpResponseRedirect(
                 reverse('badge_view', kwargs={"pk": pk}))
