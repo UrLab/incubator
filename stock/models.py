@@ -87,7 +87,7 @@ class FundZone(models.Model):
 
     @property
     def payments(self):
-        return PaymentTransaction.objects.filter(zone=self).order_by('-when')
+        return PaymentTransaction.objects.filter(zone=self).order_by('-payment_date')
 
     def __str__(self):
         return self.name
