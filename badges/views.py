@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.urls import reverse
 from django.views.generic.detail import DetailView
 from django.views.generic import ListView
@@ -7,7 +7,7 @@ from users.models import User
 from django.db.models import Count
 from django.utils import timezone
 
-from actstream import action
+from actstream import action as djaction
 from .forms import BadgeWearForm
 from .models import Badge, BadgeWear
 
@@ -78,7 +78,7 @@ def BadgeWearAddView(request, pk=0):
             badgeWear.save()
 
             if not badge.hidden:
-                action.send(form.cleaned_data['user'], verb='a recu le badge', action_object=badge)
+                djaction.send(form.cleaned_data['user'], verb='a recu le badge', action_object=badge)
 
             return HttpResponseRedirect(
                 reverse('badge_view', kwargs={"pk": pk}))
@@ -102,16 +102,22 @@ def promote_user(request, action="", username="", pk=""):
     if action == "up":
         if badge_wear.level == "DIS":
             badge_wear.level = "MAI"
-        if badge_wear.level == "INI":
+        elif badge_wear.level == "INI":
             badge_wear.level = "DIS"
-        if badge_wear.level == "RAC":
+        elif badge_wear.level == "RAC":
             badge_wear.level = "INI"
+        if not badge.hidden:
+            djaction.send(
+                user,
+                verb='a été promu {} pour le badge'.format(badge_wear.get_level_display()),
+                action_object=badge)
+
     elif action == "down":
         if badge_wear.level == "INI":
             badge_wear.level = "RAC"
-        if badge_wear.level == "DIS":
+        elif badge_wear.level == "DIS":
             badge_wear.level = "INI"
-        if badge_wear.level == "MAI":
+        elif badge_wear.level == "MAI":
             badge_wear.level = "DIS"
     else:
         return HttpResponseForbidden(
