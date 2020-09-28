@@ -2,12 +2,13 @@ from datetime import timedelta
 from django.shortcuts import render
 from django.contrib import messages
 from django.urls import reverse, reverse_lazy
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views.generic.edit import DeleteView
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.cache import cache_page
 from django.utils import timezone
 from django.db import IntegrityError
+from django.core.paginator import Paginator
 
 from influxdb import InfluxDBClient
 from rest_framework import viewsets
@@ -253,3 +254,18 @@ class OpeningsViewSet(viewsets.ModelViewSet):
 class MotdViewSet(viewsets.ModelViewSet):
     queryset = MusicOfTheDay.objects.all().order_by('-day')
     serializer_class = MotdSerializer
+
+
+def motd(request, page):
+    print(page)
+
+    list_music = MusicOfTheDay.objects.all().order_by('-day')
+    p = Paginator(list_music, 40)
+    context = {
+        'has_next': p.page(page).has_next(),
+        'has_previous': p.page(page).has_previous(),
+        'page_range': p.page_range,
+        'page': p.page(page),
+    }
+
+    return render(request, "motd.html", context)

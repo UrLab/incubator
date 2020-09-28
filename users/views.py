@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views.decorators.http import require_POST
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
 from django.views.generic import UpdateView
 from django.urls import reverse
 from django.contrib import messages
@@ -11,6 +12,7 @@ from django.conf import settings
 from django.db.models import F, Count
 from django.db import transaction
 
+from users.forms import UserCreationForm
 
 from .serializers import UserSerializer
 from .models import User
@@ -211,3 +213,22 @@ class CurrentUserDetailView(UserDetailView):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class RegisterView(CreateView):
+    template_name = 'registration/register.html'
+    form_class = UserCreationForm
+    success_url = '/'
+
+    def get_initial(self):
+        initial = super(RegisterView, self).get_initial()
+        initial = initial.copy()
+        initial['username'] = self.request.GET.get("username")
+        return initial
+
+    def form_valid(self, form):
+        ret = super(RegisterView, self).form_valid(form)
+        user = form.auth_user()
+        if user:
+            login(self.request, user)
+        return ret
