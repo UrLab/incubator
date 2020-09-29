@@ -15,13 +15,13 @@ def test_openings_empty():
 def test_openings_week():
     # First complete sept week 2016: monday 05/09 to sunday 11/09
     openings = [
-        {'time': '2016-09-05 10:00', 'is_open': True},
-        {'time': '2016-09-05 18:00', 'is_open': False},
-        {'time': '2016-09-05 19:30', 'is_open': True},
-        {'time': '2016-09-05 21:00', 'is_open': False},
+        {'time': '2016-09-05 10:00:00.0000+02:00', 'is_open': True},
+        {'time': '2016-09-05 18:00:00.0000+02:00', 'is_open': False},
+        {'time': '2016-09-05 19:30:00.0000+02:00', 'is_open': True},
+        {'time': '2016-09-05 21:00:00.0000+02:00', 'is_open': False},
     ]
 
-    begin, end = '2016-09-05', '2016-09-11'
+    begin, end = '2016-09-05 00:00:00.0000+02:00', '2016-09-11 00:00:00.0000+02:00'
 
     SpaceStatus.objects.bulk_create(SpaceStatus(**x) for x in openings)
     in_week = SpaceStatus.objects.filter(time__gte=begin, time__lte=end)
