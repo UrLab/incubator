@@ -109,7 +109,7 @@ def promote_user(request, action="", username="", pk=""):
         if not badge.hidden:
             djaction.send(
                 user,
-                verb='a été promu {} pour le badge'.format(badge_wear.get_level_display()),
+                verb='a été promu "{}" pour le badge'.format(badge_wear.get_level_display()),
                 action_object=badge)
 
     elif action == "down":
