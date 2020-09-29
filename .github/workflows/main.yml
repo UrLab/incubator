@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: python-alpine
+    runs-on: python:3.8-alpine
 
     steps:
       - uses: actions/checkout@v2
