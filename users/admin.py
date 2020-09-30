@@ -1,8 +1,11 @@
+from datetime import datetime
+
 from django.utils.safestring import mark_safe
 from django.contrib import admin
 from django.contrib import auth
 
 from .models import User, Membership
+from .utils import current_year
 from space.models import MacAdress
 from incubator.models import ASBLYear
 
@@ -66,7 +69,13 @@ class UserAdmin(admin.ModelAdmin):
     groups.short_description = u'Membre des groupes'
 
     def is_member(self, user):
-        asbl_year = ASBLYear.objects.last()
+        """ We suppose each asbl year starts the 15th of june and ends the 14th of june of the next year """
+
+        year = current_year()
+        asbl_year, created = ASBLYear.objects.get_or_create(
+            start=datetime(year, 6, 15),
+            stop=datetime(year + 1, 6, 14)
+        )
         membership = Membership.objects.filter(asbl_year=asbl_year, user=user)
         return membership.count() != 0
     is_member.short_description = u'Est membre ASBL'

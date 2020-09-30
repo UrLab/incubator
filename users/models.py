@@ -119,3 +119,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Membership(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     asbl_year = models.ForeignKey('incubator.ASBLYear', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "Membre du hackerspace durant l'année {}".format(self.asbl_year)
