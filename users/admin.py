@@ -2,12 +2,17 @@ from django.utils.safestring import mark_safe
 from django.contrib import admin
 from django.contrib import auth
 
-from .models import User
+from .models import User, Membership
 from space.models import MacAdress
 
 
 class MacAdressInline(admin.TabularInline):
     model = MacAdress
+    extra = 1
+
+
+class MembershipInline(admin.TabularInline):
+    model = Membership
     extra = 1
 
 
@@ -63,7 +68,7 @@ class UserAdmin(admin.ModelAdmin):
     list_filter = (BalanceListFilter, 'has_key', 'is_superuser', 'created', 'last_login')
     search_fields = ('username', 'email', 'first_name', 'last_name')
 
-    inlines = (MacAdressInline,)
+    inlines = (MacAdressInline, MembershipInline)
     filter_horizontal = ('groups', 'user_permissions')
 
     fieldsets = (

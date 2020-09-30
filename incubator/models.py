@@ -7,3 +7,6 @@ class ASBLYear(models.Model):
 
     class Meta:
         verbose_name = "Année d'ASBL"
+
+    def __str__(self):
+        return "{}-{}".format(self.start.year, self.stop.year)
