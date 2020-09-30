@@ -4,6 +4,7 @@ from django.contrib import auth
 
 from .models import User, Membership
 from space.models import MacAdress
+from incubator.models import ASBLYear
 
 
 class MacAdressInline(admin.TabularInline):
@@ -64,9 +65,22 @@ class UserAdmin(admin.ModelAdmin):
     groups.allow_tags = True
     groups.short_description = u'Membre des groupes'
 
-    list_display = ('username', 'balance', 'email', 'has_key', 'is_superuser', 'newsletter', 'created', 'groups')
+    def is_member(self, user):
+        asbl_year = ASBLYear.objects.last()
+        membership = Membership.objects.filter(asbl_year=asbl_year, user=user)
+        return membership.count() != 0
+    is_member.short_description = u'Est membre ASBL'
+
+    def make_member(modeladmin, request, queryset):
+        asbl_year = ASBLYear.objects.last()
+        for user in queryset.all():
+            Membership.objects.create(user=user, asbl_year=asbl_year)
+    make_member.short_description = "Rendre membre pour l'année en cours"
+
+    list_display = ('username', 'balance', 'email', 'has_key', 'is_superuser', 'newsletter', 'created', 'groups', 'is_member')
     list_filter = (BalanceListFilter, 'has_key', 'is_superuser', 'created', 'last_login')
     search_fields = ('username', 'email', 'first_name', 'last_name')
+    actions = [make_member]
 
     inlines = (MacAdressInline, MembershipInline)
     filter_horizontal = ('groups', 'user_permissions')
