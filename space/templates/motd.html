@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% load formatting %}
+{% load humanize %}
+
+{% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Lien</th>
+      <th scope="col">Pseudo</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for music in page %}
+        <tr>
+        <th scope="row">{{music.id}}</th>
+        <td><a href={{music.url}}>{{music.url}}</a></td>
+        <td>{{music.irc_nick}}</td>
+        <td>@{{music.day}}</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<nav aria-label="Page navigation example" style="margin-top: 2em">
+  <ul class="pagination justify-content-end">
+    <li class="page-item {% if not has_previous %}disabled {% endif %}">
+      <a class="page-link" {% if has_previous %} href="{% url "motd" page.previous_page_number %}" {% endif %}>Previous</a>
+    </li>
+    {% for i in page_range%}
+    <li class="page-item"><a class="page-link" href="{% url "motd" i %}">{{i}}</a></li>
+    {% endfor %}
+    <li class="page-item {% if not has_next %}disabled {% endif %}">
+      <a class="page-link" {% if has_next %} href="{% url "motd" page.next_page_number %}" {% endif %}>Next</a>
+    </li>
+  </ul>
+</nav>
+{% endblock %}

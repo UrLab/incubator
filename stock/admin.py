@@ -1,11 +1,18 @@
 from django.contrib import admin
 
-from .models import Category, Product, TransferTransaction, TopupTransaction, ProductTransaction, MiscTransaction
+from .models import (
+    Category, Product, TransferTransaction,
+    TopupTransaction, ProductTransaction, MiscTransaction,
+    PaymentTransaction, FundZone)
 
 
 class ProductInline(admin.TabularInline):
     model = Product
     extra = 1
+
+
+class PaymentTransactionInline(admin.TabularInline):
+    model = PaymentTransaction
 
 
 @admin.register(Product)
@@ -43,3 +50,21 @@ class ProductTransaction(admin.ModelAdmin):
 class MiscTransaction(admin.ModelAdmin):
     list_display = ('user', 'amount', 'info', 'when')
     search_fields = ('user__username',)
+
+
+@admin.register(PaymentTransaction)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'zone', 'way', 'amount', 'when')
+    search_fields = ('user__username',)
+
+    list_filter = ('user', 'zone')
+
+    def get_changeform_initial_data(self, request):
+        return {'user': request.user}
+
+
+@admin.register(FundZone)
+class FundZoneAdmin(admin.ModelAdmin):
+    list_display = ('name', 'method', 'balance')
+    search_fields = ('name',)
+    inlines = (PaymentTransactionInline, )

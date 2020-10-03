@@ -19,11 +19,26 @@ Quick brainstorming https://pad.lqdn.fr/p/incubator
 
 ### Setup
 
-    virtualenv -p python3 ve3 # or virtualenv-3 -p python3 ve3
-    source ve3/bin/activate
-    pip install -r requirements.txt
-    ./manage.py migrate
-    ./manage.py runserver
+```bash
+echo "export DEBUG=1" >> .env
+echo "export FAKE_REDIS=1" >> .env
+virtualenv -p python3 ve3 # or virtualenv-3 -p python3 ve3
+source ve3/bin/activate
+source .env
+pip install -r requirements.txt
+./manage.py migrate
+./manage.py runserver
+```
+
+You can fill the .env file with other stuff as well, i you wish to develop using a psotgres database, you can add these lines and modify them depending on your configuration :
+
+```bash
+export SQL_ENGINE=django.db.backends.postgresql
+export SQL_DATABASE=<DBNAME>
+export SQL_USER=<USERNAME>
+export SQL_HOST=<HOST>
+export SQL_PORT=<PORT>
+```
 
 ## MQTT backend
 

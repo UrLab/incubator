@@ -102,7 +102,7 @@
       <h3>
         Ordre du jour
         {% if request.user.is_authenticated %}
-          <a class="btn btn-outline-dark btn-sm"  href="{% url "edit_meeting" event.meeting.id %}">
+          <a class="btn btn-primary btn-sm"  href="{% url "edit_meeting" event.meeting.id %}">
               <span class="fa fa-edit" aria-hidden="true"></span>
               Editer
           </a>
@@ -123,7 +123,7 @@
       <h3>
         Compte rendu
         {% if request.user.is_authenticated %}
-          <a class="btn btn-outline-dark btn-sm"  href="{% url "edit_meeting" event.meeting.id %}">
+          <a class="btn btn-primary btn-sm"  href="{% url "edit_meeting" event.meeting.id %}">
               <span class="fa fa-edit" aria-hidden="true"></span>
               Editer
           </a>
