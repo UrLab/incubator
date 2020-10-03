@@ -51,3 +51,6 @@ class BadgeWear(models.Model):
 
     def get_absolute_url(self):
         return reverse('badge_view', args=[self.badge.pk])
+
+    def __str__(self):
+        return "Badge {} pour {}".format(self.badge.name, self.user.username)
