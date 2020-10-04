@@ -22,7 +22,7 @@ class Email(models.Model):
         content = self.content + "\n" + self.FOOTER
         return mark_safe(markdown.markdown(
             content,
-            ["nl2br"],
+            extensions=["nl2br"],
             safe_mode='escape',
             enable_attributes=False,
             output_format="html5"
