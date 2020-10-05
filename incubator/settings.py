@@ -8,12 +8,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
-from django.contrib.messages import constants as messages
+import os
 import re
+import sentry_sdk
+
+from django.contrib.messages import constants as messages
+from sentry_sdk.integrations.django import DjangoIntegration
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -28,7 +31,16 @@ DEBUG = int(os.environ.get("DEBUG", 0))  # Must export DEBUG in dev (might be te
 
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="127.0.0.1").split(" ")
+SENTRY_DSN = os.environ.get("SENTRY_DSN", "")
 
+if SENTRY_DSN != "":
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        traces_sample_rate=1.0,
+
+        send_default_pii=True
+    )
 
 # Application definition
 
