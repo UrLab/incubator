@@ -23,7 +23,7 @@ Quick brainstorming https://pad.lqdn.fr/p/incubator
 echo "export DEBUG=1" >> .env
 echo "export FAKE_REDIS=1" >> .env
 echo "export EMAIL_HOST=smtp.tonserver" >> .env
-Si port different de 25 :
+Si port smtp different de 25 :
 echo "export EMAIL_PORT=tonport" >> .env
 virtualenv -p python3 ve3 # or virtualenv-3 -p python3 ve3
 source ve3/bin/activate
