@@ -296,3 +296,7 @@ IGNORE_LIST_RE = [
     re.compile(prefix + r'(:[0-9a-f]{2}){3}')
     for prefix in MAC_RANGES
 ]
+
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
+
+EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 25))
