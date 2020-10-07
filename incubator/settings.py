@@ -68,6 +68,7 @@ INSTALLED_APPS = (
     'events',
     'users',
     'projects',
+    'badges',
     'space',
     'stock',
     'django_nyt',
