@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load formatting %}
+
+{% block title %}
+    Badges
+{% endblock %}
+
+{% block content %}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">UrLab</a></li>
+    <li class="breadcrumb-item active">Badges</li>
+</ol>
+
+<div class="page-header">
+    <h1>
+        Badges
+    </h1>
+
+    <table class="table table-striped">
+        <tr>
+            <th class="col-md-2">
+                Badge
+            </th>
+            <th class="col-md-8">
+                Description
+            </th>
+            <th class="col-md-2">
+                N° de membres
+            </th>
+        </tr>
+        <tbody>
+            {% for badge in badges %}
+                {% if not badge.hidden or request.user.username in badge.userlist %}
+                <tr>
+                    <td class="col-md-2">
+                        {% if not badge.icon %}
+                            <img src="/static/img/default-event.png" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
+                        {% else %}
+                            <img src="{{ badge.icon.url }}" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
+                        {% endif %}
+
+                        <a href="/badges/{{ badge.pk }}">
+                            {{ badge.name }}
+                        </a>
+                    </td>
+                    <td class="col-md-8">
+                        {{ badge.description|markdown|truncatechars:120 }}
+                    </td>
+                    <td class="col-md-2">
+                        {{ badge.num_wears }}
+                    </td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

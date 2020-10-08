@@ -14,7 +14,7 @@ install:
 
 script:
   - ./manage.py check
-  - py.test
+  - FAKE_REDIS=1 DEBUG=1 py.test
 
 
 notifications:
