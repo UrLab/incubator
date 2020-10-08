@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load formatting %}
+
+{% block title %}
+    Badge {{ badge.name }}
+{% endblock %}
+
+{% block content %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">UrLab</a></li>
+        <li class="breadcrumb-item"><a href="/badges/">Badges</a></li>
+        <li class="breadcrumb-item active">{{ badge.name }}</li>
+    </ol>
+</nav>
+
+<div class="page-header">
+    {% if authorized %}
+    <h1>
+        {{ badge.name }}
+    </h1>
+
+    <div class="row">
+        <div class="col-md-4 col-md-push-8">
+            <h4>Icône :</h4>
+            <div class="text-center">
+                {% if not badge.icon %}
+                    <img src="/static/img/default-event.png" style="width: 75%;" class="img-rounded" alt="Badge pic">
+                {% else %}
+                    <img src="{{ badge.icon.url }}" style="width: 75%;" class="img-rounded" alt="Badge pic">
+                {% endif %}
+            </div>
+            <hr>
+            <h4>Description : </h4>
+            {{ badge.description|markdown }}
+        </div>
+        <div class="col-md-8 col-md-pull-4 project-detail-content">
+            <h2>
+                Possesseurs du badge :
+            </h2>
+            <table class="table table-striped">
+                <tr>
+                    <th class="col-md-2">
+                        Utilisateur
+                    </th>
+                    <th class="col-md-3">
+                        Niveau
+                    </th>
+                    <th class="col-md-1">
+                        Compteur d'actions
+                    </th>
+                    <th class="col-md-1">
+                        attribué le
+                    </th>
+                    <th class="col-md-2">
+                        par
+                    </th>
+                </tr>
+                <tbody>
+                    {% for badgeWear in wearers %}
+                    <tr>
+                        <td class="col-md-2">
+                            <a href="/accounts/{{ badgeWear.user.username }}">
+                                <img src="{{ badgeWear.user.gravatar }}" class="user-avatar">
+                                {{ badgeWear.user.username }}
+                            </a>
+                        </td>
+                        <td class="col-md-3">
+                            {{ badgeWear.get_level_display }}
+                            {% if is_master %}
+                            <a {% if badgeWear.level != "MAI" %} href="/badges/up/{{ badgeWear.user.username }}/{{ badgeWear.badge.pk }}/" {% else %} style="color: grey;" {% endif %}>
+                                <i class="fa fa-arrow-up"></i>
+                            </a>
+                            <a {% if badgeWear.level != "RAC" %} href="/badges/down/{{ badgeWear.user.username }}/{{ badgeWear.badge.pk }}/" {% else %} style="color: grey;" {% endif %}>
+                                <i class="fa fa-arrow-down"></i>
+                            </a>
+                            {% endif %}
+                        </td>
+                        <td class="col-md-1">
+                            {{ badgeWear.action_counter }} pt{{ badgeWear.action_counter|pluralize:"s" }}
+                        </td>
+                        <td class="col-md-1">
+                            {{ badgeWear.timestamp|date:"d/m/Y" }}
+                        </td>
+                        <td class="col-md-2">
+                            <a href="/accounts/{{ badgeWear.attributor.username }}">
+                                <img src="{{ badgeWear.attributor.gravatar }}" class="user-avatar">
+                                {{ badgeWear.attributor.username }}
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% if is_master %}
+                <div class="container-fluid">
+                    <a href="/badges/add/{{ badge.pk }}/" class="btn btn-success pull-right">
+                        <span class="fa fa-plus" aria-hidden="true"></span>
+                        Attribuer le badge
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <h1>
+        Mystère et boule de gomme
+    </h1>
+    <p>
+        Pour accéder à cette page vous devez posséder le badge "{{ badge.name }}"
+    </p>
+    {% endif %}
+</div>
+
+{% endblock %}
