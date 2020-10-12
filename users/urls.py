@@ -15,4 +15,5 @@ urlpatterns = [
     path('<str:slug>', views.UserDetailView.as_view(), name='user_profile'),
     path('login/', views.login_view, name="login_view"),
     path('register/', views.RegisterView.as_view(), name="register"),
+    path('debtmails/', views.send_debt_mail, name="debt_mail"),
 ]

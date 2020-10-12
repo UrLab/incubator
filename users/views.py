@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.core.mail import EmailMultiAlternatives
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
+from django.contrib.admin.views.decorators import staff_member_required
 from django.conf import settings
 from django.db.models import F, Count
 from django.db import transaction
@@ -121,19 +122,22 @@ def top(request):
     return HttpResponseRedirect(reverse('change_balance'))
 
 
+@staff_member_required
 def send_debt_mail(request):
     users = User.objects.filter(balance__lt=0)
 
-    content = """Insérer un texte pour dire oulala t'es en dette mon cochon"""
+    content = """Insérer un texte pour dire oulala t'es en dette {} mon cochon"""
 
     for user in users:
         message = EmailMultiAlternatives(
             subject="Votre ardoise @UrLab",
             body=content.format(user.username),
-            from_email='Trésorier @ UrLab <tresorier@urlab.be>',
+            from_email='Trésorerie UrLab <tresorier@urlab.be>',
             to=user.email
         )
         message.send()
+
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
 
 
 @permission_required('users.change_balance')
