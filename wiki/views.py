@@ -10,7 +10,7 @@ from .forms import ArticleForm
 
 
 def wiki_home(request):
-    articles = Article.objects.all()
+    articles = Article.objects.all().filter(hidden=False)
 
     return render(request, "wiki_home.html", {
         'project': articles.filter(category="p"),
