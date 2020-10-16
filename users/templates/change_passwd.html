@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block title %}
+Changez votre mot de passe
+{% endblock %}
+
+{% block head %}
+    {{ form.media  }}
+{% endblock %}
+
+{% block content %}
+<form action="{% url "chg_passwd" %}" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">
+        Submit
+    </button>
+    {% endbuttons %}
+</form>
+
+
+{% endblock %}
