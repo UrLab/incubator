@@ -103,3 +103,27 @@ class UserCreationForm(forms.ModelForm):
         )
 
         return user
+
+
+class ChangePasswordForm(forms.Form):
+    old_password = forms.CharField(
+        label=_("Old Password"),
+        widget=forms.PasswordInput
+    )
+    new_password = forms.CharField(
+        label=_("New Password"),
+        widget=forms.PasswordInput
+    )
+    new_password2 = forms.CharField(
+        label=_("New Password confirmation"),
+        widget=forms.PasswordInput,
+        help_text=_("Enter the same password as above, for verification.")
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get("new_password")
+        confirm_password = cleaned_data.get("new_password2")
+
+        if password != confirm_password:
+            self.add_error('new_password', "Les mots de passe ne sont pas identiques!")
