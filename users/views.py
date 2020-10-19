@@ -18,7 +18,7 @@ from users.forms import UserCreationForm
 
 from .serializers import UserSerializer
 from .models import User
-from .forms import UserForm, SpendForm, TopForm, TransferForm, ProductBuyForm
+from .forms import UserForm, SpendForm, TopForm, TransferForm, ProductBuyForm, ChangePasswordForm
 from .decorators import permission_required
 from stock.models import Product, TransferTransaction, TopupTransaction, ProductTransaction, MiscTransaction
 
@@ -181,6 +181,26 @@ def hide_pamela(request):
     request.user.hide_pamela = True
     request.user.save()
     return HttpResponseRedirect(reverse('profile'))
+
+
+def change_passwd(request):
+    user = request.user
+    if request.method == "POST":
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            if user.check_password(form.cleaned_data['old_password']):
+                user.set_password(form.cleaned_data['new_password'])
+                user.save()
+                messages.add_message(request, messages.INFO, "Vous devez vous reconnecter pour continuer")
+                return HttpResponseRedirect(reverse("login"))
+            else:
+                messages.add_message(request, messages.ERROR, "Le mot de passe est incorrect")
+                return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+    context = {
+        "form": ChangePasswordForm()
+    }
+    return render(request, "change_passwd.html", context)
 
 
 class UserEditView(UpdateView):
