@@ -13,6 +13,7 @@ install:
 
 
 script:
+  - flake8 --ignore=E501,F401 .
   - ./manage.py check
   - FAKE_REDIS=1 DEBUG=1 py.test
 
