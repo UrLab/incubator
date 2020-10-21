@@ -27,7 +27,7 @@ class Article(models.Model):
     commit = models.TextField(verbose_name="commit", blank=True)
     category = models.CharField(max_length=1, choices=CATEGORY)
     hidden = models.BooleanField(default=False, verbose_name="Caché")
-    
+
     class Meta:
         verbose_name = "Article"
 
