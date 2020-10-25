@@ -163,7 +163,7 @@ def ical(request):
             description=event.get_absolute_full_url(),
             location=event.place
         )
-        cal.events.append(vevent)
+        cal.events.add(vevent)
 
     return HttpResponse(str(cal), content_type="text/calendar")
 
