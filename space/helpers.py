@@ -6,6 +6,7 @@ from .djredis import get_redis, space_is_open, get_mac, get_hostnames
 
 from django.conf import settings
 from constance import config as dyn_config
+from .maclist import Prefix,manu
 
 
 def space_may_be_open(instant=None):
@@ -31,6 +32,19 @@ def is_stealth_mode():
 def should_keep(mac):
     return not any([regex.match(mac) for regex in settings.IGNORE_LIST_RE])
 
+def manufacturer_finder(mac):
+    prefix = ""
+    position = ""
+    # selects only interesting part
+    for i in range(8):
+        if mac[i] != ":":
+            prefix = prefix + mac[i]
+
+    for position in range(len(Prefix)):
+        if Prefix[position].lower() == prefix:
+            return manu[position]
+    # returns altered Mac Address if no manufacturer was found
+    return 'xx:xx:xx:xx:' + mac[-5:]
 
 def make_pamela():
     redis = get_redis()
@@ -48,8 +62,8 @@ def make_pamela():
     # Filter macs that are ignored by the regex list
     unknown_mac = [mac for mac in unknown_mac if should_keep(mac)]
 
-    # Match unknown macs to the hostname or hide a part if we don't have a hostname
-    unknown_mac = list({hostnames.get(mac, 'xx:xx:xx:xx:' + mac[-5:]) for mac in unknown_mac})
+    # Match unknown macs to the hostname or show manufacturer if we don't have hostname
+    unknown_mac = list({hostnames.get(mac, manufacturer_finder(mac)) for mac in unknown_mac})
 
     return {
         'raw_maclist': maclist,
