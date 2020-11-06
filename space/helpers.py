@@ -6,7 +6,7 @@ from .djredis import get_redis, space_is_open, get_mac, get_hostnames
 
 from django.conf import settings
 from constance import config as dyn_config
-from .maclist import Prefix,manu
+from .maclist import manu_mac
 
 
 def space_may_be_open(instant=None):
@@ -34,17 +34,15 @@ def should_keep(mac):
 
 def manufacturer_finder(mac):
     prefix = ""
-    position = ""
     # selects only interesting part
     for i in range(8):
         if mac[i] != ":":
             prefix = prefix + mac[i]
 
-    for position in range(len(Prefix)):
-        if Prefix[position].lower() == prefix:
-            return manu[position]
-    # returns altered Mac Address if no manufacturer was found
-    return 'xx:xx:xx:xx:' + mac[-5:]
+    if prefix.upper() in manu_mac:
+        return manu_mac.get(prefix.upper())
+    else:
+        return 'xx:xx:xx:xx:' + mac[-5:]
 
 def make_pamela():
     redis = get_redis()
