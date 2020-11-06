@@ -6,24 +6,35 @@ Quick brainstorming https://pad.lqdn.fr/p/incubator
 
 
 # Install dependencies
-    
-  - Running on Ubuntu
-  
-  ``sudo apt-get install python3-dev python3-setuptools libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev python3-pip``
 
-``sudo pip3 install virtualenv``
-    
-  - Running on Fedora 
-  
-  ```sudo dnf install libtiff-devel libjpeg-devel libzip-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel python3-devel python3-setuptools python3-virtualenv```
+* Running on Ubuntu :
+
+```
+sudo apt-get install python3-dev python3-setuptools libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev python3-pip
+sudo pip3 install virtualenv
+```
+
+* Running on Fedora
+
+```
+sudo dnf install libtiff-devel libjpeg-devel libzip-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel python3-devel python3-setuptools python3-virtualenv
+```
+
+* Running on Mac OS
+
+```
+brew install postgresql
+```
 
 ### Setup
 
 ```bash
+# Env vars. Change the Value by what you want
 echo "export DEBUG=1" >> .env
 echo "export FAKE_REDIS=1" >> .env
 echo "export EMAIL_HOST=smtp.tonserver" >> .env
-echo "export EMAIL_PORT=tonport" >> .env # If the port is different than 25
+echo "export EMAIL_PORT=25"
+
 virtualenv -p python3 ve3 # or virtualenv-3 -p python3 ve3
 source ve3/bin/activate
 source .env
