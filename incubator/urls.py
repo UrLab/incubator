@@ -28,6 +28,7 @@ urlpatterns = [
     path('ag', events.views.ag),
 
     path('admin/', admin.site.urls),
+    path('auth/reset/done/', incubator.views.home, name='home'),
     path('auth/', include('django.contrib.auth.urls')),
 
     path('api/', include('incubator.apiurls')),
