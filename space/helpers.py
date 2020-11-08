@@ -32,6 +32,7 @@ def is_stealth_mode():
 def should_keep(mac):
     return not any([regex.match(mac) for regex in settings.IGNORE_LIST_RE])
 
+
 def manufacturer_finder(mac):
     prefix = ""
     # selects only interesting part
@@ -43,6 +44,7 @@ def manufacturer_finder(mac):
         return manu_mac.get(prefix.upper())
     else:
         return 'xx:xx:xx:xx:' + mac[-5:]
+
 
 def make_pamela():
     redis = get_redis()
