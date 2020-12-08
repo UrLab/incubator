@@ -206,7 +206,9 @@ def change_passwd(request):
 class UserEditView(UpdateView):
     form_class = UserForm
     template_name = 'user_form.html'
-    get_success_url = lambda self: reverse('profile')
+
+    def get_success_url(self):
+        return reverse('profile')
 
     def get_object(self, queryset=None):
         return self.request.user
