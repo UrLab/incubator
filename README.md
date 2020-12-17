@@ -33,7 +33,7 @@ brew install postgresql
 echo "export DEBUG=1" >> .env
 echo "export FAKE_REDIS=1" >> .env
 echo "export EMAIL_HOST=smtp.tonserver" >> .env
-echo "export EMAIL_PORT=25"
+echo "export EMAIL_PORT=25" >> .env
 
 virtualenv -p python3 ve3 # or virtualenv-3 -p python3 ve3
 source ve3/bin/activate
