@@ -126,12 +126,16 @@ def top(request):
 def send_debt_mail(request):
     users = User.objects.filter(balance__lt=0)
 
-    content = """Insérer un texte pour dire oulala t'es en dette {} mon cochon"""
+    content = """Bonjour {} !
+Le Urlab Banking System a détecté une dette de ta part d'un montant de {}€ :O ! N'oublie pas de t'en défaire au plus vite avant que nos avocats ne te tombent dessus !
+
+Note : Il peut s'agir d'une erreur ! Ayant eu un soucis lié à notre base de données dans le courant de l'année 2020, il se peut que ta dette ait déjà été réglée, si c'est le cas, n'hésite pas à nous contacter (contact@urlab.be).
+"""
 
     for user in users:
         message = EmailMultiAlternatives(
             subject="Votre ardoise @UrLab",
-            body=content.format(user.username),
+            body=content.format(user.username, abs(user.balance)),
             from_email='Trésorerie UrLab <tresorier@urlab.be>',
             to=user.email
         )
