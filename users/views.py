@@ -196,6 +196,9 @@ def change_passwd(request):
             else:
                 messages.add_message(request, messages.ERROR, "Le mot de passe est incorrect")
                 return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        else:
+            messages.add_message(request, messages.ERROR, "Les mots de passe ne correspondent pas")
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
     context = {
         "form": ChangePasswordForm()
