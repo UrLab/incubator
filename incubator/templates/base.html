@@ -105,6 +105,12 @@
                         Badges
                     </a>
                 </li>
+                <li class="nav-item {% active_if_contains "/streams/" %}">
+                    <a class="nav-link" href="{% url "stream-main" %}">
+                        <i class="fas fa-broadcast-tower"></i>
+                        Direct
+                    </a>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
