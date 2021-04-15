@@ -6,5 +6,5 @@ from .views import conference_list
 urlpatterns = [
     path('', TemplateView.as_view(template_name='streams/stream-http.html'),
          name='stream-main'),
-    path('conferenceList/', conference_list ),
+    path('conferences/', conference_list ),
 ]
