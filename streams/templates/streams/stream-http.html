@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Direct Live Stream UrLaB
+{% endblock %}
+
+{% block head %}
+  <style>
+      video {
+          max-width: 100%;
+          max-height: 97vh;
+          box-shadow: 3px 3px 6px #000;
+      }
+      .action-unmute {
+          width: 100%;
+      }
+  </style>
+{% endblock %}
+
+{% block content %}
+
+  <script src="{% static 'js/flv.min.js' %}"></script>
+  <video id="videoElement" controls autoplay muted></video>
+  <button class="action-unmute btn btn-primary">Unmute</button>
+
+  <script>
+    if (flvjs.isSupported()) {
+      let videoElement = document.getElementById('videoElement');
+      let flvPlayer = flvjs.createPlayer({
+        type: 'flv',
+        url: 'https://stream.okeso.net/live/test.flv'
+      });
+      flvPlayer.attachMediaElement(videoElement);
+      flvPlayer.load();
+      flvPlayer.play();
+
+      Array.from(document.getElementsByClassName('action-unmute')
+      ).forEach(element => element.addEventListener('click', function (){
+          flvPlayer.muted = false;
+          element.style.display = 'none';
+        }
+      ));
+    }
+  </script>
+
+{% endblock %}

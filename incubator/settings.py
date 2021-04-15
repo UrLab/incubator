@@ -71,6 +71,7 @@ INSTALLED_APPS = (
     'badges',
     'space',
     'stock',
+    'streams',
     'django_nyt',
     'mptt',
     'wiki',
@@ -206,6 +207,8 @@ PASSWORD_HASHERS = (
 MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 
 REST_FRAMEWORK = {

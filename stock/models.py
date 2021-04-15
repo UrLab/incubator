@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -86,7 +87,7 @@ class FundZone(models.Model):
 
     @property
     def payments(self):
-        return PaymentTransaction.objects.filter(zone=self).order_by('-when')
+        return PaymentTransaction.objects.filter(zone=self).order_by('-payment_date')
 
     def __str__(self):
         return self.name
@@ -100,9 +101,11 @@ class PaymentTransaction(Transaction):
 
     amount = models.DecimalField(max_digits=6, decimal_places=2)
     way = models.CharField(max_length=1, default="a", choices=ways)
-    receipt = models.ImageField(upload_to='souches', null=True, blank=True)
+    receipt = models.FileField(upload_to='souches', null=True, blank=True)
     zone = models.ForeignKey('stock.FundZone', on_delete=models.SET_NULL, null=True, blank=True)
+    comments = models.CharField(max_length=200, null=True, blank=True)
+    payment_date = models.DateField(default=timezone.now)
 
     def __str__(self):
-        return "{} d'un de {}€ vérifié par {}".format(
+        return "{} d'un montant de {}€ vérifié par {}".format(
             self.get_way_display(), self.amount, self.user)
