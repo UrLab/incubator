@@ -35,6 +35,7 @@ urlpatterns = [
     path('api/', include('incubator.apiurls')),
     path('notifications/', include('django_nyt.urls')),
     path('r/<slug:short_name>', redir.views.short_url, name='redirection'),
+    path('oauth/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 ]
 
 if settings.DEBUG:
