@@ -37,22 +37,24 @@ Historique de transactions
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">Date</th>
-                                <th scope="col">Montant</th>
-                                <th scope="col">Utilisateur</th>
-                                <th scope="col">souche</th>
+                                <th scope="col" class="col-md-2">Date</th>
+                                <th scope="col" class="col-md-2">Montant</th>
+                                <th scope="col" class="col-md-2">Utilisateur</th>
+                                <th scope="col" class="col-md-4">Commentaire</th>
+                                <th scope="col" class="col-md-4">souche</th>
                             </tr>
                         </thead>
                         <tbody>
                         {% for payment in zone.payments %}
                             <tr>
-                                <td>{{payment.when}}</td>
+                                <td>{{ payment.payment_date }}</td>
                                 <td style="color: {% if payment.way == "a" %}red{% else %}green{% endif %};">
                                     {% if payment.way == "a" %}-{% else %}+{% endif %}
                                     {{payment.amount}}
                                 </td>
                                 <td><a href="{% url "user_profile" user.username %}">{{payment.user.username}}</a></td>
-                                <td>{% if payment.receipt %}<a href="{{payment.receipt.url}}">souche</a>{% else %}Pas de souche disponible{% endif %}</td>
+                                <td>{{ payment.comments }}</td>
+                                <td>{% if payment.receipt %}<a href="{{payment.receipt.url}}">souche</a>{% else %}Indisponible{% endif %}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
