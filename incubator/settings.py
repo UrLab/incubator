@@ -71,6 +71,7 @@ INSTALLED_APPS = (
     'badges',
     'space',
     'stock',
+    'streams',
     'django_nyt',
     'mptt',
     'wiki',
