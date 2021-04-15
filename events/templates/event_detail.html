@@ -7,154 +7,214 @@
 
 {% block content %}
 
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/">UrLab</a></li>
-    <li class="breadcrumb-item"><a href="/events/">Événements</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{event.title}}</li>
-  </ol>
-</nav>
+{% if not event.meeting %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">UrLab</a></li>
+            <li class="breadcrumb-item"><a href="/events/">Événements</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{event.title}}</li>
+        </ol>
+    </nav>
 
-<div class="pb-2 mt-4 mb-2 border-bottom">
-  <h1 style=" word-wrap: break-word">
-    {{event.title}}
-    <a class="btn btn-outline-dark" href="{% url "edit_event" event.id %}">
-        <span class="fa fa-edit" aria-hidden="true"></span>
-        Editer
-    </a>
-  </h1>
-</div>
-
-<p>
-    <div class="row">
-        <div class="col-md-8">
-            {% include "event_time.html" %}
-            Organisateur : <a href="{% url 'user_profile' event.organizer.username %}">{{event.organizer.username}}</a>
-        </div>
-        <div class="col-md-4">
-            <p>
-                {% with interested=event.interested.all %}
-                  {% if interested.count == 0 %}
-                    Personne n'est intéressé pour l'instant
-                  {% else %}
-                    {% if interested.count == 1 %}
-                      Une personne est intéressée
-                    {% else %}
-                      {{interested.count}} personnes sont intéressés
-                    {% endif %}
-                    <div class="dropdown">
-                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Interested People
-                        <span class="caret"></span>
-                      </button>
-                      <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        {% for person in interested %}
-                          <li><a href="{% url "user_profile" person.username %}">{{person}}</a></li>
-                        {% endfor %}
-                      </ul>
-                    </div>
-                  {% endif %}
-                  {% if request.user in interested %}
-                    <a class="btn btn-primary btn-sm" href="{% url "not_interested_event" event.id %}">
-                      Plus moi
-                    </a>
-                  {% else %}
-                    <a class="btn btn-primary btn-sm" href="{% url "interested_event" event.id %}">
-                      {% if interested.count == 0%}
-                        Je le suis !
-                      {% else %}
-                        Moi aussi
-                      {% endif %}
-                    </a>
-                  {% endif %}
-                {% endwith %}
-            </p>
-            {% if request.user.is_authenticated and not event.meeting %}
-              <p>Cet événement n'a pas d'ordre du jour. <a href="{% url "add_meeting" event.id %}" class="btn btn-outline-dark btn-sm">Ajouter un OJ</a></p>
-            {% endif %}
-        </div>
-    </div>
-
-</p>
-<hr>
-<div class="row">
-  {% if event.status == 'i' %}
-    <div class="alert alert-warning" role="alert">
-      <b>Événement en incubation :</b> N'hésitez pas à le compléter, à choisir une date pour l'organiser ou tout simplement en vous signalant comme "intéressé".
-    </div>
-  {% endif %}
-  {% if not event.meeting %}
-      <div class="col-md-8" style=" word-wrap: break-word">
-        <h2>Description</h2>
-        {{event.description|markdown}}
-      </div>
-      {% if event.picture %}
-        <div class="col-md-4">
-          <img src="{{event.picture.url}}" class="img-thumbnail">
-        </div>
-      {% endif %}
-  {% else %}
-    <div class="col-md-5">
-      <h2>Description</h2>
-      {{event.description|markdown}}
-    </div>
-    <div class="col-md-7">
-      <h3>
-        Ordre du jour
-        {% if request.user.is_authenticated %}
-          <a class="btn btn-primary btn-sm"  href="{% url "edit_meeting" event.meeting.id %}">
-              <span class="fa fa-edit" aria-hidden="true"></span>
-              Editer
-          </a>
-          {% if not event.meeting.ongoing and not event.meeting.PV %}
-            <a href="{% url "export_pad" event.id %}" class="btn btn-secondary btn-sm">
-              <span class="fa fa-upload" aria-hidden="true"></span>
-              Exporter l'ordre du jour sur le pad
+    <div class="pb-2 mt-4 mb-2 border-bottom">
+        <h1 style=" word-wrap: break-word">
+            {{event.title}}
+            <a class="btn btn-outline-dark" href="{% url "edit_event" event.id %}">
+                <span class="fa fa-edit" aria-hidden="true"></span>
+                Editer
             </a>
-          {% endif %}
-        {% endif %}
-      </h3>
-      {% if not event.meeting.OJ %}
-        <p><i>L'ordre du jour est vide pour l'instant.</i></p>
-      {% else %}
-        {{event.meeting.OJ|markdown}}
-      {% endif %}
-
-      <h3>
-        Compte rendu
-        {% if request.user.is_authenticated %}
-          <a class="btn btn-primary btn-sm"  href="{% url "edit_meeting" event.meeting.id %}">
-              <span class="fa fa-edit" aria-hidden="true"></span>
-              Editer
-          </a>
-          <a href="{% url "import_pad" event.id %}" class="btn btn-secondary btn-sm">
-            <span class="fa fa-download" aria-hidden="true"></span>
-            Importer le PV depuis le pad
-          </a>
-        {% endif %}
-      </h3>
-
-      {% if event.meeting.PV %}
-        {{event.meeting.PV|markdown}}
-        <hr>
-        <h4>Pad de la réunion</h4>
-        <p><a href="{{event.meeting.pad}}">{{event.meeting.pad}}</a></p>
-      {% else %}
-        <p>Le pad pour prendre note en live se trouve là bas: <a href="{{event.meeting.pad}}">{{event.meeting.pad}}</a><br>
-        <i>Veuillez y prendre note en Markdown.</i></p>
-      {% endif %}
-      {% if event.is_today_or_before %}
-        <h4>Membres présents</h4>
-        {{event.meeting.members.all|join:", "|default:"Aucun membre présent"}}
-        <a href=""><i class="fa fa-plus" aria-hidden="true"></i></a>
-      {% endif %}
+        </h1>
     </div>
-  {% endif%}
 
-</div>
+    <p>
+        <div class="row">
+            <div class="col-md-8">
+                {% include "event_time.html" %}
+                Organisateur : <a href="{% url 'user_profile' event.organizer.username %}">{{event.organizer.username}}</a>
+            </div>
+            <div class="col-md-4">
+                <p>
+                    {% with interested=event.interested.all %}
+                        {% if interested.count == 0 %}
+                            n'est intéressé pour l'instant
+                        {% else %}
+                            {% if interested.count == 1 %}
+                            Une personne est intéressée
+                            {% else %}
+                            {{interested.count}} personnes sont intéressés
+                            {% endif %}
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                    Interested People
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    {% for person in interested %}
+                                    <li><a href="{% url "user_profile" person.username %}">{{person}}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        {% if request.user in interested %}
+                            <a class="btn btn-primary btn-sm" href="{% url "not_interested_event" event.id %}">
+                                Plus moi
+                            </a>
+                        {% else %}
+                            <a class="btn btn-primary btn-sm" href="{% url "interested_event" event.id %}">
+                                {% if interested.count == 0%}
+                                Je le suis !
+                                {% else %}
+                                Moi aussi
+                                {% endif %}
+                            </a>
+                        {% endif %}
+                    {% endwith %}
+                </p>
+                {% if request.user.is_authenticated %}
+                    <p>Cet événement n'a pas d'ordre du jour. <a href="{% url "add_meeting" event.id %}"
+                        class="btn btn-outline-dark btn-sm">Ajouter un OJ</a></p>
+                {% endif %}
+            </div>
+        </div>
 
+    </p>
+    <hr>
+    <div class="row">
+        {% if event.status == 'i' %}
+            <div class="alert alert-warning" role="alert">
+                <b>Événement en incubation :</b> N'hésitez pas à le compléter, à choisir une date pour l'organiser ou tout
+                simplement en vous signalant comme "intéressé".
+            </div>
+        {% endif %}
+        <div class="col-md-8" style=" word-wrap: break-word">
+            <h2>Description</h2>
+            {{event.description|markdown}}
+        </div>
+        {% if event.picture %}
+            <div class="col-md-4">
+                <img src="{{event.picture.url}}" class="img-thumbnail">
+            </div>
+        {% endif %}
 
+    </div>
 
+{% else %}
+    <style>
+        .container {
+            width: 100%;
+            display: flex;
+            max-width: 100vw;
+            padding-left: 5%;
+            padding-right: 5%;
+        }
 
+        .text-muted {
+            margin: auto;
+        }
+        
+        .half-screen {
+            width: 50%;
+            margin-top:1%;
+        }
 
+        @media only screen and (max-device-width: 1200px) {
+            .half-screen {
+                margin-top:1%;
+                width: 100%;
+            }
+
+            .container {
+                width: inherit;
+                display: inherit;
+            }
+        }
+
+    </style>
+    <div class="half-screen" style="margin-right: 1%;">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">UrLab</a></li>
+                <li class="breadcrumb-item"><a href="/events/">Événements</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{event.title}}</li>
+            </ol>
+        </nav>
+
+        <div class="pb-2 mt-4 mb-2 border-bottom">
+            <h1 style=" word-wrap: break-word">
+                {{event.title}}
+                <a class="btn btn-outline-dark" href="{% url "edit_event" event.id %}">
+                    <span class="fa fa-edit" aria-hidden="true"></span>
+                    Editer
+                </a>
+            </h1>
+        </div>
+
+        <p>
+            <div class="row">
+                <div class="col-md-8">
+                    {% include "event_time.html" %}
+                    Organisateur : <a href="{% url 'user_profile' event.organizer.username %}">{{event.organizer.username}}</a>
+                </div>
+                <div class="col-md-4">
+                    <p>
+                        {% with interested=event.interested.all %}
+                            {% if interested.count == 0 %}
+                                n'est intéressé pour l'instant
+                            {% else %}
+                                {% if interested.count == 1 %}
+                                Une personne est intéressée
+                                {% else %}
+                                {{interested.count}} personnes sont intéressés
+                                {% endif %}
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu1"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        Interested People
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        {% for person in interested %}
+                                        <li><a href="{% url "user_profile" person.username %}">{{person}}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                            {% if request.user in interested %}
+                                <a class="btn btn-primary btn-sm" href="{% url "not_interested_event" event.id %}">
+                                    Plus moi
+                                </a>
+                            {% else %}
+                                <a class="btn btn-primary btn-sm" href="{% url "interested_event" event.id %}">
+                                    {% if interested.count == 0%}
+                                    Je le suis !
+                                    {% else %}
+                                    Moi aussi
+                                    {% endif %}
+                                </a>
+                            {% endif %}
+                        {% endwith %}
+                    </p>
+                </div>
+            </div>
+
+        </p>
+        <hr>
+        <div class="row">
+            {% if event.status == 'i' %}
+                <div class="alert alert-warning" role="alert">
+                    <b>Événement en incubation :</b> N'hésitez pas à le compléter, à choisir une date pour l'organiser ou tout
+                    simplement en vous signalant comme "intéressé".
+                </div>
+            {% endif %}
+            <div class="col-md-12">
+                <h2>Description</h2>
+                {{event.description|markdown}}
+            </div>
+        </div>
+    </div>
+    <div class="half-screen" style="margin-left: 1%;height: 75vh;">
+        <iframe width="100%" height="100%" src="{{event.meeting.pad}}" frameborder="0" style="transition: width 2s;" id="LePad"></iframe>
+    </div>
+{% endif%}
 {% endblock %}
