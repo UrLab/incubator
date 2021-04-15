@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Event, Meeting
+from .models import Event, Meeting, Conference, Talk
 
 
 class MeetingInline(admin.StackedInline):
@@ -23,3 +23,11 @@ class MeetingAdmin(admin.ModelAdmin):
     list_display = ('event',)
     search_fields = ('OJ', 'PV')
     filter_horizontal = ('members',)
+
+@admin.register(Conference)
+class ConferenceAdmin(admin.ModelAdmin):
+    pass
+
+@admin.register(Talk)
+class TalksAdmin(admin.ModelAdmin):
+    pass
