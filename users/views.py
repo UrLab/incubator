@@ -6,8 +6,10 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
 from django.views.generic import UpdateView
 from django.urls import reverse
+from django.core.mail import EmailMultiAlternatives
 from django.contrib import messages
 from django.contrib.auth import login, authenticate
+from django.contrib.admin.views.decorators import staff_member_required
 from django.conf import settings
 from django.db.models import F, Count
 from django.db import transaction
@@ -118,6 +120,28 @@ def top(request):
             messages.error(request, "Erreur, votre recharge n'a pas été enregistrée")
 
     return HttpResponseRedirect(reverse('change_balance'))
+
+
+@staff_member_required
+def send_debt_mail(request):
+    users = User.objects.filter(balance__lt=0)
+
+    content = """Bonjour {} !
+Le Urlab Banking System a détecté une dette de ta part d'un montant de {}€ :O ! N'oublie pas de t'en défaire au plus vite avant que nos avocats ne te tombent dessus !
+
+Note : Il peut s'agir d'une erreur ! Ayant eu un soucis lié à notre base de données dans le courant de l'année 2020, il se peut que ta dette ait déjà été réglée, si c'est le cas, n'hésite pas à nous contacter (contact@urlab.be).
+"""
+
+    for user in users:
+        message = EmailMultiAlternatives(
+            subject="Votre ardoise @UrLab",
+            body=content.format(user.username, abs(user.balance)),
+            from_email='Trésorerie UrLab <tresorier@urlab.be>',
+            to=user.email
+        )
+        message.send()
+
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
 
 
 @permission_required('users.change_balance')

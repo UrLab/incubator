@@ -97,7 +97,37 @@
             </div>
         {% endif %}
 
+      {% if event.meeting.PV %}
+        {{event.meeting.PV|markdown}}
+        <hr>
+        <h4>Pad de la réunion</h4>
+        <p><a href="{{event.meeting.pad}}">{{event.meeting.pad}}</a></p>
+      {% else %}
+        <p>Le pad pour prendre note en live se trouve là bas: <a href="{{event.meeting.pad}}">{{event.meeting.pad}}</a><br>
+        <i>Veuillez y prendre note en Markdown.</i></p>
+      {% endif %}
+      {% if event.is_today_or_before %}
+        <h4>Membres présents</h4>
+        {{event.meeting.members.all|join:", "|default:"Aucun membre présent"}}
+      {% with attending=event.meeting.members.all %}
+        {% if request.user in attending %}
+          <a class="btn btn-primary btn-sm" href="{% url "not_attending_meeting" event.id %}">
+                Plus moi
+          </a>
+        {% else %}
+          <a class="btn btn-primary btn-sm" href="{% url "attending_meeting" event.id %}">
+            {% if attending.count == 0%}
+              Je serai present !
+            {% else %}
+              Moi aussi
+            {% endif %}
+          </a>
+        {% endif %}
+      {% endwith %}
+      {% endif %}
     </div>
+  {% endif%}
+</div>
 
 {% else %}
     <style>

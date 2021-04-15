@@ -28,6 +28,8 @@ brew install postgresql
 
 ### Setup
 
+**Be careful as this may not work with python3.9 yet**
+
 ```bash
 # Env vars. Change the Value by what you want
 echo "export DEBUG=1" >> .env
@@ -35,8 +37,8 @@ echo "export FAKE_REDIS=1" >> .env
 echo "export EMAIL_HOST=smtp.tonserver" >> .env
 echo "export EMAIL_PORT=25" >> .env
 
-virtualenv -p python3 ve3 # or virtualenv-3 -p python3 ve3
-source ve3/bin/activate
+python3 -m venv ve # or virtualenv-3 -p python3 ve3
+source ve/bin/activate
 source .env
 pip install -r requirements.txt
 ./manage.py migrate

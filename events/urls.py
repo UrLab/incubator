@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from .views import (
     EventDetailView, EventAddView, EventEditView, MeetingAddView,
     MeetingEditView, events_home, ical, not_interested, interested, import_pad,
-    export_pad, add_point_to_next_meeting,
+    export_pad, add_point_to_next_meeting, attending, not_attending,
 )
 
 urlpatterns = [
@@ -18,6 +18,8 @@ urlpatterns = [
     path('edit_meeting/<int:pk>', MeetingEditView.as_view(), name='edit_meeting'),
     path('not_interested/<int:pk>', login_required(not_interested), name='not_interested_event'),
     path('interested/<int:pk>', login_required(interested), name='interested_event'),
+    path('not_attending/<int:pk>', login_required(not_attending), name='not_attending_meeting'),
+    path('attending/<int:pk>', login_required(attending), name='attending_meeting'),
 
     # Private API
     path('add_point_to_next_meeting', add_point_to_next_meeting, name='add_point_to_next_meeting'),
