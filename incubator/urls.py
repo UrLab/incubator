@@ -21,6 +21,7 @@ urlpatterns = [
     path('wiki/', include('wiki.urls')),
     path('stock/', include('stock.urls')),
     path('badges/', include('badges.urls')),
+    path('streams/', include('streams.urls')),
 
     path('sm', events.views.sm),
     path('linux', events.views.linux),
@@ -28,6 +29,7 @@ urlpatterns = [
     path('ag', events.views.ag),
 
     path('admin/', admin.site.urls),
+    path('auth/reset/done/', incubator.views.password_reset_done),
     path('auth/', include('django.contrib.auth.urls')),
 
     path('api/', include('incubator.apiurls')),

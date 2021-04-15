@@ -1,7 +1,10 @@
 # from datetime import datetime
 from django.utils import timezone
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from actstream.models import Action
+from django.contrib import messages
+from django.urls import reverse
 
 from space.djredis import get_redis, space_is_open
 from events.models import Event
@@ -34,3 +37,12 @@ def home(request):
         "stream": stream,
         "event_page": False,
     })
+
+
+def password_reset_done(request):
+    messages.success(
+        request,
+        "Votre mot de passe a bien été réinitialisé, vous pouvez vous connecter avec votre nouveau mot de passe"
+    )
+
+    return HttpResponseRedirect(reverse('home'))
