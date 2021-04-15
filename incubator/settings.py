@@ -208,6 +208,8 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger'
 }
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('incubator.drf.ReadOnlyPermission',),
