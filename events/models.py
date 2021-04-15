@@ -98,3 +98,25 @@ class Meeting(models.Model):
         if not self.pad:
             self.pad = "https://pad.lqdn.fr/p/urlab-meeting-{}".format(self.id)
         super(Meeting, self).save(*args, **kwargs)
+
+class Conference(models.Model):
+    name = models.CharField(max_length=128)
+    description = models.TextField()
+
+    startDate = models.DateTimeField()
+    endDate = models.DateTimeField()
+
+    def __str__(self):
+        return f"Conférence: {self.name}"
+    
+
+class Talk(models.Model):
+    
+    title = models.CharField(max_length=256)
+    talkerName = models.CharField(max_length=128)
+    description = models.TextField()
+
+    conference = models.ForeignKey(Conference, on_delete=models.SET_NULL, null=True)
+    
+    def __str__(self):
+        return f"Talk: {self.title} By {self.talkerName}"
