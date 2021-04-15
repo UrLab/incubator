@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Conferences</H1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nom</th>
+        <th scope="col">Description</th>
+        <th scope="col">Date Début</th>
+        <th scope="col">Date Fin</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for conf in conferences %}
+        <tr>
+        <th scope="row">{{conf.id}}</th>
+        <td>{{conf.name}}</td>
+        <td>{{conf.description}}</td>
+        <td>@{{conf.startDate}}</td>
+        <td>@{{conf.endDate}}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
+
+
