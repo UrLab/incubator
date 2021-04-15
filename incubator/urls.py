@@ -21,6 +21,7 @@ urlpatterns = [
     path('wiki/', include('wiki.urls')),
     path('stock/', include('stock.urls')),
     path('badges/', include('badges.urls')),
+    path('streams/', include('streams.urls')),
 
     path('sm', events.views.sm),
     path('linux', events.views.linux),
