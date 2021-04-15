@@ -261,6 +261,16 @@ def add_point_to_next_meeting(request, point):
     r = {'new_point': point, 'full_oj': meeting.OJ}
     return JsonResponse(r, safe=False)
 
+def attending(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    event.meeting.members.add(request.user)
+    return HttpResponseRedirect(event.get_absolute_url())
+
+
+def not_attending(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    event.meeting.members.remove(request.user)
+    return HttpResponseRedirect(event.get_absolute_url())
 
 class NextMeetingAPI(APIView):
     def get(self, request, format=None):

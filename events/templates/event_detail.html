@@ -146,11 +146,24 @@
       {% if event.is_today_or_before %}
         <h4>Membres présents</h4>
         {{event.meeting.members.all|join:", "|default:"Aucun membre présent"}}
-        <a href=""><i class="fa fa-plus" aria-hidden="true"></i></a>
+      {% with attending=event.meeting.members.all %}
+        {% if request.user in attending %}
+          <a class="btn btn-primary btn-sm" href="{% url "not_attending_meeting" event.id %}">
+                Plus moi
+          </a>
+        {% else %}
+          <a class="btn btn-primary btn-sm" href="{% url "attending_meeting" event.id %}">
+            {% if attending.count == 0%}
+              Je serai present !
+            {% else %}
+              Moi aussi
+            {% endif %}
+          </a>
+        {% endif %}
+      {% endwith %}
       {% endif %}
     </div>
   {% endif%}
-
 </div>
 
 
