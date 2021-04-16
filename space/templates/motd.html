@@ -24,16 +24,42 @@
     {% endfor %}
   </tbody>
 </table>
+
 <nav aria-label="Page navigation example" style="margin-top: 2em">
-  <ul class="pagination justify-content-end">
-    <li class="page-item {% if not has_previous %}disabled {% endif %}">
-      <a class="page-link" {% if has_previous %} href="{% url "motd" page.previous_page_number %}" {% endif %}>Previous</a>
+  <ul class="pagination justify-content-center">
+    <li class="page-item {% if not has_previous %}disabled {% endif %}">  <!-- previous-->
+      <a class="page-link" {% if has_previous %} href="{% url 'motd' page.previous_page_number %}" {% endif %}>Previous</a>
     </li>
-    {% for i in page_range%}
-    <li class="page-item"><a class="page-link" href="{% url "motd" i %}">{{i}}</a></li>
-    {% endfor %}
-    <li class="page-item {% if not has_next %}disabled {% endif %}">
-      <a class="page-link" {% if has_next %} href="{% url "motd" page.next_page_number %}" {% endif %}>Next</a>
+
+      {% if page_number > 6 %}  <!-- if too much space until the start -->
+        <li class="page-item"><a class="page-link" href="{% url 'motd' 1 %}">{{1}}</a></li>  <!-- page 1 -->
+        <li class="page-item disabled"><a class="page-link">...</a></li>
+        {% for i in short_page_range_before %}
+          <li class="page-item"><a class="page-link" href="{% url 'motd' i %}">{{i}}</a></li>
+        {% endfor %}
+      {% else %}
+        {% for i in page_range_before %}
+          <li class="page-item"><a class="page-link" href="{% url 'motd' i %}">{{i}}</a></li>
+        {% endfor %}
+      {% endif %}
+
+      <li class="page-item disabled"><a class="page-link"> <strong> {{page_number}} </strong> </a></li>  <!-- current page -->
+
+      {% if page_number < num_pages %}   <!-- if too much space until the end -->
+        {% for i in short_page_range_after %}
+          <li class="page-item"><a class="page-link" href="{% url 'motd' i %}"> {{i}}</a></li>
+        {% endfor %}
+        <li class="page-item disabled"><a class="page-link">...</a></li>
+        <li class="page-item"><a class="page-link" href="{% url 'motd' num_pages %}">{{num_pages}}</a></li>  <!-- last page -->
+
+      {% else %}
+        {% for i in page_range_after %}
+          <li class="page-item"><a class="page-link" href="{% url 'motd' i %}">{{i}}</a></li>
+        {% endfor %}
+      {% endif %}
+
+    <li class="page-item {% if not has_next %}disabled {% endif %}">  <!-- next -->
+      <a class="page-link" {% if has_next %} href="{% url 'motd' page.next_page_number %}" {% endif %}>Next</a>
     </li>
   </ul>
 </nav>

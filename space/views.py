@@ -264,6 +264,14 @@ def motd(request, page):
         'has_previous': p.page(page).has_previous(),
         'page_range': p.page_range,
         'page': p.page(page),
+        'page_number': p.page(page).number,
+        'short_page_range_before': range(p.page(page).number - 5, p.page(
+            page).number),
+        'page_range_before': range(1, p.page(page).number),
+        'short_page_range_after': range(p.page(page).number + 1, p.page(
+            page).number + 6),
+        'page_range_after': range(p.page(page).number + 1, p.num_pages),
+        'num_pages': p.num_pages
     }
 
     return render(request, "motd.html", context)
