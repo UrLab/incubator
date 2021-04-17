@@ -257,8 +257,8 @@ class MotdViewSet(viewsets.ModelViewSet):
 
 
 def motd(request, page):
-    list_music = MusicOfTheDay.objects.all().order_by('-day')
-    p = Paginator(list_music, 40)
+    list_music = MusicOfTheDay.objects.all().order_by("-day")
+    p = Paginator(list_music, 39)
     context = {
         'has_next': p.page(page).has_next(),
         'has_previous': p.page(page).has_previous(),

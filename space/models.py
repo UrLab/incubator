@@ -46,13 +46,28 @@ class MusicOfTheDay(models.Model):
     day = models.DateField(auto_now_add=True, unique=True)
 
     KNOWN_PROVIDERS = {
-        'youtube.com': 'youtube',
-        'youtu.be': 'youtube',
-        'soundcloud.com': 'soundcloud',
+        "www.youtube.com": "youtube",
+        "youtu.be": "youtube",
+        "soundcloud.com": "soundcloud",
     }
 
     class Meta:
         verbose_name_plural = "Musics of the day"
+
+    def provider(self):
+        url = urlparse(self.url)
+        return self.KNOWN_PROVIDERS.get(url.netloc)
+
+    def provider_id(self):
+        url = urlparse(self.url)
+        if url.netloc == "www.youtube.com":
+            if not url.path == "/watch":
+                print(url.path)
+                return None
+            qs = parse_qs(url.query)
+            return qs.get("v", [None])[0]
+        elif url.netloc == "youtu.be":
+            return url.path[1:]
 
 
 class PrivateAPIKey(models.Model):
