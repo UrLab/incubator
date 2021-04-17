@@ -18,4 +18,5 @@ RUN pip install -r requirements-prod.txt
 
 COPY . .
 
-ENTRYPOINT ["gunicorn", "incubator.wsgi:application", "--bind", "0.0.0.0:8000"]
+ENTRYPOINT ["./entrypoint.sh"]
+CMD ["gunicorn", "incubator.wsgi:application", "--bind", "0.0.0.0:8000"]
