@@ -52,6 +52,13 @@ export SQL_PORT=<PORT>
 
     pip install paho-mqtt
 
-### Create a user
+## Create a user
 
     ./manage.py createsuperuser
+
+## Adding requirements
+
+To add a requirement, add it with no version constraint (or as little as needed)
+to `requirements.in` (or `requirements-dev.in` or `requirements-prod.in` if it is needed only in prod or dev). Then run `pip-compile` (or `pip-compile requirements-dev.in` or `pip-compile requirements-prod.in`).
+
+Never edit a `requirements-*.txt` file by hand !
