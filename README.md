@@ -1,76 +1,37 @@
-![SHAME](https://travis-ci.org/UrLab/incubator.svg?branch=master)
-# incubator
-Let's bootstrap a new incubator for UrLab ! (in python and with an API this time)
+# UrLab incubator
 
-Quick brainstorming https://pad.lqdn.fr/p/incubator
+The incubator is the main website of UrLab, a Hackerspace located in Brussels, Belgium. A live instance can be found at [urlab.be](https://urlab.be)
 
+![A screenshot of the event page](.github/readme-screenshot.png)
 
-# Install dependencies
+# Features
 
-* Running on Ubuntu :
+The incubator has these main features:
+ * Project showcase: members can pitch and present the projects they are working on at the hackerspace.
+ * Event organisation: everybody can propose to organise an event and people can register their interest
+ * Wiki: this speaks for itself
+ * Ledger: members may pay for physical items (mostly food) at the space with a ledger on the website. This limits the amount of cash circulating in the hackerspace.
+ * A [SpaceAPI](https://spaceapi.io/) implementation.
 
-```
-sudo apt-get install python3-dev python3-setuptools libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev python3-pip
-sudo pip3 install virtualenv
-```
+Bonus features are also available:
+ * Live streaming of our online events (thank you Covid-19)
+ * A list of our "music of the day"
+ * Member badges
+ * A newsletter
 
-* Running on Fedora
+If you are a hackerspace and want to use this code, go ahead !
+But please note that:
+ * We did not implement a member handling system (no membership fee tracking, ...)
+ * The code is quite coupled to UrLab and was not made to be generic
+But if you want to have try, please do !
 
-```
-sudo dnf install libtiff-devel libjpeg-devel libzip-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel python3-devel python3-setuptools python3-virtualenv
-```
+# Development guide
 
+This is a typical Django project, the usual `virtualenv`, `requirements.txt`, ... apply. Please have a look at [`DEVELOPMENT.md`](DEVELOPMENT.md) if you need more information.
 
-### Setup
+# License
 
-```shell
-python3 -m venv ve
-source ve/bin/activate
-pip install -r requirements.txt
-./manage.py migrate
-./manage.py runserver
-```
+This code is under the AGPL licence. In broad, non legally binding, terms: you can do whatever you want with it, but if you modify it, you must redistribute the source and credit the original authors.
 
-### Configuration
-You may configure your local instance by writing a `.env` file containing environment variables.
-
-```bash
-# Env vars. Change the Value by what you want
-export DEBUG=1
-export FAKE_REDIS=1
-export EMAIL_HOST=smtp.tonserver
-export EMAIL_PORT=25
-```
-
-Then by sourcing this file in the shells where you want to run Django.
-
-```shell
-source .env
-```
-
-You can fill the .env file with other stuff as well, i you wish to develop using a psotgres database, you can add these lines and modify them depending on your configuration :
-
-```bash
-export SQL_ENGINE=django.db.backends.postgresql
-export SQL_DATABASE=<DBNAME>
-export SQL_USER=<USERNAME>
-export SQL_HOST=<HOST>
-export SQL_PORT=<PORT>
-```
-
-## MQTT backend
-
-    pip install paho-mqtt
-
-## Create a user
-
-    ./manage.py createsuperuser
-
-## Adding requirements
-
-To add a requirement, add it with no version constraint (or as little as needed)
-to `requirements.in` (or `requirements-dev.in` or `requirements-prod.in` if it is needed only in prod or dev). Then run `pip-compile` (or `pip-compile requirements-dev.in` or `pip-compile requirements-prod.in`).
-
-Never edit a `requirements-*.txt` file by hand !
-
-In addition, we use [Dependabot](https://dependabot.com/) who will automatically submit Pull Requests to upgrade the python packages when a new version is available. This will only change the `requirement-*.txt`.
+# History
+The incubator is born from the frustration of our old website, a Mediawiki instance and was developed in a few days during the 2016 Brussels bombings lockdown. Here is a [quick brainstorming ](https://pad.lqdn.fr/p/incubator) we made at that time.
