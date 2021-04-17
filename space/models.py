@@ -5,6 +5,7 @@ from django.utils import timezone
 # from datetime import datetime
 import re
 import uuid
+from urllib.parse import urlparse, parse_qs
 
 MAC_REGEX = re.compile(r'([a-f0-9]{2}:){5}[a-f0-9]{2}')
 
