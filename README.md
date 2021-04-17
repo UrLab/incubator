@@ -1,6 +1,7 @@
 # UrLab incubator
 
 The incubator is the main website of UrLab, a Hackerspace located in Brussels, Belgium.
+
 A live instance can be found at [urlab.be](https://urlab.be).
 
 ![A screenshot of the event page](.github/readme-screenshot.png)
@@ -29,7 +30,9 @@ But if you want to have try, please do !
 
 # Development guide
 
-This is a typical Django project, the usual `virtualenv`, `requirements.txt`, ... apply. Please have a look at [`DEVELOPMENT.md`](DEVELOPMENT.md) if you need more information.
+This is a typical Django project, the usual `virtualenv`, `requirements.txt`, ... apply.
+
+Please have a look at [`DEVELOPMENT.md`](DEVELOPMENT.md) for an in-depth installation guide as well as help for common tasks.
 
 # License
 
