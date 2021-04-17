@@ -64,8 +64,6 @@ django-sekizai==1.0.0
     # via wiki
 django-simple-history==2.11.0
     # via -r requirements.in
-https://github.com/darklow/django-suit/tarball/v2
-    # via -r requirements.in
 django==3.0.14
     # via
     #   -r requirements.in
