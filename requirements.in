@@ -12,7 +12,6 @@ django-extensions
 django-filter
 django-simple-history
 django-mptt
-https://github.com/darklow/django-suit/tarball/v2
 wiki
 
 # Other Django
