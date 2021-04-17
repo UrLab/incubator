@@ -26,11 +26,11 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt -r requirements-dev.txt
 
       - name: Lint python code
         run: flake8 --ignore=E501,F401,E402,F811,E731,F403 .
-      
+
       - name: Run django checks
         run: ./manage.py check
 

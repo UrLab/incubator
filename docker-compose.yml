@@ -5,10 +5,9 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    command: gunicorn incubator.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - static_volume:/home/app/web/collected_static
-      - media_volume:/home/app/web/media
+      - static_volume:/srv/collected_static
+      - media_volume:/srv/media
     expose:
       - 8000
     env_file:
