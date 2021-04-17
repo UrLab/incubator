@@ -27,6 +27,11 @@ RUN flake8 --ignore=E501,F401,F811,E731,E402,F403 .
 COPY ./requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
+# install prod dependencies
+COPY ./requirements-prod.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements-prod.txt
+
+
 
 #########
 # FINAL #
