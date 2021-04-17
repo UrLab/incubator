@@ -1,6 +1,7 @@
 # UrLab incubator
 
-The incubator is the main website of UrLab, a Hackerspace located in Brussels, Belgium. A live instance can be found at [urlab.be](https://urlab.be)
+The incubator is the main website of UrLab, a Hackerspace located in Brussels, Belgium.
+A live instance can be found at [urlab.be](https://urlab.be).
 
 ![A screenshot of the event page](.github/readme-screenshot.png)
 
@@ -20,6 +21,7 @@ Bonus features are also available:
  * A newsletter
 
 If you are a hackerspace and want to use this code, go ahead !
+
 But please note that:
  * We did not implement a member handling system (no membership fee tracking, ...)
  * The code is quite coupled to UrLab and was not made to be generic
