@@ -1,34 +1,79 @@
+# Developer quickstart
 
+## Setup your machine
 
+The setup you need wildly depends on the OS you are running.
+Here are instructions for some common OSes.
 
+<details>
+ <summary>Ubuntu (or Mint)</summary>
+ ```shell
+ sudo apt-get install python3-dev python3-setuptools libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev python3-pip
+ sudo pip3 install virtualenv
+ ```
+</details>
 
-# Install dependencies
+<details>
+ <summary>Fedora</summary>
+ ```shell
+ sudo dnf install libtiff-devel libjpeg-devel libzip-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel python3-devel python3-setuptools python3-virtualenv
+ ```
+</details>
 
-* Running on Ubuntu :
-
+## Get the code
+```shell
+git clone git@github.com:UrLab/incubator.git
+cd incubator
 ```
-sudo apt-get install python3-dev python3-setuptools libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev python3-pip
-sudo pip3 install virtualenv
-```
 
-* Running on Fedora
+## Initial setup
+Now that you have the code we have to install the required Python dependencies.
 
-```
-sudo dnf install libtiff-devel libjpeg-devel libzip-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel python3-devel python3-setuptools python3-virtualenv
-```
-
-
-### Setup
+We will use a virtualenv for this purpose. This allows us to install specific versions of the package for the incubator and avoid messing up with your system packages. If you don't know what is a virtualenv, it might be good to google it a bit or ask about it to members of the hackerspace, they will be happy to help.
 
 ```shell
 python3 -m venv ve
 source ve/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.txt -r requirements-dev.txt
+```
+
+The last step is to create an empty database with the correct structure.
+```shell
 ./manage.py migrate
+```
+
+## Run the web server
+Now that you are set up, you can fire up the Django web server:
+```shell
 ./manage.py runserver
 ```
 
-### Configuration
+ And have a look at your local instance on [localhost:8000](http://localhost:8000)
+
+
+## Next time
+The next time you want to work on this code, you don't have to repeat the whole list of commands we just typed. You only have to activate the virtualenv (you have to activate it once for every new shell you open)
+
+```shell
+source ve/bin/activate
+```
+
+And then start the server
+```shell
+./manage.py runserver
+```
+
+# How to ?
+
+## Create a admin user
+
+You might need to create a user with admin rights on your local instance. Just run this command:
+
+```shell
+./manage.py createsuperuser
+```
+
+## Change the configuration
 You may configure your local instance by writing a `.env` file containing environment variables.
 
 ```bash
@@ -45,7 +90,7 @@ Then by sourcing this file in the shells where you want to run Django.
 source .env
 ```
 
-You can fill the .env file with other stuff as well, i you wish to develop using a psotgres database, you can add these lines and modify them depending on your configuration :
+You can fill the .env file with other stuff as well, i you wish to develop using a Postgres database (by default, you use SQLite), you can add these lines and modify them depending on your configuration :
 
 ```bash
 export SQL_ENGINE=django.db.backends.postgresql
@@ -56,14 +101,12 @@ export SQL_PORT=<PORT>
 ```
 
 ## MQTT backend
-
+```shell
     pip install paho-mqtt
+```
 
-## Create a user
 
-    ./manage.py createsuperuser
-
-## Adding requirements
+## Adding new requirements
 
 To add a requirement, add it with no version constraint (or as little as needed)
 to `requirements.in` (or `requirements-dev.in` or `requirements-prod.in` if it is needed only in prod or dev). Then run `pip-compile` (or `pip-compile requirements-dev.in` or `pip-compile requirements-prod.in`).
