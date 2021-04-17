@@ -20,10 +20,14 @@ certifi==2019.9.11
     # via
     #   requests
     #   sentry-sdk
+cffi==1.14.5
+    # via cryptography
 chardet==3.0.4
     # via requests
 click==7.1.2
     # via pip-tools
+cryptography==3.4.7
+    # via jwcrypto
 decorator==4.4.1
     # via
     #   ipython
@@ -56,6 +60,8 @@ django-mptt==0.11.0
     #   wiki
 django-nyt==1.1.5
     # via wiki
+django-oauth-toolkit==1.5.0
+    # via -r requirements.in
 django-picklefield==3.0.1
     # via django-constance
 django-resized==0.3.9
@@ -76,6 +82,7 @@ django==3.0.14
     #   django-jsonfield
     #   django-mptt
     #   django-nyt
+    #   django-oauth-toolkit
     #   django-picklefield
     #   django-sekizai
     #   djangorestframework
@@ -94,12 +101,16 @@ ipython==7.9.0
     # via -r requirements.in
 jedi==0.15.1
     # via ipython
+jwcrypto==0.8
+    # via django-oauth-toolkit
 markdown==3.2.2
     # via
     #   -r requirements.in
     #   wiki
 mypy-extensions==0.4.3
     # via -r requirements.in
+oauthlib==3.1.0
+    # via django-oauth-toolkit
 packaging==19.2
     # via bleach
 parso==0.5.1
@@ -120,6 +131,8 @@ prompt-toolkit==2.0.10
     # via ipython
 ptyprocess==0.6.0
     # via pexpect
+pycparser==2.20
+    # via cffi
 pygments==2.7.4
     # via ipython
 pyparsing==2.4.3
@@ -138,6 +151,7 @@ redis==3.3.11
 requests==2.22.0
     # via
     #   -r requirements.in
+    #   django-oauth-toolkit
     #   influxdb
 sentry-sdk==0.17.6
     # via -r requirements.in
@@ -147,6 +161,7 @@ six==1.12.0
     #   django-classy-tags
     #   django-extensions
     #   django-jsonfield
+    #   django-oauth-toolkit
     #   django-simple-history
     #   ics
     #   influxdb
