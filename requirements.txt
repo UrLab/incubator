@@ -8,41 +8,39 @@ appnope==0.1.2
     # via ipython
 arrow==0.14.7
     # via ics
-asgiref==3.2.10
+asgiref==3.3.4
     # via django
-backcall==0.1.0
+backcall==0.2.0
     # via ipython
-beautifulsoup4==4.9.1
+beautifulsoup4==4.9.3
     # via django-bootstrap4
-bleach==3.1.5
+bleach==3.3.0
     # via wiki
-certifi==2019.9.11
+certifi==2020.12.5
     # via
     #   requests
     #   sentry-sdk
-chardet==3.0.4
+chardet==4.0.0
     # via requests
 click==7.1.2
     # via pip-tools
-decorator==4.4.1
-    # via
-    #   ipython
-    #   traitlets
-django-activity-stream==0.9.0
+decorator==5.0.7
+    # via ipython
+django-activity-stream==0.10.0
     # via -r requirements.in
-django-analytical==2.5.0
+django-analytical==3.0.0
     # via -r requirements.in
-django-bootstrap4==2.2.0
+django-bootstrap4==3.0.0
     # via -r requirements.in
-django-classy-tags==1.0.0
+django-classy-tags==2.0.0
     # via django-sekizai
-django-constance[database]==2.7.0
+django-constance[database]==2.8.0
     # via -r requirements.in
-django-crispy-forms==1.8.0
+django-crispy-forms==1.11.2
     # via -r requirements.in
-django-extensions==2.2.5
+django-extensions==3.1.2
     # via -r requirements.in
-django-filter==2.3.0
+django-filter==2.4.0
     # via -r requirements.in
 django-js-asset==1.2.2
     # via django-mptt
@@ -54,22 +52,22 @@ django-mptt==0.11.0
     # via
     #   -r requirements.in
     #   wiki
-django-nyt==1.1.5
+django-nyt==1.2
     # via wiki
 django-picklefield==3.0.1
     # via django-constance
-django-resized==0.3.9
+django-resized==0.3.11
     # via -r requirements.in
-django-sekizai==1.0.0
+django-sekizai==2.0.0
     # via wiki
-django-simple-history==2.11.0
+django-simple-history==2.12.0
     # via -r requirements.in
-django==3.0.14
+django==3.2
     # via
     #   -r requirements.in
-    #   django-analytical
     #   django-bootstrap4
     #   django-classy-tags
+    #   django-extensions
     #   django-filter
     #   django-jsonfield
     #   django-mptt
@@ -78,103 +76,100 @@ django==3.0.14
     #   django-sekizai
     #   djangorestframework
     #   wiki
-djangorestframework==3.11.2
+djangorestframework==3.12.4
     # via -r requirements.in
 ics==0.7
     # via -r requirements.in
-idna==2.8
+idna==2.10
     # via requests
-influxdb==5.2.3
+influxdb==5.3.1
     # via -r requirements.in
 ipython-genutils==0.2.0
     # via traitlets
-ipython==7.9.0
+ipython==7.22.0
     # via -r requirements.in
-jedi==0.15.1
+jedi==0.18.0
     # via ipython
 markdown==3.2.2
     # via
     #   -r requirements.in
     #   wiki
+msgpack==1.0.2
+    # via influxdb
 mypy-extensions==0.4.3
     # via -r requirements.in
-packaging==19.2
+packaging==20.9
     # via bleach
-parso==0.5.1
+parso==0.8.2
     # via jedi
 pep517==0.10.0
     # via pip-tools
-pexpect==4.7.0
+pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-pillow==8.1.1
+pillow==8.2.0
     # via
     #   -r requirements.in
     #   wiki
 pip-tools==6.1.0
     # via -r requirements.in
-prompt-toolkit==2.0.10
+prompt-toolkit==3.0.18
     # via ipython
-ptyprocess==0.6.0
+ptyprocess==0.7.0
     # via pexpect
-pygments==2.7.4
+pygments==2.8.1
     # via ipython
-pyparsing==2.4.3
+pyparsing==2.4.7
     # via packaging
 python-dateutil==2.8.1
     # via
     #   arrow
     #   ics
     #   influxdb
-pytz==2019.3
+pytz==2021.1
     # via
     #   django
     #   influxdb
-redis==3.3.11
+redis==3.5.3
     # via -r requirements.in
-requests==2.22.0
+requests==2.25.1
     # via
     #   -r requirements.in
     #   influxdb
-sentry-sdk==0.17.6
+sentry-sdk==1.0.0
     # via -r requirements.in
-six==1.12.0
+six==1.15.0
     # via
     #   bleach
-    #   django-classy-tags
-    #   django-extensions
     #   django-jsonfield
     #   django-simple-history
     #   ics
     #   influxdb
-    #   packaging
-    #   prompt-toolkit
     #   python-dateutil
-    #   traitlets
-sorl-thumbnail==12.6.3
+sorl-thumbnail==12.7.0
     # via wiki
-soupsieve==2.0.1
+soupsieve==2.2.1
     # via beautifulsoup4
-sqlparse==0.3.0
+sqlparse==0.4.1
     # via django
-tatsu==4.4.0
+tatsu==5.6.1
     # via ics
-toml==0.10.1
+toml==0.10.2
     # via pep517
-traitlets==4.3.3
+traitlets==5.0.5
     # via ipython
 typing-extensions==3.7.4.3
     # via -r requirements.in
-urllib3==1.25.6
+urllib3==1.26.4
     # via
     #   requests
     #   sentry-sdk
-wcwidth==0.1.7
+wcwidth==0.2.5
     # via prompt-toolkit
 webencodings==0.5.1
     # via bleach
-wiki==0.6
+wiki==0.7.5
     # via -r requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:
