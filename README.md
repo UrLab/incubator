@@ -23,19 +23,29 @@ sudo dnf install libtiff-devel libjpeg-devel libzip-devel freetype-devel lcms2-d
 
 ### Setup
 
-```bash
-# Env vars. Change the Value by what you want
-echo "export DEBUG=1" >> .env
-echo "export FAKE_REDIS=1" >> .env
-echo "export EMAIL_HOST=smtp.tonserver" >> .env
-echo "export EMAIL_PORT=25" >> .env
-
-python3 -m venv ve # or virtualenv-3 -p python3 ve3
+```shell
+python3 -m venv ve
 source ve/bin/activate
-source .env
-pip install -r requirements.txt -r requirements-dev.txt
+pip install -r requirements.txt
 ./manage.py migrate
 ./manage.py runserver
+```
+
+### Configuration
+You may configure your local instance by writing a `.env` file containing environment variables.
+
+```bash
+# Env vars. Change the Value by what you want
+export DEBUG=1
+export FAKE_REDIS=1
+export EMAIL_HOST=smtp.tonserver
+export EMAIL_PORT=25
+```
+
+Then by sourcing this file in the shells where you want to run Django.
+
+```shell
+source .env
 ```
 
 You can fill the .env file with other stuff as well, i you wish to develop using a psotgres database, you can add these lines and modify them depending on your configuration :
