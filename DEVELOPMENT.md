@@ -8,7 +8,7 @@ Here are instructions for some common OSes.
 <details>
  <summary>Ubuntu (or Mint)</summary>
  ```shell
- sudo apt-get install python3-dev python3-setuptools libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev python3-pip
+ sudo apt-get install python3-dev python3-setuptools python3-pip
  sudo pip3 install virtualenv
  ```
 </details>
@@ -16,7 +16,15 @@ Here are instructions for some common OSes.
 <details>
  <summary>Fedora</summary>
  ```shell
- sudo dnf install libtiff-devel libjpeg-devel libzip-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel python3-devel python3-setuptools python3-virtualenv
+ sudo dnf install python3-devel python3-setuptools python3-virtualenv
+ ```
+</details>
+
+<details>
+ <summary>MacOS</summary>
+ ```shell
+ brew install python3
+ pip3 install virtualenv 
  ```
 </details>
 
