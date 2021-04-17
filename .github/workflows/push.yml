@@ -39,3 +39,12 @@ jobs:
 
       - name: Run tests
         run: FAKE_REDIS=1 DEBUG=1 py.test
+
+  docker:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build docker image
+        run: docker build -t urlab/incubator .
