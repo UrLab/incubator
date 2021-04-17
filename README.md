@@ -62,3 +62,5 @@ To add a requirement, add it with no version constraint (or as little as needed)
 to `requirements.in` (or `requirements-dev.in` or `requirements-prod.in` if it is needed only in prod or dev). Then run `pip-compile` (or `pip-compile requirements-dev.in` or `pip-compile requirements-prod.in`).
 
 Never edit a `requirements-*.txt` file by hand !
+
+In addition, we use [Dependabot](https://dependabot.com/) who will automatically submit Pull Requests to upgrade the python packages when a new version is available. This will only change the `requirement-*.txt`.
