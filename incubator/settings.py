@@ -27,10 +27,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = os.environ.get("SECRET_KEY", "vairysecrette")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = int(os.environ.get("DEBUG", 0))  # Must export DEBUG in dev (might be temporary though)
+DEBUG = bool(int(os.environ.get("DEBUG", "1")))
 
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="127.0.0.1").split(" ")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,::1,localhost").split(
+    ","
+)
 SENTRY_DSN = os.environ.get("SENTRY_DSN", "")
 
 if SENTRY_DSN != "":
@@ -223,7 +225,7 @@ ROOT_URL = "https://urlab.be"
 
 BANK_ACCOUNT = "BE66 0017 6764 5043"
 
-REDIS_HOST = "rainbowdash.lan"
+REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
 REDIS_PORT = 6379
 FAKE_REDIS = int(os.environ.get("FAKE_REDIS", 0))
 
@@ -313,6 +315,6 @@ IGNORE_LIST_RE = [
     for prefix in MAC_RANGES
 ]
 
-EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
+EMAIL_HOST = os.environ.get("EMAIL_HOST", "localhost")
 
 EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 25))
