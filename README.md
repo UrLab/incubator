@@ -20,15 +20,8 @@ sudo pip3 install virtualenv
 sudo dnf install libtiff-devel libjpeg-devel libzip-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel python3-devel python3-setuptools python3-virtualenv
 ```
 
-* Running on Mac OS
-
-```
-brew install postgresql
-```
 
 ### Setup
-
-**Be careful as this may not work with python3.9 yet**
 
 ```bash
 # Env vars. Change the Value by what you want
@@ -40,7 +33,7 @@ echo "export EMAIL_PORT=25" >> .env
 python3 -m venv ve # or virtualenv-3 -p python3 ve3
 source ve/bin/activate
 source .env
-pip install -r requirements.txt
+pip install -r requirements.txt -r requirements-dev.txt
 ./manage.py migrate
 ./manage.py runserver
 ```
@@ -62,7 +55,3 @@ export SQL_PORT=<PORT>
 ### Create a user
 
     ./manage.py createsuperuser
-
-# View / Edit Notebooks
-
-    ./manage.py shell_plus --notebook
