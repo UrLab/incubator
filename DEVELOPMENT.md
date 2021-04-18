@@ -7,25 +7,31 @@ Here are instructions for some common OSes.
 
 <details>
  <summary>Ubuntu (or Mint)</summary>
+ 
  ```shell
  sudo apt-get install python3-dev python3-setuptools python3-pip
  sudo pip3 install virtualenv
  ```
+ 
 </details>
 
 <details>
  <summary>Fedora</summary>
+ 
  ```shell
  sudo dnf install python3-devel python3-setuptools python3-virtualenv
  ```
+ 
 </details>
 
 <details>
  <summary>MacOS</summary>
+ 
  ```shell
  brew install python3
  pip3 install virtualenv 
  ```
+ 
 </details>
 
 ## Get the code
