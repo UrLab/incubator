@@ -4,27 +4,46 @@
 {% load humanize %}
 
 {% block content %}
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Lien</th>
-      <th scope="col">Pseudo</th>
-      <th scope="col">Date</th>
-    </tr>
-  </thead>
-  <tbody>
+<nav aria-label="breadcrumb">
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/">UrLab</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Music of the day</li>
+</ol>
+</nav>
+<h1>Music of the day <small>En direct de notre chan irc !</small></h1>
+<div class="d-flex flex-row flex-wrap">
     {% for music in page %}
-        <tr>
-        <th scope="row">{{music.id}}</th>
-        <td><a href={{music.url}}>{{music.url}}</a></td>
-        <td>{{music.irc_nick}}</td>
-        <td>@{{music.day}}</td>
-        </tr>
+        <div class="p-2">
+          <div class="card" style="width: 22rem;">
+            {% if music.provider == 'youtube' %}
+              <iframe
+                class="card-img-top"
+                src="https://www.youtube-nocookie.com/embed/{{music.provider_id}}"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+              ></iframe>
+            {% else %}
+            <img class="card-img-top" style="object-fit: cover;" src="/static/img/missing-motd.jpg" height=150 alt="Card image cap">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">
+                <a href={{music.url}}>
+                  {% if music.provider %}
+                    {{music.provider|capfirst}}
+                  {% else %}
+                    {{music.url}}
+                  {% endif %}
+                </a>
+              </h5>
+              <p class="card-text">
+                Par {{music.irc_nick}} le {{music.day}}
+              </p>
+            </div>
+          </div>
+        </div>
     {% endfor %}
-  </tbody>
-</table>
-
+</div>
 <nav aria-label="Page navigation example" style="margin-top: 2em">
   <ul class="pagination justify-content-center">
 
@@ -65,4 +84,5 @@
     </li>
   </ul>
 </nav>
+<br/>
 {% endblock %}
