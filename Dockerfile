@@ -6,7 +6,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 RUN apt update
-RUN apt install -y libpq-dev build-essential
+RUN apt install -y libpq-dev build-essential netcat
 
 RUN pip install --upgrade pip
 
