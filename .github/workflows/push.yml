@@ -12,16 +12,12 @@ jobs:
   build:
     runs-on: ubuntu-20.04
 
-    strategy:
-      matrix:
-        pyversion: [3.8]
-
     steps:
       - uses: actions/checkout@v2
 
       - uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.pyversion }}
+          python-version: 3.9
 
       - name: Install Python dependencies
         run: |
