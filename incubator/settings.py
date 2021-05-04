@@ -196,7 +196,7 @@ BANK_ACCOUNT = "BE66 0017 6764 5043"
 
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
 REDIS_PORT = 6379
-FAKE_REDIS = int(os.environ.get("FAKE_REDIS", 1))
+FAKE_REDIS = int(os.environ.get("FAKE_REDIS", 0))
 
 USE_WAMP = False
 CROSSBAR_URL = "http://localhost:8080/publish"
