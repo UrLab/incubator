@@ -3,13 +3,14 @@ from django.contrib.auth.decorators import login_required
 from .views import (
     EventDetailView, EventAddView, EventEditView, MeetingAddView,
     MeetingEditView, events_home, ical, not_interested, interested, import_pad,
-    export_pad, add_point_to_next_meeting, attending, not_attending,
+    export_pad, add_point_to_next_meeting, attending, not_attending, talks
 )
 
 urlpatterns = [
     path('', events_home, name='events_home'),
     path('add', EventAddView.as_view(), name='add_event'),
     path('urlab.ics', ical, name='ical'),
+    path('talks/', talks, name='talks'),
     path('edit/<int:pk>', EventEditView.as_view(), name='edit_event'),
     path('import_pad/<int:pk>', import_pad, name='import_pad'),
     path('export_pad/<int:pk>', export_pad, name='export_pad'),
