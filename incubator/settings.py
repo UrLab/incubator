@@ -59,7 +59,6 @@ INSTALLED_APPS = (
     "rest_framework",
     "django_filters",
     "crispy_forms",
-    "analytical",
     "constance",
     "constance.backends.database",
     "simple_history",
@@ -228,9 +227,6 @@ WIKI_ATTACHMENTS_EXTENSIONS = (
 )
 
 ACTSTREAM_SETTINGS = {"USE_JSONFIELD": True}
-
-PIWIK_DOMAIN_PATH = "piwik.urlab.be"
-PIWIK_SITE_ID = "2"
 
 MINIMAL_MAIL_APPROVERS = 3
 

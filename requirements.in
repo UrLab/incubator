@@ -4,7 +4,6 @@ django>=3
 # Main Django apps
 djangorestframework
 django-activity-stream
-django-analytical
 django-bootstrap4
 django-constance[database]
 django-crispy-forms
