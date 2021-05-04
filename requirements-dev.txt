@@ -4,7 +4,7 @@
 #
 #    pip-compile requirements-dev.in
 #
-astroid==2.5.3
+astroid==2.5.6
     # via pylint
 attrs==20.3.0
     # via pytest
@@ -38,7 +38,7 @@ pyflakes==2.3.1
     # via
     #   -r requirements-dev.in
     #   flake8
-pylint==2.7.4
+pylint==2.8.2
     # via -r requirements-dev.in
 pyparsing==2.4.7
     # via
