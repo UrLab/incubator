@@ -28,6 +28,7 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from constance import config as dyn_config
 
 
 class EventAddView(PermissionRequiredMixin, CreateView):
@@ -77,6 +78,7 @@ def talks(request):
             'live': events.filter(start__lt=cutoff + timedelta(minutes=30), stop__gt=cutoff - timedelta(hours=2)).first(),
             'future_events': future_events,
             'past_events': past_events,
+            'stream_url': dyn_config.LIVESTREAM_URL,
         }
     )
 

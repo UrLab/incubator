@@ -115,7 +115,7 @@
       let videoElement = document.getElementById('videoElement');
       let flvPlayer = flvjs.createPlayer({
         type: 'flv',
-        url: 'https://stream.okeso.net/live/test.flv'
+        url: '{{stream_url}}'
       });
       flvPlayer.attachMediaElement(videoElement);
       flvPlayer.load();
