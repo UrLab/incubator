@@ -33,24 +33,25 @@
     <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z"></path>
     </svg>Unmute</button>
   </div>
-  <div id="live-alternative" class="row mb-5">
-    <div class="col-md-6 col-sm-12">
-      <img src="{% static 'img/waiting.gif' %}" />
+  {% if live %}
+    <div id="live-alternative" class="row mb-5">
+      <div class="col-md-6 col-sm-12">
+        <img src="{% static 'img/waiting.gif' %}" />
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <h1>{{live.title}}</h1>
+        <p>
+          Le live de la conférence va bientôt commencer et sera disponible sur cette page.
+          Vous pouvez aussi le regarder sur notre
+          <a href="https://twitch.tv/urlab">chaine Twitch</a>.
+        </p>
+        <p>
+          La conférence devrait commencer aux alentours de {{live.start|time}}.
+        </p>
+        <a href="{% url 'view_event' live.pk %}" class="btn btn-primary">Programme des talks</a>
+      </div>
     </div>
-    <div class="col-md-6 col-sm-12">
-      <h1>{{live.title}}</h1>
-      <p>
-        Le live de la conférence va bientôt commencer et sera disponible sur cette page.
-        Vous pouvez aussi le regarder sur notre
-        <a href="https://twitch.tv/urlab">chaine Twitch</a>.
-      </p>
-      <p>
-        La conférence devrait commencer aux alentours de {{live.start|time}}.
-      </p>
-      <a href="{% url 'view_event' live.pk %}" class="btn btn-primary">Programme des talks</a>
-    </div>
-
-  </div>
+  {% endif %}
 
 {% if future_events %}
   <h1>Prochaine{{future_events|pluralize}} conférence{{future_events|pluralize}}</h1>
@@ -86,6 +87,7 @@
 {% endif %}
 
 <h1>Conférences organisées par UrLab</h1>
+<p>UrLab organise régulièrement des conférences</p>
 <div class="row">
   {% for event in past_events %}
     <div class="col-lg-3 col-sm-6">
