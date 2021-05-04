@@ -1,6 +1,5 @@
 {% load static %}
 {% load bootstrap4 %}
-{% load analytical %}
 {% load activelink %}
 
 <!DOCTYPE html>
@@ -9,7 +8,6 @@
 
 <head
     prefix="og: http://ogp.me/ns# place: http://ogp.me/ns/place# article: http://ogp.me/ns/article# fb: http://ogp.me/ns/fb#">
-    {% analytical_head_top %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% block bootstrapcss %}
@@ -36,11 +34,9 @@
     <meta property="place:location:latitude" content="50.8129409" />
     <meta property="place:location:longitude" content="4.3844292" />
     {% endblock %}
-    {% analytical_head_bottom %}
 </head>
 
 <body class="base-body">
-    {% analytical_body_top %}
     {% if request.user.is_authenticated and request.user.username == "SupayrPoney" %}
     <a href="http://www.reactivemanifesto.org/"> <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
             src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-red-right.png"> </a>
@@ -186,7 +182,6 @@
         </div>
     </footer>
     <script src="{% static "js/navbar.js" %}"></script>
-    {% analytical_body_bottom %}
 </body>
 
 </html>
