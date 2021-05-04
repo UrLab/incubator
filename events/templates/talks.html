@@ -24,7 +24,7 @@
 {% block content %}
 
   <script src="{% static 'js/flv.min.js' %}"></script>
-  <div id="live-stream" style="display: none">
+  <div id="live-stream" style="display: none" class="mb-5">
     <h1>Live stream</h1>
     <video id="videoElement" width="100%" controls autoplay muted></video>
       <button type="button" class="action-unmute btn btn-success">
@@ -112,14 +112,28 @@
 
   <script>
     if (flvjs.isSupported()) {
-      let videoElement = document.getElementById('videoElement');
-      let flvPlayer = flvjs.createPlayer({
-        type: 'flv',
-        url: '{{stream_url}}'
-      });
-      flvPlayer.attachMediaElement(videoElement);
-      flvPlayer.load();
-      flvPlayer.play();
+
+      $.ajax('{{stream_url}}', {
+        method: 'HEAD',
+        timeout: 5000,
+      }).done(function() {
+        let videoElement = document.getElementById('videoElement');
+        let flvPlayer = flvjs.createPlayer({
+          type: 'flv',
+          url: '{{stream_url}}'
+        });
+        flvPlayer.attachMediaElement(videoElement);
+        flvPlayer.load();
+        flvPlayer.play();
+
+        $('#live-stream').show();
+        $('#live-alternative').hide();
+      })
+      .fail(function() {
+        console.log("Livestream is not available");
+      })
+
+
 
       Array.from(document.getElementsByClassName('action-unmute')
       ).forEach(element => element.addEventListener('click', function (){
