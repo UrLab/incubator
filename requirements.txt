@@ -28,8 +28,6 @@ decorator==5.0.7
     # via ipython
 django-activity-stream==0.10.0
     # via -r requirements.in
-django-analytical==3.0.0
-    # via -r requirements.in
 django-bootstrap4==3.0.1
     # via -r requirements.in
 django-classy-tags==2.0.0
