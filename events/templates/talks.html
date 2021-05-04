@@ -70,15 +70,15 @@
         <div class="col-md-8">
           <div class="card-body">
             <h5 class="card-title">{{event.title}}</h5>
-            <p class="card-text">{{event.description}}</p>
             <p class="card-text">
               <ul>
-                <li>Talk1</li>
-                <li>Talk1</li>
+                {% for talk in event.talks %}
+                  <li>{{talk}}</li>
+                {% endfor %}
               </ul>
             </p>
             <p class="card-text"><small class="text-muted">{{event.start}}</small></p>
-            <a href="{% url 'view_event' event.pk %}" class="btn btn-primary">Programme</a>
+            <a href="{% url 'view_event' event.pk %}" class="btn btn-primary">Description des talks</a>
           </div>
         </div>
       </div>
