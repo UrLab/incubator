@@ -111,37 +111,43 @@
 </div>
 
   <script>
-    if (flvjs.isSupported()) {
+    function enableStream() {
+      if (flvjs.isSupported()) {
 
-      $.ajax('{{stream_url}}', {
-        method: 'HEAD',
-        timeout: 5000,
-      }).done(function() {
-        let videoElement = document.getElementById('videoElement');
-        let flvPlayer = flvjs.createPlayer({
-          type: 'flv',
-          url: '{{stream_url}}'
-        });
-        flvPlayer.attachMediaElement(videoElement);
-        flvPlayer.load();
-        flvPlayer.play();
+        $.ajax('{{stream_url}}', {
+          method: 'HEAD',
+          timeout: 5000,
+        }).done(function() {
+          let videoElement = document.getElementById('videoElement');
+          let flvPlayer = flvjs.createPlayer({
+            type: 'flv',
+            url: '{{stream_url}}'
+          });
+          flvPlayer.attachMediaElement(videoElement);
+          flvPlayer.load();
+          flvPlayer.play();
 
-        $('#live-stream').show();
-        $('#live-alternative').hide();
-      })
-      .fail(function() {
-        console.log("Livestream is not available");
-      })
+          $('#live-stream').show();
+          $('#live-alternative').hide();
 
+          Array.from(document.getElementsByClassName('action-unmute')
+          ).forEach(element => element.addEventListener('click', function (){
+              flvPlayer.muted = false;
+              element.style.display = 'none';
+            }
+          ));
 
-
-      Array.from(document.getElementsByClassName('action-unmute')
-      ).forEach(element => element.addEventListener('click', function (){
-          flvPlayer.muted = false;
-          element.style.display = 'none';
-        }
-      ));
+        })
+        .fail(function() {
+          console.log("Livestream is not available");
+          setTimeout(function(){
+             console.log("Retrying stream loading...");
+             enableStream();
+          }, 1000 * 60);
+        })
+      }
     }
+    enableStream();
   </script>
 
 {% endblock %}
