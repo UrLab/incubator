@@ -4,8 +4,6 @@
 #
 #    pip-compile
 #
-appnope==0.1.2
-    # via ipython
 arrow==0.14.7
     # via ics
 asgiref==3.3.4
@@ -60,7 +58,7 @@ django-resized==0.3.11
     # via -r requirements.in
 django-sekizai==2.0.0
     # via wiki
-django-simple-history==2.12.0
+django-simple-history==3.0.0
     # via -r requirements.in
 django==3.2.1
     # via
@@ -143,7 +141,6 @@ six==1.15.0
     # via
     #   bleach
     #   django-jsonfield
-    #   django-simple-history
     #   ics
     #   influxdb
     #   python-dateutil
