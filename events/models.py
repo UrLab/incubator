@@ -64,10 +64,8 @@ class Event(models.Model):
     def talks(self):
         if not self.is_talk:
             return None
-
         lines = self.description.split("\n")
         return [x.strip().strip("#") for x in lines if x.strip().startswith("##")]
-
 
     class Meta:
         verbose_name = "Événement"
