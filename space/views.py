@@ -172,7 +172,7 @@ def spaceapi(request):
             "ml": "hackulb@cerkinfo.be",
             "twitter": "@UrLabBxl",
             "facebook": "https://www.facebook.com/urlabbxl",
-            "irc": "irc://chat.freenode.net#urlab",
+            "irc": "irc://irc.libera.chat#urlab",
             "email": "contact@urlab.be",
             "phone": "+3226504967",
             "keymasters": keymasters,
