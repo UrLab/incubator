@@ -3,6 +3,8 @@ from datetime import datetime
 from django.utils.safestring import mark_safe
 from django.contrib import admin
 from django.contrib import auth
+from django.urls import reverse
+from django.utils.html import format_html
 
 from .models import User, Membership
 from .utils import current_year
@@ -68,6 +70,11 @@ class UserAdmin(admin.ModelAdmin):
     groups.allow_tags = True
     groups.short_description = u'Membre des groupes'
 
+    def change_password(self, user):
+        url = reverse("admin_change_passwd", args=(user.id,))
+        return format_html(f"<a href='{url}'>Changer le mot de passe</a>")
+    change_password.allow_tags = True
+
     def is_member(self, user):
         """ We suppose each asbl year starts the 15th of june and ends the 14th of june of the next year """
 
@@ -93,6 +100,7 @@ class UserAdmin(admin.ModelAdmin):
 
     inlines = (MacAdressInline, MembershipInline)
     filter_horizontal = ('groups', 'user_permissions')
+    readonly_fields = ('change_password', )
 
     fieldsets = (
         (None, {
@@ -104,7 +112,7 @@ class UserAdmin(admin.ModelAdmin):
             )
         }),
         (None, {
-            'fields': ('password', 'last_login')
+            'fields': ('change_password', 'last_login')
         }),
         ('Permissions', {
             'classes': ('collapse',),

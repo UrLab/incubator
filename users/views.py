@@ -18,7 +18,7 @@ from users.forms import UserCreationForm
 
 from .serializers import UserSerializer
 from .models import User
-from .forms import UserForm, SpendForm, TopForm, TransferForm, ProductBuyForm, ChangePasswordForm
+from .forms import UserForm, SpendForm, TopForm, TransferForm, ProductBuyForm, ChangePasswordForm, AdminChangePasswordForm
 from .decorators import permission_required
 from stock.models import Product, TransferTransaction, TopupTransaction, ProductTransaction, MiscTransaction
 
@@ -209,6 +209,24 @@ def change_passwd(request):
     }
     return render(request, "change_passwd.html", context)
 
+
+def admin_change_passwd(request, id):
+    user = User.objects.get(id=id)
+    if request.method == "POST":
+        form = AdminChangePasswordForm(request.POST)
+        if form.is_valid():
+            user.set_password(form.cleaned_data['new_password'])
+            user.save()
+            messages.add_message(request, messages.INFO, "Le mot de passe a bien ete modifier")
+            return HttpResponseRedirect("/admin")
+        else:
+            messages.add_message(request, messages.ERROR, "Les mots de passe ne sont pas identiques!")
+
+    context = {
+        "form": AdminChangePasswordForm(),
+        "user_id": id
+    }
+    return render(request, "admin_change_passwd.html", context)
 
 class UserEditView(UpdateView):
     form_class = UserForm
