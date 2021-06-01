@@ -4,8 +4,6 @@
 #
 #    pip-compile
 #
-appnope==0.1.2
-    # via ipython
 arrow==0.14.7
     # via ics
 asgiref==3.3.4
@@ -84,7 +82,7 @@ influxdb==5.3.1
     # via -r requirements.in
 ipython-genutils==0.2.0
     # via traitlets
-ipython==7.23.0
+ipython==7.24.0
     # via -r requirements.in
 jedi==0.18.0
     # via ipython
