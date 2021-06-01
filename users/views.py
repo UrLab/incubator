@@ -228,6 +228,7 @@ def admin_change_passwd(request, id):
     }
     return render(request, "admin_change_passwd.html", context)
 
+
 class UserEditView(UpdateView):
     form_class = UserForm
     template_name = 'user_form.html'
