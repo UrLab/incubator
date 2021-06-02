@@ -4,8 +4,6 @@
 #
 #    pip-compile
 #
-appnope==0.1.2
-    # via ipython
 arrow==0.14.7
     # via ics
 asgiref==3.3.4
@@ -162,7 +160,7 @@ traitlets==5.0.5
     #   matplotlib-inline
 typing-extensions==3.10.0.0
     # via -r requirements.in
-urllib3==1.26.4
+urllib3==1.26.5
     # via
     #   requests
     #   sentry-sdk
