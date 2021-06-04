@@ -1,6 +1,24 @@
 {% load humanize %}
 {% load bootstrap4 %}
 
+<style type="text/css">
+    .filter-green-hover:hover {
+        filter: invert(62%) sepia(19%) saturate(2436%) hue-rotate(79deg) brightness(92%) contrast(78%);
+    }
+
+    .filter-red-hover:hover {
+        filter: invert(19%) sepia(66%) saturate(3735%) hue-rotate(350deg) brightness(90%) contrast(96%);
+    }
+
+    .filter-green{
+        filter: invert(62%) sepia(19%) saturate(2436%) hue-rotate(79deg) brightness(92%) contrast(78%);
+    }
+
+    .filter-red{
+        filter: invert(19%) sepia(66%) saturate(3735%) hue-rotate(350deg) brightness(90%) contrast(96%);
+    }
+</style>
+
 <h2>Commentaires</h2>
 {% for comment in project.comments.all %}
 <div class="card mb-2">
@@ -10,8 +28,8 @@
     <div class="card-body">
         <div class="row">
             <div class="col-sm-1">
-                <a href="#" style="text-decoration: none;">
-                    <svg class="filter-green" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+                <a href="{% url 'upvote' project.id comment.id%}" style="text-decoration: none;">
+                    <svg class="{% if request.user in comment.up_vote_user.all %}filter-green{% endif %} filter-green-hover" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
                         height="24">
                         <path fill-rule="evenodd"
                             d="M18.655 10.405a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06l4.97-4.97v14.44a.75.75 0 001.5 0V5.435l4.97 4.97a.75.75 0 001.06 0z">
@@ -20,8 +38,8 @@
                     <span class="badge badge-light">{{comment.up_vote}}</span>
                 </a>
                 </br>
-                <a href="#" style="text-decoration: none;">
-                    <svg class="filter-red" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+                <a href="{% url 'downvote' project.id comment.id%}" style="text-decoration: none;">
+                    <svg class="{% if request.user in comment.down_vote_user.all %}filter-red{% endif %} filter-red-hover" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
                         height="24">
                         <path fill-rule="evenodd"
                             d="M4.97 13.22a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 10-1.06-1.06l-4.97 4.97V3.75a.75.75 0 00-1.5 0v14.44l-4.97-4.97a.75.75 0 00-1.06 0z">

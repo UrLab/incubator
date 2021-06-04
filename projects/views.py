@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import viewsets
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormMixin
@@ -16,7 +16,7 @@ from users.decorators import permission_required
 from users.mixins import PermissionRequiredMixin
 
 from .serializers import ProjectSerializer
-from .models import Project, Task
+from .models import Project, Task, Comment
 from .forms import ProjectForm, CommentForm
 
 
@@ -62,25 +62,42 @@ class ProjectDetailView(FormMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
-        print(self.request.user)
         context['form'] = CommentForm(initial={'project': self.object, 'author': self.request.user})
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
-        print(form)
         if form.is_valid():
-            print('valid')
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
     def form_valid(self, form):
-        print(form)
-        print('testcvxv')
         form.save()
         return super(ProjectDetailView, self).form_valid(form)
+
+
+def upvote_comment(request, project_id, comment_id):
+    user = request.user
+    comment = Comment.objects.get(id=comment_id)
+
+    comment.up_vote_user.add(user)
+    if user in comment.down_vote_user.all():
+        comment.down_vote_user.remove(user)
+
+    return redirect(reverse('view_project', kwargs={'pk': project_id}))
+
+
+def downvote_comment(request, project_id, comment_id):
+    user = request.user
+    comment = Comment.objects.get(id=comment_id)
+
+    comment.down_vote_user.add(user)
+    if user in comment.up_vote_user.all():
+        comment.up_vote_user.remove(user)
+
+    return redirect(reverse('view_project', kwargs={'pk': project_id}))
 
 
 def clusters_of(seq, size):
