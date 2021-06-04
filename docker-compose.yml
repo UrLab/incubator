@@ -2,9 +2,7 @@ version: '3.7'
 
 services:
   web:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    image: docker.pkg.github.com/UrLab/incubator:latest
     volumes:
       - static_volume:/srv/collected_static
       - media_volume:/srv/media
