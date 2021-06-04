@@ -1,0 +1,46 @@
+{% load humanize %}
+{% load bootstrap4 %}
+
+<h2>Commentaires</h2>
+{% for comment in project.comments.all %}
+<div class="card mb-2">
+    <div class="card-header">
+        {{comment.author}}
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-1">
+                <a href="#" style="text-decoration: none;">
+                    <svg class="filter-green" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+                        height="24">
+                        <path fill-rule="evenodd"
+                            d="M18.655 10.405a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06l4.97-4.97v14.44a.75.75 0 001.5 0V5.435l4.97 4.97a.75.75 0 001.06 0z">
+                        </path>
+                    </svg>
+                    <span class="badge badge-light">{{comment.up_vote}}</span>
+                </a>
+                </br>
+                <a href="#" style="text-decoration: none;">
+                    <svg class="filter-red" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+                        height="24">
+                        <path fill-rule="evenodd"
+                            d="M4.97 13.22a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 10-1.06-1.06l-4.97 4.97V3.75a.75.75 0 00-1.5 0v14.44l-4.97-4.97a.75.75 0 00-1.06 0z">
+                        </path>
+                    </svg>
+                    <span class="badge badge-light">{{comment.down_vote}}</span>
+                </a>
+            </div>
+            <div class="col">
+                <p class="card-text">{{comment.content}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<form method="POST" class="post-form">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button type="submit" class="save btn btn-primary">Commenter</button>
+    {% endbuttons %}
+</form>
