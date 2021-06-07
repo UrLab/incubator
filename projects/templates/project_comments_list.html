@@ -23,7 +23,7 @@
 {% for comment in project.comments.all %}
 <div class="card mb-2">
     <div class="card-header">
-        {{comment.author}}
+        {{comment.created |date:"d/m/y"}} - {{comment.author}}:
     </div>
     <div class="card-body">
         <div class="row">
