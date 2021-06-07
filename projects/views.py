@@ -74,7 +74,7 @@ class ProjectDetailView(FormMixin, DetailView):
             return self.form_invalid(form)
 
     def form_valid(self, form):
-        form.save()
+        action.send(self.request.user, verb='a commenté', action_object=self.object)
         return super(ProjectDetailView, self).form_valid(form)
 
 
