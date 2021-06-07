@@ -315,3 +315,5 @@ IGNORE_LIST_RE = [re.compile(prefix + r"(:[0-9a-f]{2}){3}") for prefix in MAC_RA
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "localhost")
 
 EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 25))
+
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "contact@urlab.be")

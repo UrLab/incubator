@@ -17,4 +17,5 @@ urlpatterns = [
     path('register/', views.RegisterView.as_view(), name="register"),
     path('debtmails/', views.send_debt_mail, name="debt_mail"),
     path('passwd/', login_required(views.change_passwd), name="chg_passwd"),
+    path('admin/user/<int:id>/change_password', views.admin_change_passwd, name="admin_change_passwd"),
 ]
