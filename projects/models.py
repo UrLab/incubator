@@ -85,3 +85,23 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Comment(models.Model):
+    project = models.ForeignKey(Project, related_name='comments', verbose_name='Projet', on_delete=models.CASCADE)
+
+    author = models.ForeignKey(User, verbose_name='Auteur', on_delete=models.DO_NOTHING)
+    content = models.TextField(verbose_name='Commentaire')
+
+    created = models.DateTimeField(auto_now_add=True)
+
+    up_vote_user = models.ManyToManyField(User, related_name='up_vote', verbose_name='Like')
+    down_vote_user = models.ManyToManyField(User, related_name='down_vote', verbose_name='Dislike')
+
+    @property
+    def up_vote(self):
+        return self.up_vote_user.all().count()
+
+    @property
+    def down_vote(self):
+        return self.down_vote_user.all().count()
