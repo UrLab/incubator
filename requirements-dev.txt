@@ -44,7 +44,7 @@ pyparsing==2.4.7
     # via
     #   -c requirements.txt
     #   packaging
-pytest-django==4.2.0
+pytest-django==4.3.0
     # via -r requirements-dev.in
 pytest==6.2.4
     # via
