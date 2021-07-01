@@ -24,6 +24,20 @@ click==7.1.2
     # via pip-tools
 decorator==5.0.7
     # via ipython
+django==3.2.5
+    # via
+    #   -r requirements.in
+    #   django-bootstrap4
+    #   django-classy-tags
+    #   django-extensions
+    #   django-filter
+    #   django-jsonfield
+    #   django-mptt
+    #   django-nyt
+    #   django-picklefield
+    #   django-sekizai
+    #   djangorestframework
+    #   wiki
 django-activity-stream==0.10.0
     # via -r requirements.in
 django-bootstrap4==3.0.1
@@ -40,9 +54,9 @@ django-filter==2.4.0
     # via -r requirements.in
 django-js-asset==1.2.2
     # via django-mptt
-django-jsonfield-compat==0.4.4
-    # via -r requirements.in
 django-jsonfield==1.4.1
+    # via -r requirements.in
+django-jsonfield-compat==0.4.4
     # via -r requirements.in
 django-mptt==0.11.0
     # via
@@ -58,20 +72,6 @@ django-sekizai==2.0.0
     # via wiki
 django-simple-history==3.0.0
     # via -r requirements.in
-django==3.2.4
-    # via
-    #   -r requirements.in
-    #   django-bootstrap4
-    #   django-classy-tags
-    #   django-extensions
-    #   django-filter
-    #   django-jsonfield
-    #   django-mptt
-    #   django-nyt
-    #   django-picklefield
-    #   django-sekizai
-    #   djangorestframework
-    #   wiki
 djangorestframework==3.12.4
     # via -r requirements.in
 ics==0.7
@@ -80,10 +80,10 @@ idna==2.10
     # via requests
 influxdb==5.3.1
     # via -r requirements.in
-ipython-genutils==0.2.0
-    # via traitlets
 ipython==7.24.1
     # via -r requirements.in
+ipython-genutils==0.2.0
+    # via traitlets
 jedi==0.18.0
     # via ipython
 markdown==3.2.2
