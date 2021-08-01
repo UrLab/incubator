@@ -12,7 +12,7 @@ flake8==3.9.2
     # via -r requirements-dev.in
 iniconfig==1.1.1
     # via pytest
-isort==5.8.0
+isort==5.9.3
     # via
     #   -r requirements-dev.in
     #   pylint
@@ -44,12 +44,12 @@ pyparsing==2.4.7
     # via
     #   -c requirements.txt
     #   packaging
-pytest-django==4.3.0
-    # via -r requirements-dev.in
 pytest==6.2.4
     # via
     #   -r requirements-dev.in
     #   pytest-django
+pytest-django==4.3.0
+    # via -r requirements-dev.in
 toml==0.10.2
     # via
     #   -c requirements.txt
