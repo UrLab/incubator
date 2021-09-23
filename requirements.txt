@@ -148,7 +148,7 @@ sorl-thumbnail==12.7.0
     # via wiki
 soupsieve==2.2.1
     # via beautifulsoup4
-sqlparse==0.4.1
+sqlparse==0.4.2
     # via django
 tatsu==5.6.1
     # via ics
