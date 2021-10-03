@@ -10,14 +10,6 @@ from django.core.exceptions import ValidationError
 
 from incubator.models import ASBLYear
 
-# Create your models here.
-#    User :
-#    Des users ont des skills/badges
-#    Les badges ne peuvent être donnés que par quelqu'un qui l'a déjà (genre des teachers)
-#    un badge pourrait être "utilisateur de la reprap" et "certigfierait" que le user sait utiliser la machine
-#    Des users appartiennent à un groupe (anon, registered, membres cotisants, "bureau")
-#    Système d'emprunt (optionnel)
-
 
 def insensitive_unique_username(username):
     # Ceci est un test en prod, pardonnez mon âme.
@@ -84,13 +76,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     newsletter = models.BooleanField(default=True, verbose_name='abonné à la newsletter')
     is_active = models.BooleanField(default=True, verbose_name='Utilisateur actif')
     description = models.TextField(default="", verbose_name="Description", max_length=255, null=True)
-    # , widget=forms.Textarea(attrs={'placeholder': 'Ajouter une description', 'style':'resize:none;'}))
+    discord_id = models.CharField(default=None, max_length=256, blank=True, null=True)
 
     def get_short_name(self):
         return self.username
 
     def get_full_name(self):
         return self.username
+
+    @property
+    def discord_connected(self):
+        return self.discord_id is not None
 
     @property
     def is_staff(self):
