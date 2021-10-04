@@ -55,7 +55,8 @@
     </div>
 </div>
 {% endfor %}
-<form method="POST" class="post-form">
+
+<form method="POST" action="{% url "add_comment" project.id %}" class="post-form">
     {% csrf_token %}
     {% bootstrap_form form %}
     {% buttons %}
