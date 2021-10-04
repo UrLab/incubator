@@ -95,8 +95,8 @@ class Comment(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
 
-    up_vote_user = models.ManyToManyField(User, related_name='up_vote', verbose_name='Like')
-    down_vote_user = models.ManyToManyField(User, related_name='down_vote', verbose_name='Dislike')
+    up_vote_user = models.ManyToManyField(User, related_name='up_vote', verbose_name='Like', blank=True)
+    down_vote_user = models.ManyToManyField(User, related_name='down_vote', verbose_name='Dislike', blank=True)
 
     @property
     def up_vote(self):
