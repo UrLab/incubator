@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Project, Task
+from .models import Project, Task, Comment
 
 
 class TaskInline(admin.TabularInline):
@@ -21,3 +21,8 @@ class ProjectAdmin(admin.ModelAdmin):
 @admin.register(Task)
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('name', 'project', 'completed')
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('project', 'author', 'up_vote')
