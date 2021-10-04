@@ -182,14 +182,20 @@ def remove_participation(request, pk):
 
 
 def add_comment(request, project_id):
-    user = request.user
+    project = Project.objects.get(id=project_id)
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
-            form.save()
+            Comment.objects.create(
+                author=request.user,
+                project=project,
+                content=form.cleaned_data["content"]
+            )
+
+    action.send(request.user, verb='a commenté sur le projet', action_object=project)
 
     context = {
-        "form": CommentForm(initial={'project': Project.objects.get(id=project_id), 'user': user})
+        "form": CommentForm(initial={'project': project, 'user': request.user})
     }
     return render(request, "change_passwd.html", context)
 
