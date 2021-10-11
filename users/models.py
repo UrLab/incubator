@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractBaseUser, UserManager, Permission
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 
+from rest_framework.authtoken.models import Token
 
 from incubator.models import ASBLYear
 
@@ -76,7 +77,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     newsletter = models.BooleanField(default=True, verbose_name='abonné à la newsletter')
     is_active = models.BooleanField(default=True, verbose_name='Utilisateur actif')
     description = models.TextField(default="", verbose_name="Description", max_length=255, null=True)
-    discord_id = models.CharField(default=None, max_length=256, blank=True, null=True)
+    discord_id = models.ForeignKey(Token, null=True, blank=True, on_delete=models.CASCADE)
 
     def get_short_name(self):
         return self.username
@@ -110,6 +111,12 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_absolute_url(self):
         return reverse('user_profile', args=[self.username])
+
+    def save(self, *args, **kwargs):
+        if self.discord_id != "":
+            self.discord_id = Token.objects.create(user=self)
+
+        super.save(*args, **kwargs)
 
 
 class Membership(models.Model):
