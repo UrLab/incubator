@@ -16,6 +16,8 @@ services:
       - db
     networks:
       - private
+    restart: unless-stopped
+
   db:
     image: postgres:12.0-alpine
     volumes:
@@ -24,6 +26,8 @@ services:
       - ./.env.db
     networks:
       - private
+    restart: unless-stopped
+
   nginx:
     build: ./nginx
     volumes:
@@ -47,6 +51,7 @@ services:
       - private
       - public
       - traefik-proxy
+    restart: unless-stopped
 
 networks:
   private:
