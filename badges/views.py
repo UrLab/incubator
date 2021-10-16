@@ -33,7 +33,7 @@ class BadgeDetailView(DetailView):
     def get_context_data(self, **kwargs):
 
         context = super().get_context_data(**kwargs)
-        if not BadgeWear.objects.filter(badge=self.object, user=self.request.user):
+        if self.object.hidden and (not BadgeWear.objects.filter(badge=self.object, user=self.request.user)):
             context['authorized'] = False
             return context
 
