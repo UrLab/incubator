@@ -51,11 +51,10 @@ class ProjectEditView(PermissionRequiredMixin, UpdateView):
         return ret
 
 
-class ProjectDetailView(FormMixin, DetailView):
+class ProjectDetailView(DetailView):
     model = Project
     template_name = 'project_detail.html'
     context_object_name = 'project'
-    form_class = CommentForm
 
     def get_success_url(self):
         return reverse('view_project', kwargs={'pk': self.object.id})
@@ -64,18 +63,6 @@ class ProjectDetailView(FormMixin, DetailView):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
         context['form'] = CommentForm(initial={'project': self.object, 'author': self.request.user})
         return context
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    def form_valid(self, form):
-        action.send(self.request.user, verb='a commenté', action_object=self.object)
-        return super(ProjectDetailView, self).form_valid(form)
 
 
 def upvote_comment(request, project_id, comment_id):
@@ -182,16 +169,15 @@ def remove_participation(request, pk):
 
 
 def add_comment(request, project_id):
-    user = request.user
     if request.method == "POST":
         form = CommentForm(request.POST)
         if form.is_valid():
             form.save()
 
-    context = {
-        "form": CommentForm(initial={'project': Project.objects.get(id=project_id), 'user': user})
-    }
-    return render(request, "change_passwd.html", context)
+    project = get_object_or_404(Project, id=project_id)
+    action.send(request.user, verb='a commenté sur le projet', action_object=project)
+
+    return HttpResponseRedirect(reverse('view_project', args=[project_id]))
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
