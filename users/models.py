@@ -4,7 +4,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.exceptions import ValidationError
 
 
@@ -83,6 +83,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     hide_pamela = models.BooleanField(default=False, verbose_name='caché sur pamela')
     newsletter = models.BooleanField(default=True, verbose_name='abonné à la newsletter')
     is_active = models.BooleanField(default=True, verbose_name='Utilisateur actif')
+    description = models.TextField(default="", verbose_name="Description", max_length=255, null=True)
+    # , widget=forms.Textarea(attrs={'placeholder': 'Ajouter une description', 'style':'resize:none;'}))
 
     def get_short_name(self):
         return self.username
@@ -115,5 +117,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Membership(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    asbl_year = models.ForeignKey('incubator.ASBLYear')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    asbl_year = models.ForeignKey('incubator.ASBLYear', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "Membre du hackerspace durant l'année {}".format(self.asbl_year)

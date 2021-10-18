@@ -1,16 +1,55 @@
 <h2>
-    <span class="fa fa-calendar-o" aria-hidden="true"></span>
-    Évènements à venir
+  <span class="fa fa-calendar-o" aria-hidden="true"></span>
+  Évènements à venir
 </h2>
 
 <p>Les évènements de Urlab programmés pour les prochains jours sont :</p>
 
 <div class={% if not user.is_authenticated %}"col-md-9"{% else %}""{% endif %}>
-    {% if events %}
-        {% for event in events %}
-            {% include "event_card.html" %}
-        {% endfor %}
-    {% else %}
-        <p class="text-muted">Il n'y a actuellement pas d'évènements à venir</p>
-    {% endif %}
+  {% if events %}
+  {% for event in events %}
+    {% load formatting %}
+    <div class={% if event_page %}"col-sm-6 col-md-3"{% else %}""{% endif %}>
+      <div class="card event-card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-xs-2">
+              <a href="{% url "view_event" event.id %}">
+                {% if not event.picture %}
+                <img class="event-pic-thumb" alt="Image manquante" src="/static/img/default-event.png">
+                {% else %}
+                <img class="event-pic-thumb" src="{{event.picture.url}}">
+                {% endif %}
+              </a>
+            </div>
+            <div class="col-xs-10">
+              <h4>
+                <a href="{% url "view_event" event.id %}" style=" word-wrap: break-word">
+                  {{ event.title }}
+                </a>
+                <a href="#event-{{event.id}}-description" title="En savoir plus" data-toggle="collapse" class="collapsed">
+                  <i class="fa fa-plus"></i>
+                </a>
+              </h4>
+            </div>
+          </div>
+        </div>
+        <div id="event-{{event.id}}-description" class="card-body collapse" style="word-wrap: break-word">
+          {{event.description|markdown}}
+          {% if request.user.is_authenticated %}
+          <a class="btn btn-secondary" href="{% url "edit_event" event.id %}">
+            <span class="fa fa-edit" aria-hidden="true"></span>
+            Editer
+          </a>
+          {% endif %}
+        </div>
+        <div class="card-footer">
+          {% include "event_time.html" %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+  {% else %}
+  <p class="text-muted">Il n'y a actuellement pas d'évènements à venir</p>
+  {% endif %}
 </div>

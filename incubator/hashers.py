@@ -4,7 +4,6 @@ from django.utils.crypto import get_random_string
 from django.contrib.auth.hashers import BasePasswordHasher
 from django.utils.crypto import constant_time_compare
 from django.contrib.auth.hashers import mask_hash
-from django.utils import six
 
 
 class MediaWikiHasher(BasePasswordHasher):
@@ -31,14 +30,7 @@ class MediaWikiHasher(BasePasswordHasher):
         else:
             return '%s$%s$%s' % (self.algorithm, salt, hash)
 
-    def _encode2(self, password, salt=None):  # pragma: py2
-        if salt is None:  # pragma: no cover
-            return hashlib.md5(password).hexdigest()
-        else:
-            secret_hash = hashlib.md5(password).hexdigest()
-            return hashlib.md5('%s-%s' % (salt, secret_hash)).hexdigest()
-
-    def _encode3(self, password, salt=None):  # pragma: py3
+    def _encode(self, password, salt=None):  # pragma: py3
         password = bytes(password, 'utf-8')
 
         if salt is None or salt == '':  # pragma: no cover
@@ -63,8 +55,3 @@ class MediaWikiHasher(BasePasswordHasher):
             ('salt', mask_hash(salt)),
             ('hash', mask_hash(hash)),
         ])
-
-    if six.PY3:  # pragma: py3
-        _encode = _encode3
-    else:  # pragma: py2
-        _encode = _encode2

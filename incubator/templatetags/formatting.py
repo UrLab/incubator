@@ -1,4 +1,3 @@
-import re
 import markdown
 
 from django import template
@@ -11,25 +10,26 @@ register = template.Library()
 @register.filter(is_safe=False, name='markdown')
 @stringfilter
 def my_markdown(value):
-    extensions = ["nl2br", "extra", "codehilite", "headerid(level=2)", "sane_lists"]
+    extensions = ["nl2br", "extra", "codehilite", "toc", "sane_lists"]
 
     html = mark_safe(markdown.markdown(
         value,
-        extensions,
+        extensions=extensions,
         safe_mode='escape',
         enable_attributes=False,
         output_format="html5"
     ))
     return SafeText(html)
 
+
 @register.filter(is_safe=False, name='unsafeMarkdown')
 @stringfilter
 def my_markdown(value):
-    extensions = ["nl2br", "extra", "codehilite", "headerid(level=2)", "sane_lists"]
+    extensions = ["nl2br", "extra", "codehilite", "toc", "sane_lists"]
 
     html = mark_safe(markdown.markdown(
         value,
-        extensions,
+        extensions=extensions,
         safe_mode=False,
         enable_attributes=False,
         output_format="html5"

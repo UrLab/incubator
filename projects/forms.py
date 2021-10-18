@@ -1,13 +1,19 @@
-from django.forms import ModelForm, Textarea
+from django import forms
+from .models import Project, Comment
 
-from .models import Project
 
-
-class ProjectForm(ModelForm):
+class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
         exclude = ['organizer']
 
         widgets = {
-            'content': Textarea(attrs={'rows': 25}),
+            'content': forms.Textarea(attrs={'rows': 25}),
         }
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['content', 'project', 'author']
+        widgets = {'project': forms.HiddenInput(), 'author': forms.HiddenInput()}

@@ -1,44 +1,42 @@
-![SHAME](https://travis-ci.org/UrLab/incubator.svg?branch=master)
-# incubator
-Let's bootstrap a new incubator for UrLab ! (in python and with an API this time)
+# UrLab incubator
 
-Quick brainstorming https://pad.lqdn.fr/p/incubator
+The incubator is the main website of UrLab, a Hackerspace located in Brussels, Belgium.
 
+A live instance can be found at [urlab.be](https://urlab.be).
 
-# Install dependencies
-    
-  - Running on Ubuntu
-  
-  ``sudo apt-get install python3-dev python3-setuptools libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev python3-pip``
+![A screenshot of the event page](.github/readme-screenshot.png)
 
-``sudo pip3 install virtualenv``
-    
-  - Running on Fedora 
-  
-  ```sudo dnf install libtiff-devel libjpeg-devel libzip-devel freetype-devel lcms2-devel libwebp-devel tcl-devel tk-devel python3-devel python3-setuptools python3-virtualenv```
+# Features
 
-### Setup
+The incubator has these main features:
+ * Project showcase: members can pitch and present the projects they are working on at the hackerspace.
+ * Event organisation: everybody can propose to organise an event and people can register their interest
+ * Wiki: this speaks for itself
+ * Ledger: members may pay for physical items (mostly food) at the space with a ledger on the website. This limits the amount of cash circulating in the hackerspace.
+ * A [SpaceAPI](https://spaceapi.io/) implementation.
 
-    virtualenv -p python3 ve3 # or virtualenv-3 -p python3 ve3
-    source ve3/bin/activate
-    pip install -r requirements.txt
-    ./manage.py migrate
-    ./manage.py runserver
+Bonus features are also available:
+ * Live streaming of our online events (thank you Covid-19)
+ * A list of our "music of the day"
+ * Member badges
+ * A newsletter
 
-### Create a user
+If you are a hackerspace and want to use this code, go ahead !
 
-    ./manage.py createsuperuser
-    
-## Docker
-Install the incubator in a container via docker
+But please note that:
+ * We did not implement a member handling system (no membership fee tracking, ...)
+ * The code is quite coupled to UrLab and was not made to be generic
+But if you want to have try, please do !
 
-    docker build -t incubator .
-    docker run --name incubatorfromspace -p 8000:8000 -d incubator
-    
-Admin : poney/poney, admin/admin, 
-    
-# View / Edit Notebooks
+# Development guide
 
-    ./manage.py shell_plus --notebook
+This is a typical Django project, the usual `virtualenv`, `requirements.txt`, ... apply.
 
+Please have a look at [`DEVELOPMENT.md`](DEVELOPMENT.md) for an in-depth installation guide as well as help for common tasks.
 
+# License
+
+This code is under the AGPL licence. In broad, non legally binding, terms: you can do whatever you want with it, but if you modify it, you must redistribute the source and credit the original authors.
+
+# History
+The incubator is born from the frustration of our old website, a Mediawiki instance and was developed in a few days during the 2016 Brussels bombings lockdown. Here is a [quick brainstorming ](https://pad.lqdn.fr/p/incubator) we made at that time.

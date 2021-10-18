@@ -1,22 +1,22 @@
-FROM django:onbuild
-# FOR DEV ONLY
+FROM python:3.9-slim-buster
 
-# who are we ?
-MAINTAINER UrLab
+WORKDIR /srv
 
-# Add the path
-ADD . /usr/src/app
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# Update the default application repository sources list
-RUN apt-get update && apt-get -y upgrade
+RUN apt update
+RUN apt install -y libpq-dev build-essential netcat
 
-# Install the packages needed
-RUN apt-get install -y python3-dev python3-setuptools libtiff5-dev libjpeg62-turbo-dev zlib1g-dev libfreetype6-dev liblcms2-dev libwebp-dev tcl8.5-dev tk8.5-dev
+RUN pip install --upgrade pip
 
-# South
-RUN ./manage.py migrate
+COPY ./requirements.txt .
+RUN pip install -r requirements.txt
 
-# create some superuser for ya
-RUN echo "from django.contrib.auth import get_user_model; User = get_user_model() ;User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python manage.py shell
-RUN echo "from django.contrib.auth import get_user_model; User = get_user_model() ;User.objects.create_superuser('root', 'root@example.com', 'root')" | python manage.py shell
-RUN echo "from django.contrib.auth import get_user_model; User = get_user_model() ;User.objects.create_superuser('poney', 'poney@example.com', 'poney')" | python manage.py shell
+COPY ./requirements-prod.txt .
+RUN pip install -r requirements-prod.txt
+
+COPY . .
+
+ENTRYPOINT ["./entrypoint.sh"]
+CMD ["gunicorn", "incubator.wsgi:application", "--bind", "0.0.0.0:8000"]

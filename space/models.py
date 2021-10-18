@@ -1,9 +1,11 @@
 from django.db import models
 from incubator import settings
 from django.core.exceptions import ValidationError
-from datetime import datetime
+from django.utils import timezone
+# from datetime import datetime
 import re
 import uuid
+from urllib.parse import urlparse, parse_qs
 
 MAC_REGEX = re.compile(r'([a-f0-9]{2}:){5}[a-f0-9]{2}')
 
@@ -16,7 +18,7 @@ def validate_mac(value):
 class MacAdress(models.Model):
     adress = models.CharField(max_length=17, unique=True, verbose_name='MAC address', validators=[validate_mac])
     machine_name = models.CharField(blank=True, max_length=100, verbose_name='Nom de la machine')
-    holder = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
+    holder = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         self.adress = self.adress.lower()
@@ -27,7 +29,7 @@ class MacAdress(models.Model):
 
 
 def _auto_now():
-    return datetime.now()
+    return timezone.now()
 
 
 class SpaceStatus(models.Model):
@@ -45,13 +47,28 @@ class MusicOfTheDay(models.Model):
     day = models.DateField(auto_now_add=True, unique=True)
 
     KNOWN_PROVIDERS = {
-        'youtube.com': 'youtube',
-        'youtu.be': 'youtube',
-        'soundcloud.com': 'soundcloud',
+        "www.youtube.com": "youtube",
+        "youtu.be": "youtube",
+        "soundcloud.com": "soundcloud",
     }
 
     class Meta:
         verbose_name_plural = "Musics of the day"
+
+    def provider(self):
+        url = urlparse(self.url)
+        return self.KNOWN_PROVIDERS.get(url.netloc)
+
+    def provider_id(self):
+        url = urlparse(self.url)
+        if url.netloc == "www.youtube.com":
+            if not url.path == "/watch":
+                print(url.path)
+                return None
+            qs = parse_qs(url.query)
+            return qs.get("v", [None])[0]
+        elif url.netloc == "youtu.be":
+            return url.path[1:]
 
 
 class PrivateAPIKey(models.Model):
@@ -60,7 +77,7 @@ class PrivateAPIKey(models.Model):
         verbose_name_plural = "Clefs d'accès à l'API privée"
 
     key = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, verbose_name='Clef')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur', on_delete=models.CASCADE)
     name = models.CharField(max_length=250, verbose_name='Utilisée pour')
     active = models.BooleanField(default=False)
 

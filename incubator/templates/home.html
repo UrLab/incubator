@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load bootstrap3 %}
+{% load bootstrap4 %}
 {% load formatting %}
 {% load humanize %}
 
@@ -12,11 +12,19 @@
                 </div>
             {% endif %}
 
-        {% if request.user.is_authenticated %}
-            <h1>Mon UrLab</h1>
-            <p>Les dernières nouvelles de mon hackerspace préféré.</p>
-            {% include "home_feed.html" %}
-        {% else %}
+            {% if messages %}
+                <ul class="messages mt-5">
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% if request.user.is_authenticated %}
+                <h1>Mon UrLab</h1>
+                <p>Les dernières nouvelles de mon hackerspace préféré.</p>
+                {% include "home_feed.html" %}
+            {% else %}
 
             <h1>
                 UrLab ?</h1>
@@ -51,7 +59,9 @@
             </div>
         {% else %}
             <div class="col-md-4">
-                {% include "map.html" %}
+                <div class="row">
+                    {% include "map.html" %}
+                </div>
             </div>
         {% endif %}
     </div>

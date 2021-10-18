@@ -1,29 +1,31 @@
 from rest_framework import viewsets
-# from django.core.urlresolvers import reverse
-# from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views.decorators.http import require_POST
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView
 from django.views.generic import UpdateView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
+from django.core.mail import EmailMultiAlternatives
 from django.contrib import messages
+from django.contrib.auth import login, authenticate
+from django.contrib.admin.views.decorators import staff_member_required
 from django.conf import settings
 from django.db.models import F, Count
-from actstream.models import Action
-from space.djredis import get_redis
 from django.db import transaction
 
+from users.forms import UserCreationForm
 
 from .serializers import UserSerializer
 from .models import User
-from .forms import UserForm, SpendForm, TopForm, TransferForm, ProductBuyForm
+from .forms import UserForm, SpendForm, TopForm, TransferForm, ProductBuyForm, ChangePasswordForm, AdminChangePasswordForm
 from .decorators import permission_required
 from stock.models import Product, TransferTransaction, TopupTransaction, ProductTransaction, MiscTransaction
 
 
 def balance(request):
-    favorites = Product.objects.filter(producttransaction__user=request.user).annotate(Count("producttransaction")).order_by("-producttransaction__count")[:5]
+    favorites = Product.objects.filter(producttransaction__user=request.user).annotate(
+        Count("producttransaction")).order_by("-producttransaction__count")[:5]
     return render(request, 'balance.html', {
         'account': settings.BANK_ACCOUNT,
         'products': Product.objects.order_by('category', 'name'),
@@ -32,6 +34,22 @@ def balance(request):
         'spendForm': SpendForm(),
         'transferForm': TransferForm(),
     })
+
+
+@require_POST
+def login_view(request):
+    username = request.POST.get("username", "")
+    password = request.POST.get("password", "")
+
+    user = authenticate(request, username=username, password=password)
+    if user is not None:
+        login(request, user)
+        next = request.GET.get("next", "/")
+        next = next if next != "" else "/"
+        return HttpResponseRedirect(next)
+    else:
+        messages.error(request, "Aucun compte correspondant à cet identifiant n'a été trouvé")
+        return HttpResponseRedirect(request.META["HTTP_REFERER"])
 
 
 @permission_required('users.change_balance')
@@ -104,6 +122,28 @@ def top(request):
     return HttpResponseRedirect(reverse('change_balance'))
 
 
+@staff_member_required
+def send_debt_mail(request):
+    users = User.objects.filter(balance__lt=0)
+
+    content = """Bonjour {} !
+Le Urlab Banking System a détecté une dette de ta part d'un montant de {}€ :O ! N'oublie pas de t'en défaire au plus vite avant que nos avocats ne te tombent dessus !
+
+Note : Il peut s'agir d'une erreur ! Ayant eu un soucis lié à notre base de données dans le courant de l'année 2020, il se peut que ta dette ait déjà été réglée, si c'est le cas, n'hésite pas à nous contacter (contact@urlab.be).
+"""
+
+    for user in users:
+        message = EmailMultiAlternatives(
+            subject="Votre ardoise @UrLab",
+            body=content.format(user.username, abs(user.balance)),
+            from_email='Trésorerie UrLab <tresorier@urlab.be>',
+            to=user.email
+        )
+        message.send()
+
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
+
+
 @permission_required('users.change_balance')
 @require_POST
 def transfer(request):
@@ -147,40 +187,54 @@ def hide_pamela(request):
     return HttpResponseRedirect(reverse('profile'))
 
 
-def userdetail(request):
-    client = get_redis()
-    streampubtosend = []
-    streamprivtosend = []
-    STREAM_SIZE = 100
-    TRANSACTION_NUM = 5 # Number of transactions to be shown on the page
-    streamPublic = Action.objects.filter(public=True).prefetch_related('target', 'actor', 'action_object')[:STREAM_SIZE]
-    # streamPrivate = Action.objects.filter(public=False).prefetch_related('target', 'actor', 'action_object')[:STREAM_SIZE]
+def change_passwd(request):
+    user = request.user
+    if request.method == "POST":
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            if user.check_password(form.cleaned_data['old_password']):
+                user.set_password(form.cleaned_data['new_password'])
+                user.save()
+                messages.add_message(request, messages.INFO, "Vous devez vous reconnecter pour continuer")
+                return HttpResponseRedirect(reverse("login"))
+            else:
+                messages.add_message(request, messages.ERROR, "Le mot de passe est incorrect")
+                return HttpResponseRedirect(request.META['HTTP_REFERER'])
+        else:
+            messages.add_message(request, messages.ERROR, "Les mots de passe ne correspondent pas")
+            return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
-    transfers = list(request.user.transfertransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
-    topups = list(request.user.topuptransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
-    purchases = list(request.user.producttransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
-    misc = list(request.user.misctransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
-    # Sort all transactions and keep only the TRANSACTION_NUM most recent
-    all_private_transactions = sorted(transfers + topups + purchases + misc, key=lambda x: x.when, reverse=True)[:TRANSACTION_NUM]
+    context = {
+        "form": ChangePasswordForm()
+    }
+    return render(request, "change_passwd.html", context)
 
-    i = 0
-    for a in streamPublic:
-        if a.actor == request.user:
-            streampubtosend.append(a)
-            i += 1
-            if i == TRANSACTION_NUM:
-                break
 
-    return render(request, 'user_detail.html', {
-        'stream_pub': streampubtosend,
-        'stream_priv': all_private_transactions,
-    })
+def admin_change_passwd(request, id):
+    user = User.objects.get(id=id)
+    if request.method == "POST":
+        form = AdminChangePasswordForm(request.POST)
+        if form.is_valid():
+            user.set_password(form.cleaned_data['new_password'])
+            user.save()
+            messages.add_message(request, messages.INFO, "Le mot de passe a bien ete modifier")
+            return HttpResponseRedirect("/admin")
+        else:
+            messages.add_message(request, messages.ERROR, "Les mots de passe ne sont pas identiques!")
+
+    context = {
+        "form": AdminChangePasswordForm(),
+        "user_id": id
+    }
+    return render(request, "admin_change_passwd.html", context)
 
 
 class UserEditView(UpdateView):
     form_class = UserForm
     template_name = 'user_form.html'
-    get_success_url = lambda self: reverse('profile')
+
+    def get_success_url(self):
+        return reverse('profile')
 
     def get_object(self, queryset=None):
         return self.request.user
@@ -192,12 +246,57 @@ class UserDetailView(DetailView):
     context_object_name = 'user'
     slug_field = "username"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        request = self.request
+
+        TRANSACTION_NUM = 5  # Number of transactions to be shown on the page
+
+        # Public
+        streampubtosend = self.object.actor_actions.filter(public=True)\
+            .prefetch_related('target', 'actor', 'action_object')[:TRANSACTION_NUM]
+
+        # Private
+        all_private_transactions = []
+        if request.user == self.object:
+            transfers = list(request.user.transfertransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
+            topups = list(request.user.topuptransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
+            purchases = list(request.user.producttransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
+            misc = list(request.user.misctransaction_set.all().order_by("-when")[:TRANSACTION_NUM])
+            # Sort all transactions and keep only the TRANSACTION_NUM most recent
+            all_private_transactions = sorted(
+                transfers + topups + purchases + misc, key=lambda x: x.when, reverse=True)[:TRANSACTION_NUM]
+
+        context['stream_pub'] = streampubtosend
+        context['stream_priv'] = all_private_transactions
+
+        return context
+
 
 class CurrentUserDetailView(UserDetailView):
     def get_object(self):
-            return self.request.user
+        return self.request.user
 
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class RegisterView(CreateView):
+    template_name = 'registration/register.html'
+    form_class = UserCreationForm
+    success_url = '/'
+
+    def get_initial(self):
+        initial = super(RegisterView, self).get_initial()
+        initial = initial.copy()
+        initial['username'] = self.request.GET.get("username")
+        return initial
+
+    def form_valid(self, form):
+        ret = super(RegisterView, self).form_valid(form)
+        user = form.auth_user()
+        if user:
+            login(self.request, user)
+        return ret

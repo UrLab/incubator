@@ -1,28 +1,25 @@
+from datetime import timedelta
 from django.shortcuts import render
 from django.contrib import messages
-from django.core.urlresolvers import reverse, reverse_lazy
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.urls import reverse, reverse_lazy
+from django.http import HttpResponseRedirect, JsonResponse
 from django.views.generic.edit import DeleteView
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.cache import cache_page
 from django.utils import timezone
 from django.db import IntegrityError
+from django.core.paginator import Paginator
 
 from influxdb import InfluxDBClient
 from rest_framework import viewsets
 from rest_framework.response import Response
-
-import matplotlib as mpl
-mpl.use('Agg')
-import matplotlib.pyplot as plt
-from datetime import timedelta
 
 from .djredis import get_redis, set_space_open, space_is_open
 from .models import MacAdress, SpaceStatus, MusicOfTheDay
 from .forms import MacAdressForm
 from .serializers import PamelaSerializer, SpaceStatusSerializer, MotdSerializer
 from .decorators import private_api, one_or_zero
-from .plots import weekday_plot, weekday_probs, human_time
+# from .plots import weekday_probs, human_time
 from .helpers import is_stealth_mode, make_empty_pamela, make_pamela, user_should_see_pamela
 from users.models import User
 from realtime.helpers import publish_space_state
@@ -78,9 +75,10 @@ def full_pamela(request):
 
 @private_api(open=one_or_zero)
 def status_change(request, open):
-    set_space_open(get_redis(), open)
     r = {'open': open}
-    publish_space_state(open)
+    if bool(open) != space_is_open(get_redis()):
+        set_space_open(get_redis(), open)
+        publish_space_state(open)
     return JsonResponse(r, safe=False)
 
 
@@ -174,7 +172,7 @@ def spaceapi(request):
             "ml": "hackulb@cerkinfo.be",
             "twitter": "@UrLabBxl",
             "facebook": "https://www.facebook.com/urlabbxl",
-            "irc": "irc://chat.freenode.net#urlab",
+            "irc": "irc://irc.libera.chat#urlab",
             "email": "contact@urlab.be",
             "phone": "+3226504967",
             "keymasters": keymasters,
@@ -210,31 +208,18 @@ def spaceapi(request):
             "location": loc,
             "name": 'light_%s' % loc
         } for loc in ('inside', 'outside')]
-    except:
+    except Exception:
         pass
 
     return JsonResponse(response)
 
 
 def openings_data(request):
-    opts = {k: request.GET[k] for k in request.GET}
+    # opts = {k: request.GET[k] for k in request.GET}
     return JsonResponse({
-        'probs': list(weekday_probs(opts)),
-        'range': human_time(opts),
+        'probs': 0,  # list(weekday_probs(opts)),
+        'range': 0,  # human_time(opts),
     })
-
-
-def openings(request):
-    opts = {k: request.GET[k] for k in request.GET}
-
-    weekday_plot(plt, opts)
-
-    # Wrap everything in a django response and clear matplotlib context
-    response = HttpResponse(content_type="image/png")
-    plt.savefig(response, format='png', facecolor=(0, 0, 0, 0),
-                edgecolor='none', bbox_inches='tight', pad_inches=0)
-    plt.clf()
-    return response
 
 
 class PamelaObject(object):
@@ -269,3 +254,22 @@ class OpeningsViewSet(viewsets.ModelViewSet):
 class MotdViewSet(viewsets.ModelViewSet):
     queryset = MusicOfTheDay.objects.all().order_by('-day')
     serializer_class = MotdSerializer
+
+
+def motd(request, page):
+    list_music = MusicOfTheDay.objects.all().order_by("-day")
+    p = Paginator(list_music, 39)
+    context = {
+        'has_next': p.page(page).has_next(),
+        'has_previous': p.page(page).has_previous(),
+        'page': p.page(page),
+        'page_number': p.page(page).number,
+        'short_page_range_before': range(p.page(page).number - 5, p.page(page).number),
+        'page_range_before': range(1, p.page(page).number),
+        'short_page_range_after': range(p.page(page).number + 1, p.page(page).number + 6),
+        'page_range_after': range(p.page(page).number + 1, p.num_pages + 1),
+        'last_page_need_shortened': p.num_pages - 5,
+        'num_pages': p.num_pages
+    }
+
+    return render(request, "motd.html", context)

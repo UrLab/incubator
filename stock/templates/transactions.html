@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}
+Historique de transactions
+{% endblock %}
+
+{% block content %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">UrLab</a></li>
+        <li class="breadcrumb-item">stock</li>
+        <li class="breadcrumb-item active" aria-current="page">transactions</li>
+    </ol>
+</nav>
+
+<ul class="nav nav-tabs justify-content-end" id="article-menu" role="tablist">
+    <li class="nav-item mr-auto">
+        <h3><strong>Dernières transactions d'Urlab</strong></h3>
+    </li>
+    {% for zone in zones %}
+        <li class="nav-item">
+            <a href="#tab-{{zone.name}}" class="nav-link {% if forloop.counter == 1 %}active{% endif %}" data-toggle="tab" role="tab">
+                <span class="hidden-xs">{{ zone.name }}</span>
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
+<div class="row">
+    <div class="col">
+        <div id="my-tab-content" class="tab-content">
+            {% for zone in zones %}
+                <div class="tab-pane {% if forloop.counter == 1 %}active{% endif %}" id="tab-{{zone.name}}">
+                    <p> Montant estimé en {{zone.name}} : {{ zone.balance }} €</p>
+                    <br>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="col-md-2">Date</th>
+                                <th scope="col" class="col-md-2">Montant</th>
+                                <th scope="col" class="col-md-2">Utilisateur</th>
+                                <th scope="col" class="col-md-4">Commentaire</th>
+                                <th scope="col" class="col-md-4">souche</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for payment in zone.payments %}
+                            <tr>
+                                <td>{{ payment.payment_date }}</td>
+                                <td style="color: {% if payment.way == "a" %}red{% else %}green{% endif %};">
+                                    {% if payment.way == "a" %}-{% else %}+{% endif %}
+                                    {{payment.amount}}
+                                </td>
+                                <td><a href="{% url "user_profile" user.username %}">{{payment.user.username}}</a></td>
+                                <td>{{ payment.comments }}</td>
+                                <td>{% if payment.receipt %}<a href="{{payment.receipt.url}}">souche</a>{% else %}Indisponible{% endif %}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<!-- Owiii du javascript random au milieu de nul part, much love-->
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('#tabs').tab();
+    });
+</script>
+
+{% endblock %}

@@ -1,24 +1,26 @@
-from django.conf.urls import url
+from django.urls import path
 from django.contrib.auth.decorators import login_required
 from .views import (
-    EventDetailView, EventAddView, EventEditView, MeetingAddView, MeetingEditView,
-    events_home, ical, not_interested, interested, import_pad, export_pad,
-    add_point_to_next_meeting,
+    EventDetailView, EventAddView, EventEditView, MeetingAddView,
+    MeetingEditView, events_home, ical, not_interested, interested, import_pad,
+    export_pad, add_point_to_next_meeting, attending, not_attending,
 )
 
 urlpatterns = [
-    url(r'^$', events_home, name='events_home'),
-    url(r'^add$', EventAddView.as_view(), name='add_event'),
-    url(r'^urlab.ics$', ical, name='ical'),
-    url(r'^edit/(?P<pk>[0-9]+)$', EventEditView.as_view(), name='edit_event'),
-    url(r'^import_pad/(?P<pk>[0-9]+)$', import_pad, name='import_pad'),
-    url(r'^export_pad/(?P<pk>[0-9]+)$', export_pad, name='export_pad'),
-    url(r'^(?P<pk>[0-9]+)', EventDetailView.as_view(), name='view_event'),
-    url(r'^add_meeting/(?P<pk>[0-9]+)$', MeetingAddView.as_view(), name='add_meeting'),
-    url(r'^edit_meeting/(?P<pk>[0-9]+)$', MeetingEditView.as_view(), name='edit_meeting'),
-    url(r'^not_interested/(?P<pk>[0-9]+)$', login_required(not_interested), name='not_interested_event'),
-    url(r'^interested/(?P<pk>[0-9]+)$', login_required(interested), name='interested_event'),
+    path('', events_home, name='events_home'),
+    path('add', EventAddView.as_view(), name='add_event'),
+    path('urlab.ics', ical, name='ical'),
+    path('edit/<int:pk>', EventEditView.as_view(), name='edit_event'),
+    path('import_pad/<int:pk>', import_pad, name='import_pad'),
+    path('export_pad/<int:pk>', export_pad, name='export_pad'),
+    path('<int:pk>', EventDetailView.as_view(), name='view_event'),
+    path('add_meeting/<int:pk>', MeetingAddView.as_view(), name='add_meeting'),
+    path('edit_meeting/<int:pk>', MeetingEditView.as_view(), name='edit_meeting'),
+    path('not_interested/<int:pk>', login_required(not_interested), name='not_interested_event'),
+    path('interested/<int:pk>', login_required(interested), name='interested_event'),
+    path('not_attending/<int:pk>', login_required(not_attending), name='not_attending_meeting'),
+    path('attending/<int:pk>', login_required(attending), name='attending_meeting'),
 
     # Private API
-    url(r'^add_point_to_next_meeting$', add_point_to_next_meeting, name='add_point_to_next_meeting'),
+    path('add_point_to_next_meeting', add_point_to_next_meeting, name='add_point_to_next_meeting'),
 ]

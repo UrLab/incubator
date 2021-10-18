@@ -1,0 +1,67 @@
+version: '3.7'
+
+services:
+  web:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - static_volume:/srv/collected_static
+      - media_volume:/srv/media
+    expose:
+      - 8000
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+    networks:
+      - private
+    restart: unless-stopped
+
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.db
+    networks:
+      - private
+    restart: unless-stopped
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/home/app/web/collected_static
+      - media_volume:/home/app/web/media
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web.entrypoints=http"
+      - "traefik.http.routers.web.rule=Host(`urlab.be`)"
+      - "traefik.http.middlewares.web-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.web.middlewares=web-https-redirect"
+      - "traefik.http.routers.web-secure.entrypoints=https"
+      - "traefik.http.routers.web-secure.rule=Host(`urlab.be`)"
+      - "traefik.http.routers.web-secure.tls=true"
+      - "traefik.http.routers.web-secure.tls.certresolver=http"
+      - "traefik.http.routers.web-secure.service=nginx-incubator@docker"
+      - "traefik.docker.network=traefik-proxy"
+    depends_on:
+      - web
+    networks:
+      - private
+      - public
+      - traefik-proxy
+    restart: unless-stopped
+
+networks:
+  private:
+    driver: overlay
+  public:
+    external: true
+  traefik-proxy:
+    external: true
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:

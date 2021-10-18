@@ -1,11 +1,9 @@
-from django.conf.urls import include, url
+from django.urls import include, path
 from django.contrib import admin
 
 import incubator.views
 import incubator.apiurls
 from incubator import settings
-from wiki.urls import get_pattern as get_wiki_pattern
-from django_nyt.urls import get_pattern as get_nyt_pattern
 
 import redir.views
 import events.views
@@ -13,27 +11,31 @@ import incubator.views
 import space.views
 
 urlpatterns = [
-    url(r'^$', incubator.views.home, name='home'),
-    url(r'^new/', incubator.views.new, name='new'),
-    url(r'^spaceapi.json$', space.views.spaceapi, name="spaceapi"),
-    url(r'^events/', include('events.urls')),
-    url(r'^projects/', include('projects.urls')),
-    url(r'^accounts/', include('users.urls')),
-    url(r'^space/', include('space.urls')),
+    path('', incubator.views.home, name='home'),
+    path('new/', incubator.views.new, name='new'),
+    path('spaceapi.json', space.views.spaceapi, name="spaceapi"),
 
-    url(r'^sm$', events.views.sm),
-    url(r'^linux$', events.views.linux),
-    url(r'^git$', events.views.git),
-    url(r'^ag$', events.views.ag),
+    path('events/', include('events.urls')),
+    path('projects/', include('projects.urls')),
+    path('accounts/', include('users.urls')),
+    path('space/', include('space.urls')),
+    path('wiki/', include('wiki.urls')),
+    path('stock/', include('stock.urls')),
+    path('badges/', include('badges.urls')),
+    path('streams/', include('streams.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^auth/', include('django.contrib.auth.urls')),
-    url(r'^register/', incubator.views.RegisterView.as_view(), name="register"),
+    path('sm', events.views.sm),
+    path('linux', events.views.linux),
+    path('git', events.views.git),
+    path('ag', events.views.ag),
 
-    url(r'^api/', include('incubator.apiurls')),
-    url(r'^notifications/', get_nyt_pattern()),
-    url(r'^wiki/', get_wiki_pattern()),
-    url(r'^r/(?P<short_name>[^/]+)/?$', redir.views.short_url, name='redirection'),
+    path('admin/', admin.site.urls),
+    path('auth/reset/done/', incubator.views.password_reset_done),
+    path('auth/', include('django.contrib.auth.urls')),
+
+    path('api/', include('incubator.apiurls')),
+    path('notifications/', include('django_nyt.urls')),
+    path('r/<slug:short_name>', redir.views.short_url, name='redirection'),
 ]
 
 if settings.DEBUG:

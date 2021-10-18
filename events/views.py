@@ -1,17 +1,18 @@
 from django.shortcuts import render
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse, JsonResponse
+from django.urls import reverse
+from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.db.models import Q
-from datetime import datetime
+# from datetime import datetime
 from actstream import action
 from ics import Calendar
 from ics import Event as VEvent
 from users.decorators import permission_required
 from users.mixins import PermissionRequiredMixin
+from incubator.settings import EVENTS_PER_PAGE
 
 from space.decorators import private_api
 from realtime.helpers import send_message
@@ -19,6 +20,12 @@ from realtime.helpers import send_message
 from .serializers import EventSerializer, MeetingSerializer, HackerAgendaEventSerializer, FullMeetingSerializer
 from .models import Event, Meeting
 from .forms import EventForm, MeetingForm
+
+from rest_framework import filters
+from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class EventAddView(PermissionRequiredMixin, CreateView):
@@ -82,18 +89,53 @@ class MeetingEditView(PermissionRequiredMixin, UpdateView):
 
 
 def events_home(request):
-    futureQ = Q(stop__gt=timezone.now()) # NOQA
-    readyQ = Q(status__exact="r") # NOQA
+    futureQ = Q(stop__gt=timezone.now())  # NOQA
+    readyQ = Q(status__exact="r")  # NOQA
+
+    # Par défaut on envoie la page 0 des evenement futurs
+    offset = request.GET.get("offset", 0)
+    type = request.GET.get("type", "future")
+    try:
+        offset = int(offset) if offset is not None else 0
+    except ValueError:
+        return HttpResponseBadRequest(
+            "La valeur de l'offset n'est pas correcte")
+
+    type = type if type is not None else "future"
 
     base = Event.objects.select_related('meeting')
+    isLastPage = False
 
-    context = {
-        'future': base.filter(futureQ & readyQ).order_by('start'),
-        'past': base.filter(~futureQ & readyQ).order_by('-start')[:10],
-        'incubation': base.filter(~readyQ),
-    }
+    if type == "future":
+        events = base.filter(futureQ & readyQ).order_by('start')
+    elif type == "past":
+        events = base.filter(~futureQ & readyQ).order_by('-start')
+    elif type == "incubation":
+        events = base.filter(~readyQ).order_by('-id')
+    else:
+        return HttpResponseBadRequest("Le type d'évenement n'est pas correct")
 
-    return render(request, "events_home.html", context)
+    nbPages = events.count() // EVENTS_PER_PAGE
+
+    if offset > nbPages or offset < 0:
+        return HttpResponseBadRequest("La valeur de l'offset doit être \
+            comprise entre 0 et {}".format(nbPages))
+
+    if (offset + 1) * EVENTS_PER_PAGE < events.count():
+        context = events[  # Takes a slice of the event array
+            offset * EVENTS_PER_PAGE:(offset + 1) * EVENTS_PER_PAGE]
+    else:
+        context = events[offset * EVENTS_PER_PAGE:]
+        isLastPage = True  # Pour pouvoir dire qu'il n'y a pas plus de page
+
+    vars = {
+        'events': context,
+        'last': isLastPage,
+        'type': type,
+        'offset': offset + 1,
+        'nbPage': nbPages,
+        'range': range(1, nbPages + 2)}
+    return render(request, "events_home.html", vars)
 
 
 def short_url_maker(*keywords):
@@ -121,7 +163,7 @@ def ical(request):
             description=event.get_absolute_full_url(),
             location=event.place
         )
-        cal.events.append(vevent)
+        cal.events.add(vevent)
 
     return HttpResponse(str(cal), content_type="text/calendar")
 
@@ -172,17 +214,11 @@ def import_pad(request, pk):
     meeting.save()
     return HttpResponseRedirect(event.get_absolute_url())
 
+
 sm = short_url_maker("smartmonday")
 linux = short_url_maker("install", "party")
 git = short_url_maker("workshop", "git")
 ag = short_url_maker("AG", "mandat")
-
-
-from rest_framework import filters
-from rest_framework import viewsets
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -202,7 +238,7 @@ def get_next_meeting():
     return (
         Meeting.objects
         .filter(
-            event__start__gte=datetime.now(),
+            event__start__gte=timezone.now(),
             ongoing=False
         )
         .order_by('event__start')
@@ -224,6 +260,18 @@ def add_point_to_next_meeting(request, point):
     meeting.save()
     r = {'new_point': point, 'full_oj': meeting.OJ}
     return JsonResponse(r, safe=False)
+
+
+def attending(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    event.meeting.members.add(request.user)
+    return HttpResponseRedirect(event.get_absolute_url())
+
+
+def not_attending(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    event.meeting.members.remove(request.user)
+    return HttpResponseRedirect(event.get_absolute_url())
 
 
 class NextMeetingAPI(APIView):

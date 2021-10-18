@@ -1,0 +1,46 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt -r requirements-dev.txt
+
+      - name: Lint python code
+        run: flake8 --ignore=E501,F401,E402,F811,E731,F403 .
+
+      - name: Run django checks
+        run: ./manage.py check
+
+      - name: Check migrations
+        run: ./manage.py makemigrations --dry-run --check
+
+      - name: Run tests
+        run: FAKE_REDIS=1 DEBUG=1 py.test
+
+  docker:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build docker image
+        run: docker build -t urlab/incubator .

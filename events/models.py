@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from datetime import timedelta
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import timezone
 from django_resized import ResizedImageField
 import requests
@@ -17,9 +17,10 @@ class Event(models.Model):
     start = models.DateTimeField(verbose_name='Date et heure de début', blank=True, null=True)
     stop = models.DateTimeField(verbose_name='Date et heure de fin', blank=True, null=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, verbose_name='Etat')
-    organizer = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Organisateur')
+    organizer = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Organisateur', on_delete=models.DO_NOTHING)
     description = models.TextField(blank=True)
-    picture = ResizedImageField(size=[500, 500], upload_to='event_pictures', null=True, blank=True)
+    picture = ResizedImageField(
+        size=[500, 500], crop=['middle', 'center'], quality=100, upload_to='event_pictures', null=True, blank=True)
     interested = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="interesting_events")
 
     def is_only_a_day(self):
@@ -77,7 +78,7 @@ class Meeting(models.Model):
             ("run_meeting", "Peut mener des réunions"),
         )
 
-    event = models.OneToOneField(Event, verbose_name="Événement")
+    event = models.OneToOneField(Event, verbose_name="Événement", on_delete=models.CASCADE)
     OJ = models.TextField(verbose_name='Ordre du jour', blank=True)
     PV = models.TextField(blank=True)
     members = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name='Membres présents', blank=True)

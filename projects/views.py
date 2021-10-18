@@ -1,11 +1,13 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import viewsets
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormMixin
 from django.views.generic import CreateView, UpdateView
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.contrib import messages
-from datetime import datetime
+from django.utils import timezone
+# from datetime import datetime
 from actstream import action
 from math import ceil
 from itertools import groupby
@@ -14,8 +16,8 @@ from users.decorators import permission_required
 from users.mixins import PermissionRequiredMixin
 
 from .serializers import ProjectSerializer
-from .models import Project, Task
-from .forms import ProjectForm
+from .models import Project, Task, Comment
+from .forms import ProjectForm, CommentForm
 
 
 class ProjectAddView(PermissionRequiredMixin, CreateView):
@@ -54,6 +56,36 @@ class ProjectDetailView(DetailView):
     template_name = 'project_detail.html'
     context_object_name = 'project'
 
+    def get_success_url(self):
+        return reverse('view_project', kwargs={'pk': self.object.id})
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectDetailView, self).get_context_data(**kwargs)
+        context['form'] = CommentForm(initial={'project': self.object, 'author': self.request.user})
+        return context
+
+
+def upvote_comment(request, project_id, comment_id):
+    user = request.user
+    comment = Comment.objects.get(id=comment_id)
+
+    comment.up_vote_user.add(user)
+    if user in comment.down_vote_user.all():
+        comment.down_vote_user.remove(user)
+
+    return redirect(reverse('view_project', kwargs={'pk': project_id}))
+
+
+def downvote_comment(request, project_id, comment_id):
+    user = request.user
+    comment = Comment.objects.get(id=comment_id)
+
+    comment.down_vote_user.add(user)
+    if user in comment.up_vote_user.all():
+        comment.up_vote_user.remove(user)
+
+    return redirect(reverse('view_project', kwargs={'pk': project_id}))
+
 
 def clusters_of(seq, size):
     for i in range(int(ceil(len(seq) / size))):
@@ -67,11 +99,12 @@ def projects_home(request):
     # group the finised and "ants are gone" projets together
     grouper = lambda x: x.status if x.status != "a" else "f"
     groups = {k: list(g) for k, g in groupby(projects, grouper)}
-    return render(request, "projects_home.html", {
-        'progress': clusters_of(groups.get('i',[]), 4),
-        'done': clusters_of(groups.get('f',[]), 4),
-        'proposition': clusters_of(groups.get('p',[]), 4),
-    })
+    context = {
+        'progress': clusters_of(groups.get('i', []), 4),
+        'done': clusters_of(groups.get('f', []), 4),
+        'proposition': clusters_of(groups.get('p', []), 4),
+    }
+    return render(request, "projects_home.html", context)
 
 
 @permission_required('projects.add_task')
@@ -100,7 +133,7 @@ def add_task(request, pk):
 def complete_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.completed_by = request.user
-    task.completed_on = datetime.now()
+    task.completed_on = timezone.now()
     task.save()
 
     action.send(request.user, verb='a fini la tâche', action_object=task, target=task.project)
@@ -133,6 +166,18 @@ def remove_participation(request, pk):
     project = get_object_or_404(Project, pk=pk)
     project.participants.remove(request.user)
     return HttpResponseRedirect(reverse('view_project', args=[pk]))
+
+
+def add_comment(request, project_id):
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+    project = get_object_or_404(Project, id=project_id)
+    action.send(request.user, verb='a commenté sur le projet', action_object=project)
+
+    return HttpResponseRedirect(reverse('view_project', args=[project_id]))
 
 
 class ProjectViewSet(viewsets.ModelViewSet):

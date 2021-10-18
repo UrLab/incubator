@@ -1,10 +1,12 @@
 incubator/local_settings.py
 media/
 ve/
+ve3/
 collected_static/
 
 # IDE
 .idea
+.vscode
 
 
 # Byte-compiled / optimized / DLL files
@@ -28,6 +30,7 @@ parts/
 sdist/
 var/
 ve/
+ve3/
 *.egg-info/
 .installed.cfg
 *.egg
@@ -65,3 +68,7 @@ target/
 
 # db
 db.sqlite3
+
+# env
+.env
+.env.db

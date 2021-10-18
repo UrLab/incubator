@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.core.validators import MaxValueValidator
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import timezone
 from datetime import timedelta
 from django_resized import ResizedImageField
@@ -28,7 +28,8 @@ class Project(models.Model):
 
     title = models.CharField(max_length=300, verbose_name='Nom')
 
-    maintainer = models.ForeignKey(User, related_name="maintained_projects", verbose_name='Mainteneur')
+    maintainer = models.ForeignKey(
+        User, related_name="maintained_projects", verbose_name='Mainteneur', on_delete=models.DO_NOTHING)
     participants = models.ManyToManyField(User, blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
@@ -38,7 +39,8 @@ class Project(models.Model):
     progress = models.PositiveIntegerField(validators=[MaxValueValidator(100)], verbose_name="Progression")
     dependencies = models.ManyToManyField('self', blank=True, verbose_name="Dépendences")
 
-    picture = ResizedImageField(size=[500, 500], upload_to='project_pictures', null=True, blank=True)
+    picture = ResizedImageField(
+        size=[500, 500], crop=['middle', 'center'], quality=100, upload_to='project_pictures', null=True, blank=True)
 
     short_description = models.CharField(max_length=1000, verbose_name="Description courte")
     content = models.TextField(verbose_name="Contenu", blank=True)
@@ -62,13 +64,15 @@ class Project(models.Model):
 
 
 class Task(models.Model):
-    project = models.ForeignKey(Project, related_name='tasks', verbose_name='Projet')
+    project = models.ForeignKey(Project, related_name='tasks', verbose_name='Projet', on_delete=models.CASCADE)
     name = models.CharField(max_length=300, verbose_name='Nom')
 
-    proposed_by = models.ForeignKey(User, related_name='proposed_tasks', verbose_name='Proposé par')
+    proposed_by = models.ForeignKey(
+        User, related_name='proposed_tasks', verbose_name='Proposé par', on_delete=models.DO_NOTHING)
     proposed_on = models.DateTimeField(verbose_name='Date de création', auto_now_add=True)
 
-    completed_by = models.ForeignKey(User, related_name='completed_tasks', verbose_name='Réalisé par', null=True, blank=True)
+    completed_by = models.ForeignKey(
+        User, related_name='completed_tasks', verbose_name='Réalisé par', null=True, blank=True, on_delete=models.SET_NULL)
     completed_on = models.DateTimeField(verbose_name='Date de réalisation', null=True, blank=True)
 
     @property
@@ -81,3 +85,23 @@ class Task(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Comment(models.Model):
+    project = models.ForeignKey(Project, related_name='comments', verbose_name='Projet', on_delete=models.CASCADE)
+
+    author = models.ForeignKey(User, verbose_name='Auteur', on_delete=models.DO_NOTHING)
+    content = models.TextField(verbose_name='Commentaire')
+
+    created = models.DateTimeField(auto_now_add=True)
+
+    up_vote_user = models.ManyToManyField(User, related_name='up_vote', verbose_name='Like', blank=True)
+    down_vote_user = models.ManyToManyField(User, related_name='down_vote', verbose_name='Dislike', blank=True)
+
+    @property
+    def up_vote(self):
+        return self.up_vote_user.all().count()
+
+    @property
+    def down_vote(self):
+        return self.down_vote_user.all().count()
