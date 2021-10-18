@@ -38,6 +38,7 @@ def home(request):
         "event_page": False,
     })
 
+
 def new(request):
     return render(request, "new.html")
 
