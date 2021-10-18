@@ -19,8 +19,18 @@ class ApproveBadgeForm(forms.ModelForm):
 
 class CreateBadgeForm(forms.ModelForm):
     """A form to create a new badge proposition"""
+    anonymous = forms.BooleanField(label="Proposer anonymement", required=False)
 
     class Meta:
         model = Badge
-        widgets = {'approved': forms.HiddenInput()}
-        exclude = ['proposed_by', 'approved']
+        widgets = {
+            'approved': forms.HiddenInput(),
+            'proposed_by': forms.HiddenInput()
+        }
+        exclude = ['approved']
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        if cleaned_data['anonymous']:
+            cleaned_data['proposed_by'] = None
+        return cleaned_data

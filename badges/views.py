@@ -66,7 +66,7 @@ class ProposeBadgeView(CreateView):
 
     def get_initial(self):
         initial = super().get_initial()
-        initial['approved'] = True
+        initial['proposed_by'] = self.request.user
         return initial
 
     def form_valid(self, form):
