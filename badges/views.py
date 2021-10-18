@@ -20,7 +20,10 @@ class BadgeHomeView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['badges'] = self.object_list.annotate(num_wears=Count('badgewear'))
+        context['approved_badges'] = context['badges'].filter(
+            approved=True).annotate(num_wears=Count('badgewear'))
+
+        context['other_badges'] = context['badges'].filter(approved=False)
 
         return context
 

@@ -30,7 +30,7 @@
             </th>
         </tr>
         <tbody>
-            {% for badge in badges %}
+            {% for badge in approved_badges %}
                 {% if not badge.hidden or request.user.username in badge.userlist %}
                 <tr>
                     <td class="col-md-2">
@@ -52,9 +52,60 @@
                     </td>
                 </tr>
                 {% endif %}
+            {% empty %}
+            <tr>
+                <td class="col-md-2"></td>
+                <td class="col-md-8">
+                    c'est plutôt pas très rempli :)
+                </td>
+                <td class="col-md-2"></td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    {% if other_badges %}
+        <h1>
+            Badges en attente d'approbation
+        </h1>
+
+        <table class="table table-striped">
+            <tr>
+                <th class="col-md-2">
+                    Badge
+                </th>
+                <th class="col-md-8">
+                    Description
+                </th>
+                <th class="col-md-2">
+                    N° de membres
+                </th>
+            </tr>
+            <tbody>
+                {% for badge in other_badges %}
+                    <tr>
+                        <td class="col-md-2">
+                            {% if not badge.icon %}
+                                <img src="/static/img/default-event.png" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
+                            {% else %}
+                                <img src="{{ badge.icon.url }}" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
+                            {% endif %}
+
+                            <a href="/badges/{{ badge.pk }}">
+                                {{ badge.name }}
+                            </a>
+                        </td>
+                        <td class="col-md-8">
+                            {{ badge.description|markdown|truncatechars:120 }}
+                        </td>
+                        <td class="col-md-2">
+                            {{ badge.num_wears }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 </div>
 
 {% endblock %}
