@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load formatting %}
+{% load static %}
 
 {% block title %}
     Badges
@@ -86,7 +87,7 @@
                     <tr>
                         <td class="col-md-2">
                             {% if not badge.icon %}
-                                <img src="/static/img/default-event.png" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
+                                <img src="{% static "img/default-event.png" %}" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
                             {% else %}
                                 <img src="{{ badge.icon.url }}" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
                             {% endif %}
