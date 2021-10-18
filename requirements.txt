@@ -80,7 +80,7 @@ idna==2.10
     # via requests
 influxdb==5.3.1
     # via -r requirements.in
-ipython==7.27.0
+ipython==7.28.0
     # via -r requirements.in
 ipython-genutils==0.2.0
     # via traitlets
