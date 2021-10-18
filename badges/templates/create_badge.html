@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load formatting %}
+{% load bootstrap4 %}
+
+{% block title %}
+    Proposition de badge
+{% endblock %}
+
+{% block head %}
+    {{ form.media }}
+{% endblock %}
+
+{% block content %}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">UrLab</a></li>
+        <li class="breadcrumb-item"><a href="/badges/">Badges</a></li>
+        <li class="breadcrumb-item active">proposer</li>
+    </ol>
+</nav>
+
+<div class="page-header">
+    <h1>
+        Proposition de badge
+    </h1>
+
+    <form action="" method="post" class="form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+        <button type="submit" class="btn btn-success">
+            Approuver <i class="fas fa-check"></i>
+        </button>
+        {% endbuttons %}
+    </form>
+</div>
+
+{% endblock %}
