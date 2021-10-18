@@ -12,7 +12,7 @@ from actstream import action as djaction
 
 from users.mixins import PermissionRequiredMixin
 
-from .forms import BadgeWearForm, ApproveBadgeForm
+from .forms import BadgeWearForm, ApproveBadgeForm, CreateBadgeForm
 from .models import Badge, BadgeWear
 
 
@@ -57,6 +57,23 @@ class BadgeDetailView(DetailView):
             context['is_master'] = False
 
         return context
+
+
+class ProposeBadgeView(CreateView):
+    form_class = CreateBadgeForm
+    model = Badge
+    template_name = 'create_badge.html'
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['approved'] = True
+        return initial
+
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+        djaction.send(self.request.user, verb='a proposé', action_object=self.object)
+
+        return ret
 
 
 class BadgeApproveView(PermissionRequiredMixin, UpdateView):
