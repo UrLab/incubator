@@ -1,7 +1,7 @@
-name: build and push docker
+name: Run tests
 
 on:
-  push:
+  pull_request:
     branches:
       - main
 
@@ -32,16 +32,3 @@ jobs:
 
       - name: Run tests
         run: FAKE_REDIS=1 DEBUG=1 py.test
-
-  docker:
-    runs-on: ubuntu-20.04
-
-    steps:
-      - uses: docker/setup-buildx-action@v1
-        name: Set up Docker Buildx
-
-      - uses: docker/build-push-action@v2
-        name: Build and push
-        with:
-          push: true
-          tags: docker.pkg.github.com/UrLab/incubator:latest
