@@ -6,9 +6,13 @@ from django.views.generic import ListView
 from users.models import User
 from django.db.models import Count
 from django.utils import timezone
+from django.views.generic import CreateView, UpdateView
 
 from actstream import action as djaction
-from .forms import BadgeWearForm
+
+from users.mixins import PermissionRequiredMixin
+
+from .forms import BadgeWearForm, ApproveBadgeForm
 from .models import Badge, BadgeWear
 
 
@@ -53,6 +57,24 @@ class BadgeDetailView(DetailView):
             context['is_master'] = False
 
         return context
+
+
+class BadgeApproveView(PermissionRequiredMixin, UpdateView):
+    form_class = ApproveBadgeForm
+    model = Badge
+    template_name = 'approve_badge.html'
+    permission_required = 'badges.approve_badge'
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['approved'] = True
+        return initial
+
+    def form_valid(self, form):
+        ret = super().form_valid(form)
+        djaction.send(self.request.user, verb='a approuvé', action_object=self.object)
+
+        return ret
 
 
 def BadgeWearAddView(request, pk=0):
