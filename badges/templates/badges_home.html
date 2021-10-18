@@ -92,9 +92,15 @@
                                 <img src="{{ badge.icon.url }}" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
                             {% endif %}
 
-                            <a href="{% url "badge_review" badge.pk %}">
-                                {{ badge.name }}
-                            </a>
+                            {% if 'badges.approve_badge' in perms %}
+                                <a href="{% url "badge_review" badge.pk %}">
+                                    {{ badge.name }}
+                                </a>
+                            {% else %}
+                                <a href="{% url "badge_view" badge.pk %}">
+                                    {{ badge.name }}
+                                </a>
+                            {% endif %}
                         </td>
                         <td class="col-md-8">
                             {{ badge.description|markdown|truncatechars:120 }}
