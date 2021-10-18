@@ -3,25 +3,22 @@ from badges.models import BadgeWear, Badge
 
 
 class BadgeWearForm(forms.ModelForm):
-
+    """A form to give a user a badge"""
     class Meta:
         model = BadgeWear
         fields = ('user', 'level')
 
 
 class ApproveBadgeForm(forms.ModelForm):
-
+    """A form to approve a proposed badge"""
     class Meta:
         model = Badge
         widgets = {'approved': forms.HiddenInput()}
         exclude = ['name', 'description', 'hidden', 'icon', 'proposed_by']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['approved'].value = True
-
 
 class CreateBadgeForm(forms.ModelForm):
+    """A form to create a new badge proposition"""
 
     class Meta:
         model = Badge
