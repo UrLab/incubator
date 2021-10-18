@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - main
+      - fix_github_package
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   test:
@@ -35,10 +40,26 @@ jobs:
 
   docker:
     runs-on: ubuntu-20.04
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - uses: docker/setup-buildx-action@v1
         name: Set up Docker Buildx
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - uses: docker/build-push-action@v2
         name: Build and push
