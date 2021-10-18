@@ -79,7 +79,7 @@
                     Description
                 </th>
                 <th class="col-md-2">
-                    N° de membres
+                    Initiateur
                 </th>
             </tr>
             <tbody>
@@ -106,7 +106,11 @@
                             {{ badge.description|markdown|truncatechars:120 }}
                         </td>
                         <td class="col-md-2">
-                            {{ badge.num_wears }}
+                            {% if badge.proposed_by %}
+                                <a href="{% url "user_profile" badge.proposed_by.username %}">{{ badge.proposed_by.username }}</a>
+                            {% else %}
+                                Proposition anonyme
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
