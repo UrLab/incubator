@@ -103,8 +103,8 @@
                     </a>
                 </li>
 
-                <li class="">
-                    <a href="{% url "new" %}">
+                <li class="nav-item {% active_if_contains "/new/" %}">
+                    <a class="nav-link" href="{% url "new" %}">
                         <i class="fa fa-info-circle"></i>
                         Nouveau au hackerspace ?
                     </a>
