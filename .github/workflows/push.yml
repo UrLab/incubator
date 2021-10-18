@@ -44,4 +44,4 @@ jobs:
         name: Build and push
         with:
           push: true
-          tags: docker.pkg.github.com/UrLab/incubator:latest
+          tags: docker.pkg.github.com/urlab/incubator:latest
