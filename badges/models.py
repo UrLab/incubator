@@ -7,6 +7,11 @@ from incubator import settings
 
 
 class Badge(models.Model):
+    class Meta:
+        permissions = (
+            ("approve_badge", "Peut approuver une proposition de badge"),
+        )
+
     name = models.CharField(max_length=30, unique=True)
     description = models.TextField()
     hidden = models.BooleanField(default=False)
