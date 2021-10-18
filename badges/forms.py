@@ -19,3 +19,11 @@ class ApproveBadgeForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['approved'].value = True
+
+
+class CreateBadgeForm(forms.ModelForm):
+
+    class Meta:
+        model = Badge
+        widgets = {'approved': forms.HiddenInput()}
+        exclude = ['proposed_by', 'approved']
