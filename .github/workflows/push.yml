@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - fix_github_package
 
 env:
   REGISTRY: ghcr.io

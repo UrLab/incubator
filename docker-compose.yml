@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   web:
-    image: docker.pkg.github.com/UrLab/incubator:latest
+    image: ghcr.io/urlab/incubator:main
     volumes:
       - static_volume:/srv/collected_static
       - media_volume:/srv/media
