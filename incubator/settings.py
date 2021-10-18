@@ -260,6 +260,7 @@ CONSTANCE_CONFIG = {
         "Color of the message to show on the homepage.",
         "bootstrap-alert",
     ),
+    "LIVESTREAM_URL": ("", "Url of the .flv endpoint for the livestream", str),
 }
 
 OPEN_WEEKDAYS = [0, 1, 2, 3, 4]  # Monday is day 0

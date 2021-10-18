@@ -17,7 +17,7 @@
 
 <div class="pb-2 mt-4 mb-2 border-bottom">
   <h1 style=" word-wrap: break-word">
-    {{event.title}}
+    {% if event.is_talk %}Conférence: {% endif %}{{event.title}}
     <a class="btn btn-outline-dark" href="{% url "edit_event" event.id %}">
         <span class="fa fa-edit" aria-hidden="true"></span>
         Editer
@@ -69,7 +69,7 @@
                   {% endif %}
                 {% endwith %}
             </p>
-            {% if request.user.is_authenticated and not event.meeting %}
+            {% if request.user.is_authenticated and not event.meeting and not event.is_talk %}
               <p>Cet événement n'a pas d'ordre du jour. <a href="{% url "add_meeting" event.id %}" class="btn btn-outline-dark btn-sm">Ajouter un OJ</a></p>
             {% endif %}
         </div>
@@ -85,7 +85,6 @@
   {% endif %}
   {% if not event.meeting %}
       <div class="col-md-8" style=" word-wrap: break-word">
-        <h2>Description</h2>
         {{event.description|markdown}}
       </div>
       {% if event.picture %}

@@ -20,8 +20,9 @@ class Event(models.Model):
     organizer = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Organisateur', on_delete=models.DO_NOTHING)
     description = models.TextField(blank=True)
     picture = ResizedImageField(
-        size=[500, 500], crop=['middle', 'center'], quality=100, upload_to='event_pictures', null=True, blank=True)
-    interested = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="interesting_events")
+        size=[500, 500], crop=['middle', 'center'], quality=100, upload_to='event_pictures', null=True, blank=True, verbose_name="Image")
+    interested = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="interesting_events", verbose_name="Personnes intéressées")
+    is_talk = models.BooleanField(default=False, verbose_name="Cet événement est une conférence")
 
     def is_only_a_day(self):
         return self.start.date() == self.stop.date()
@@ -59,6 +60,12 @@ class Event(models.Model):
 
     def all_day(self):
         return False
+
+    def talks(self):
+        if not self.is_talk:
+            return None
+        lines = self.description.split("\n")
+        return [x.strip().strip("#") for x in lines if x.strip().startswith("##")]
 
     class Meta:
         verbose_name = "Événement"

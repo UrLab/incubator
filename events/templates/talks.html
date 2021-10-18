@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  Conférences
+{% endblock %}
+
+{% block head %}
+  <style>
+      video {
+          max-width: 100%;
+          max-height: 97vh;
+          box-shadow: 3px 3px 6px #000;
+      }
+      .action-unmute {
+          width: 100%;
+      }
+  </style>
+  {% if not live %}
+    <meta http-equiv="refresh" content="300">
+  {% endif  %}
+{% endblock %}
+
+{% block content %}
+
+  <script src="{% static 'js/flv.min.js' %}"></script>
+  <div id="live-stream" style="display: none" class="mb-5">
+    <h1>Live stream</h1>
+    <video id="videoElement" width="100%" controls autoplay muted></video>
+      <button type="button" class="action-unmute btn btn-success">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-mic" viewBox="0 0 16 16">
+    <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"></path>
+    <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5zM8 0a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V3a3 3 0 0 0-3-3z"></path>
+    </svg>Unmute</button>
+  </div>
+  {% if live %}
+    <div id="live-alternative" class="row mb-5">
+      <div class="col-md-6 col-sm-12">
+        <img src="{% static 'img/waiting.gif' %}" />
+      </div>
+      <div class="col-md-6 col-sm-12">
+        <h1>{{live.title}}</h1>
+        <p>
+          Le live de la conférence va bientôt commencer et sera disponible sur cette page.
+          Vous pouvez aussi le regarder sur notre
+          <a href="https://twitch.tv/urlab">chaine Twitch</a>.
+        </p>
+        <p>
+          La conférence devrait commencer aux alentours de {{live.start|time}}.
+        </p>
+        <a href="{% url 'view_event' live.pk %}" class="btn btn-primary">Programme des talks</a>
+      </div>
+    </div>
+  {% endif %}
+
+{% if future_events %}
+  <h1>Prochaine{{future_events|pluralize}} conférence{{future_events|pluralize}}</h1>
+  {% for event in future_events %}
+    <div class="card mb-3" >
+      <div class="row no-gutters">
+        <div class="col-md-4">
+          <a href="{% url 'view_event' event.pk %}">
+            {% if event.picture %}
+            <img src="{{event.picture.url}}" class="card-img">
+            {% else %}
+            <img src="{% static 'img/no-talk.png'%}" class="card-img">
+            {% endif %}
+          </a>
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">{{event.title}}</h5>
+            <p class="card-text">
+              <ul>
+                {% for talk in event.talks %}
+                  <li>{{talk}}</li>
+                {% endfor %}
+              </ul>
+            </p>
+            <p class="card-text"><small class="text-muted">{{event.start}}</small></p>
+            <a href="{% url 'view_event' event.pk %}" class="btn btn-primary">Description des talks</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endif %}
+
+<h1>Conférences organisées par UrLab</h1>
+<p>UrLab organise régulièrement des conférences</p>
+<div class="row">
+  {% for event in past_events %}
+    <div class="col-lg-3 col-sm-6">
+      <div class="card">
+        <a href="{% url 'view_event' event.pk %}">
+          {% if event.picture %}
+          <img class="card-img-top" src="{{event.picture.url}}" alt="Card image cap">
+          {% else %}
+          <img class="card-img-top" src="{% static 'img/no-talk.png'%}" alt="Card image cap">
+          {% endif %}
+
+        </a>
+        <div class="card-body">
+          <h5 class="card-title">{{event.title}}</h5>
+          <p class="card-text"><small class="text-muted">{{event.start}}</small></p>
+          <a href="{% url 'view_event' event.pk %}" class="btn btn-secondary">Détails</a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+  <script>
+    function enableStream() {
+      if (flvjs.isSupported()) {
+
+        $.ajax('{{stream_url}}', {
+          method: 'HEAD',
+          timeout: 5000,
+        }).done(function() {
+          let videoElement = document.getElementById('videoElement');
+          let flvPlayer = flvjs.createPlayer({
+            type: 'flv',
+            url: '{{stream_url}}'
+          });
+          flvPlayer.attachMediaElement(videoElement);
+          flvPlayer.load();
+          flvPlayer.play();
+
+          $('#live-stream').show();
+          $('#live-alternative').hide();
+
+          Array.from(document.getElementsByClassName('action-unmute')
+          ).forEach(element => element.addEventListener('click', function (){
+              flvPlayer.muted = false;
+              element.style.display = 'none';
+            }
+          ));
+
+        })
+        .fail(function() {
+          console.log("Livestream is not available");
+          setTimeout(function(){
+             console.log("Retrying stream loading...");
+             enableStream();
+          }, 1000 * 60);
+        })
+      }
+    }
+    enableStream();
+  </script>
+
+{% endblock %}

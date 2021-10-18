@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponse, JsonResponse, HttpResponseBadRequest
@@ -26,6 +28,7 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from constance import config as dyn_config
 
 
 class EventAddView(PermissionRequiredMixin, CreateView):
@@ -62,6 +65,22 @@ class EventDetailView(DetailView):
     model = Event
     template_name = 'event_detail.html'
     context_object_name = 'event'
+
+
+def talks(request):
+    cutoff = timezone.now()
+    events = Event.objects.filter(is_talk=True)
+    future_events = events.filter(start__gt=cutoff)
+    past_events = events.filter(stop__lt=cutoff)
+    return render(
+        request, 'talks.html',
+        {
+            'live': events.filter(start__lt=cutoff + timedelta(minutes=30), stop__gt=cutoff - timedelta(hours=2)).first(),
+            'future_events': future_events,
+            'past_events': past_events,
+            'stream_url': dyn_config.LIVESTREAM_URL,
+        }
+    )
 
 
 class MeetingAddView(PermissionRequiredMixin, CreateView):
