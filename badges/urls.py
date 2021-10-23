@@ -1,14 +1,12 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
-from .views import BadgeDetailView, promote_user,\
-    BadgeHomeView, BadgeWearAddView
+import badges.views as bviews
 
 urlpatterns = [
-    path('', BadgeHomeView.as_view(), name='badges_home_view'),
-    path('add/<int:pk>/', BadgeWearAddView, name='badges_add'),
-    path('add/', BadgeWearAddView, name='badges_add'),
-    path(
-        '<slug:action>/<str:username>/<int:pk>/', login_required(promote_user), name='promote_user'),
-    path(
-        '<int:pk>/', login_required(BadgeDetailView.as_view()), name='badge_view'),
+    path('', bviews.BadgeHomeView.as_view(), name='badges_home_view'),
+    path('add/<int:pk>/', bviews.BadgeWearAddView, name='badges_add'),
+    path('propose/', login_required(bviews.ProposeBadgeView.as_view()), name='badge_proposal'),
+    path('<int:pk>/', login_required(bviews.BadgeDetailView.as_view()), name='badge_view'),
+    path('<int:pk>/review', login_required(bviews.BadgeApproveView.as_view()), name='badge_review'),
+    path('<slug:action>/<str:username>/<int:pk>/', login_required(bviews.promote_user), name='promote_user'),
 ]

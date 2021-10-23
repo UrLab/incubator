@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load formatting %}
+{% load static %}
 
 {% block title %}
     Badges
@@ -30,7 +31,7 @@
             </th>
         </tr>
         <tbody>
-            {% for badge in badges %}
+            {% for badge in approved_badges %}
                 {% if not badge.hidden or request.user.username in badge.userlist %}
                 <tr>
                     <td class="col-md-2">
@@ -40,7 +41,7 @@
                             <img src="{{ badge.icon.url }}" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
                         {% endif %}
 
-                        <a href="/badges/{{ badge.pk }}">
+                        <a href="{% url "badge_view" badge.pk %}">
                             {{ badge.name }}
                         </a>
                     </td>
@@ -52,9 +53,76 @@
                     </td>
                 </tr>
                 {% endif %}
+            {% empty %}
+            <tr>
+                <td class="col-md-2"></td>
+                <td class="col-md-8">
+                    c'est plutôt pas très rempli :)
+                </td>
+                <td class="col-md-2"></td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    {% if other_badges %}
+        <h1>
+            Badges en attente d'approbation
+        </h1>
+
+        <table class="table table-striped">
+            <tr>
+                <th class="col-md-2">
+                    Badge
+                </th>
+                <th class="col-md-8">
+                    Description
+                </th>
+                <th class="col-md-2">
+                    Initiateur
+                </th>
+            </tr>
+            <tbody>
+                {% for badge in other_badges %}
+                    <tr>
+                        <td class="col-md-2">
+                            {% if not badge.icon %}
+                                <img src="{% static "img/default-event.png" %}" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
+                            {% else %}
+                                <img src="{{ badge.icon.url }}" alt="Icon {{ badge.name }}" style="width: 30px; margin-right: 10px;" class="img-circle">
+                            {% endif %}
+
+                            {% if 'badges.approve_badge' in perms %}
+                                <a href="{% url "badge_review" badge.pk %}">
+                                    {{ badge.name }}
+                                </a>
+                            {% else %}
+                                <a href="{% url "badge_view" badge.pk %}">
+                                    {{ badge.name }}
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td class="col-md-8">
+                            {{ badge.description|markdown|truncatechars:120 }}
+                        </td>
+                        <td class="col-md-2">
+                            {% if badge.proposed_by %}
+                                <a href="{% url "user_profile" badge.proposed_by.username %}">{{ badge.proposed_by.username }}</a>
+                            {% else %}
+                                Proposition anonyme
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    
+    <div class="d-flex justify-content-end">
+        <a href="{% url "badge_proposal" %}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Proposer un badge
+        </a>
+    </div>
 </div>
 
 {% endblock %}
