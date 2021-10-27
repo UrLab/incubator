@@ -6,8 +6,15 @@
     Badges
 {% endblock %}
 
-{% block content %}
+{% block opengraph %}
+    <meta property="og:title" content="Badges" />
+    <meta property="og:description" content="La liste des badges du hackerspace" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://urlab.be{% url "badges_home_view" %}" />
+    <meta property="og:image" content="https://urlab.be/static/img/space-invaders.png" />
+{% endblock %}
 
+{% block content %}
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/">UrLab</a></li>
     <li class="breadcrumb-item active">Badges</li>
