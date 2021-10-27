@@ -4,8 +4,15 @@
 Evénements de UrLab
 {% endblock %}
 
-{% block content %}
+{% block opengraph %}
+    <meta property="og:title" content="Événements du hackerspace" />
+    <meta property="og:description" content="La liste des événements du hackerspace" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://urlab.be{% url "events_home" %}" />
+    <meta property="og:image" content="https://urlab.be/static/img/space-invaders.png" />
+{% endblock %}
 
+{% block content %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/">UrLab</a></li>

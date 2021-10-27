@@ -5,8 +5,22 @@
 {{event.title}}
 {% endblock %}
 
-{% block content %}
+{% block opengraph %}
+    <meta property="og:title" content="{{ event.title }}" />
+    <meta property="og:url" content="https://urlab.be{% url "view_event" event.pk %}" />
+    <meta property="og:description" content="{{ event.description }}" />
+    {% if event.picture %}
+        <meta property="og:image" content="https://urlab.be{{ event.picture.url }}" />
+    {% else %}
+        <meta property="og:image" content="https://urlab.be/static/img/default-event.png" />
+    {% endif %}
+    <meta property="article:section" content="Événement" />
+    <meta property="article:author" content="{{ event.maintainer.username }}" />
+    <meta property="article:published_time" content="{{ project.created|date:"c" }}" />
+    <meta property="article:modified_time" content="{{ project.modified|date:"c" }}" />
+{% endblock %}
 
+{% block content %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/">UrLab</a></li>

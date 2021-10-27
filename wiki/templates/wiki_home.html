@@ -4,8 +4,15 @@
 Wiki UrLab
 {% endblock %}
 
-{% block content %}
+{% block opengraph %}
+    <meta property="og:title" content="Wiki du hackerspace" />
+    <meta property="og:description" content="Le wiki du hackerspace, toute l'aide dont tu as besoin est ici :)" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://urlab.be{% url "wiki_home" %}" />
+    <meta property="og:image" content="https://urlab.be/static/img/space-invaders.png" />
+{% endblock %}
 
+{% block content %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/">UrLab</a></li>
