@@ -10,7 +10,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  test:
+  pytest:
     runs-on: ubuntu-20.04
 
     steps:
