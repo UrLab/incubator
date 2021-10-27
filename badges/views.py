@@ -12,7 +12,7 @@ from actstream import action as djaction
 
 from users.mixins import PermissionRequiredMixin
 
-from .forms import BadgeWearForm, ApproveBadgeForm, CreateBadgeForm
+from .forms import LeveledBadgeWearForm, BadgeWearForm, ApproveBadgeForm, CreateBadgeForm
 from .models import Badge, BadgeWear
 
 
@@ -98,7 +98,6 @@ def BadgeWearAddView(request, pk=0):
     if pk == 0:
         return HttpResponseRedirect(reverse('badges_home_view'))
 
-    form = BadgeWearForm()
     badge = get_object_or_404(Badge, pk=pk)
     badgeWear = request.user.badgewear_set.filter(badge=badge)
 
@@ -106,15 +105,21 @@ def BadgeWearAddView(request, pk=0):
         return HttpResponseForbidden("Vous n'avez pas \
             les droits pour effectuer cette action")
 
-    if request.method == "POST":
+    if badge.has_level:
+        form = LeveledBadgeWearForm(request.POST)
+    else:
         form = BadgeWearForm(request.POST)
 
-        if form.is_valid():
+    if request.method == "POST":
+        if badge.has_level:
+            form = LeveledBadgeWearForm(request.POST)
+        else:
+            form = BadgeWearForm(request.POST)
 
+        if form.is_valid():
             badgeWear = BadgeWear(user=form.cleaned_data['user'])
             badgeWear.badge = badge
-            badgeWear.level = form.cleaned_data['level']
-            badgeWear.action_counter = 0
+            badgeWear.level = form.cleaned_data['level'] if badge.has_level else None
             badgeWear.timestamp = timezone.now()
             badgeWear.attributor = request.user
             badgeWear.save()
