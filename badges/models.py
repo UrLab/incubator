@@ -49,7 +49,7 @@ class BadgeWear(models.Model):
 
     badge = models.ForeignKey('Badge', on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur', on_delete=models.CASCADE)
-    level = models.CharField(max_length=3, choices=LEVEL_CHOICES, default=INITIATE)
+    level = models.CharField(max_length=3, choices=LEVEL_CHOICES, default=INITIATE, null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     attributor = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True,
