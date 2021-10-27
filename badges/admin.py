@@ -11,4 +11,11 @@ class BadgeAdmin(admin.ModelAdmin):
 
 @admin.register(BadgeWear)
 class BadgeWearAdmin(admin.ModelAdmin):
-    list_display = ('badge', 'user', 'level', 'action_counter', 'timestamp', 'attributor')
+
+    @staticmethod
+    def badge_level(obj):
+        if obj.badge.has_level:
+            return obj.get_level_display()
+        return "-"
+
+    list_display = ('badge', 'user', 'badge_level', 'timestamp', 'attributor')
