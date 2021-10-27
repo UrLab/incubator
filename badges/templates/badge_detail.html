@@ -5,8 +5,19 @@
     Badge {{ badge.name }}
 {% endblock %}
 
-{% block content %}
+{% block opengraph %}
+    <meta property="og:title" content="{{ badge.name }}" />
+    <meta property="og:url" content="https://urlab.be{% url "badge_view" badge.pk %}" />
+    <meta property="og:description" content="{{ badge.description }}" />
+    {% if badge.icon %}
+        <meta property="og:image" content="https://urlab.be{{ badge.icon.url }}" />
+    {% else %}
+        <meta property="og:image" content="https://urlab.be/static/img/default-event.png" />
+    {% endif %}
+    <meta property="article:section" content="Badge" />
+{% endblock %}
 
+{% block content %}
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="/">UrLab</a></li>
@@ -112,5 +123,4 @@
     </p>
     {% endif %}
 </div>
-
 {% endblock %}

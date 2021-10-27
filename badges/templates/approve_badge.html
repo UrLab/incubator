@@ -6,6 +6,18 @@
     Badge {{ badge.name }}
 {% endblock %}
 
+{% block opengraph %}
+    <meta property="og:title" content="{{ badge.name }}" />
+    <meta property="og:url" content="https://urlab.be{% url "badge_view" badge.pk %}" />
+    {% if badge.icon %}
+        <meta property="og:image" content="https://urlab.be{{ badge.icon.url }}" />
+    {% else %}
+        <meta property="og:image" content="https://urlab.be/static/img/default-event.png" />
+    {% endif %}
+    <meta property="og:description" content="{{ badge.description }}" />
+    <meta property="article:section" content="Badge" />
+{% endblock %}
+
 {% block head %}
     {{ form.media }}
 {% endblock %}
