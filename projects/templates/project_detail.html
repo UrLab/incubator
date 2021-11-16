@@ -56,11 +56,6 @@
     </h1>
 </div>
 
-{% if not perms.projects.change_project %}
-<div class="alert alert-info" role="alert">
-  Tu n'as pas les droits pour éditer ce projet.
-</div>
-{% endif %}
 
 <div class="row">
     <div class="col-md-8 col-md-pull-4 project-detail-content">
@@ -77,6 +72,13 @@
     </div>
 
     <div class="col-md-4">
+        {% if not perms.projects.change_project and user in project.participants.all%}
+        <div class="alert alert-info" role="alert">
+          <h5 class="alert-heading">Tu n'as pas les droits pour éditer ce projet.</h5>
+          <p>C'est probablement parce que tu n'as pas le statut de membre régulier :(</p>
+        </div>
+        {% endif %}
+
         {% if project.picture %}
         <img src="{{project.picture.url}}" class="img-thumbnail">
         {% endif %}
