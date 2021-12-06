@@ -2,18 +2,24 @@ import django.forms as forms
 from badges.models import BadgeWear, Badge
 
 
-class LeveledBadgeWearForm(forms.ModelForm):
-    """A form to give a user a badge with a level"""
+class BadgeWearForm(forms.ModelForm):
+    """A form to give a user a badge"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        print(kwargs["has_level"])
+        if not kwargs["has_level"]:
+            level = forms.CharField(widget=forms.HiddenInput)
+
     class Meta:
         model = BadgeWear
         fields = ('user', 'level')
 
-
-class BadgeWearForm(forms.ModelForm):
-    """A form to give a user a badge"""
-    class Meta:
-        model = BadgeWear
-        fields = ('user', )
+    def save(self, *args, **kwargs):
+        """Override of the save function"""
+        instance = super().save(commit=False)
+        if not instance.has_level:
+            print(self.fields)
 
 
 class ApproveBadgeForm(forms.ModelForm):
