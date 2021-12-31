@@ -28,6 +28,9 @@
         max-width: 750px;
         max-height: 750px;
     }
+    .alert {
+        display:inline-block;
+    }
 </style>
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
@@ -37,17 +40,22 @@
     </ol>
 </nav>
 
+
 <div class="pb-2 mt-4 mb-2 border-bottom">
     <h1>
-        {{project.title}} <small>{{project.short_description}}</small>
-        <a class="btn btn-primary" href="{% url "edit_project" project.id %}">
+        {{project.title}}
+        {% if perms.projects.change_project %}
+        <a class="btn btn-primary"  href="{% url "edit_project" project.id %}">
             <span class="fa fa-edit" aria-hidden="true"></span>
             Editer
         </a>
-
+        {% endif %}
     </h1>
-
+    <h1>
+        <small>{{project.short_description}}</small>
+    </h1>
 </div>
+
 
 <div class="row">
     <div class="col-md-8 col-md-pull-4 project-detail-content">
@@ -64,6 +72,13 @@
     </div>
 
     <div class="col-md-4">
+        {% if not perms.projects.change_project and user in project.participants.all%}
+        <div class="alert alert-info" role="alert">
+          <h5 class="alert-heading">Tu n'as pas les droits pour éditer ce projet.</h5>
+          <p>C'est probablement parce que tu n'as pas le statut de membre régulier :(</p>
+        </div>
+        {% endif %}
+
         {% if project.picture %}
         <img src="{{project.picture.url}}" class="img-thumbnail">
         {% endif %}
@@ -135,5 +150,5 @@
     <div class="col mt-4">
         {% include "project_comments_list.html" %}
     </div>
-</div> 
+</div>
 {% endblock %}
