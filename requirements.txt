@@ -8,6 +8,8 @@ arrow==0.14.7
     # via ics
 asgiref==3.3.4
     # via django
+asttokens==2.0.5
+    # via stack-data
 backcall==0.2.0
     # via ipython
 beautifulsoup4==4.9.3
@@ -74,13 +76,15 @@ django-simple-history==3.0.0
     # via -r requirements.in
 djangorestframework==3.12.4
     # via -r requirements.in
+executing==0.8.3
+    # via stack-data
 ics==0.7
     # via -r requirements.in
 idna==2.10
     # via requests
 influxdb==5.3.1
     # via -r requirements.in
-ipython==7.28.0
+ipython==8.2.0
     # via -r requirements.in
 ipython-genutils==0.2.0
     # via traitlets
@@ -116,6 +120,8 @@ prompt-toolkit==3.0.18
     # via ipython
 ptyprocess==0.7.0
     # via pexpect
+pure-eval==0.2.2
+    # via stack-data
 pygments==2.9.0
     # via ipython
 pyparsing==2.4.7
@@ -139,6 +145,7 @@ sentry-sdk==1.4.3
     # via -r requirements.in
 six==1.15.0
     # via
+    #   asttokens
     #   bleach
     #   django-jsonfield
     #   ics
@@ -150,6 +157,8 @@ soupsieve==2.2.1
     # via beautifulsoup4
 sqlparse==0.4.2
     # via django
+stack-data==0.2.0
+    # via ipython
 tatsu==5.6.1
     # via ics
 toml==0.10.2
