@@ -2,7 +2,7 @@ from stock.models import ProductTransaction
 from rest_framework import serializers
 
 
-class UtripSerializer(serializers.ModelSerializer):
+class UrtipSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
 
