@@ -4,10 +4,12 @@
 #
 #    pip-compile requirements-dev.in
 #
-astroid==2.8.0
+astroid==2.11.6
     # via pylint
 attrs==20.3.0
     # via pytest
+dill==0.3.5.1
+    # via pylint
 flake8==4.0.1
     # via -r requirements-dev.in
 iniconfig==1.1.1
@@ -40,7 +42,7 @@ pyflakes==2.4.0
     # via
     #   -r requirements-dev.in
     #   flake8
-pylint==2.11.1
+pylint==2.14.4
     # via -r requirements-dev.in
 pyparsing==2.4.7
     # via
@@ -55,7 +57,10 @@ pytest-django==4.4.0
 toml==0.10.2
     # via
     #   -c requirements.txt
-    #   pylint
     #   pytest
+tomli==2.0.1
+    # via pylint
+tomlkit==0.11.0
+    # via pylint
 wrapt==1.12.1
     # via astroid
