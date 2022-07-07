@@ -107,7 +107,7 @@ export SQL_PORT=<PORT>
 
 ## MQTT backend
 ```shell
-    pip install paho-mqtt
+    poetry add paho-mqtt
 ```
 
 
