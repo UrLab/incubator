@@ -6,7 +6,7 @@ from .models import SpaceStatus, MusicOfTheDay
 class PamelaSerializer(serializers.Serializer):
     total_mac_count = serializers.IntegerField()
     last_updated = serializers.DateTimeField()
-    unknown_mac = serializers.ListField(serializers.CharField())
+    unknown_mac = serializers.ListField(child=serializers.CharField())
     age = serializers.IntegerField()
     users = UserSerializer(many=True)
     hidden = serializers.IntegerField()
