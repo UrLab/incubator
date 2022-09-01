@@ -50,7 +50,7 @@ django==3.2.14
     #   wiki
 django-activity-stream==1.4.1
     # via -r requirements.in
-django-bootstrap4==22.1
+django-bootstrap4==22.2
     # via -r requirements.in
 django-classy-tags==3.0.1
     # via django-sekizai
