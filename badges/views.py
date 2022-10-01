@@ -12,7 +12,7 @@ from actstream import action as djaction
 
 from users.mixins import PermissionRequiredMixin
 
-from .forms import BadgeWearForm, ApproveBadgeForm, CreateBadgeForm
+from .forms import LeveledBadgeWearForm, BadgeWearForm, ApproveBadgeForm, CreateBadgeForm
 from .models import Badge, BadgeWear
 
 
@@ -23,8 +23,10 @@ class BadgeHomeView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context['approved_badges'] = context['badges'].filter(
             approved=True).annotate(num_wears=Count('badgewear'))
+
         context['other_badges'] = context['badges'].filter(approved=False)
 
         return context
@@ -100,12 +102,19 @@ def BadgeWearAddView(request, pk=0):
     badgeWear = request.user.badgewear_set.filter(badge=badge)
 
     if not badgeWear or badgeWear[0].level != "MAI":
-        return HttpResponseForbidden("Vous n'avez pas les droits pour effectuer cette action")
+        return HttpResponseForbidden("Vous n'avez pas \
+            les droits pour effectuer cette action")
 
-    form = BadgeWearForm(request.POST)
+    if badge.has_level:
+        form = LeveledBadgeWearForm(request.POST)
+    else:
+        form = BadgeWearForm(request.POST)
 
     if request.method == "POST":
-        form = BadgeWearForm(request.POST)
+        if badge.has_level:
+            form = LeveledBadgeWearForm(request.POST)
+        else:
+            form = BadgeWearForm(request.POST)
 
         if form.is_valid():
             badgeWear = BadgeWear(user=form.cleaned_data['user'])
