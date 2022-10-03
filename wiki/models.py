@@ -32,7 +32,7 @@ class Article(models.Model):
         verbose_name = "Article"
 
     def __str__(self):
-        return self.title
+        return f"{self.title} ({self.commit})"
 
     def get_absolute_url(self):
         return reverse('view_article', args=[self.pk])
