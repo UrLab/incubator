@@ -6,7 +6,7 @@ from django.utils import timezone
 from actstream import action
 
 from .models import Article
-from .forms import ArticleForm
+from .forms import ArticleForm, DiffForm
 
 
 def wiki_home(request):
@@ -18,6 +18,26 @@ def wiki_home(request):
         'miscellaneous': articles.filter(category="d"),
         'objects': articles.filter(category="o"),
         'hackerspace': articles.filter(category="h"),
+    })
+
+
+def diff_article(request):
+    """Compares two versions of an article."""
+    form = DiffForm()
+
+    if request.method == 'POST':
+        form_post = DiffForm(request.POST)
+        if form_post.is_valid():
+            article = form_post.cleaned_data['article']
+            old_article = form_post.cleaned_data['old_article']
+            return render(request, "diff_article.html", {
+                "article": article,
+                "old_article": old_article,
+                "form": form,
+            })
+
+    return render(request, "diff_article.html", {
+        "form": form,
     })
 
 
@@ -57,6 +77,11 @@ class ArticleDetailView(DetailView):
     template_name = 'article_detail.html'
     context_object_name = 'article'
 
+    def get_context_data(self, **kwargs):
+        context = super(ArticleDetailView, self).get_context_data(**kwargs)
+        context['diff_form'] = DiffForm
+
+        return context
 
 class ArticleOldDetailView(DetailView):
     model = Article.history.model
