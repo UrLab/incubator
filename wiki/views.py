@@ -28,9 +28,11 @@ def diff_article(request):
     if request.method == 'POST':
         form_post = DiffForm(request.POST)
         if form_post.is_valid():
-            article = form_post.cleaned_data['article']
-            old_article = form_post.cleaned_data['old_article']
+            article = form_post.cleaned_data['base_commit']
+            old_article = form_post.cleaned_data['comp_commit']
+            delta = article.diff_against(old_article, included_fields=['content'])
             return render(request, "diff_article.html", {
+                "delta": delta,
                 "article": article,
                 "old_article": old_article,
                 "form": form,
