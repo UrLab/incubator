@@ -78,7 +78,8 @@
                         </div>
                     </div>
                 {% endfor %}
-                <form action="{% url "diff_article" %}">
+                <form action="{% url "diff_article" %}" method="POST">
+                    {% csrf_token %}
                     <div class="form-group">
                         {{ diff_form.as_p }}
                     </div>
