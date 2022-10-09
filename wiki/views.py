@@ -1,9 +1,11 @@
+from difflib import HtmlDiff
 from django.shortcuts import render
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from actstream import action
+from bs4 import BeautifulSoup
 
 from .models import Article
 from .forms import ArticleForm, DiffForm
@@ -30,9 +32,18 @@ def diff_article(request):
         if form_post.is_valid():
             article = form_post.cleaned_data['base_commit']
             old_article = form_post.cleaned_data['comp_commit']
-            delta = article.diff_against(old_article, included_fields=['content'])
+
+            # Calculating the delta
+            delta = HtmlDiff().make_table(
+                old_article.content.split("\n"),
+                article.content.split("\n")
+            )
+            # Making the table pretty
+            table = BeautifulSoup(delta, features="html.parser")
+            table.table['class'] = table.table.get('class', []) + ["table table-stripped"]
+
             return render(request, "diff_article.html", {
-                "delta": delta,
+                "delta": table.prettify(),
                 "article": article,
                 "old_article": old_article,
                 "form": form,

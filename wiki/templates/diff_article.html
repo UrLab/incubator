@@ -13,35 +13,24 @@ Formulaire article
 {% endblock %}
 
 {% block content %}
-    Différences:
-    {% for change in delta.changes %}
-        <p id="old">{{ change.old | safe }}</p><p id="new">{{ change.new | safe }}</p>
-    {% empty %}
-        <p>Aucun changement dans le contenu</p>
-    {% endfor %}
+    <h2>Différences:</h2>
 
-    <script>
-        function highlight(newElem, oldElem){ 
-            var oldText = oldElem.text().split("\n"),
-                text = '';
+    <div class="container">
+        {{ delta | safe }}
+    </div>
 
-            newElem.text().split('\n').forEach(function(val, i){
-                if (val != oldText.charAt(i))
-                    text += "<span class='highlight'>"+val+"</span>";
-                else
-                    text += val;
-            });
-            newElem.html(text); 
-        }
-
-        $(document).ready(function(){
-            highlight($("#new"), $("#old"));
-        });
-    </script>
-
-    <style>
-        .highlight {
-            background-color: #4411dd;
-        }
-    </style>
+    <div class="row">
+        <div class="col-2 row-elem"></div>
+        <div class="col-2 row-elem">
+            <a class="btn btn-success" href="{% url "view_article" old_article.pk %}">
+                Voir cette version
+            </a>
+        </div>
+        <div class="col-4 row-elem"></div>
+        <div class="col-2 row-elem">
+            <a class="btn btn-success" href="{% url "view_article" article.pk %}">
+                Voir cette version
+            </a>
+        </div>
+    </div>
 {% endblock %}
