@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block title %}
+Formulaire article
+{% endblock %}
+
+{% block head %}
+    {{ form.media  }}
+    <!-- <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet"> -->
+    <!-- <script type="text/javascript" src="{% static "js/bootstrap-multiselect.js" %}"></script> -->
+{% endblock %}
+
+{% block content %}
+    Différences:
+    {% for change in delta.changes %}
+        <p id="old">{{ change.old | safe }}</p><p id="new">{{ change.new | safe }}</p>
+    {% empty %}
+        <p>Aucun changement dans le contenu</p>
+    {% endfor %}
+
+    <script>
+        function highlight(newElem, oldElem){ 
+            var oldText = oldElem.text().split("\n"),
+                text = '';
+
+            newElem.text().split('\n').forEach(function(val, i){
+                if (val != oldText.charAt(i))
+                    text += "<span class='highlight'>"+val+"</span>";
+                else
+                    text += val;
+            });
+            newElem.html(text); 
+        }
+
+        $(document).ready(function(){
+            highlight($("#new"), $("#old"));
+        });
+    </script>
+
+    <style>
+        .highlight {
+            background-color: #4411dd;
+        }
+    </style>
+{% endblock %}
