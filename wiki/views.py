@@ -30,13 +30,13 @@ def diff_article(request):
     if request.method == 'POST':
         form_post = DiffForm(request.POST)
         if form_post.is_valid():
-            article = form_post.cleaned_data['base_commit']
-            old_article = form_post.cleaned_data['comp_commit']
+            old_article = form_post.cleaned_data['base_commit']
+            article = form_post.cleaned_data['comp_commit']
 
             # Calculating the delta
             delta = HtmlDiff().make_table(
-                article.content.split("\n"),
-                old_article.content.split("\n")
+                old_article.content.split("\n"),
+                article.content.split("\n")
             )
             # Making the table pretty
             table = BeautifulSoup(delta, features="html.parser")
@@ -44,6 +44,7 @@ def diff_article(request):
 
             return render(request, "diff_article.html", {
                 "delta": table.prettify(),
+                "initial_article": article.history_object,
                 "article": article,
                 "old_article": old_article,
                 "form": form,
