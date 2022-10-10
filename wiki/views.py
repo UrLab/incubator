@@ -35,8 +35,8 @@ def diff_article(request):
 
             # Calculating the delta
             delta = HtmlDiff().make_table(
-                old_article.content.split("\n"),
-                article.content.split("\n")
+                article.content.split("\n"),
+                old_article.content.split("\n")
             )
             # Making the table pretty
             table = BeautifulSoup(delta, features="html.parser")
