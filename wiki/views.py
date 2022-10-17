@@ -34,7 +34,7 @@ def diff_article(request):
             article = form_post.cleaned_data['comp_commit']
 
             # Calculating the delta
-            delta = HtmlDiff().make_table(
+            delta = HtmlDiff(wrapcolumn=75).make_table(
                 old_article.content.split("\n"),
                 article.content.split("\n")
             )
