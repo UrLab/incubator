@@ -22,7 +22,7 @@ find /home/incubator/dumps/ -type f -mtime +90 -exec rm {} \;
 if [ -z ${SECONDARY_SERVER_HOST+x} ];
 then
     echo "SECONDARY_SERVER_HOST is unset, can't copy the backup to the secondary server";
-    return;
+    exit -1;
 fi
 
 # Copy the backup file to the secondary server
