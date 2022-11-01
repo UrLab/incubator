@@ -122,7 +122,7 @@ pillow==9.2.0
     # via
     #   -r requirements.in
     #   wiki
-pip-tools==6.8.0
+pip-tools==6.9.0
     # via -r requirements.in
 prompt-toolkit==3.0.30
     # via ipython
