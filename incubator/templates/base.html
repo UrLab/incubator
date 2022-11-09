@@ -1,5 +1,4 @@
 {% load static %}
-{% load bootstrap4 %}
 {% load activelink %}
 
 <!DOCTYPE html>
@@ -10,10 +9,8 @@
     prefix="og: http://ogp.me/ns# place: http://ogp.me/ns/place# article: http://ogp.me/ns/article# fb: http://ogp.me/ns/fb#">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block bootstrapcss %}
-    {% bootstrap_css %}
-    {% endblock %}
-    {% bootstrap_javascript jquery=1 %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
     <script src="https://kit.fontawesome.com/ba8a2a8bc9.js" crossorigin="anonymous"></script>
