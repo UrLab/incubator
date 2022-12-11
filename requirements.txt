@@ -76,7 +76,7 @@ django-nyt==1.2.2
     # via wiki
 django-picklefield==3.1
     # via django-constance
-django-resized==1.0.1
+django-resized==1.0.2
     # via -r requirements.in
 django-sekizai==3.0.1
     # via wiki
