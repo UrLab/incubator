@@ -82,7 +82,7 @@ django-sekizai==3.0.1
     # via wiki
 django-simple-history==3.1.1
     # via -r requirements.in
-djangorestframework==3.13.1
+djangorestframework==3.14.0
     # via -r requirements.in
 executing==0.8.3
     # via stack-data
