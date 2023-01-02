@@ -35,6 +35,7 @@ decorator==5.1.1
 django==3.2.16
     # via
     #   -r requirements.in
+    #   django-activity-stream
     #   django-bootstrap4
     #   django-classy-tags
     #   django-extensions
@@ -46,7 +47,7 @@ django==3.2.16
     #   django-sekizai
     #   djangorestframework
     #   wiki
-django-activity-stream==1.4.1
+django-activity-stream==1.4.2
     # via -r requirements.in
 django-bootstrap4==22.3
     # via -r requirements.in
