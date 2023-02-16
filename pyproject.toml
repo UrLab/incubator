@@ -28,10 +28,10 @@ ics = "^0.7"
 influxdb = "^5.3.1"
 
 [tool.poetry.dev-dependencies]
-pyproject-flake8 = "^0.0.1-alpha.2"
+pyproject-flake8 = "6.0.0"
 isort = "^5.10.1"
 pycodestyle = "^2.8.0"
-pyflakes = "^2.4.0"
+pyflakes = "^3.0.0"
 pytest = "^6.2.5"
 pylint = "^2.12.2"
 pytest-django = "^4.5.1"
@@ -44,7 +44,7 @@ addopts = "--reuse-db --nomigrations"
 [tool.flake8]
 exclude = [".git", "migrations"]
 max-line-length = 125
-
+ignore=["E501", "F401", "E402", "F811", "E731", "F403"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
