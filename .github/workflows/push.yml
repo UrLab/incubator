@@ -22,20 +22,19 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt -r requirements-dev.txt
+          poetry install --with prod
 
       - name: Lint python code
-        run: flake8 --ignore=E501,F401,E402,F811,E731,F403 .
+        run: poetry run flake8 --ignore=E501,F401,E402,F811,E731,F403 .
 
       - name: Run django checks
-        run: ./manage.py check
+        run: poetry run python manage.py check
 
       - name: Check migrations
-        run: ./manage.py makemigrations --dry-run --check
+        run: poetry run python manage.py makemigrations --dry-run --check
 
       - name: Run tests
-        run: FAKE_REDIS=1 DEBUG=1 py.test
+        run: FAKE_REDIS=1 DEBUG=1 poetry run py.test
 
   docker:
     runs-on: ubuntu-20.04
