@@ -6,7 +6,7 @@ authors = ["Members of the hackerspace"]
 license = "AGPL-3.0"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.10"
 Django = "^3.2.9"
 djangorestframework = "^3.12.4"
 django-activity-stream = "^0.10.0"
