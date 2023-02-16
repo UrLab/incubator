@@ -88,6 +88,16 @@ def downvote_comment(request, project_id, comment_id):
 
 
 def clusters_of(seq, size):
+    """Groups a sequence into clusters of a given size.
+
+    Args:
+        seq (_type_): The sequence to group.
+        size (_type_): The size of the clusters.
+
+    Yields:
+        cluster: A cluster of the given size.
+    """
+
     for i in range(int(ceil(len(seq) / size))):
         lower, upper = i * size, (i + 1) * size
         yield seq[lower:upper]
@@ -103,6 +113,7 @@ def projects_home(request):
         'progress': clusters_of(groups.get('i', []), 4),
         'done': clusters_of(groups.get('f', []), 4),
         'proposition': clusters_of(groups.get('p', []), 4),
+        'archived': clusters_of(groups.get('d', []), 4),
     }
     return render(request, "projects_home.html", context)
 
