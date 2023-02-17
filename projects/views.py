@@ -108,7 +108,18 @@ def projects_home(request):
 
     # group the finised and "ants are gone" projets together
     grouper = lambda x: x.status if x.status != "a" else "f"
-    groups = {k: list(g) for k, g in groupby(projects, grouper)}
+
+    # for an unknown reason, the following line does not work
+    # groups = {k: list(g) for k, g in groupby(projects, grouper)}
+    # Here a workaround
+    groups = groupby(projects, grouper)
+    groups = {}
+    for k, g in groups:
+        if k in groups:
+            groups[k].extend(list(g))
+        else:
+            groups[k] = list(g)
+
     context = {
         'progress': clusters_of(groups.get('i', []), 4),
         'done': clusters_of(groups.get('f', []), 4),
