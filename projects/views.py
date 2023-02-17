@@ -107,18 +107,20 @@ def projects_home(request):
     projects = Project.objects.prefetch_related("participants").select_related("maintainer").order_by('status', '-modified')
 
     # group the finised and "ants are gone" projets together
-    grouper = lambda x: x.status if x.status != "a" else "f"
-
+    # grouper = lambda x: x.status if x.status != "a" else "f"
     # for an unknown reason, the following line does not work
     # groups = {k: list(g) for k, g in groupby(projects, grouper)}
+
     # Here a workaround
-    groups = groupby(projects, grouper)
     groups = {}
-    for k, g in groups:
-        if k in groups:
-            groups[k].extend(list(g))
-        else:
-            groups[k] = list(g)
+    for project in projects:
+        status = project.status
+        if project.status == "a":
+            status = "f"
+
+        if status not in groups:
+            groups[status] = []
+        groups[status].append(project)
 
     context = {
         'progress': clusters_of(groups.get('i', []), 4),
