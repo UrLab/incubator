@@ -16,6 +16,17 @@
 #
 ###############################################################################
 
+import base64
+import hashlib
+import hmac
+import json
+import random
+from datetime import datetime
+
+import six
+from six.moves.http_client import HTTPConnection, HTTPSConnection
+from six.moves.urllib import parse
+
 __all__ = ['Client']
 
 try:
@@ -27,17 +38,6 @@ except ImportError:
 import sys
 
 _HAS_SSL_CLIENT_CONTEXT = sys.version_info >= (2, 7, 9)
-
-import json
-import hmac
-import hashlib
-import base64
-import random
-from datetime import datetime
-
-import six
-from six.moves.urllib import parse
-from six.moves.http_client import HTTPConnection, HTTPSConnection
 
 
 def _utcnow():
@@ -118,13 +118,13 @@ class Client:
             if type(secret) == str:
                 secret = six.u(secret)
 
-        assert(type(url) == six.text_type)
-        assert((key and secret) or (not key and not secret))
-        assert(key is None or type(key) == six.text_type)
-        assert(secret is None or type(secret) == six.text_type)
-        assert(type(timeout) == int)
+        assert (type(url) == six.text_type)
+        assert ((key and secret) or (not key and not secret))
+        assert (key is None or type(key) == six.text_type)
+        assert (secret is None or type(secret) == six.text_type)
+        assert (type(timeout) == int)
         if _HAS_SSL and _HAS_SSL_CLIENT_CONTEXT:
-            assert(context is None or isinstance(context, ssl.SSLContext))
+            assert (context is None or isinstance(context, ssl.SSLContext))
 
         self._seq = 1
         self._key = key
@@ -171,7 +171,7 @@ class Client:
         """
         if six.PY2 and type(topic) == str:
             topic = six.u(topic)
-        assert(type(topic) == six.text_type)
+        assert (type(topic) == six.text_type)
 
         # this will get filled and later serialized into HTTP/POST body
         event = {
@@ -180,7 +180,7 @@ class Client:
 
         if 'options' in kwargs:
             event['options'] = kwargs.pop('options')
-            assert(type(event['options']) == dict)
+            assert (type(event['options']) == dict)
 
         if args:
             event['args'] = args
