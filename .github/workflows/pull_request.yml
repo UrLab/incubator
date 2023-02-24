@@ -45,4 +45,4 @@ jobs:
           poetry run flake8
           poetry run python manage.py check
           poetry run python manage.py makemigrations --dry-run --check
-          DJANGO_SETTINGS_MODULE=incubator.settings py.test
+          DJANGO_SETTINGS_MODULE=incubator.settings pytest
