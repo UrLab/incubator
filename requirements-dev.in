@@ -1,9 +1,0 @@
--c requirements.txt
-
-flake8
-isort
-pycodestyle
-pyflakes
-pylint
-pytest
-pytest-django

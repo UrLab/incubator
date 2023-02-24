@@ -30,7 +30,13 @@ But if you want to have try, please do !
 
 # Development guide
 
-This is a typical Django project, the usual `virtualenv`, `requirements.txt`, ... apply.
+This project uses poetry as package manager. To install the requirements for development, you first need to install poetry :
+```
+pip install -U poetry
+```
+Then you will be able to create a virtual environment for the project by typing `poetry install`, and then `poetry shell` in order to spawn a shell within the new environment.
+
+**:warning: You will need to type `exit` in order to leave the poetry virtual environment instead of the classic `deactivate` :warning:**
 
 Please have a look at [`DEVELOPMENT.md`](DEVELOPMENT.md) for an in-depth installation guide as well as help for common tasks.
 

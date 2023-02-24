@@ -14,28 +14,34 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3.3.0
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4.5.0
         with:
           python-version: '3.10'
 
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1.3.3
+        with:
+          version: 1.3.2
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
       - name: Install Python dependencies
         run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt -r requirements-dev.txt
+          poetry install --with prod
 
       - name: Lint python code
-        run: flake8 --ignore=E501,F401,E402,F811,E731,F403 .
+        run: poetry run flake8 --ignore=E501,F401,E402,F811,E731,F403 .
 
       - name: Run django checks
-        run: ./manage.py check
+        run: poetry run python manage.py check
 
       - name: Check migrations
-        run: ./manage.py makemigrations --dry-run --check
+        run: poetry run python manage.py makemigrations --dry-run --check
 
       - name: Run tests
-        run: FAKE_REDIS=1 DEBUG=1 py.test
+        run: FAKE_REDIS=1 DEBUG=1 poetry run py.test
 
   docker:
     runs-on: ubuntu-20.04
@@ -45,10 +51,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3.3.0
 
       - name: Log in to the Container registry
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        uses: docker/login-action@v2.1.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -56,11 +62,11 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        uses: docker/metadata-action@v4.3.0
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - uses: docker/build-push-action@v2
+      - uses: docker/build-push-action@v4.0.0
         name: Build and push
         with:
           push: true
