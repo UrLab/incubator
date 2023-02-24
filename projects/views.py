@@ -88,6 +88,16 @@ def downvote_comment(request, project_id, comment_id):
 
 
 def clusters_of(seq, size):
+    """Groups a sequence into clusters of a given size.
+
+    Args:
+        seq (_type_): The sequence to group.
+        size (_type_): The size of the clusters.
+
+    Yields:
+        cluster: A cluster of the given size.
+    """
+
     for i in range(int(ceil(len(seq) / size))):
         lower, upper = i * size, (i + 1) * size
         yield seq[lower:upper]
@@ -97,12 +107,26 @@ def projects_home(request):
     projects = Project.objects.prefetch_related("participants").select_related("maintainer").order_by('status', '-modified')
 
     # group the finised and "ants are gone" projets together
-    grouper = lambda x: x.status if x.status != "a" else "f"
-    groups = {k: list(g) for k, g in groupby(projects, grouper)}
+    # grouper = lambda x: x.status if x.status != "a" else "f"
+    # for an unknown reason, the following line does not work
+    # groups = {k: list(g) for k, g in groupby(projects, grouper)}
+
+    # Here a workaround
+    groups = {}
+    for project in projects:
+        status = project.status
+        if project.status == "a":
+            status = "f"
+
+        if status not in groups:
+            groups[status] = []
+        groups[status].append(project)
+
     context = {
         'progress': clusters_of(groups.get('i', []), 4),
         'done': clusters_of(groups.get('f', []), 4),
         'proposition': clusters_of(groups.get('p', []), 4),
+        'archived': clusters_of(groups.get('d', []), 4),
     }
     return render(request, "projects_home.html", context)
 
