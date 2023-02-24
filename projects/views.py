@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from rest_framework import viewsets
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import FormMixin
 from django.views.generic import CreateView, UpdateView
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponseBadRequest
@@ -10,7 +9,6 @@ from django.utils import timezone
 # from datetime import datetime
 from actstream import action
 from math import ceil
-from itertools import groupby
 
 from users.decorators import permission_required
 from users.mixins import PermissionRequiredMixin
@@ -112,6 +110,9 @@ def projects_home(request):
     # groups = {k: list(g) for k, g in groupby(projects, grouper)}
 
     # Here a workaround
+    if request.POST:
+        search_term = request.POST['search_term']
+        projects = projects.filter(title__contains=search_term)
     groups = {}
     for project in projects:
         status = project.status
@@ -127,6 +128,7 @@ def projects_home(request):
         'done': clusters_of(groups.get('f', []), 4),
         'proposition': clusters_of(groups.get('p', []), 4),
         'archived': clusters_of(groups.get('d', []), 4),
+        'search_term': search_term if request.POST else ''
     }
     return render(request, "projects_home.html", context)
 

@@ -20,6 +20,19 @@ Projets à UrLab
     </ol>
 </nav>
 
+
+<form action="{% url 'projects_home' %}" method="post" class="form">
+    {% csrf_token %}
+    <div class="input-group" style="justify-content: right">
+        <div class="form-outline">
+            <input type="search" id="form1" class="form-control" name="search_term" value="{{search_term}}"/>
+        </div>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+</form>
+
 <ul class="nav nav-tabs justify-content-end" id="article-menu" role="tablist">
     <li class="nav-item mr-auto">
         <p><strong>Incubateur a projets</strong></p>
