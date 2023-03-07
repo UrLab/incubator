@@ -75,6 +75,12 @@
                         Wiki
                     </a>
                 </li>
+                <li class="nav-item {% active_if_contains "/space/pamela" %}">
+                    <a class="nav-link" href="{% url "pamela_list" %}">
+                        <i class="fa fa-users"></i>
+                        Pamela
+                    </a>
+                </li>
                 <li class="nav-item {% active_if_contains "/motd/" %}">
                     <a class="nav-link" href="{% url "motd" "1" %}">
                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-music-note" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
