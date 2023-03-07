@@ -16,6 +16,12 @@ services:
       - private
     restart: unless-stopped
 
+  redis:
+    image: redis:7.0.9
+    networks:
+      - private
+    restart: unless-stopped
+
   db:
     image: postgres:12.0-alpine
     volumes:
