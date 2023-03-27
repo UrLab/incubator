@@ -34,8 +34,6 @@ platformdirs==2.5.2
     # via pylint
 pluggy==1.0.0
     # via pytest
-py==1.11.0
-    # via pytest
 pycodestyle==2.8.0
     # via
     #   -r requirements-dev.in
@@ -50,23 +48,16 @@ pyparsing==3.0.9
     # via
     #   -c requirements.txt
     #   packaging
-pytest==7.1.2
+pytest==7.2.2
     # via
     #   -r requirements-dev.in
     #   pytest-django
 pytest-django==4.5.2
     # via -r requirements-dev.in
-tomli==2.0.1
-    # via
-    #   -c requirements.txt
-    #   pylint
-    #   pytest
 tomlkit==0.11.1
     # via pylint
 wrapt==1.14.1
-    # via
-    #   -c requirements.txt
-    #   astroid
+    # via astroid
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
