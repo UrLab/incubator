@@ -18,6 +18,7 @@ class Badge(models.Model):
     icon = models.ImageField(blank=True, null=True)
     approved = models.BooleanField(default=False)
     proposed_by = models.ForeignKey("users.User", verbose_name="initiateur", null=True, blank=True, on_delete=models.PROTECT)
+    has_level = models.BooleanField(default=True, verbose_name="Possède des niveaux ?")
 
     def __str__(self):
         return self.name
@@ -48,11 +49,10 @@ class BadgeWear(models.Model):
 
     badge = models.ForeignKey('Badge', on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='Utilisateur', on_delete=models.CASCADE)
-    level = models.CharField(max_length=3, choices=LEVEL_CHOICES, default=INITIATE)
-    action_counter = models.PositiveIntegerField(default=0)
+    level = models.CharField(max_length=3, choices=LEVEL_CHOICES, default=INITIATE, null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     attributor = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True,
+        settings.AUTH_USER_MODEL, null=True, blank=True,
         verbose_name='Attributeur', related_name="attributed",
         on_delete=models.SET_NULL)
 

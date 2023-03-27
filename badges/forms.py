@@ -2,11 +2,18 @@ import django.forms as forms
 from badges.models import BadgeWear, Badge
 
 
+class LeveledBadgeWearForm(forms.ModelForm):
+    """A form to give a user a badge with a level"""
+    class Meta:
+        model = BadgeWear
+        fields = ('user', 'level')
+
+
 class BadgeWearForm(forms.ModelForm):
     """A form to give a user a badge"""
     class Meta:
         model = BadgeWear
-        fields = ('user', 'level')
+        fields = ('user', )
 
 
 class ApproveBadgeForm(forms.ModelForm):
@@ -14,7 +21,7 @@ class ApproveBadgeForm(forms.ModelForm):
     class Meta:
         model = Badge
         widgets = {'approved': forms.HiddenInput()}
-        exclude = ['name', 'description', 'hidden', 'icon', 'proposed_by']
+        exclude = ['name', 'description', 'hidden', 'icon', 'proposed_by', 'has_level']
 
 
 class CreateBadgeForm(forms.ModelForm):
