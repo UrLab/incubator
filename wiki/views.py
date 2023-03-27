@@ -52,10 +52,15 @@ class ArticleEditView(LoginRequiredMixin, UpdateView):
         return ret
 
 
-class ArticleDetailView(DetailView):
+class ArticleDetailView(UserPassesTestMixin, DetailView):
     model = Article
     template_name = 'article_detail.html'
     context_object_name = 'article'
+
+    def test_func(self):
+        if self.get_object().private:
+            return self.request.user.is_staff
+        return True
 
 
 class ArticleOldDetailView(DetailView):
