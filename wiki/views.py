@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.detail import DetailView
 from django.views.generic import CreateView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils import timezone
 from actstream import action
 
@@ -10,7 +10,7 @@ from .forms import ArticleForm
 
 
 def wiki_home(request):
-    articles = Article.objects.all().filter(hidden=False)
+    articles = Article.objects.all().filter(hidden=False, private=False)
 
     return render(request, "wiki_home.html", {
         'project': articles.filter(category="p"),
