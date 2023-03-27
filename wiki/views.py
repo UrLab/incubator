@@ -30,8 +30,11 @@ class ArticleAddView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.creator = self.request.user
         form.instance.last_modifier = self.request.user.get_username()
+        form.instance.hidden = form.instance.hidden or form.instance.private
         ret = super(ArticleAddView, self).form_valid(form)
-        action.send(self.request.user, verb='a créé', action_object=self.object)
+
+        if not self.object.hidden:
+            action.send(self.request.user, verb='a créé', action_object=self.object)
 
         return ret
 
@@ -46,8 +49,11 @@ class ArticleEditView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.instance.last_modifier = self.request.user.get_username()
         form.instance.last_modified = timezone.now()
+        form.instance.hidden = form.instance.hidden or form.instance.private
         ret = super(ArticleEditView, self).form_valid(form)
-        action.send(self.request.user, verb='a édité', action_object=self.object)
+
+        if not self.object.hidden:
+            action.send(self.request.user, verb='a édité', action_object=self.object)
 
         return ret
 
