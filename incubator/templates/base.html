@@ -27,12 +27,10 @@
     <meta property="og:locale" content="fr_BE" />
     <meta property="fb:app_id" content="1563249853970263" />
     {% block opengraph %}
-    <meta property="og:title" content="UrLab" />
-    <meta property="og:type" content="place" />
-    <meta property="og:url" content="https://urlab.be" />
-    <meta property="og:image" content="https://urlab.be/static/img/space-invaders.png" />
-    <meta property="place:location:latitude" content="50.8129409" />
-    <meta property="place:location:longitude" content="4.3844292" />
+        <meta property="og:title" content="UrLab" />
+        <meta property="og:type" content="place" />
+        <meta property="og:url" content="https://urlab.be" />
+        <meta property="og:image" content="https://urlab.be/static/img/space-invaders.png" />
     {% endblock %}
 </head>
 
@@ -75,6 +73,12 @@
                     <a class="nav-link" href="{% url "wiki_home" %}">
                         <i class="fa fa-pencil-square-o"></i>
                         Wiki
+                    </a>
+                </li>
+                <li class="nav-item {% active_if_contains "/space/pamela" %}">
+                    <a class="nav-link" href="{% url "pamela_list" %}">
+                        <i class="fa fa-users"></i>
+                        Pamela
                     </a>
                 </li>
                 <li class="nav-item {% active_if_contains "/motd/" %}">

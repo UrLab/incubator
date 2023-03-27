@@ -103,5 +103,5 @@ class Meeting(models.Model):
     def save(self, *args, **kwargs):
         super(Meeting, self).save(*args, **kwargs)
         if not self.pad:
-            self.pad = "https://pad.lqdn.fr/p/urlab-meeting-{}".format(self.id)
+            self.pad = "https://pad.lqdn.fr/p/urlab-meeting-notes-{}".format(self.id)
         super(Meeting, self).save(*args, **kwargs)

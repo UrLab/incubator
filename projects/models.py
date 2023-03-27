@@ -20,6 +20,7 @@ STATUS_CHOICES = (
     ("i", "in progress"),
     ("f", "finished"),
     ("a", "ants are gone"),
+    ("d", "blocked to 131"),
 )
 
 
