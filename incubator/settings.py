@@ -191,7 +191,7 @@ REST_FRAMEWORK = {
 ROOT_URL = "https://urlab.be"
 
 
-BANK_ACCOUNT = "BE66 0017 6764 5043"
+BANK_ACCOUNT = "BE22 3632 1093 6947"
 
 REDIS_HOST = os.environ.get("REDIS_HOST", "localhost")
 REDIS_PORT = 6379
