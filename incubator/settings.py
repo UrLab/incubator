@@ -314,7 +314,8 @@ MAC_RANGES = EXPRESSIF_RANGES + VMWARE_RANGES + OTHER_RANGES
 IGNORE_LIST_RE = [re.compile(prefix + r"(:[0-9a-f]{2}){3}") for prefix in MAC_RANGES]
 
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "localhost")
-
 EMAIL_PORT = int(os.environ.get("EMAIL_PORT", 25))
-
-DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", "contact@urlab.be")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", default="contact@urlab.be")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", default="")
+DEFAULT_FROM_EMAIL = os.environ.get("EMAIL_FROM", default="contact@urlab.be")
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", default=True)
