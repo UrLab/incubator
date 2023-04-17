@@ -70,5 +70,4 @@ target/
 db.sqlite3
 
 # env
-.env
-.env.db
+.env*
