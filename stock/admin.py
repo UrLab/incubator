@@ -3,7 +3,8 @@ from django.contrib import admin
 from .models import (
     Category, Product, TransferTransaction,
     TopupTransaction, ProductTransaction, MiscTransaction,
-    PaymentTransaction, FundZone)
+    PaymentTransaction, FundZone, RefundTransaction)
+import stock.actions as actions
 
 
 class ProductInline(admin.TabularInline):
@@ -15,6 +16,10 @@ class PaymentTransactionInline(admin.TabularInline):
     model = PaymentTransaction
 
 
+class RefundTransactionInline(admin.TabularInline):
+    model = RefundTransaction
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'price',)
@@ -23,6 +28,10 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
+    @admin.action(description="Refund the user from the bank zone")
+    def refund_from_bank(modeladmin, request, queryset):
+        for obj in queryset:
+            print(obj)
     list_display = ('name',)
     inlines = (ProductInline,)
 
@@ -56,6 +65,7 @@ class MiscTransaction(admin.ModelAdmin):
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ('user', 'zone', 'way', 'amount', 'when')
     search_fields = ('user__username',)
+    inlines = (RefundTransactionInline, )
 
     list_filter = ('user', 'zone')
 
@@ -68,3 +78,12 @@ class FundZoneAdmin(admin.ModelAdmin):
     list_display = ('name', 'method', 'balance')
     search_fields = ('name',)
     inlines = (PaymentTransactionInline, )
+
+
+@admin.register(RefundTransaction)
+class RefundTransactionAdmin(admin.ModelAdmin):
+    list_display = ("user", "title", "amount", "completed")
+    actions = [
+        actions.refund_from_bank,
+        actions.refund_from_cash
+    ]
