@@ -24,8 +24,13 @@ from stock.models import Product, TransferTransaction, TopupTransaction, Product
 
 
 def balance(request):
-    favorites = Product.objects.filter(producttransaction__user=request.user).annotate(
-        Count("producttransaction")).order_by("-producttransaction__count")[:5]
+    favorites = Product.objects.filter(
+        producttransaction__user=request.user
+    ).exclude(
+        active=False
+    ).annotate(
+        Count("producttransaction")
+    ).order_by("-producttransaction__count")[:5]
     return render(request, 'balance.html', {
         'account': settings.BANK_ACCOUNT,
         'products': Product.objects.order_by('category', 'name').exclude(active=False),
