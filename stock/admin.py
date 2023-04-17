@@ -1,9 +1,16 @@
 from django.contrib import admin
 
 from .models import (
-    Category, Product, TransferTransaction,
-    TopupTransaction, ProductTransaction, MiscTransaction,
-    PaymentTransaction, FundZone, RefundTransaction)
+    Category,
+    Product,
+    TransferTransaction,
+    TopupTransaction,
+    ProductTransaction,
+    MiscTransaction,
+    PaymentTransaction,
+    FundZone,
+    RefundTransaction,
+)
 import stock.actions as actions
 
 
@@ -22,68 +29,61 @@ class RefundTransactionInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'category', 'price',)
-    search_fields = ('name',)
+    list_display = ("name", "category", "price")
+    search_fields = ("name",)
 
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    @admin.action(description="Refund the user from the bank zone")
-    def refund_from_bank(modeladmin, request, queryset):
-        for obj in queryset:
-            print(obj)
-    list_display = ('name',)
+    list_display = ("name",)
     inlines = (ProductInline,)
 
 
 @admin.register(TransferTransaction)
 class TransferTransactionAdmin(admin.ModelAdmin):
-    list_display = ('user', 'receiver', 'amount', 'when')
-    search_fields = ('user__username',)
+    list_display = ("user", "receiver", "amount", "when")
+    search_fields = ("user__username",)
 
 
 @admin.register(TopupTransaction)
 class TopupTransaction(admin.ModelAdmin):
-    list_display = ('user', 'amount', 'topup_type', 'when')
-    search_fields = ('user__username',)
-    list_filter = ('topup_type',)
+    list_display = ("user", "amount", "topup_type", "when")
+    search_fields = ("user__username",)
+    list_filter = ("topup_type",)
 
 
 @admin.register(ProductTransaction)
 class ProductTransaction(admin.ModelAdmin):
-    list_display = ('user', 'price', 'product', 'when')
-    search_fields = ('user__username', 'product__name')
+    list_display = ("user", "price", "product", "when")
+    search_fields = ("user__username", "product__name")
 
 
 @admin.register(MiscTransaction)
 class MiscTransaction(admin.ModelAdmin):
-    list_display = ('user', 'amount', 'info', 'when')
-    search_fields = ('user__username',)
+    list_display = ("user", "amount", "info", "when")
+    search_fields = ("user__username",)
 
 
 @admin.register(PaymentTransaction)
 class PaymentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'zone', 'way', 'amount', 'when')
-    search_fields = ('user__username',)
-    inlines = (RefundTransactionInline, )
+    list_display = ("user", "zone", "way", "amount", "when")
+    search_fields = ("user__username",)
+    inlines = (RefundTransactionInline,)
 
-    list_filter = ('user', 'zone')
+    list_filter = ("user", "zone")
 
     def get_changeform_initial_data(self, request):
-        return {'user': request.user}
+        return {"user": request.user}
 
 
 @admin.register(FundZone)
 class FundZoneAdmin(admin.ModelAdmin):
-    list_display = ('name', 'method', 'balance')
-    search_fields = ('name',)
-    inlines = (PaymentTransactionInline, )
+    list_display = ("name", "method", "balance")
+    search_fields = ("name",)
+    inlines = (PaymentTransactionInline,)
 
 
 @admin.register(RefundTransaction)
 class RefundTransactionAdmin(admin.ModelAdmin):
     list_display = ("user", "title", "amount", "completed")
-    actions = [
-        actions.refund_from_bank,
-        actions.refund_from_cash
-    ]
+    actions = [actions.refund_from_bank, actions.refund_from_cash]

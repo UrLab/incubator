@@ -27,7 +27,9 @@ class Transaction(models.Model):
 
 
 class TransferTransaction(Transaction):
-    receiver = models.ForeignKey("users.User", related_name="incoming_transfers", on_delete=models.DO_NOTHING)
+    receiver = models.ForeignKey(
+        "users.User", related_name="incoming_transfers", on_delete=models.DO_NOTHING
+    )
     amount = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
@@ -39,13 +41,15 @@ class TopupTransaction(Transaction):
     topup_type = models.CharField(
         max_length=20,
         choices=[
-            ('BANK', "Virement"),
-            ('CASH', "Caisse"),
+            ("BANK", "Virement"),
+            ("CASH", "Caisse"),
         ],
     )
 
     def __str__(self):
-        return "{} a versé {}€ sur son ardoise. ({})".format(self.user, self.amount, self.get_topup_type_display())
+        return "{} a versé {}€ sur son ardoise. ({})".format(
+            self.user, self.amount, self.get_topup_type_display()
+        )
 
 
 class ProductTransaction(Transaction):
@@ -55,7 +59,9 @@ class ProductTransaction(Transaction):
         return self.product.price
 
     def __str__(self):
-        return "{} a dépensé {}€ pour le produit {}".format(self.user, self.product.price, self.product)
+        return "{} a dépensé {}€ pour le produit {}".format(
+            self.user, self.product.price, self.product
+        )
 
 
 class MiscTransaction(Transaction):
@@ -68,8 +74,8 @@ class MiscTransaction(Transaction):
 
 class FundZone(models.Model):
     payment_method = (
-        ('BANK', "Virement"),
-        ('CASH', "Caisse"),
+        ("BANK", "Virement"),
+        ("CASH", "Caisse"),
     )
 
     name = models.CharField(max_length=50)
@@ -83,11 +89,14 @@ class FundZone(models.Model):
                 total -= payment.amount
             else:
                 total += payment.amount
-        return total + sum(trans.amount for trans in TopupTransaction.objects.filter(topup_type=self.method))
+        return total + sum(
+            trans.amount
+            for trans in TopupTransaction.objects.filter(topup_type=self.method)
+        )
 
     @property
     def payments(self):
-        return PaymentTransaction.objects.filter(zone=self).order_by('-payment_date')
+        return PaymentTransaction.objects.filter(zone=self).order_by("-payment_date")
 
     def __str__(self):
         return self.name
@@ -95,26 +104,29 @@ class FundZone(models.Model):
 
 class PaymentTransaction(Transaction):
     ways = (
-        ('a', 'Dépense'),
-        ('b', 'Réception'),
+        ("a", "Dépense"),
+        ("b", "Réception"),
     )
 
     amount = models.DecimalField(max_digits=6, decimal_places=2)
     way = models.CharField(max_length=1, default="a", choices=ways)
-    receipt = models.FileField(upload_to='souches', null=True, blank=True)
-    zone = models.ForeignKey('stock.FundZone', on_delete=models.SET_NULL, null=True, blank=True)
+    receipt = models.FileField(upload_to="souches", null=True, blank=True)
+    zone = models.ForeignKey(
+        "stock.FundZone", on_delete=models.SET_NULL, null=True, blank=True
+    )
     comments = models.CharField(max_length=200, null=True, blank=True)
     payment_date = models.DateField(default=timezone.now)
 
     def __str__(self):
-        return "{} d'un montant de {}€ vérifié par {}".format(
-            self.get_way_display(), self.amount, self.user)
+        return f"{self.get_way_display()} d'un montant de {self.amount}€ vérifié par {self.user}"
 
 
 class RefundTransaction(Transaction):
     title = models.CharField(max_length=200)
     amount = models.DecimalField(max_digits=6, decimal_places=2)
-    payment = models.ForeignKey('stock.PaymentTransaction', on_delete=models.CASCADE, null=True, blank=True)
+    payment = models.ForeignKey(
+        "stock.PaymentTransaction", on_delete=models.CASCADE, null=True, blank=True
+    )
     receipt = models.FileField(upload_to="souches", null=True, blank=True)
 
     @property
@@ -133,7 +145,7 @@ class RefundTransaction(Transaction):
             way="a",
             receipt=self.receipt,
             zone=zone,
-            comments=f"Remboursement '{self.title}' à {self.user.username}"
+            comments=f"Remboursement '{self.title}' à {self.user.username}",
         )
         self.save()
 
