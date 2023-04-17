@@ -109,3 +109,35 @@ class PaymentTransaction(Transaction):
     def __str__(self):
         return "{} d'un montant de {}€ vérifié par {}".format(
             self.get_way_display(), self.amount, self.user)
+
+
+class RefundTransaction(Transaction):
+    title = models.CharField(max_length=200)
+    amount = models.DecimalField(max_digits=6, decimal_places=2)
+    payment = models.ForeignKey('stock.PaymentTransaction', on_delete=models.CASCADE, null=True, blank=True)
+    receipt = models.FileField(upload_to="souches", null=True, blank=True)
+
+    @property
+    def completed(self):
+        return self.payment is not None
+
+    def refund(self, zone: FundZone, user):
+        """Completes a refund transaction
+
+        Args:
+            zone (FundZone): The zone from which the refund has been done
+        """
+        self.payment = PaymentTransaction.objects.create(
+            user=user,
+            amount=self.amount,
+            way="a",
+            receipt=self.receipt,
+            zone=zone,
+            comments=f"Remboursement '{self.title}' à {self.user.username}"
+        )
+        self.save()
+
+    def __str__(self):
+        if self.completed:
+            return f"{self.user} a été remboursé {self.amount}€ pour {self.title}"
+        return f"{self.user} demande {self.amount}€ de remboursement '{self.title}'"
