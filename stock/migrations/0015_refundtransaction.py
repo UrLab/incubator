@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('stock', '0013_paymenttransaction_payment_date'),
+        ('stock', '0014_product_active'),
     ]
 
     operations = [

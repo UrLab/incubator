@@ -13,6 +13,8 @@ from .models import (
 )
 import stock.actions as actions
 
+import stock.actions as actions
+
 
 class ProductInline(admin.TabularInline):
     model = Product
@@ -31,6 +33,8 @@ class RefundTransactionInline(admin.TabularInline):
 class ProductAdmin(admin.ModelAdmin):
     list_display = ("name", "category", "price")
     search_fields = ("name",)
+
+    actions = (actions.make_active, actions.make_inactive,)
 
 
 @admin.register(Category)
