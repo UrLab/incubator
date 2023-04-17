@@ -7,6 +7,7 @@ from .models import (
 
 import stock.actions as actions
 
+
 class ProductInline(admin.TabularInline):
     model = Product
     extra = 1
