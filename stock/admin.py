@@ -5,6 +5,7 @@ from .models import (
     TopupTransaction, ProductTransaction, MiscTransaction,
     PaymentTransaction, FundZone)
 
+import stock.actions as actions
 
 class ProductInline(admin.TabularInline):
     model = Product
@@ -19,6 +20,8 @@ class PaymentTransactionInline(admin.TabularInline):
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'price',)
     search_fields = ('name',)
+
+    actions = (actions.make_active, actions.make_inactive,)
 
 
 @admin.register(Category)

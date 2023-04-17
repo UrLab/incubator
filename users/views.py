@@ -28,7 +28,7 @@ def balance(request):
         Count("producttransaction")).order_by("-producttransaction__count")[:5]
     return render(request, 'balance.html', {
         'account': settings.BANK_ACCOUNT,
-        'products': Product.objects.order_by('category', 'name'),
+        'products': Product.objects.order_by('category', 'name').exclude(active=False),
         'favorites': favorites,
         'topForm': TopForm(),
         'spendForm': SpendForm(),
