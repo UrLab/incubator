@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block title %}
+Formulaire article
+{% endblock %}
+
+{% block head %}
+    {{ form.media  }}
+    <!-- <link href="{% static "css/bootstrap-multiselect.css" %}" rel="stylesheet"> -->
+    <!-- <script type="text/javascript" src="{% static "js/bootstrap-multiselect.js" %}"></script> -->
+    <style>
+        .diff_add {
+            background-color: #aaffaa;
+        }
+
+        .diff_sub {
+            background-color: #ffaaaa;
+        }
+
+        .diff_chg {
+            background-color: #ffffaa;
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+    <h2>Différences:</h2>
+
+    <div class="row">
+        <div class="col-2 row-elem"></div>
+        <div class="col-2 row-elem">
+            <p>{{ old_article.commit }}</p>
+        </div>
+        <div class="col-4 row-elem"></div>
+        <div class="col-2 row-elem">
+            <p>{{ article.commit }}</p>
+        </div>
+    </div>
+
+    {{ delta | safe }}
+
+    <div class="row">
+        <div class="col-2 row-elem"></div>
+        <div class="col-2 row-elem">
+            <a class="btn btn-primary" href="{% url "view_old_version" initial_article.pk article.pk %}">
+                Voir cette version
+            </a>
+        </div>
+        <div class="col-4 row-elem"></div>
+        <div class="col-2 row-elem">
+            <a class="btn btn-primary" href="{% url "view_old_version" initial_article.pk old_article.pk %}">
+                Voir cette version
+            </a>
+        </div>
+    </div>
+
+    <h4 class="mt-5">Légende:</h4>
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col" class="col-2">Couleur</th>
+                <th scope="col">Signification</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="background-color: #FFAAAA">(t)op</td>
+                <td>Supprimé</td>
+            </tr>
+            <tr>
+                <td style="background-color: #AAFFAA">(f)irst change</td>
+                <td>Ajouté</td>
+            </tr>
+            <tr>
+                <td style="background-color: #FFFF77">(n)ext change</td>
+                <td>Modifié</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

@@ -78,7 +78,14 @@
                         </div>
                     </div>
                 {% endfor %}
-            {% endif %}
+                <form action="{% url "diff_article" %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ diff_form.as_p }}
+                    </div>
+                    <input class="btn btn-success" type="submit" value="Montrer la différence">
+                </form>
+                {% endif %}
         </div>
     </div>
 
