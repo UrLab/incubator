@@ -16,5 +16,5 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 
 def payment_transaction_home(request):
-    zones = FundZone.objects.all().order_by('name')
+    zones = FundZone.objects.all().order_by("name")
     return render(request, "transactions.html", locals())

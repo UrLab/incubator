@@ -5,5 +5,5 @@ from .views import payment_transaction_home
 
 
 urlpatterns = [
-    path('transactions', login_required(payment_transaction_home), name='transactions'),
+    path("transactions", login_required(payment_transaction_home), name="transactions"),
 ]
