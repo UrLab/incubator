@@ -9,6 +9,12 @@
         </p>
     <hr/>
 
+    {% if space_open %}
+    <div class="alert alert-success">Le hackerspace est actuellement ouvert ! Venez nous dire bonjour !</div>
+    {% else %}
+    <div class="alert alert-warning">La hackerspace est fermé pour l'instant :(</div>
+    {% endif %}
+
     <div class="text-right">
         <h3>Social</h3>
         <a href="https://twitter.com/UrLabBxl" title="Twitter" target="_blank">
