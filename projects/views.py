@@ -197,6 +197,9 @@ def add_comment(request, project_id):
         form = CommentForm(request.POST)
         if form.is_valid():
             form.save()
+        else:
+            messages.error(request, form.errors)
+            return HttpResponseRedirect(reverse('view_project', args=[project_id]))
 
     project = get_object_or_404(Project, id=project_id)
     action.send(request.user, verb='a commenté sur le projet', action_object=project)
