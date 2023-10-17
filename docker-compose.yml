@@ -14,6 +14,10 @@ services:
       - db
     networks:
       - private
+    labels:
+      ofelia.enabled: "true"
+      ofelia.job-exec.autoclose.schedule: "0 0 4 * * *"
+      ofelia.job-exec.autoclose.command: "python3 manage.py close_space"
     restart: unless-stopped
 
   redis:
@@ -53,6 +57,13 @@ services:
       - public
       - traefik-proxy
     restart: unless-stopped
+
+  ofelia:
+    image: mcuadros/ofelia:latest
+    command: daemon --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
 
 networks:
   private:
