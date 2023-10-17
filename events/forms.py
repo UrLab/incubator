@@ -1,3 +1,4 @@
+import re
 from django.forms import ModelForm, Textarea
 
 from django import forms
@@ -22,6 +23,7 @@ class EventForm(ModelForm):
         start = cleaned_data.get("start")
         stop = cleaned_data.get("stop")
         status = cleaned_data.get("status")
+        content = cleaned_data.get("description")
 
         if start and stop:
             if stop < start:
@@ -35,6 +37,15 @@ class EventForm(ModelForm):
         if status == "r" and not start:
             raise forms.ValidationError(
                 "Un événement prêt doit avoir une date de début"
+            )
+
+        expr = re.compile(r"!\[.+\]\(http:\/\/.+\)")
+        matches = expr.findall(content)
+
+        if len(matches) > 0:
+            self.add_error(
+                "description",
+                f"La description de l'évènement contient des images en http non sécurisé ({' - '.join(matches)})"
             )
 
 
