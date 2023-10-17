@@ -49,7 +49,7 @@ def set_space_open(client, is_open):
     SpaceStatus.objects.create(is_open=bool(is_open))
 
 
-def space_is_open(client):
+def space_is_open(client) -> bool:
     status = client.get('incubator_status')
     return status is not None and int(status) == 1
 
