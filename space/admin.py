@@ -5,7 +5,7 @@ from .models import MacAdress, SpaceStatus, MusicOfTheDay, PrivateAPIKey
 @admin.register(MacAdress)
 class MacAdressAdmin(admin.ModelAdmin):
     list_display = ('adress', 'holder', 'machine_name')
-    search_fields = ('adress', 'holder')
+    search_fields = ('adress', 'holder__username')
 
 
 @admin.register(SpaceStatus)
