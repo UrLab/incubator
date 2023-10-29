@@ -123,6 +123,9 @@ def events_home(request):
     type = type if type is not None else "future"
 
     base = Event.objects.select_related('meeting')
+    search_term = request.GET.get('search_term', None)
+    if search_term:
+        base = base.filter(title__contains=search_term)
     isLastPage = False
 
     if type == "future":
@@ -153,7 +156,8 @@ def events_home(request):
         'type': type,
         'offset': offset + 1,
         'nbPage': nbPages,
-        'range': range(1, nbPages + 2)}
+        'range': range(1, nbPages + 2),
+        'search_term': search_term if search_term else ''}
     return render(request, "events_home.html", vars)
 
 
