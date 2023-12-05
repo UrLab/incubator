@@ -4,10 +4,12 @@
 #
 #    pip-compile --output-file=requirements-dev.txt requirements-dev.in
 #
-astroid==2.11.6
+astroid==3.0.1
     # via pylint
 dill==0.3.5.1
     # via pylint
+exceptiongroup==1.2.0
+    # via pytest
 flake8==4.0.1
     # via -r requirements-dev.in
 iniconfig==1.1.1
@@ -16,8 +18,6 @@ isort==5.10.1
     # via
     #   -r requirements-dev.in
     #   pylint
-lazy-object-proxy==1.7.1
-    # via astroid
 mccabe==0.6.1
     # via
     #   flake8
@@ -38,7 +38,7 @@ pyflakes==2.4.0
     # via
     #   -r requirements-dev.in
     #   flake8
-pylint==2.14.4
+pylint==3.0.2
     # via -r requirements-dev.in
 pyparsing==3.0.9
     # via
@@ -50,10 +50,14 @@ pytest==7.3.1
     #   pytest-django
 pytest-django==4.5.2
     # via -r requirements-dev.in
+tomli==2.0.1
+    # via
+    #   -c requirements.txt
+    #   pylint
+    #   pytest
 tomlkit==0.11.1
     # via pylint
-wrapt==1.14.1
-    # via astroid
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools
+typing-extensions==4.6.2
+    # via
+    #   -c requirements.txt
+    #   astroid
