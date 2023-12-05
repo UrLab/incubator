@@ -161,7 +161,7 @@ sorl-thumbnail==12.8.0
     # via wiki
 soupsieve==2.3.2.post1
     # via beautifulsoup4
-sqlparse==0.4.2
+sqlparse==0.4.4
     # via django
 stack-data==0.3.0
     # via ipython
