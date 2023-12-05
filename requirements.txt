@@ -17,7 +17,9 @@ backcall==0.2.0
 beautifulsoup4==4.11.1
     # via django-bootstrap4
 bleach[css]==5.0.1
-    # via wiki
+    # via
+    #   bleach
+    #   wiki
 build==0.8.0
     # via pip-tools
 certifi==2022.12.7
@@ -113,7 +115,7 @@ pexpect==4.8.0
     # via ipython
 pickleshare==0.7.5
     # via ipython
-pillow==9.4.0
+pillow==10.0.1
     # via
     #   -r requirements.in
     #   wiki
@@ -170,7 +172,9 @@ tinycss2==1.1.1
     #   bleach
     #   wiki
 tomli==2.0.1
-    # via pep517
+    # via
+    #   build
+    #   pep517
 traitlets==5.3.0
     # via
     #   ipython
