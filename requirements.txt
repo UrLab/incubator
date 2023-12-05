@@ -183,7 +183,7 @@ traitlets==5.3.0
     #   matplotlib-inline
 typing-extensions==4.6.2
     # via -r requirements.in
-urllib3==1.26.14
+urllib3==1.26.18
     # via
     #   requests
     #   sentry-sdk
