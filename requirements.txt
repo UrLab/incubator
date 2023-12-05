@@ -10,8 +10,6 @@ asgiref==3.5.2
     # via django
 asttokens==2.0.5
     # via stack-data
-async-timeout==4.0.2
-    # via redis
 attrs==21.4.0
     # via ics
 backcall==0.2.0
@@ -141,7 +139,7 @@ pytz==2022.1
     #   django
     #   djangorestframework
     #   influxdb
-redis==4.4.2
+redis==4.5.5
     # via -r requirements.in
 requests==2.31.0
     # via
