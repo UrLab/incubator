@@ -39,6 +39,10 @@ def home(request):
     })
 
 
+def new(request):
+    return render(request, "new.html")
+
+
 def password_reset_done(request):
     messages.success(
         request,

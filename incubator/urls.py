@@ -12,6 +12,7 @@ import space.views
 
 urlpatterns = [
     path('', incubator.views.home, name='home'),
+    path('new/', incubator.views.new, name='new'),
     path('spaceapi.json', space.views.spaceapi, name="spaceapi"),
 
     path('events/', include('events.urls')),

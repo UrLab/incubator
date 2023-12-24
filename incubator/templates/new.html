@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+{% load formatting %}
+{% load humanize %}
+
+{% block content %}
+    <h1 class="text-center">Bienvenue à UrLab, le hackerspace de l'ULB!</h1>
+    <div class="mb-5"></div>
+
+    <div class="mb-5">
+        <h2>sommaire</h2>
+        <ul>
+            <li><a href="#comeToHS">Venir au hackerspace</a></li>
+            <li><a href="#hackerquoi">Qu'est-ce que le hackerspace ?</a></li>
+            <li><a href="#hackerpasquoi">Qu'est-ce que n'est pas le hackerspace ?</a></li>
+            <li><a href="#sinvestir">S'investir au hackerspace</a></li>
+            <ul>
+                <li><a href="#sinvestir_projets">Les projets</a></li>
+                <li><a href="#sinvestir_events">Les événements</a></li>
+                <li><a href="#sinvestir_help">Aider le hackerspace</a></li>
+            </ul>
+            <li><a href="#hackerlife">La vie au hackerspace</a></li>
+            <ul>
+                <li><a href="#hackerlife_commu">La communauté</a></li>
+                <li><a href="#hackerlife_shopping">Les courses</a></li>
+                <li><a href="#hackerlife_trash">Les poubelles</a></li>
+                <li><a href="#hackerlife_snaacks">Les snacks/boissons</a></li>
+            </ul>
+            <li><a href="#projets">Les projets</a></li>
+            <ul>
+                <li><a href="#projets_add">Se rajouter à un projet</a></li>
+                <li><a href="#projets_propose">Proposer un projet</a></li>
+                <li><a href="#projets_money">Demander un budget</a></li>
+            </ul>
+        </ul>
+    </div>
+
+    <div class="mb-5">
+        <h2 id="comeToHS">Venir au hackerspace</h2>
+        <p class="ml-5">
+            Le hackerspace est ouvert du lundi au vendredi. <br/>
+            On essaie d'être ouvert le plus longtemps possible(de 8h30 à 23h00) mais ce n'est pas sûr!
+            Pour voir si on est ouvert, rends toi sur <a href="https://urlab.be/space/pamela">pamela</a>.
+        </p>
+    </div>
+
+    <div class="mb-5">
+        <h2 id="hackerquoi">Qu'est-ce que le hackerspace</h2>
+        <ul>
+            <li>un atelier</li>
+            <li>de l'entraide</li>
+            <li>des rencontres</li>
+            <li>des projets</li>
+            <li>du partage</li>
+            <li>de la technologie</li>
+            <li>de la merde (de temps en temps ;) )</li>
+        </ul>
+    </div>
+
+    <div class="mb-5">
+        <h2 id="hackerpasquoi">Qu'est-ce que n'est <strong>PAS</strong> le hackerspace</h2>
+        <ul>
+            <li>une bibliothèque</li>
+            <li>la guidance en informatique</li>
+            <li>un cyber-café</li>
+            <li>une salle d'attente</li>
+            <li>une ludothèque</li>
+            <li>un cinéma</li>
+            <li>une salle de concert</li>
+        </ul>
+    </div>
+
+    <div class="mb-5">
+        <h2 id="sinvestir">S'investir au hackerspace</h2>
+        <h3 class="ml-3" id="sinvestir_projets">Les projets</h3>
+        <p class="ml-5">Voir la catégorie <a href="#projets">projets</a></p>
+
+        <h3 class="ml-3" id="sinvestir_events">Les évènements</h3>
+        <p class="ml-5">Nous organisons des évènements tout au long de l'année. La grande majorité sont gratuits
+            et pour tous! (Il y a que pour les barbecues qu'on demande une P.A.F)<br />
+            Le but des ces évènements:
+            <ul class="ml-5">
+                <li>Aider les BA1 en informatique (mais pas qu'eux!),</li>
+                <li>promouvoir l'informatique au sein de l'ULB,</li>
+                <li>apprendre à utiliser des outils indispensable à tous programmeurs,</li>
+                <li>et pleins d'autres choses !</li>
+            </ul>
+        </p>
+
+        <h3 class="ml-3" id="sinvestir_help">Aider le hackerspace</h3>
+        <p class="ml-5">Deux gros évènements nous permettent de gagner de l'argent pour financer les projets:</p>
+        <ul class="ml-5">
+            <li> <a href="http://www.fosdem.org">le FOSDEM</a> organisé par le CI (le premier we de février)</li>
+            <li> <a href="http://www.sciences.be/evenements/printemps-des-sciences/">le printemps des sciences</a> (en mars)</li>
+        </ul>
+        <p class="ml-5">Grâce à ça, nous pouvons:</p>
+        <ul class="ml-5">
+            <li> Acheter du matériel technologique qui coûte cher (inmprimante 3D) </li>
+            <li> Refaire le stock de club-mate, fritz-cola, ...</li>
+            <li> Faire tourner le hackerspace en général</li>
+        </ul>
+        <p class="ml-5">Toute aide est plus que la bienvenue !</p>
+    </div>
+
+    <div class="mb-5">
+        <h2 id="hackerlife">La vie au hackerspace</h2>
+        <h3 class="ml-3" id="hackerlife_commu">La communauté</h3>
+        <p class="ml-5">
+            Dès lors que tu viens au hackerspace ou participe à ces évènements, etc. tu fais partie de la communauté.
+            Cependant, si tu veux pouvoir voter aux réunions, tu dois payer ta cotisation(5€) et ainsi
+            devenir membre.
+        </p>
+
+        <h3 class="ml-3" id="hackerlife_shopping">Les courses</h3>
+        <p class="ml-5">
+            Malheureusement, la cuisine ne se remplit pas automatiquement. Lorsque vous voyez qu'un produit
+            manque, n'hésitez pas à créer une liste de course sur le tableau.
+        </p>
+        <p class="ml-5">
+            N'hésitez pas à aller faire les courses spontanément (par exemple si vous allez acheter
+            un en-cas au okay). Sinon, le membre du comité présent demandera aux gens présents
+            au hackerspace de l'aider.
+        </p>
+
+        <h3 class="ml-3" id="hackerlife_trash">les poubelles</h3>
+        <p class="ml-5">
+            C'est lechbot, sur irc, qui décide qui doit sortir quelle poubelle. Cependant, si vous voyez
+            qu'une poubelle est remplie et menace de déborder n'hésiter pas à aller la jeter.
+            <a href="http://www.ulb.ac.be/environnement/docs/Campus/Dechets/molok_solbosch.jpg">
+            Voici une liste des différents endroits ou il y a des poubelles sur le campus.</a>
+        </p>
+
+        <h3 class="ml-3" id="hackerlife_snaacks">Les snacks/boissons</h3>
+        <p class="ml-5">
+            Les snacks et boissons sont disponibles dans la cuisine. Le prix est marqué sur
+            l'ardoise. Il y a deux moyen de payer, en mettant l'argent dans la caisse ou en faisant un virement.
+        </p>
+    </div>
+
+    <div class="mb-5">
+        <h2 id="projets">Les projets</h2>
+        <h3 class="ml-3" id="projets_add">Se rajouter à un projet</h3>
+        <p class="ml-5">
+            N'importe qui peut participer à n'importe quel projet. Si tu désires t'impliquer dans un projet, il
+            te suffit de contacter la personne qui maintient le projet et cette dernière se fera un plaisir de
+            t'aider à participer au projet.
+        </p>
+
+        <h3 class="ml-3" id="projets_propose">Proposer un projet</h3>
+        <p class="ml-5">
+            Tu as fais le tour des projets en cours et des propositions et rien ne t'intéresse ?
+            Tu voudrais proposer ton projet ? rien de plus simple ! Sur la page Nos projets, en bas de la
+            page, il y a un bouton "proposer". Clique dessus et remplis le formulaire qui te sera proposer.
+            Lorsque tu arrives dans l'espace description, pour rendre celle-ci plus lisible, tu dois utiliser
+            <strong>markdown</strong>. C'est langage de formatage de texte. Voici deux liens pour apprendre
+            (comprend copier/coller) rapidement comment mettre ta description en page.<br />
+            <a href="https://en.support.wordpress.com/markdown-quick-reference/">markdown quick reference</a><br />
+            <a href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">markdown cheat sheet</a><br />
+        </p>
+
+        <h3 class="ml-3" id="projets_money">Demander un budget</h3>
+        <p class="ml-5">
+            Si ton projet avance, tu peux rajouter un point à l'ordre du jour de la prochaine réunion.
+            Tu viendras défendre (plus présenter) ton projet à la réunion et à quoi le budget servira et
+            ensuite, les membres présents à la réunion voteront la demande de budget.
+        </p>
+    </div>
+
+    <div class="mb-5">
+        <h2>Matériel à disposition</h2>
+        <p class="ml-5">
+            Beaucoup de matériel éléctronique et informatique est à la disposition de tous au hackerspace. Si tu désires emprunter
+            du matériel pour le faire sortir du hackerspace, tu dois impérativement noter ton emprunt dans le <a href="{% url "wiki_home" %}">wiki</a>
+            du hackerspace.
+            <br/>
+            Si tu possède du matériel chez toi et que tu n'en a pas l'utilité, amène le au hackerspace, il peut toujours servir !
+        </p>
+    </div>
+{% endblock %}

@@ -39,6 +39,7 @@
     <a href="http://www.reactivemanifesto.org/"> <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
             src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-red-right.png"> </a>
     {% endif %}
+
     <header class="base-header">
         {% if space_open %}
         <div id="home-logo"><a href="/"><img id="home-logo-image" src="/static/img/space-invaders-open.png" /></a></div>
@@ -103,6 +104,13 @@
                     <a class="nav-link" href="{% url 'talks' %}">
                         <i class="fas fa-broadcast-tower"></i>
                         Conférences
+                    </a>
+                </li>
+
+                <li class="nav-item {% active_if_contains "/new/" %}">
+                    <a class="nav-link" href="{% url "new" %}">
+                        <i class="fa fa-info-circle"></i>
+                        Nouveau au hackerspace ?
                     </a>
                 </li>
             </ul>
