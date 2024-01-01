@@ -81,7 +81,7 @@ django-resized==1.0.2
     # via -r requirements.in
 django-sekizai==3.0.1
     # via wiki
-django-simple-history==3.2.0
+django-simple-history==3.4.0
     # via -r requirements.in
 djangorestframework==3.14.0
     # via -r requirements.in
