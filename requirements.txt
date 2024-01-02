@@ -61,7 +61,7 @@ django-crispy-forms==1.14.0
     # via -r requirements.in
 django-extensions==3.2.3
     # via -r requirements.in
-django-filter==22.1
+django-filter==23.5
     # via -r requirements.in
 django-js-asset==2.0.0
     # via django-mptt
