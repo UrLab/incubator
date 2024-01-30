@@ -18,7 +18,7 @@ backcall==0.2.0
     # via ipython
 beautifulsoup4==4.11.1
     # via django-bootstrap4
-bleach[css]==5.0.1
+bleach[css]==6.1.0
     # via
     #   bleach
     #   wiki
@@ -170,9 +170,7 @@ stack-data==0.3.0
 tatsu==5.8.0
     # via ics
 tinycss2==1.1.1
-    # via
-    #   bleach
-    #   wiki
+    # via bleach
 tomli==2.0.1
     # via
     #   build
@@ -195,7 +193,7 @@ webencodings==0.5.1
     #   tinycss2
 wheel==0.38.1
     # via pip-tools
-wiki==0.9
+wiki==0.10
     # via -r requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:
