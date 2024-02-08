@@ -14,8 +14,6 @@ async-timeout==4.0.3
     # via redis
 attrs==21.4.0
     # via ics
-backcall==0.2.0
-    # via ipython
 beautifulsoup4==4.11.1
     # via django-bootstrap4
 bleach[css]==5.0.1
@@ -85,6 +83,8 @@ django-simple-history==3.2.0
     # via -r requirements.in
 djangorestframework==3.14.0
     # via -r requirements.in
+exceptiongroup==1.2.0
+    # via ipython
 executing==0.8.3
     # via stack-data
 ics==0.7.2
@@ -93,7 +93,7 @@ idna==3.3
     # via requests
 influxdb==5.3.1
     # via -r requirements.in
-ipython==8.13.2
+ipython==8.21.0
     # via -r requirements.in
 jedi==0.18.1
     # via ipython
@@ -115,15 +115,13 @@ pep517==0.12.0
     # via build
 pexpect==4.8.0
     # via ipython
-pickleshare==0.7.5
-    # via ipython
 pillow==10.2.0
     # via
     #   -r requirements.in
     #   wiki
 pip-tools==6.13.0
     # via -r requirements.in
-prompt-toolkit==3.0.30
+prompt-toolkit==3.0.43
     # via ipython
 ptyprocess==0.7.0
     # via pexpect
