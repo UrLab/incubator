@@ -28,7 +28,7 @@ packaging==21.3
     #   pytest
 platformdirs==2.5.2
     # via pylint
-pluggy==1.0.0
+pluggy==1.4.0
     # via pytest
 pycodestyle==2.8.0
     # via
@@ -44,7 +44,7 @@ pyparsing==3.0.9
     # via
     #   -c requirements.txt
     #   packaging
-pytest==7.3.1
+pytest==8.0.2
     # via
     #   -r requirements-dev.in
     #   pytest-django
