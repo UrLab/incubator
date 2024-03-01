@@ -181,7 +181,7 @@ traitlets==5.3.0
     # via
     #   ipython
     #   matplotlib-inline
-typing-extensions==4.6.2
+typing-extensions==4.10.0
     # via -r requirements.in
 urllib3==1.26.18
     # via
