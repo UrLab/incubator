@@ -6,8 +6,10 @@
 #
 arrow==1.2.2
     # via ics
-asgiref==3.5.2
-    # via django
+asgiref==3.7.2
+    # via
+    #   django
+    #   django-simple-history
 asttokens==2.0.5
     # via stack-data
 async-timeout==4.0.3
@@ -79,7 +81,7 @@ django-resized==1.0.2
     # via -r requirements.in
 django-sekizai==3.0.1
     # via wiki
-django-simple-history==3.2.0
+django-simple-history==3.5.0
     # via -r requirements.in
 djangorestframework==3.14.0
     # via -r requirements.in
@@ -183,7 +185,9 @@ traitlets==5.14.1
     #   ipython
     #   matplotlib-inline
 typing-extensions==4.10.0
-    # via -r requirements.in
+    # via
+    #   -r requirements.in
+    #   asgiref
 urllib3==1.26.18
     # via
     #   requests
