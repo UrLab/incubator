@@ -10,7 +10,7 @@ packaging==21.3
     # via
     #   -c requirements.txt
     #   gunicorn
-psycopg2-binary==2.9.3
+psycopg2-binary==2.9.9
     # via -r requirements-prod.in
 pyparsing==3.0.9
     # via
