@@ -67,7 +67,7 @@ django-jsonfield==1.4.1
     # via -r requirements.in
 django-jsonfield-compat==0.4.4
     # via -r requirements.in
-django-mptt==0.13.4
+django-mptt==0.14.0
     # via
     #   -r requirements.in
     #   wiki
