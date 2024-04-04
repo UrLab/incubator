@@ -4,12 +4,14 @@
 #
 #    pip-compile --output-file=requirements-dev.txt requirements-dev.in
 #
-astroid==3.0.1
+astroid==3.1.0
     # via pylint
 dill==0.3.5.1
     # via pylint
 exceptiongroup==1.2.0
-    # via pytest
+    # via
+    #   -c requirements.txt
+    #   pytest
 flake8==4.0.1
     # via -r requirements-dev.in
 iniconfig==1.1.1
@@ -38,7 +40,7 @@ pyflakes==2.4.0
     # via
     #   -r requirements-dev.in
     #   flake8
-pylint==3.0.3
+pylint==3.1.0
     # via -r requirements-dev.in
 pyparsing==3.0.9
     # via
