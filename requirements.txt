@@ -71,7 +71,7 @@ django-mptt==0.14.0
     # via
     #   -r requirements.in
     #   wiki
-django-nyt==1.2.2
+django-nyt==1.4
     # via wiki
 django-picklefield==3.1
     # via django-constance
@@ -97,9 +97,10 @@ ipython==8.22.1
     # via -r requirements.in
 jedi==0.18.1
     # via ipython
-markdown==3.3.7
+markdown==3.6
     # via
     #   -r requirements.in
+    #   pymdown-extensions
     #   wiki
 matplotlib-inline==0.1.3
     # via ipython
@@ -127,6 +128,8 @@ pure-eval==0.2.2
     # via stack-data
 pygments==2.15.0
     # via ipython
+pymdown-extensions==10.5
+    # via wiki
 pyparsing==3.0.9
     # via packaging
 pyproject-hooks==1.0.0
@@ -143,6 +146,8 @@ pytz==2022.1
     #   django
     #   djangorestframework
     #   influxdb
+pyyaml==6.0.1
+    # via pymdown-extensions
 redis==4.5.5
     # via -r requirements.in
 requests==2.31.0
@@ -196,7 +201,7 @@ webencodings==0.5.1
     #   tinycss2
 wheel==0.38.1
     # via pip-tools
-wiki==0.10.1
+wiki==0.11
     # via -r requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:
