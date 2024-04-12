@@ -89,7 +89,7 @@ executing==0.8.3
     # via stack-data
 ics==0.7.2
     # via -r requirements.in
-idna==3.3
+idna==3.7
     # via requests
 influxdb==5.3.1
     # via -r requirements.in
