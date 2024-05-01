@@ -118,7 +118,7 @@ pillow==10.3.0
     # via
     #   -r requirements.in
     #   wiki
-pip-tools==7.4.0
+pip-tools==7.4.1
     # via -r requirements.in
 prompt-toolkit==3.0.43
     # via ipython
