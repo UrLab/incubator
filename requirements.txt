@@ -81,7 +81,7 @@ django-sekizai==3.0.1
     # via wiki
 django-simple-history==3.5.0
     # via -r requirements.in
-djangorestframework==3.14.0
+djangorestframework==3.15.1
     # via -r requirements.in
 exceptiongroup==1.2.0
     # via ipython
@@ -144,7 +144,6 @@ python-dateutil==2.8.2
 pytz==2022.1
     # via
     #   django
-    #   djangorestframework
     #   influxdb
 pyyaml==6.0.1
     # via pymdown-extensions
