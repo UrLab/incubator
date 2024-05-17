@@ -154,9 +154,9 @@ def spaceapi(request):
         "logo": "https://urlab.be/static/img/space-invaders.png",
         "url": "https://urlab.be",
         "location": {
-            "lat": 50.812915,
-            "lon": 4.384396,
-            "address": "131, avenue Buyl, 1050, Bruxelles, Belgium",
+            "lat": 50.8115138,
+            "lon": 4.3828331,
+            "address": "Av. Franklin Roosevelt 50, 1000 Brussels, Belgium - ULB: UB2.126",
         },
         "state": {
             "open": space_is_open(client),
