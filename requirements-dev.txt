@@ -50,7 +50,7 @@ pytest==8.2.0
     # via
     #   -r requirements-dev.in
     #   pytest-django
-pytest-django==4.5.2
+pytest-django==4.8.0
     # via -r requirements-dev.in
 tomli==2.0.1
     # via
