@@ -149,7 +149,7 @@ pyyaml==6.0.1
     # via pymdown-extensions
 redis==5.0.3
     # via -r requirements.in
-requests==2.32.0
+requests==2.32.3
     # via
     #   -r requirements.in
     #   influxdb
