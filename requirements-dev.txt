@@ -59,7 +59,7 @@ tomli==2.0.1
     #   pytest
 tomlkit==0.11.1
     # via pylint
-typing-extensions==4.10.0
+typing-extensions==4.12.1
     # via
     #   -c requirements.txt
     #   astroid
