@@ -147,7 +147,7 @@ pytz==2022.1
     #   influxdb
 pyyaml==6.0.1
     # via pymdown-extensions
-redis==5.0.3
+redis==5.0.7
     # via -r requirements.in
 requests==2.32.3
     # via
