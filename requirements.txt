@@ -47,7 +47,7 @@ django==3.2.25
     #   django-sekizai
     #   djangorestframework
     #   wiki
-django-activity-stream==1.4.2
+django-activity-stream==2.0.0
     # via -r requirements.in
 django-bootstrap4==24.1
     # via -r requirements.in
