@@ -91,7 +91,7 @@ ics==0.7.2
     # via -r requirements.in
 idna==3.7
     # via requests
-influxdb==5.3.1
+influxdb==5.3.2
     # via -r requirements.in
 ipython==8.25.0
     # via -r requirements.in
