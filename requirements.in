@@ -1,5 +1,5 @@
 # Main packages
-django>=3, <4
+django>=3, <6
 
 # Main Django apps
 djangorestframework
