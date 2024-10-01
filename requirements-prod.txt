@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=requirements-prod.txt requirements-prod.in
 #
-gunicorn==22.0.0
+gunicorn==23.0.0
     # via -r requirements-prod.in
 packaging==21.3
     # via
