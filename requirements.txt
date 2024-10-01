@@ -43,7 +43,6 @@ django==3.2.25
     #   django-js-asset
     #   django-jsonfield
     #   django-nyt
-    #   django-picklefield
     #   django-sekizai
     #   djangorestframework
     #   wiki
@@ -53,7 +52,7 @@ django-bootstrap4==24.1
     # via -r requirements.in
 django-classy-tags==3.0.1
     # via django-sekizai
-django-constance[database]==3.1.0
+django-constance[database]==4.1.2
     # via -r requirements.in
 django-crispy-forms==1.14.0
     # via -r requirements.in
@@ -73,8 +72,6 @@ django-mptt==0.16.0
     #   wiki
 django-nyt==1.4
     # via wiki
-django-picklefield==3.1
-    # via django-constance
 django-resized==1.0.2
     # via -r requirements.in
 django-sekizai==3.0.1
