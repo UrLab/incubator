@@ -71,7 +71,7 @@ django-mptt==0.16.0
     # via
     #   -r requirements.in
     #   wiki
-django-nyt==1.4
+django-nyt==1.4.1
     # via wiki
 django-picklefield==3.1
     # via django-constance
@@ -201,7 +201,7 @@ webencodings==0.5.1
     #   tinycss2
 wheel==0.38.1
     # via pip-tools
-wiki==0.11
+wiki==0.11.2
     # via -r requirements.in
 
 # The following packages are considered to be unsafe in a requirements file:
