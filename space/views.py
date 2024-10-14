@@ -151,7 +151,7 @@ def spaceapi(request):
     response = {
         "api": "0.13",
         "space": "UrLab",
-        "logo": "https://urlab.be/static/img/space-invaders.png",
+        "logo": "https://urlab.be/static/img/space-invaders.svg",
         "url": "https://urlab.be",
         "location": {
             "lat": 50.8115138,
@@ -163,7 +163,7 @@ def spaceapi(request):
             "lastchange": round(SpaceStatus.objects.last().time.timestamp()),
             "icon": {
                 "open": "https://urlab.be/static/img/space-invaders-open.png",
-                "closed": "https://urlab.be/static/img/space-invaders.png"
+                "closed": "https://urlab.be/static/img/space-invaders.svg"
             }
         },
         # "events": {},
