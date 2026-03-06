@@ -87,10 +87,17 @@ export SQL_PORT=<PORT>
 
 ## Adding new requirements
 
-To add a requirement, add it to the `[project.dependencies]` list in `pyproject.toml` (or to the appropriate group in `[dependency-groups]` for dev/prod-only deps). Then run:
+To add a new dependency, use:
 
 ```shell
-uv lock
+uv add <dependency>
 ```
 
-This will update `uv.lock`. Never edit `uv.lock` by hand!
+For dev-only or prod-only dependencies, use the `--group` flag:
+
+```shell
+uv add --group dev <dependency>
+uv add --group prod <dependency>
+```
+
+This will update both `pyproject.toml` and `uv.lock` automatically. Never edit `uv.lock` by hand!
