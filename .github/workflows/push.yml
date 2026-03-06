@@ -11,44 +11,45 @@ env:
 
 jobs:
   pytest:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
       - name: Install Python dependencies
-        run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt -r requirements-dev.txt
+        run: uv sync --all-groups
 
       - name: Lint python code
-        run: flake8 --ignore=E501,F401,E402,F811,E731,F403,E721 .
+        run: uv run flake8 --ignore=E501,F401,E402,F811,E731,F403,E721 --exclude=.git,*migrations*,ve,.venv .
 
       - name: Run django checks
-        run: ./manage.py check
+        run: uv run ./manage.py check
 
       - name: Check migrations
-        run: ./manage.py makemigrations --dry-run --check
+        run: uv run ./manage.py makemigrations --dry-run --check
 
       - name: Run tests
-        run: FAKE_REDIS=1 DEBUG=1 py.test
+        run: FAKE_REDIS=1 DEBUG=1 uv run py.test
 
   docker:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       packages: write
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Log in to the Container registry
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -56,11 +57,11 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-      - uses: docker/build-push-action@v2
+      - uses: docker/build-push-action@v6
         name: Build and push
         with:
           push: true

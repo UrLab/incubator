@@ -1,18 +1,23 @@
-FROM python:3.10-slim-buster
+FROM python:3.10-slim-bookworm
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 WORKDIR /srv
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV UV_COMPILE_BYTECODE=1
+ENV UV_LINK_MODE=copy
 
-RUN apt update && apt install -y libpq-dev build-essential netcat && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends libpq-dev build-essential netcat-openbsd && rm -rf /var/lib/apt/lists/*
 
-COPY ./requirements.txt .
-COPY ./requirements-prod.txt .
+COPY pyproject.toml uv.lock ./
 
-RUN pip install --upgrade pip && pip install -r requirements.txt && pip install -r requirements-prod.txt
+RUN uv sync --frozen --no-dev --group prod --no-install-project
 
 COPY . .
 
+RUN uv sync --frozen --no-dev --group prod --no-editable
+
 ENTRYPOINT ["./entrypoint.sh"]
-CMD ["gunicorn", "incubator.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["uv", "run", "gunicorn", "incubator.wsgi:application", "--bind", "0.0.0.0:8000"]
