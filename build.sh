@@ -2,7 +2,7 @@
 
 git pull
 docker pull ghcr.io/urlab/incubator:main
-docker-compose up -d --build
-docker-compose exec web uv run python manage.py migrate --noinput
-docker-compose exec web uv run python manage.py collectstatic --no-input --clear
-docker-compose restart nginx
+docker compose up -d --build
+docker compose exec web uv run python manage.py migrate --noinput
+docker compose exec web uv run python manage.py collectstatic --no-input --clear
+docker compose restart nginx
