@@ -1,37 +1,85 @@
 import markdown
+import nh3
 
 from django import template
 from django.template.defaultfilters import stringfilter
-from django.utils.safestring import mark_safe, SafeText
+from django.utils.safestring import mark_safe
 
 register = template.Library()
 
+ALLOWED_TAGS = {
+    "h1",
+    "h2",
+    "h3",
+    "h4",
+    "h5",
+    "h6",
+    "p",
+    "br",
+    "hr",
+    "a",
+    "img",
+    "strong",
+    "em",
+    "b",
+    "i",
+    "u",
+    "s",
+    "del",
+    "ins",
+    "sub",
+    "sup",
+    "ul",
+    "ol",
+    "li",
+    "blockquote",
+    "pre",
+    "code",
+    "table",
+    "thead",
+    "tbody",
+    "tr",
+    "th",
+    "td",
+    "div",
+    "span",
+    "dl",
+    "dt",
+    "dd",
+    "abbr",
+}
 
-@register.filter(is_safe=False, name='markdown')
-@stringfilter
-def my_markdown(value):
+ALLOWED_ATTRIBUTES = {
+    "a": {"href", "title"},
+    "img": {"src", "alt", "title"},
+    "abbr": {"title"},
+    "td": {"colspan", "rowspan"},
+    "th": {"colspan", "rowspan"},
+    "code": {"class"},
+    "div": {"class"},
+    "span": {"class"},
+    "pre": {"class"},
+}
+
+
+def _render_markdown(value):
+    """Render markdown to HTML and sanitize the output."""
     extensions = ["nl2br", "extra", "codehilite", "toc", "sane_lists"]
-
-    html = mark_safe(markdown.markdown(
-        value,
-        extensions=extensions,
-        safe_mode='escape',
-        enable_attributes=False,
-        output_format="html5"
-    ))
-    return SafeText(html)
+    raw_html = markdown.markdown(value, extensions=extensions, output_format="html5")
+    return nh3.clean(
+        raw_html,
+        tags=ALLOWED_TAGS,
+        attributes=ALLOWED_ATTRIBUTES,
+    )
 
 
-@register.filter(is_safe=False, name='unsafeMarkdown')
+@register.filter(is_safe=False, name="markdown")
 @stringfilter
-def my_markdown(value):
-    extensions = ["nl2br", "extra", "codehilite", "toc", "sane_lists"]
+def safe_markdown(value):
+    return mark_safe(_render_markdown(value))
 
-    html = mark_safe(markdown.markdown(
-        value,
-        extensions=extensions,
-        safe_mode=False,
-        enable_attributes=False,
-        output_format="html5"
-    ))
-    return SafeText(html)
+
+@register.filter(is_safe=False, name="unsafeMarkdown")
+@stringfilter
+def unsafe_markdown(value):
+    return mark_safe(_render_markdown(value))
