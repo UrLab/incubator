@@ -1,0 +1,64 @@
+[project]
+name = "incubator"
+version = "0.1.0"
+description = "UrLab's incubator – hackerspace management platform"
+requires-python = ">=3.10"
+
+dependencies = [
+    # Main packages
+    "django>=3,<4",
+
+    # Main Django apps
+    "djangorestframework",
+    "django-activity-stream",
+    "django-bootstrap4",
+    "django-constance",
+    "django-crispy-forms",
+    "django-extensions",
+    "django-filter",
+    "django-simple-history",
+    "django-mptt",
+    "wiki",
+    "sorl-thumbnail<12.10",
+    "setuptools<78",
+
+    # Other Django
+    "django-jsonfield",
+    "django-jsonfield-compat",
+    "django-resized",
+
+    # Tooling
+    "influxdb",
+    "ipython",
+    "mypy-extensions",
+    "typing-extensions",
+
+    # Common Python packages
+    "ics",
+    "Markdown",
+    "Pillow",
+    "redis",
+    "requests",
+    "sentry-sdk",
+]
+
+[dependency-groups]
+dev = [
+    "flake8",
+    "isort",
+    "pycodestyle",
+    "pyflakes",
+    "pylint",
+    "pytest",
+    "pytest-django",
+]
+prod = ["gunicorn", "psycopg2-binary"]
+
+[tool.pytest.ini_options]
+norecursedirs = "ve static media .git env venv v3 ve3 venv3 env3"
+DJANGO_SETTINGS_MODULE = "incubator.settings"
+addopts = "--reuse-db --nomigrations"
+
+[tool.flake8]
+exclude = ".git,*migrations*,ve"
+max-line-length = 125

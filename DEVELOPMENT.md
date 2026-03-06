@@ -2,37 +2,11 @@
 
 ## Setup your machine
 
-The setup you need wildly depends on the OS you are running.
-Here are instructions for some common OSes.
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/):
 
-<details>
- <summary>Ubuntu (or Mint)</summary>
- 
- ```shell
- sudo apt-get install python3-dev python3-setuptools python3-pip
- sudo pip3 install virtualenv
- ```
- 
-</details>
-
-<details>
- <summary>Fedora</summary>
- 
- ```shell
- sudo dnf install python3-devel python3-setuptools python3-virtualenv
- ```
- 
-</details>
-
-<details>
- <summary>MacOS</summary>
- 
- ```shell
- brew install python3
- pip3 install virtualenv 
- ```
- 
-</details>
+```shell
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
 
 ## Get the code
 ```shell
@@ -41,40 +15,31 @@ cd incubator
 ```
 
 ## Initial setup
-Now that you have the code we have to install the required Python dependencies.
-
-We will use a virtualenv for this purpose. This allows us to install specific versions of the package for the incubator and avoid messing up with your system packages. If you don't know what is a virtualenv, it might be good to google it a bit or ask about it to members of the hackerspace, they will be happy to help.
+Install dependencies (uv will automatically create a virtual environment):
 
 ```shell
-python3 -m venv ve
-source ve/bin/activate
-pip install -r requirements.txt -r requirements-dev.txt
+uv sync --group dev
 ```
 
 The last step is to create an empty database with the correct structure.
 ```shell
-./manage.py migrate
+uv run ./manage.py migrate
 ```
 
 ## Run the web server
 Now that you are set up, you can fire up the Django web server:
 ```shell
-./manage.py runserver
+uv run ./manage.py runserver
 ```
 
  And have a look at your local instance on [localhost:8000](http://localhost:8000)
 
 
 ## Next time
-The next time you want to work on this code, you don't have to repeat the whole list of commands we just typed. You only have to activate the virtualenv (you have to activate it once for every new shell you open)
+The next time you want to work on this code, just start the server:
 
 ```shell
-source ve/bin/activate
-```
-
-And then start the server
-```shell
-./manage.py runserver
+uv run ./manage.py runserver
 ```
 
 # How to ?
@@ -84,7 +49,7 @@ And then start the server
 You might need to create a user with admin rights on your local instance. Just run this command:
 
 ```shell
-./manage.py createsuperuser
+uv run ./manage.py createsuperuser
 ```
 
 ## Change the configuration
@@ -116,15 +81,16 @@ export SQL_PORT=<PORT>
 
 ## MQTT backend
 ```shell
-    pip install paho-mqtt
+    uv add paho-mqtt
 ```
 
 
 ## Adding new requirements
 
-To add a requirement, add it with no version constraint (or as little as needed)
-to `requirements.in` (or `requirements-dev.in` or `requirements-prod.in` if it is needed only in prod or dev). Then run `pip-compile` (or `pip-compile requirements-dev.in` or `pip-compile requirements-prod.in`).
+To add a requirement, add it to the `[project.dependencies]` list in `pyproject.toml` (or to the appropriate group in `[dependency-groups]` for dev/prod-only deps). Then run:
 
-Never edit a `requirements-*.txt` file by hand !
+```shell
+uv lock
+```
 
-In addition, we use [Dependabot](https://dependabot.com/) who will automatically submit Pull Requests to upgrade the python packages when a new version is available. This will only change the `requirement-*.txt`.
+This will update `uv.lock`. Never edit `uv.lock` by hand!

@@ -71,3 +71,5 @@ db.sqlite3
 
 # env
 .env*
+
+.python-version

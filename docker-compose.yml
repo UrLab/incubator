@@ -15,7 +15,7 @@ services:
     labels:
       ofelia.enabled: "true"
       ofelia.job-exec.autoclose.schedule: "0 0 4 * * *"
-      ofelia.job-exec.autoclose.command: "python3 manage.py close_space"
+      ofelia.job-exec.autoclose.command: "uv run python manage.py close_space"
     restart: unless-stopped
 
   redis:
