@@ -60,5 +60,5 @@ DJANGO_SETTINGS_MODULE = "incubator.settings"
 addopts = "--reuse-db --nomigrations"
 
 [tool.flake8]
-exclude = ".git,*migrations*,ve"
+exclude = ".git,*migrations*,ve,.venv"
 max-line-length = 125

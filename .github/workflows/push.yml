@@ -27,7 +27,7 @@ jobs:
         run: uv sync --all-groups
 
       - name: Lint python code
-        run: uv run flake8 --ignore=E501,F401,E402,F811,E731,F403,E721 .
+        run: uv run flake8 --ignore=E501,F401,E402,F811,E731,F403,E721 --exclude=.git,*migrations*,ve,.venv .
 
       - name: Run django checks
         run: uv run ./manage.py check
