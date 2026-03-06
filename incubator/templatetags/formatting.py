@@ -82,4 +82,10 @@ def safe_markdown(value):
 @register.filter(is_safe=False, name="unsafeMarkdown")
 @stringfilter
 def unsafe_markdown(value):
+    """Render markdown to sanitized HTML.
+
+    Despite the name, this filter uses the same sanitized rendering path as the
+    ``markdown`` filter via ``_render_markdown``. It is retained for backwards
+    compatibility with existing templates that reference ``unsafeMarkdown``.
+    """
     return mark_safe(_render_markdown(value))

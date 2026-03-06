@@ -316,15 +316,21 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", default="")
 DEFAULT_FROM_EMAIL = os.environ.get("EMAIL_FROM", default="contact@urlab.be")
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", default=True)
 
-DEFAULT_FILE_STORAGE = {
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+
+STORAGES = {
     "default": {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
 
 # Security settings (applied in production when DEBUG=False)
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_HSTS_SECONDS = 31536000  # 1 year
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True

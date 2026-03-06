@@ -32,10 +32,15 @@ source .env.db
 DB_NAME="${POSTGRES_DB:-incubator_db}"
 DB_USER="${POSTGRES_USER:-incubator}"
 
-# echo "[1/6] Dumping database from PostgreSQL 12..."
-# docker compose exec -T db pg_dumpall -U "$DB_USER" > "$DUMP_FILE"
-# DUMP_SIZE=$(du -h "$DUMP_FILE" | cut -f1)
-# echo "       Dump complete: $DUMP_FILE ($DUMP_SIZE)"
+echo "[1/6] Dumping database from PostgreSQL 12..."
+docker compose exec -T db pg_dump -U "$DB_USER" -d "$DB_NAME" > "$DUMP_FILE"
+DUMP_SIZE=$(du -h "$DUMP_FILE" | cut -f1)
+echo "       Dump complete: $DUMP_FILE ($DUMP_SIZE)"
+
+if [ ! -s "$DUMP_FILE" ]; then
+    echo "ERROR: Dump file is empty or missing. Aborting."
+    exit 1
+fi
 
 echo "[2/6] Stopping all services..."
 docker compose down
@@ -65,7 +70,7 @@ for i in $(seq 1 30); do
 done
 
 echo "[6/6] Restoring dump into PostgreSQL 17..."
-docker compose exec -T db psql -U "$DB_USER" -d "$DB_NAME" < "$DUMP_FILE"
+docker compose exec -T db psql -U "$DB_USER" -d "$DB_NAME" -v ON_ERROR_STOP=1 < "$DUMP_FILE"
 
 # Re-set the password so it's hashed with scram-sha-256 (Postgres 17 default).
 # Old Postgres 12 stored passwords as md5, which won't work for TCP connections.
