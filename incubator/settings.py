@@ -30,9 +30,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "vairysecrette")
 DEBUG = bool(int(os.environ.get("DEBUG", "1")))
 
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,::1,localhost").split(
-    ","
-)
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "127.0.0.1,::1,localhost").split(",")
 SENTRY_DSN = os.environ.get("SENTRY_DSN", "")
 
 if SENTRY_DSN != "":
@@ -70,10 +68,8 @@ INSTALLED_APPS = (
     "space",
     "stock",
     "streams",
-    "django_nyt",
     "mptt",
     "wiki",
-    "sekizai",
     "sorl.thumbnail",
     "django_extensions",
     "realtime",
@@ -83,6 +79,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE = (
+    "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -158,7 +155,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.messages.context_processors.messages",
                 "space.context_processors.state",
-                "sekizai.context_processors.sekizai",
             ],
         },
     },
@@ -170,9 +166,8 @@ PASSWORD_HASHERS = (
     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
     "django.contrib.auth.hashers.BCryptPasswordHasher",
-    "django.contrib.auth.hashers.SHA1PasswordHasher",
-    "django.contrib.auth.hashers.MD5PasswordHasher",
-    "django.contrib.auth.hashers.CryptPasswordHasher",
+    # Legacy hashers kept for migration only — passwords will be
+    # re-hashed with PBKDF2 on next login.
     "incubator.hashers.MediaWikiHasher",
 )
 
@@ -320,3 +315,20 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", default="contact@urlab.be")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", default="")
 DEFAULT_FROM_EMAIL = os.environ.get("EMAIL_FROM", default="contact@urlab.be")
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS", default=True)
+
+DEFAULT_FILE_STORAGE = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+}
+
+# Security settings (applied in production when DEBUG=False)
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"

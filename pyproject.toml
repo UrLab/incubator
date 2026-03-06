@@ -2,44 +2,40 @@
 name = "incubator"
 version = "0.1.0"
 description = "UrLab's incubator – hackerspace management platform"
-requires-python = ">=3.10"
+requires-python = ">=3.14"
 
 dependencies = [
     # Main packages
-    "django>=3,<4",
-
+    "django>=6,<7",
     # Main Django apps
     "djangorestframework",
     "django-activity-stream",
     "django-bootstrap4",
-    "django-constance",
+    "django-constance[database]",
     "django-crispy-forms",
     "django-extensions",
     "django-filter",
     "django-simple-history",
     "django-mptt",
-    "wiki",
     "sorl-thumbnail<12.10",
     "setuptools<78",
-
     # Other Django
     "django-jsonfield",
     "django-jsonfield-compat",
     "django-resized",
-
     # Tooling
     "influxdb",
     "ipython",
     "mypy-extensions",
     "typing-extensions",
-
     # Common Python packages
-    "ics",
+    "ics>=0.8.0.dev0",
     "Markdown",
     "Pillow",
     "redis",
     "requests",
     "sentry-sdk",
+    "nh3>=0.3.3",
 ]
 
 [dependency-groups]

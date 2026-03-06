@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView
@@ -49,9 +50,10 @@ def login_view(request):
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
-        next = request.GET.get("next", "/")
-        next = next if next != "" else "/"
-        return HttpResponseRedirect(next)
+        next_url = request.GET.get("next", "/")
+        if not next_url or not url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}):
+            next_url = "/"
+        return HttpResponseRedirect(next_url)
     else:
         messages.error(request, "Aucun compte correspondant à cet identifiant n'a été trouvé")
         return HttpResponseRedirect(request.META["HTTP_REFERER"])
@@ -180,12 +182,14 @@ def transfer(request):
     return HttpResponseRedirect(reverse('change_balance'))
 
 
+@require_POST
 def show_pamela(request):
     request.user.hide_pamela = False
     request.user.save()
     return HttpResponseRedirect(reverse('profile'))
 
 
+@require_POST
 def hide_pamela(request):
     request.user.hide_pamela = True
     request.user.save()
