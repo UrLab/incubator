@@ -6,11 +6,7 @@ import nh3
 
 
 class Email(models.Model):
-    FOOTER = (
-        "_Si vous ne souhaitez pas recevoir cette newsletter,"
-        + " changez vos préférences sur "
-        + "[votre profil utilisateur](https://urlab.be/accounts/edit)_"
-    )
+    FOOTER = "_Si vous ne souhaitez pas recevoir cette newsletter, changez vos préférences sur [votre profil utilisateur](https://urlab.be/accounts/edit)_"
 
     subject = models.CharField(max_length=511, verbose_name="Sujet")
     content = models.TextField(blank=True, verbose_name="Contenu")
