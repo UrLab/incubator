@@ -17,7 +17,7 @@ dependencies = [
     "django-filter",
     "django-simple-history",
     "django-mptt",
-    "sorl-thumbnail<12.10",
+    "sorl-thumbnail<13.1",
     "setuptools<78",
     # Other Django
     "django-jsonfield",
