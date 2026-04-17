@@ -71,7 +71,7 @@ def talks(request):
     cutoff = timezone.now()
     events = Event.objects.filter(is_talk=True)
     future_events = events.filter(start__gt=cutoff)
-    past_events = events.filter(stop__lt=cutoff)
+    past_events = events.filter(stop__lt=cutoff).order_by("-start") # show latest conference first
     return render(
         request, 'talks.html',
         {
