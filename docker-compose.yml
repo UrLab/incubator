@@ -1,6 +1,7 @@
 services:
   web:
     image: ghcr.io/urlab/incubator:main
+    #image: incubator:local
     volumes:
       - static_volume:/srv/collected_static
       - media_volume:/srv/media
@@ -66,6 +67,7 @@ services:
 networks:
   private:
     driver: overlay
+    attachable: true
   public:
     external: true
   traefik-proxy:

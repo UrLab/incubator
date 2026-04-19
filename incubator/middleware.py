@@ -13,3 +13,20 @@ class AdminAccessMiddleware:
             if not request.user.is_authenticated or not request.user.is_staff:
                 raise Http404
         return self.get_response(request)
+
+
+import logging
+
+logger = logging.getLogger(__name__)
+
+class RequestLoggingMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        logger.debug(
+            f"{request.method} {request.path} "
+            f"IP={request.META.get('REMOTE_ADDR')} "
+            f"UA={request.META.get('HTTP_USER_AGENT')}"
+        )
+        return self.get_response(request)
