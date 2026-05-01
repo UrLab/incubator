@@ -29,7 +29,7 @@ dependencies = [
     "mypy-extensions",
     "typing-extensions",
     # Common Python packages
-    "ics>=0.8.0.dev0",
+    "ics>=0.8.0.dev1",
     "Markdown",
     "Pillow",
     "redis",
