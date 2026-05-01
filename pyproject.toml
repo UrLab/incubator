@@ -35,7 +35,7 @@ dependencies = [
     "redis",
     "requests",
     "sentry-sdk",
-    "nh3>=0.3.3",
+    "nh3>=0.3.5",
 ]
 
 [dependency-groups]
