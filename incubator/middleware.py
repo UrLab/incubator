@@ -1,5 +1,9 @@
+import logging
+
 from django.http import Http404
 from django.urls import reverse
+
+logger = logging.getLogger(__name__)
 
 
 class AdminAccessMiddleware:
@@ -14,10 +18,6 @@ class AdminAccessMiddleware:
                 raise Http404
         return self.get_response(request)
 
-
-import logging
-
-logger = logging.getLogger(__name__)
 
 class RequestLoggingMiddleware:
     def __init__(self, get_response):
